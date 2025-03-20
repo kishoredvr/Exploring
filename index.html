@@ -48,16 +48,18 @@
       box-sizing: border-box;
     }
     .profile-container img {
-      border-radius: 50%;
-      width: 150px;
-      height: 150px;
+      border-radius: 10px; /* Slightly rounded for a refined look */
+      width: 120px;        /* Narrower width for a portrait shape */
+      height: 180px;       /* Taller height to enforce portrait format */
+      object-fit: cover;   /* Ensures the image fills the space without distortion */
       margin-right: 20px;
     }
     .profile-container p {
       margin: 0;
       flex: 1;
-      font-size: 20px;  /* Increased font size for emphasis */
-      line-height: 1.6; /* Enhance readability via more generous spacing */
+      font-size: 20px;
+      line-height: 1.6;
+      text-align: justify; /* Justified alignment for the introductory text */
     }
     .columns {
       display: flex;
