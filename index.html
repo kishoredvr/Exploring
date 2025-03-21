@@ -20,6 +20,7 @@
     }
     nav {
       margin: 10px 0;
+      text-align: center;
     }
     nav a {
       margin: 0 15px;
@@ -32,25 +33,23 @@
       border-bottom: 2px solid white;
     }
     .container {
-      max-width: 1000px;
-      margin: auto;
+      max-width: calc(100% - 2cm); /* Reduces side margins to 1cm */
+      margin: 0 auto;
       padding: 20px;
+      box-sizing: border-box;
     }
     .profile-container {
       display: flex;
-      align-items: stretch; /* Ensures both image and text span full container height */
+      align-items: stretch;
       background: #ffffff;
       padding: 20px;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
-      box-sizing: border-box;
     }
     .profile-container img {
-      border-radius: 10px; /* Gives a refined, slightly rounded portrait look */
-      height: 100%;       /* Makes the image's height match the container's (and thus the paragraph's) height */
-      width: auto;        /* Maintains natural aspect ratio for portrait orientation */
-      max-width: 180px;   /* Limits width so the image stays portrait and fits neatly beside the text */
+      border-radius: 10px;
+      max-width: 180px;
       object-fit: cover;
       margin-right: 20px;
     }
@@ -68,12 +67,12 @@
     }
     .column {
       flex: 1;
-      margin: 0 10px 20px;
+      margin: 10px;
       background: #ffffff;
       padding: 15px;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      min-width: 300px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
     .column h3 {
       color: #4CAF50;
@@ -93,8 +92,6 @@
       .profile-container img {
         margin-right: 0;
         margin-bottom: 10px;
-        height: auto; /* Revert to auto height in a vertical layout */
-        width: auto;
         max-width: 150px;
       }
       .column {
@@ -106,11 +103,11 @@
 </head>
 <body>
   <header>
-    <h1> ::Ethical Hacking :: Vedic Astrology::  <br> 
+    <h1> ::Ethical Hacking :: Vedic Astrology::  <br>
        ::Country Wise Economy Study:: </h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">About Me</a>
+    <nav style="background-color: #4CAF50; padding: 10px;">
+      <a href="#" style="color: white;">Home</a>
+      <a href="#" style="color: white;">About Me</a>
     </nav>
   </header>
   <div class="container">
