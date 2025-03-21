@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    nav {
+      background-color: #4CAF50;
+      text-align: center;
+      padding: 10px 0;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      border-bottom: 2px solid transparent;
+    }
+    nav a:hover {
+      border-bottom: 2px solid white;
+    }
+    .container {
+      max-width: calc(100% - 2cm); /* Keeps the width within 1cm margin on both sides */
+      margin: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .social-media {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .social-media img {
+      width: 40px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+    .description-boxes {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      flex: 1; /* Each box takes up equal space */
+      background: #ffffff;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .description-box h3 {
+      color: #4CAF50;
+      margin-bottom: 10px;
+    }
+    .contact-details {
+      background: #ffffff;
+      margin: 10px auto;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .contact-details h3 {
+      color: #4CAF50;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>About Me</h1>
+  </header>
+  <nav>
+    <a href="https://caravikishore.github.io/Exploring/">Home</a>
+    <a href="#">About Me</a>
+  </nav>
+  <div class="container">
+    <!-- Social Media Links -->
+    <div class="social-media">
+      <a href="https://instagram.com"><img src="instagram-logo.png" alt="Instagram"></a>
+      <a href="https://facebook.com"><img src="facebook-logo.png" alt="Facebook"></a>
+      <a href="https://youtube.com"><img src="youtube-logo.png" alt="YouTube"></a>
+      <a href="https://linkedin.com/in/your-profile"><img src="linkedin-logo.png" alt="LinkedIn"></a>
+    </div>
+    
+    <!-- Description Boxes in Columns -->
+    <div class="description-boxes">
+      <div class="description-box">
+        <h3>Heading 1</h3>
+        <p>Short description for Heading 1 goes here.</p>
+      </div>
+      <div class="description-box">
+        <h3>Heading 2</h3>
+        <p>Short description for Heading 2 goes here.</p>
+      </div>
+      <div class="description-box">
+        <h3>Heading 3</h3>
+        <p>Short description for Heading 3 goes here.</p>
+      </div>
+    </div>
+    
+    <!-- Contact Details -->
+    <div class="contact-details">
+      <h3>Contact Me</h3>
+      <p>Email: your-email@example.com</p>
+      <p>Phone: +123 456 7890</p>
+    </div>
+  </div>
+</body>
+</html>
