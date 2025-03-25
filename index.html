@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exploring The World</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9; /* Light background for readability */
+      color: #333;
+    }
+    header {
+      background-color: #4CAF50; /* Green theme for the header */
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    nav {
+      margin: 10px 0;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-bottom: 2px solid transparent;
+    }
+    nav a:hover {
+      border-bottom: 2px solid white;
+    }
+    .container {
+      max-width: calc(100% - 2cm);
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .profile-container {
+      display: flex;
+      align-items: stretch;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .profile-container img {
+      border-radius: 10px;
+      max-width: 180px;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+    .profile-container p {
+      margin: 0;
+      flex: 1;
+      font-size: 20px;
+      line-height: 1.6;
+      text-align: justify;
+    }
+    .square-box {
+      border: 1px solid #4CAF50; /* Matches the header green */
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-evenly;
+      gap: 20px;
+      background-color: #e8f5e9; /* Light greenish background for consistency */
+    }
+    .topic {
+      flex: 1;
+      text-align: center;
+      border: 1px solid #d4e1d4; /* Subtle green border for topics */
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #ffffff; /* Clean white for individual topics */
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .topic h4 {
+      color: #4CAF50; /* Green headers for topic titles */
+      margin-bottom: 10px;
+    }
+    .topic ul {
+      list-style: none;
+      padding: 0;
+    }
+    .topic li {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topic li img {
+      width: 24px; /* Logo size */
+      height: 24px;
+    }
+    .topic li a {
+      color: #4CAF50; /* Green links for consistency */
+      text-decoration: none;
+    }
+    .topic li a:hover {
+      text-decoration: underline;
+    }
+    .columns {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .column {
+      flex: 1;
+      margin: 10px;
+      background: #ffffff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .column h3 {
+      color: #4CAF50;
+    }
+    .more {
+      display: block;
+      margin-top: 10px;
+      color: #4CAF50;
+      text-align: right;
+      text-decoration: none;
+    }
+    @media (max-width: 768px) {
+      .profile-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .profile-container img {
+        margin-right: 0;
+        margin-bottom: 10px;
+        max-width: 150px;
+      }
+      .square-box {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .column {
+        flex-basis: 100%;
+        margin: 0 0 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>:: Digital Reliability : Vedic Astrology : Country Wise Economy Study ::</h1>
+    <nav style="background-color: #4CAF50; padding: 10px;">
+      <a href="#" style="color: white;">Home</a>
+      <a href="https://kishoredvr.github.io/Exploring/AboutMe.html" style="color: white;">About Me</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header" style="color: white;">Message Me</a>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="profile-container">
+      <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/IMG_20250320_170423.png" alt="Your Profile Picture">
+      <p>
+        Hello, I'm Kishore DVR. <br>
+        Welcome to a digital sanctuary where innovation meets destiny. Here, engaging videos, thought-provoking articles, and handpicked 	YouTube treasures open doors to the captivating worlds of ethical hacking, the time-honored secrets of Vedic astrology, and the 	vibrant rhythms of national economies. Embark with me on an odyssey where cyber challenges intertwine with cosmic insights and the 	art of financial analysis—each narrative crafted to spark exploration, question convention, and reveal the extraordinary 	intersections that shape our ever-evolving world.
+      </p>
+    </div>
+
+    <!-- Square Box for Links -->
+    <div class="square-box">
+      <div class="topic">
+        <h4>Topic 1</h4>
+        <ul>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+            <a href="https://www.youtube.com/topic1" target="_blank">YouTube</a>
+          </li>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+            <a href="https://www.instagram.com/topic1" target="_blank">Instagram</a>
+          </li>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+            <a href="https://www.facebook.com/topic1" target="_blank">Facebook</a>
+          </li>
+        </ul>
+      </div>
+      <div class="topic">
+        <h4>Topic 2</h4>
+        <ul>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+            <a href="https://www.youtube.com/topic2" target="_blank">YouTube</a>
+          </li>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+            <a href="https://www.instagram.com/topic2" target="_blank">Instagram</a>
+          </li>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+            <a href="https://www.facebook.com/topic2" target="_blank">Facebook</a>
+          </li>
+        </ul>
+      </div>
+      <div class="topic">
+        <h4>Topic 3</h4>
+        <ul>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+            <a href="https://www.youtube.com/topic3" target="_blank">YouTube</a>
+          </li>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+            <a href="https://www.instagram.com/topic3" target="_blank">Instagram</a>
+          </li>
+          <li>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+            <a href="https://www.facebook.com/topic3" target="_blank">Facebook</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+        <h3>Latest Videos</h3>
+        <p>Check out my latest YouTube videos on various topics.</p>
+        <ul>
+          <li>Video Title 1</li>
+          <li>Video Title 2</li>
+          <li>Video Title 3</li>
+        </ul>
+        <a href="#" class="more">More</a>
+      </div>
+      <div class="column">
+        <h3>Article Insights</h3>
+        <p>A brief description of what the articles are about, covering key topics related to your research.</p>
+        <a href="#" class="more">More</a>
+      </div>
+      <div class="column">
+        <h3>Important Links</h3>
+        <p>A collection of important links to resources, articles, and related information.</p>
+        <ul>
+          <li>Link Description 1</li>
+          <li>Link Description 2</li>
+          <li>Link Description 3</li>
+        </ul>
+        <a href="#" class="more">More</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
