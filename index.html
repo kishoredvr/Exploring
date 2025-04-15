@@ -88,6 +88,26 @@
       line-height: 1.6;
       text-align: justify;
     }
+    .profile-container ul {
+      padding-left: 0;
+      margin: 15px 0 15px 20px;
+    }
+    .profile-container li {
+      list-style-type: none;
+      margin: 12px 0;
+      padding-left: 30px;
+      position: relative;
+      line-height: 1.5;
+      font-size: 18px;
+    }
+    .profile-container li:before {
+      content: "•";
+      color: #4a6fa5;
+      font-size: 24px;
+      position: absolute;
+      left: 0;
+      top: -3px;
+    }
     .square-box {
       border: 1px solid #4CAF50;
       padding: 20px;
@@ -210,10 +230,19 @@
   <div class="container">
     <div class="profile-container">
       <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture">
-      <p>
-        Hello, I'm Kishore DVR. <br>
-        Welcome to a digital sanctuary where innovation meets destiny. Here, engaging videos, thought-provoking articles, and handpicked 	YouTube treasures open doors to the captivating worlds of ethical hacking, the time-honored secrets of Vedic astrology, and the 	vibrant rhythms of national economies. Embark with me on an odyssey where cyber challenges intertwine with cosmic insights and the 	art of financial analysis—each narrative crafted to spark exploration, question convention, and reveal the extraordinary 	intersections that shape our ever-evolving world.
-      </p>
+      <div>
+        <p>Hello, I'm Kishore DVR.</p>
+        <p>Welcome to a digital sanctuary where innovation meets destiny. Here, engaging videos, thought-provoking articles, and handpicked YouTube treasures open doors to the captivating worlds of ethical hacking, the time-honored secrets of Vedic astrology, and the vibrant rhythms of national economies.</p>
+        
+        <p>You will find videos, articles, and YouTube selections about:</p>
+        <ul>
+          <li>Ethical Hacking</li>
+          <li>Vedic Astrology</li>
+          <li>National Economies</li>
+        </ul>
+        
+        <p>I share my thoughts and insights on these interesting topics. Join me to explore the connections between technology, ancient wisdom, and the world of finance. Embark with me on an odyssey where cyber challenges intertwine with cosmic insights and the art of financial analysis—each narrative crafted to spark exploration, question convention, and reveal the extraordinary intersections that shape our ever-evolving world.</p>
+      </div>
     </div>
     <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://www.youtube.com;">
     <!-- Square Box for Links -->
@@ -248,12 +277,12 @@
           </li>
           <li>
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1BJffsKTp8/?mibextid=qi2Omg"_blank">Facebook</a>
+            <a href="https://www.facebook.com/share/1BJffsKTp8/?mibextid=qi2Omg" target="_blank">Facebook</a>
           </li>
         </ul>
       </div>
       <div class="topic">
-        <h4> Country Wise Economy Study</h4>
+        <h4>Country Wise Economy Study</h4>
         <ul>
           <li>
             <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
@@ -274,7 +303,7 @@
     <div class="columns">
       <div class="column">
         <h3>Latest Video</h3>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/3F1LgEkEhsc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/3F1LgEkEhsc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <a href="#" class="more">More</a>
       </div>
       <div class="column">
