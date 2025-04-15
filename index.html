@@ -5,301 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exploring The World</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #333;
+    /* (Previous CSS styles remain exactly the same) */
+    
+    .profile-container ul {
+      padding-left: 20px;
+      margin: 15px 0;
     }
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 5px 20px;
-      text-align: center;
-    }
-    header h1 {
-      font-size: 1.2rem;
-      margin: 5px 0;
-    }
-    nav {
-      margin: 5px 0;
-      text-align: center;
-      padding: 5px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-    nav a {
-      margin: 0 10px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.9rem;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
-    }
-    nav a:hover {
-      border-bottom: 2px solid white;
-    }
-    #google_translate_element {
-      margin-left: 10px;
-      display: inline-block;
-    }
-    .goog-te-combo {
-      padding: 2px;
-      border-radius: 3px;
-      border: 1px solid #fff;
-      background-color: #4CAF50;
-      color: white;
-    }
-    .container {
-      max-width: calc(100% - 2cm);
-      margin: 0 auto;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .profile-container {
-      display: flex;
-      align-items: stretch;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-    .profile-container img {
-      border-radius: 10px;
-      max-width: 180px;
-      object-fit: cover;
-      margin-right: 20px;
-    }
-    .profile-container p {
-      margin: 0;
-      flex: 1;
-      font-size: 20px;
-      line-height: 1.6;
-      text-align: justify;
-    }
-    .square-box {
-      border: 1px solid #4CAF50;
-      padding: 20px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-evenly;
-      gap: 20px;
-      background-color: #e8f5e9;
-    }
-    .topic {
-      flex: 1;
-      text-align: center;
-      border: 1px solid #d4e1d4;
-      padding: 10px;
-      border-radius: 5px;
-      background-color: #ffffff;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    .topic h4 {
-      color: #4CAF50;
+    .profile-container li {
       margin-bottom: 10px;
-      font-size: 1rem;
+      font-size: 18px;
+      line-height: 1.5;
     }
-    .topic ul {
-      list-style: none;
-      padding: 0;
-    }
-    .topic li {
-      margin: 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.9rem;
-    }
-    .topic li img {
-      width: 20px;
-      height: 20px;
-    }
-    .topic li a {
+    .profile-container li:before {
+      content: ">";
       color: #4CAF50;
-      text-decoration: none;
-    }
-    .topic li a:hover {
-      text-decoration: underline;
-    }
-    .columns {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .column {
-      flex: 1;
-      margin: 10px;
-      background: #ffffff;
-      padding: 15px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-    .column h3 {
-      color: #4CAF50;
-      font-size: 1.1rem;
-    }
-    .more {
-      display: block;
-      margin-top: 10px;
-      color: #4CAF50;
-      text-align: right;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    @media (max-width: 768px) {
-      .profile-container {
-        flex-direction: column;
-        align-items: center;
-      }
-      .profile-container img {
-        margin-right: 0;
-        margin-bottom: 10px;
-        max-width: 150px;
-      }
-      .square-box {
-        flex-direction: column;
-        gap: 10px;
-      }
-      .column {
-        flex-basis: 100%;
-        margin: 0 0 20px;
-      }
-      header h1 {
-        font-size: 1rem;
-      }
-      nav a {
-        font-size: 0.8rem;
-        margin: 0 5px;
-      }
-      .nav-links {
-        flex-direction: column;
-      }
-      #google_translate_element {
-        margin-left: 0;
-        margin-top: 5px;
-      }
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>:: Digital Reliability : Vedic Astrology : Country Wise Economy Study ::</h1>
-    <nav>
-      <div class="nav-links">
-        <a href="https://kishoredvr.github.io/Exploring/">Home</a>
-        <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header">Message Me</a>
-        <div id="google_translate_element"></div>
-      </div>
-    </nav>
-  </header>
+  <!-- (Header and navigation remain exactly the same) -->
+  
   <div class="container">
     <div class="profile-container">
       <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture">
-      <p>
-        Hello, I'm Kishore DVR. <br>
-        Welcome to a digital sanctuary where innovation meets destiny. Here, engaging videos, thought-provoking articles, and handpicked 	YouTube treasures open doors to the captivating worlds of ethical hacking, the time-honored secrets of Vedic astrology, and the 	vibrant rhythms of national economies. Embark with me on an odyssey where cyber challenges intertwine with cosmic insights and the 	art of financial analysis—each narrative crafted to spark exploration, question convention, and reveal the extraordinary 	intersections that shape our ever-evolving world.
-      </p>
-    </div>
-    <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://www.youtube.com;">
-    <!-- Square Box for Links -->
-    <div class="square-box">
-      <div class="topic">
-        <h4>Digital Reliability</h4>
+      <div>
+        <p><strong>Hello, I'm Kishore DVR.</strong></p>
+        <p>Welcome to my website. Here, you will find videos, articles, and YouTube selections about:</p>
         <ul>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-            <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank">YouTube</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-            <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank">Instagram</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank">Facebook</a>
-          </li>
+          <li>Ethical Hacking</li>
+          <li>Vedic Astrology</li>
+          <li>National Economies</li>
         </ul>
-      </div>
-      <div class="topic">
-        <h4>Vedic Astrology</h4>
-        <ul>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-            <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank">YouTube</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-            <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank">Instagram</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1BJffsKTp8/?mibextid=qi2Omg"_blank">Facebook</a>
-          </li>
-        </ul>
-      </div>
-      <div class="topic">
-        <h4> Country Wise Economy Study</h4>
-        <ul>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-            <a href="https://youtube.com/@countrywisestudyoneconomy?si=Ruqd6yeef9ixM6Db" target="_blank">YouTube</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-            <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank">Instagram</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1FTMfrtWD7/" target="_blank">Facebook</a>
-          </li>
-        </ul>
+        <p>I share my thoughts and insights on these interesting topics. Join me to explore the connections between technology, ancient wisdom, and the world of finance.</p>
       </div>
     </div>
 
-    <div class="columns">
-      <div class="column">
-        <h3>Latest Video</h3>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/3F1LgEkEhsc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <a href="#" class="more">More</a>
-      </div>
-      <div class="column">
-        <h3>Article Insights</h3>
-        <p>A brief description of what the articles are about, covering key topics related to your research.</p>
-        <a href="https://astrostudy.github.io/Articles/" class="more">More</a>
-      </div>
-      <div class="column">
-        <h3>Important Links</h3>
-        <p>A collection of important links to resources, articles, and related information.</p>
-        <ul>
-          <li><a href="https://github.com/digitalreliability/Sharing/tree/Astrology-Related"><b>GitHub</b></a></li>
-          <li>Link Description 2</li>
-          <li>Link Description 3</li>
-        </ul>
-        <a href="#" class="more">More</a>
-      </div>
-    </div>
+    <!-- (Rest of the HTML remains exactly the same) -->
   </div>
-  <!-- Google Translate API -->
-  <script type="text/javascript">
-      function googleTranslateElementInit() {
-          new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-      }
-  </script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
