@@ -26,6 +26,16 @@
       margin: 5px 0;
       text-align: center;
       padding: 5px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
     }
     nav a {
       margin: 0 10px;
@@ -34,12 +44,21 @@
       font-weight: bold;
       font-size: 0.9rem;
       border-bottom: 2px solid transparent;
+      white-space: nowrap;
     }
     nav a:hover {
       border-bottom: 2px solid white;
     }
     #google_translate_element {
-      margin-top: 5px;
+      margin-left: 10px;
+      display: inline-block;
+    }
+    .goog-te-combo {
+      padding: 2px;
+      border-radius: 3px;
+      border: 1px solid #fff;
+      background-color: #4CAF50;
+      color: white;
     }
     .container {
       max-width: calc(100% - 2cm);
@@ -166,6 +185,13 @@
         font-size: 0.8rem;
         margin: 0 5px;
       }
+      .nav-links {
+        flex-direction: column;
+      }
+      #google_translate_element {
+        margin-left: 0;
+        margin-top: 5px;
+      }
     }
   </style>
 </head>
@@ -173,10 +199,12 @@
   <header>
     <h1>:: Digital Reliability : Vedic Astrology : Country Wise Economy Study ::</h1>
     <nav>
-      <a href="https://kishoredvr.github.io/Exploring/">Home</a>
-      <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header">Message Me</a>
-      <div id="google_translate_element"></div>
+      <div class="nav-links">
+        <a href="https://kishoredvr.github.io/Exploring/">Home</a>
+        <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header">Message Me</a>
+        <div id="google_translate_element"></div>
+      </div>
     </nav>
   </header>
   <div class="container">
