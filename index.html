@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Exploring The World</title>
   <style>
     body {
@@ -15,8 +15,15 @@
     header {
       background-color: #4CAF50;
       color: white;
-      padding: 5px 20px;
+      padding: 5px 0;
       text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    .header-container {
+      max-width: calc(100% - 0.8cm);
+      margin: 0 auto;
+      padding: 0 15px;
     }
     header h1 {
       font-size: 1.2rem;
@@ -30,6 +37,8 @@
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 20;
     }
     .nav-links {
       display: flex;
@@ -38,11 +47,11 @@
       align-items: center;
     }
     nav a {
-      margin: 0 10px;
+      margin: 0 8px;
       color: white;
       text-decoration: none;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       border-bottom: 2px solid transparent;
       white-space: nowrap;
     }
@@ -50,7 +59,7 @@
       border-bottom: 2px solid white;
     }
     #google_translate_element {
-      margin-left: 10px;
+      margin-left: 8px;
       display: inline-block;
     }
     .goog-te-combo {
@@ -59,100 +68,120 @@
       border: 1px solid #fff;
       background-color: #4CAF50;
       color: white;
+      font-size: 0.85rem;
     }
     .container {
-      max-width: calc(100% - 2cm);
+      max-width: calc(100% - 0.8cm);
       margin: 0 auto;
-      padding: 20px;
+      padding: 15px;
       box-sizing: border-box;
+      position: relative;
+    }
+    .main-content {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: stretch;
     }
     .profile-container {
+      flex: 7;
       display: flex;
-      align-items: stretch;
       background: #ffffff;
-      padding: 20px;
+      padding: 15px;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      min-height: 250px;
     }
     .profile-container img {
       border-radius: 10px;
-      width: 270px; /* Increased by 50% from 180px */
+      width: 180px;
       height: auto;
       object-fit: cover;
-      margin-right: 20px;
+      margin-right: 15px;
     }
     .profile-text {
       flex: 1;
     }
     .profile-container p {
       margin: 0;
-      font-size: 16px; /* Reduced from 20px */
-      line-height: 1.5; /* Slightly reduced from 1.6 */
+      font-size: 15px;
+      line-height: 1.4;
       text-align: justify;
     }
     .profile-container ul {
       padding-left: 0;
-      margin: 12px 0 12px 20px; /* Slightly reduced margins */
+      margin: 10px 0 10px 15px;
     }
     .profile-container li {
       list-style-type: none;
-      margin: 10px 0; /* Reduced from 12px */
-      padding-left: 25px; /* Reduced from 30px */
+      margin: 8px 0;
+      padding-left: 20px;
       position: relative;
-      line-height: 1.4; /* Reduced from 1.5 */
-      font-size: 16px; /* Reduced from 18px */
+      line-height: 1.3;
+      font-size: 15px;
     }
     .profile-container li:before {
       content: "•";
       color: #4a6fa5;
-      font-size: 20px; /* Reduced from 24px */
+      font-size: 18px;
       position: absolute;
       left: 0;
-      top: -2px; /* Adjusted */
+      top: -2px;
     }
-    .square-box {
-      border: 1px solid #4CAF50;
-      padding: 20px;
-      border-radius: 5px;
-      margin-bottom: 20px;
+    .vertical-topics {
+      flex: 3;
       display: flex;
-      justify-content: space-evenly;
-      gap: 20px;
-      background-color: #e8f5e9;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: space-between;
     }
     .topic {
-      flex: 1;
-      text-align: center;
-      border: 1px solid #d4e1d4;
-      padding: 10px;
+      border: 1px solid #4CAF50;
+      padding: 6px;
       border-radius: 5px;
-      background-color: #ffffff;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      background-color: #e8f5e9;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: calc(250px / 3 - 12px);
     }
     .topic h4 {
       color: #4CAF50;
-      margin-bottom: 10px;
-      font-size: 1rem;
+      margin: 0 0 4px 0;
+      font-size: 0.8rem;
+      text-align: center;
+      line-height: 1.2;
     }
     .topic ul {
       list-style: none;
       padding: 0;
+      margin: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .topic li {
-      margin: 8px 0;
+      margin: 2px 0;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 10px;
-      font-size: 0.9rem;
+      gap: 6px;
+      font-size: 0.65rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .topic li img {
-      width: 20px;
-      height: 20px;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
     }
     .topic li a {
       color: #4CAF50;
       text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .topic li a:hover {
       text-decoration: underline;
@@ -161,154 +190,150 @@
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
     }
     .column {
       flex: 1;
-      margin: 10px;
+      min-width: 250px;
       background: #ffffff;
-      padding: 15px;
+      padding: 12px;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
     .column h3 {
       color: #4CAF50;
-      font-size: 1.1rem;
+      font-size: 1rem;
+      margin: 0 0 10px 0;
+    }
+    .column iframe {
+      max-width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
     }
     .more {
       display: block;
-      margin-top: 10px;
+      margin-top: 8px;
       color: #4CAF50;
       text-align: right;
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
-    @media (max-width: 768px) {
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .main-content {
+        flex-direction: column;
+      }
       .profile-container {
         flex-direction: column;
-        align-items: center;
+      }
+      .vertical-topics {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .topic {
+        flex: 1 1 150px;
+      }
+    }
+    @media (max-width: 768px) {
+      .container {
+        max-width: calc(100% - 20px);
+        padding: 10px;
       }
       .profile-container img {
-        margin-right: 0;
-        margin-bottom: 10px;
         width: 150px;
       }
-      .profile-container p {
-        font-size: 15px;
+    }
+    @media (max-width: 480px) {
+      .profile-container img {
+        width: 120px;
       }
+      .profile-container p,
       .profile-container li {
-        font-size: 15px;
+        font-size: 14px;
       }
-      .square-box {
+      .topic h4 {
+        font-size: 0.75rem;
+      }
+      .topic li {
+        font-size: 0.6rem;
+      }
+      nav {
         flex-direction: column;
-        gap: 10px;
-      }
-      .column {
-        flex-basis: 100%;
-        margin: 0 0 20px;
-      }
-      header h1 {
-        font-size: 1rem;
       }
       nav a {
-        font-size: 0.8rem;
-        margin: 0 5px;
-      }
-      .nav-links {
-        flex-direction: column;
-      }
-      #google_translate_element {
-        margin-left: 0;
-        margin-top: 5px;
+        margin: 2px 0;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <nav>
-      <div class="nav-links">
-        <a href="https://kishoredvr.github.io/Exploring/">Home</a>
-        <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header">Message Me</a>
-        <div id="google_translate_element"></div>
-      </div>
-    </nav>
+    <div class="header-container">
+      <nav>
+        <div class="nav-links">
+          <a href="https://kishoredvr.github.io/Exploring/">Home</a>
+          <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header">Message Me</a>
+          <div id="google_translate_element"></div>
+        </div>
+      </nav>
+    </div>
   </header>
   <div class="container">
-    <div class="profile-container">
-      <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture">
-      <div class="profile-text">
-        <p>Hello, I'm Kishore DVR.</p>
-        <p>Welcome to a digital sanctuary where innovation meets destiny. I share my thoughts and insights on these interesting topics. Join me to explore and enjoy my the thoughts and resources. Please check here videos, articles, and resources about:</p>
-        <ul>
-          <li>Digital Reliability</li>
-          <li>Vedic Astrology</li>
-          <li>National Economies</li>
-        </ul>
-             
+    <div class="main-content">
+      <div class="profile-container">
+        <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture">
+        <div class="profile-text">
+          <p>Hello, I'm Kishore DVR.</p>
+          <p>Welcome to a digital sanctuary where innovation meets destiny. I share my thoughts and insights on these interesting topics. Join me to explore and enjoy my the thoughts and resources. Please check here videos, articles, and resources about:</p>
+          <ul>
+            <li>Digital Reliability</li>
+            <li>Vedic Astrology</li>
+            <li>National Economies</li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://www.youtube.com;">
-    <!-- Square Box for Links -->
-    <div class="square-box">
-      <div class="topic">
-        <h4>Digital Reliability</h4>
-        <ul>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-            <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank">YouTube</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-            <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank">Instagram</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank">Facebook</a>
-          </li>
-        </ul>
-      </div>
-      <div class="topic">
-        <h4>Vedic Astrology</h4>
-        <ul>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-            <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank">YouTube</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-            <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank">Instagram</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1BJffsKTp8/?mibextid=qi2Omg" target="_blank">Facebook</a>
-          </li>
-        </ul>
-      </div>
-      <div class="topic">
-        <h4>Country Wise Economy Study</h4>
-        <ul>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-            <a href="https://youtube.com/@countrywisestudyoneconomy?si=Ruqd6yeef9ixM6Db" target="_blank">YouTube</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-            <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank">Instagram</a>
-          </li>
-          <li>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-            <a href="https://www.facebook.com/share/1FTMfrtWD7/" target="_blank">Facebook</a>
-          </li>
-        </ul>
+      <div class="vertical-topics">
+        <div class="topic">
+          <h4>Digital Reliability</h4>
+          <ul>
+            <li>
+              <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
+              <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
+              <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+            </li>
+          </ul>
+        </div>
+        <div class="topic">
+          <h4>Vedic Astrology</h4>
+          <ul>
+            <li>
+              <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
+              <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
+              <a href="https://www.facebook.com/share/1BJffsKTp8/?mibextid=qi2Omg" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+            </li>
+          </ul>
+        </div>
+        <div class="topic">
+          <h4>Country Wise Economy Study</h4>
+          <ul>
+            <li>
+              <a href="https://youtube.com/@countrywisestudyoneconomy?si=Ruqd6yeef9ixM6Db" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
+              <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
+              <a href="https://www.facebook.com/share/1FTMfrtWD7/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="columns">
       <div class="column">
         <h3>Latest Video</h3>
-        <iframe width="100%" height="270" src="https://www.youtube.com/embed/3F1LgEkEhsc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/3F1LgEkEhsc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <a href="#" class="more">More</a>
       </div>
       <div class="column">
@@ -328,11 +353,12 @@
       </div>
     </div>
   </div>
+
   <!-- Google Translate API -->
   <script type="text/javascript">
-      function googleTranslateElementInit() {
-          new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-      }
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
