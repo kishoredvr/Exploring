@@ -11,6 +11,12 @@
             padding: 0;
             background-color: #f9f9f9;
             color: #333;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .scale-container {
+            transform: scale(0.8);
+            transform-origin: 0 0;
+            width: 125%; /* Counteract the scaling to maintain full width */
         }
         header {
             background-color: #4CAF50;
@@ -93,39 +99,40 @@
     </style>
 </head>
 <body>
-      
-    <!-- Navigation menu moved below the header -->
-    <nav>
-        <a href=" https://kishoredvr.github.io/Exploring/" style="color: white;">Home</a>
-        <a href="https://kishoredvr.github.io/Exploring/AboutMe.html" style="color: white;">Origin Of Thoughts</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header" style="color: white;">Message Me</a>
-        <!-- Google Translate Widget -->
-<div id="google_translate_element"></div>
+    <div class="scale-container">
+        <!-- Navigation menu moved below the header -->
+        <nav>
+            <a href=" https://kishoredvr.github.io/Exploring/" style="color: white;">Home</a>
+            <a href="https://kishoredvr.github.io/Exploring/AboutMe.html" style="color: white;">Origin Of Thoughts</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header" style="color: white;">Message Me</a>
+            <!-- Google Translate Widget -->
+            <div id="google_translate_element"></div>
 
-<!-- Google Translate API -->
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-    }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    </nav>
-    
-    <div class="container">
-        <div class="description-boxes">
-            <div class="description-box">
-                <h3>Exploring Nations: Financial Insights and Personal Perspectives</h3>
-                <p>Exploring the world country by country, I offer insights into financial opportunities and cultural identities. For individuals, I highlight in-demand skills for successful migration. For businesses, I pinpoint profitable industries and unique opportunities. Beyond economics, I delve into culture, traditions, societal norms, and safety aspects like crime rates and legal systems. This dual approach provides valuable information for career seekers, entrepreneurs, and anyone curious about different nations.
-                </p>
-            </div>
-            <div class="description-box">
-                <h3>Unveiling the Cosmos: My Journey in Astrology</h3>
-                <p>Driven by a lifelong curiosity about the universe, my 12+ years of astrological study evolved from analyzing individual charts to understanding global celestial influences. I've observed how our responses to natural rhythms shape life, exemplified by Dubai's air conditioning laws reflecting environmental needs. Cosmic shifts in the solar system impact Earth, mirroring Vedic astrology's principles. My astrological journey is a dedicated exploration of the profound connection between humanity and the cosmos, with a deep focus on the intricate art of individual horoscope analysis</div>
-                </p>
-            <div class="description-box">
-                <h3>Empowering the Future: Mastering Open Source, AI, and Digital Security</h3>
-                <p>In the digital age, self-reliance and adaptability are key. Linux empowers users with its open-source nature, offering independence and security unlike paid software. While AI brings advancements, its potential biases necessitate understanding and responsible use. Adapting to AI's impact on jobs through upskilling, especially in programming and AI, is vital. I'm exploring Linux, ethical hacking, digital security, and AI model creation to empower myself and others, sharing knowledge on social media to foster technological advancement and future readiness.
-                </p>
+            <!-- Google Translate API -->
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+                }
+            </script>
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        </nav>
+        
+        <div class="container">
+            <div class="description-boxes">
+                <div class="description-box">
+                    <h3>Exploring Nations: Financial Insights and Personal Perspectives</h3>
+                    <p>Exploring the world country by country, I offer insights into financial opportunities and cultural identities. For individuals, I highlight in-demand skills for successful migration. For businesses, I pinpoint profitable industries and unique opportunities. Beyond economics, I delve into culture, traditions, societal norms, and safety aspects like crime rates and legal systems. This dual approach provides valuable information for career seekers, entrepreneurs, and anyone curious about different nations.
+                    </p>
+                </div>
+                <div class="description-box">
+                    <h3>Unveiling the Cosmos: My Journey in Astrology</h3>
+                    <p>Driven by a lifelong curiosity about the universe, my 12+ years of astrological study evolved from analyzing individual charts to understanding global celestial influences. I've observed how our responses to natural rhythms shape life, exemplified by Dubai's air conditioning laws reflecting environmental needs. Cosmic shifts in the solar system impact Earth, mirroring Vedic astrology's principles. My astrological journey is a dedicated exploration of the profound connection between humanity and the cosmos, with a deep focus on the intricate art of individual horoscope analysis</div>
+                    </p>
+                <div class="description-box">
+                    <h3>Empowering the Future: Mastering Open Source, AI, and Digital Security</h3>
+                    <p>In the digital age, self-reliance and adaptability are key. Linux empowers users with its open-source nature, offering independence and security unlike paid software. While AI brings advancements, its potential biases necessitate understanding and responsible use. Adapting to AI's impact on jobs through upskilling, especially in programming and AI, is vital. I'm exploring Linux, ethical hacking, digital security, and AI model creation to empower myself and others, sharing knowledge on social media to foster technological advancement and future readiness.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
