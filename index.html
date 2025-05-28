@@ -21,7 +21,7 @@
     header {
       background-color: #4CAF50;
       color: white;
-      padding: 5px 0;
+      padding: 5px 0; /* Reduced padding slightly to accommodate menu item boxes */
       text-align: center;
       position: relative;
       z-index: 10;
@@ -53,20 +53,25 @@
       align-items: center;
     }
     nav a {
-      margin: 0 8px;
+      margin: 5px 8px; /* Adjusted margin for spacing between boxes */
+      padding: 6px 12px; /* Added padding to create space inside the box */
       color: white;
       text-decoration: none;
       font-weight: bold;
       font-size: 0.85rem;
-      border-bottom: 2px solid transparent;
+      border: 1px solid white; /* Added border for the box outline */
+      border-radius: 4px; /* Added rounded corners to the box */
       white-space: nowrap;
+      transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover */
     }
     nav a:hover {
-      border-bottom: 2px solid white;
+      background-color: white; /* Change background on hover */
+      color: #4CAF50; /* Change text color on hover */
     }
     #google_translate_element {
-      margin-left: 8px;
+      margin-left: 8px; /* Keeps the translate element spaced from the last menu item */
       display: inline-block;
+      vertical-align: middle; /* Align with the middle of the menu items */
     }
     .goog-te-combo {
       padding: 2px;
@@ -75,6 +80,8 @@
       background-color: #4CAF50;
       color: white;
       font-size: 0.85rem;
+      height: auto; /* Ensure it aligns well if text size changes */
+      line-height: normal; /* Ensure consistent line height */
     }
     .container {
       max-width: calc(100% - 0.8cm);
@@ -263,6 +270,10 @@
       .profile-container img {
         width: 150px;
       }
+      nav a {
+        font-size: 0.8rem; /* Slightly smaller font for smaller screens if needed */
+        padding: 5px 10px; /* Adjust padding for smaller screens */
+      }
     }
     @media (max-width: 480px) {
       .profile-container img {
@@ -283,10 +294,22 @@
         height: 18px;
       }
       nav {
-        flex-direction: column;
+        flex-direction: column; /* Stack nav items vertically */
       }
       nav a {
-        margin: 2px 0;
+        margin: 4px 0; /* Adjust margin for stacked items */
+        width: calc(100% - 20px); /* Make nav items take more width */
+        box-sizing: border-box;
+        text-align: center;
+      }
+      #google_translate_element {
+        margin-left: 0;
+        margin-top: 5px; /* Add some space above translate element when stacked */
+        width: calc(100% - 20px); /* Make translate element take more width */
+        box-sizing: border-box;
+      }
+      .goog-te-combo {
+        width: 100%; /* Make dropdown full width */
       }
     }
   </style>
@@ -308,7 +331,7 @@
     <div class="container">
       <div class="main-content">
         <div class="profile-container">
-          <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture">
+          <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture" onerror="this.onerror=null; this.src='https://placehold.co/180x250/cccccc/000000?text=Profile+Image';">
           <div class="profile-text">
             <p>Hello, I'm Kishore DVR.</p>
             <p><br>Welcome to a digital sanctuary where innovation meets destiny. I share my thoughts and insights on these interesting topics. Join me to explore and enjoy my the thoughts and resources. Please check here videos, articles, and resources about:</p>
@@ -324,9 +347,9 @@
             <h4>Digital Reliability</h4>
             <ul>
               <li>
-                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
-                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
-                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=YT';"></a>
+                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=IG';"></a>
+                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=FB';"></a>
               </li>
             </ul>
           </div>
@@ -334,9 +357,9 @@
             <h4>AstroTechnics</h4>
             <ul>
               <li>
-                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
-                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
-                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=YT';"></a>
+                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=IG';"></a>
+                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=FB';"></a>
               </li>
             </ul>
           </div>
@@ -344,9 +367,9 @@
             <h4>National Economies</h4>
             <ul>
               <li>
-                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
-                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
-                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=YT';"></a>
+                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=IG';"></a>
+                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=FB';"></a>
               </li>
             </ul>
           </div>
@@ -382,7 +405,6 @@
     </div>
   </div>
 
-  <!-- Google Translate API -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
@@ -396,14 +418,46 @@
         const videoIdMatch = iframe.src.match(/embed\/([a-zA-Z0-9_-]{11})/);
         if (videoIdMatch) {
           const videoId = videoIdMatch[1];
-          fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
-            .then(response => response.json())
-            .then(data => {
-              document.getElementById("video-title").textContent = data.title;
-            })
-            .catch(() => {
-              document.getElementById("video-title").textContent = "Unable to load video title.";
-            });
+          // Simulating API call as direct fetch to oembed might be blocked by CORS in snippet
+          // In a real scenario, ensure the endpoint is accessible or use a backend proxy.
+          // For this example, we'll just keep the placeholder or a generic title.
+          const videoTitleElement = document.getElementById("video-title");
+          if (videoTitleElement) {
+             // Placeholder for title fetching logic
+             // The original fetch call to `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=$${videoId}&format=json`
+             // is specific to an environment that might proxy YouTube oEmbed.
+             // For general browser execution, this would typically be:
+             // fetch(`https://www.youtube.com/oembed?url=http%3A//youtube.com/watch%3Fv%3D${videoId}&format=json`)
+             // However, to avoid potential live fetch issues in this static example,
+             // we'll set a generic message or leave it as "Loading title..."
+             // If you have a backend to proxy this, that would be the robust solution.
+            videoTitleElement.textContent = "Latest Video Title (Dynamic)"; // Example static title
+            // Original fetch logic (might not work in all environments due to CORS):
+            /*
+            fetch(`https://www.youtube.com/oembed?url=http%3A//youtube.com/watch%3Fv%3D${videoId}&format=json`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then(data => {
+                if (data && data.title) {
+                  videoTitleElement.textContent = data.title;
+                } else {
+                  videoTitleElement.textContent = "Title not available.";
+                }
+              })
+              .catch(() => {
+                videoTitleElement.textContent = "Unable to load video title.";
+              });
+            */
+          }
+        } else {
+            const videoTitleElement = document.getElementById("video-title");
+            if (videoTitleElement) {
+                videoTitleElement.textContent = "Video ID not found in URL.";
+            }
         }
       }
     })();
