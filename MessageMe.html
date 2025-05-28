@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8"> <!-- 80% zoom effect -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.9"> <!-- 90% zoom effect -->
     <title>Message Me | Exploring</title>
     <style>
         body {
@@ -13,46 +13,48 @@
             margin: 0 auto;
             padding: 20px;
             background-color: #f9f9f9;
-            zoom: 0.8; /* Fallback for browsers that don't support viewport scaling */
-            transform: scale(0.8); /* Additional scaling for consistency */
+            transform: scale(0.9); /* 90% zoom */
             transform-origin: top center;
-            width: 125%; /* Counteract the scaling to prevent horizontal scroll */
+            width: 111.11%; /* Counteract the scaling */
         }
         
         nav {
-            background-color: #f9f9f9; /* Changed to light gray background */
+            background-color: #f9f9f9; /* Changed to light gray */
             padding: 15px 0;
-            border-radius: 5px;
             margin-bottom: 30px;
+            text-align: center;
         }
         
         nav ul {
             list-style-type: none;
             margin: 0;
             padding: 0;
-            display: flex;
+            display: inline-flex; /* Changed to inline-flex */
             justify-content: center;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 5px;
         }
         
         nav li {
-            margin: 0 15px;
+            margin: 0 10px;
         }
         
         nav a {
-            color: #2c3e50; /* Dark text color */
+            color: #2c3e50;
             text-decoration: none;
             font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 8px 15px;
+            border-radius: 3px;
             transition: all 0.3s;
             border: 1px solid #ddd; /* Box outline */
             background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
         nav a:hover {
             background-color: #f0f0f0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         #ff-compose {
@@ -73,27 +75,25 @@
         }
         
         @media (max-width: 600px) {
+            body {
+                transform: scale(1);
+                width: 100%;
+                padding: 10px;
+            }
+            
             nav ul {
                 flex-direction: column;
-                align-items: center;
+                display: flex;
             }
             
             nav li {
                 margin: 5px 0;
-                width: 80%;
-                text-align: center;
+                width: 100%;
             }
             
             nav a {
                 display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            
-            body {
-                zoom: 1;
-                transform: none;
-                width: 100%;
+                text-align: center;
             }
         }
     </style>
