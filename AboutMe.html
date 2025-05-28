@@ -18,20 +18,17 @@
             transform-origin: 0 0;
             width: 125%;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-        }
+        /* Header was not in the original HTML for this page, nav is styled directly */
         nav {
             background-color: #4CAF50;
             text-align: center;
-            padding: 10px 0;
+            padding: 10px 0; /* Original padding */
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Allows nav items to wrap if space is tight */
+            position: relative; /* For z-index if ever needed */
+            z-index: 20;
         }
         .nav-links {
             display: flex;
@@ -40,19 +37,26 @@
             align-items: center;
         }
         nav a {
+            /* Updated styles for box outline */
+            margin: 5px 8px; /* Adjusted margin for spacing between boxes */
+            padding: 6px 12px; /* Added padding to create space inside the box */
             color: white;
-            margin: 0 15px;
             text-decoration: none;
             font-weight: bold;
-            border-bottom: 2px solid transparent;
+            font-size: 0.85rem; /* Consistent font size */
+            border: 1px solid white; /* Added border for the box outline */
+            border-radius: 4px; /* Added rounded corners to the box */
             white-space: nowrap;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover */
         }
         nav a:hover {
-            border-bottom: 2px solid white;
+            background-color: white; /* Change background on hover */
+            color: #4CAF50; /* Change text color on hover */
         }
         #google_translate_element {
-            display: inline-block;
-            margin-left: 15px;
+            display: inline-block; /* Default display */
+            margin-left: 8px; /* Spacing from the last nav link */
+            vertical-align: middle; /* Align with the middle of the menu items */
         }
         .goog-te-combo {
             padding: 2px;
@@ -60,13 +64,16 @@
             border: 1px solid #fff;
             background-color: #4CAF50;
             color: white;
+            font-size: 0.85rem; /* Match nav link font size */
+            height: auto;
+            line-height: normal;
         }
         .container {
-            max-width: 100%;
+            max-width: 100%; /* Original */
             padding: 20px;
             box-sizing: border-box;
         }
-        h1 {
+        h1 { /* This was for a title outside nav, keeping as is */
             text-align: center;
             margin-bottom: 10px;
         }
@@ -110,20 +117,34 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             nav {
-                flex-direction: column;
+                flex-direction: column; /* Stack .nav-links (which contains a and translate) */
+                align-items: center; /* Center .nav-links */
             }
             .nav-links {
-                margin-bottom: 10px;
+                flex-direction: column; /* Stack children: a tags and google_translate_element */
+                align-items: center; /* Center the stacked items */
+                width: 100%; /* Take full width available in nav */
             }
             nav a {
-                margin: 5px;
-                font-size: 0.9em;
+                margin: 5px 0; /* Vertical margin, no horizontal for stacked items */
+                width: 90%; /* Percentage of .nav-links width */
+                max-width: 300px; /* Prevent from being too wide */
+                box-sizing: border-box;
+                text-align: center;
+                font-size: 0.85rem; /* Keep font size or adjust e.g. 0.9em from original responsive */
+                padding: 6px 10px; /* Consistent padding or adjust for smaller screens */
             }
             #google_translate_element {
-                margin-left: 0;
-                margin-top: 10px;
+                margin-left: 0; /* Reset left margin */
+                margin-top: 10px; /* Space above when stacked */
+                width: 90%; /* Match link width */
+                max-width: 300px; /* Match link max-width */
+                box-sizing: border-box;
             }
-            .description-box {
+            .goog-te-combo {
+                width: 100%; /* Make dropdown full width of its container */
+            }
+            .description-box { /* Original responsive rule for other content */
                 flex-basis: 100%;
             }
         }
@@ -133,9 +154,9 @@
     <div class="scale-container">
         <nav>
             <div class="nav-links">
-                <a href="https://kishoredvr.github.io/Exploring/" style="color: white;">Home</a>
-                <a href="https://kishoredvr.github.io/Exploring/AboutMe.html" style="color: white;">Origin Of Thoughts</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header" style="color: white;">Message Me</a>
+                <a href="https://kishoredvr.github.io/Exploring/">Home</a>
+                <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?usp=header">Message Me</a>
                 <div id="google_translate_element"></div>
             </div>
         </nav>
@@ -149,8 +170,8 @@
                 </div>
                 <div class="description-box">
                     <h3>Unveiling the Cosmos: My Journey in Astrology</h3>
-                    <p>Driven by a lifelong curiosity about the universe, my 12+ years of astrological study evolved from analyzing individual charts to understanding global celestial influences. I've observed how our responses to natural rhythms shape life, exemplified by Dubai's air conditioning laws reflecting environmental needs. Cosmic shifts in the solar system impact Earth, mirroring Vedic astrology's principles. My astrological journey is a dedicated exploration of the profound connection between humanity and the cosmos, with a deep focus on the intricate art of individual horoscope analysis</div>
-                    </p>
+                    <p>Driven by a lifelong curiosity about the universe, my 12+ years of astrological study evolved from analyzing individual charts to understanding global celestial influences. I've observed how our responses to natural rhythms shape life, exemplified by Dubai's air conditioning laws reflecting environmental needs. Cosmic shifts in the solar system impact Earth, mirroring Vedic astrology's principles. My astrological journey is a dedicated exploration of the profound connection between humanity and the cosmos, with a deep focus on the intricate art of individual horoscope analysis
+                    </p> </div>
                 <div class="description-box">
                     <h3>Empowering the Future: Mastering Open Source, AI, and Digital Security</h3>
                     <p>In the digital age, self-reliance and adaptability are key. Linux empowers users with its open-source nature, offering independence and security unlike paid software. While AI brings advancements, its potential biases necessitate understanding and responsible use. Adapting to AI's impact on jobs through upskilling, especially in programming and AI, is vital. I'm exploring Linux, ethical hacking, digital security, and AI model creation to empower myself and others, sharing knowledge on social media to foster technological advancement and future readiness.
@@ -160,7 +181,6 @@
         </div>
     </div>
 
-    <!-- Google Translate API -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
