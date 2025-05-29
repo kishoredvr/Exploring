@@ -418,46 +418,34 @@
         const videoIdMatch = iframe.src.match(/embed\/([a-zA-Z0-9_-]{11})/);
         if (videoIdMatch) {
           const videoId = videoIdMatch[1];
-          // Simulating API call as direct fetch to oembed might be blocked by CORS in snippet
-          // In a real scenario, ensure the endpoint is accessible or use a backend proxy.
-          // For this example, we'll just keep the placeholder or a generic title.
           const videoTitleElement = document.getElementById("video-title");
-          if (videoTitleElement) {
-             // Placeholder for title fetching logic
-             // The original fetch call to `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=$${videoId}&format=json`
-             // is specific to an environment that might proxy YouTube oEmbed.
-             // For general browser execution, this would typically be:
-             // fetch(`https://www.youtube.com/oembed?url=http%3A//youtube.com/watch%3Fv%3D${videoId}&format=json`)
-             // However, to avoid potential live fetch issues in this static example,
-             // we'll set a generic message or leave it as "Loading title..."
-             // If you have a backend to proxy this, that would be the robust solution.
-            videoTitleElement.textContent = "Latest Video Title (Dynamic)"; // Example static title
-            // Original fetch logic (might not work in all environments due to CORS):
-            /*
-            fetch(`https://www.youtube.com/oembed?url=http%3A//youtube.com/watch%3Fv%3D${videoId}&format=json`)
-              .then(response => {
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                return response.json();
-              })
-              .then(data => {
-                if (data && data.title) {
-                  videoTitleElement.textContent = data.title;
-                } else {
-                  videoTitleElement.textContent = "Title not available.";
-                }
-              })
-              .catch(() => {
-                videoTitleElement.textContent = "Unable to load video title.";
-              });
-            */
-          }
-        } else {
-            const videoTitleElement = document.getElementById("video-title");
-            if (videoTitleElement) {
-                videoTitleElement.textContent = "Video ID not found in URL.";
+          
+          // Use YouTube's oEmbed endpoint with JSONP callback
+          const script = document.createElement('script');
+          script.src = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json&callback=handleVideoTitle`;
+          document.body.appendChild(script);
+          
+          // Define the callback function
+          window.handleVideoTitle = function(data) {
+            if (data && data.title) {
+              videoTitleElement.textContent = data.title;
+            } else {
+              videoTitleElement.textContent = "Title not available";
             }
+            document.body.removeChild(script);
+            delete window.handleVideoTitle;
+          };
+          
+          // Set timeout in case the request fails
+          setTimeout(() => {
+            if (videoTitleElement.textContent === "Loading title...") {
+              videoTitleElement.textContent = "Unable to load video title";
+              if (document.body.contains(script)) {
+                document.body.removeChild(script);
+              }
+              delete window.handleVideoTitle;
+            }
+          }, 3000);
         }
       }
     })();
