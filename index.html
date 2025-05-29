@@ -21,7 +21,7 @@
     header {
       background-color: #4CAF50;
       color: white;
-      padding: 5px 0; /* Reduced padding slightly to accommodate menu item boxes */
+      padding: 5px 0;
       text-align: center;
       position: relative;
       z-index: 10;
@@ -53,25 +53,25 @@
       align-items: center;
     }
     nav a {
-      margin: 5px 8px; /* Adjusted margin for spacing between boxes */
-      padding: 6px 12px; /* Added padding to create space inside the box */
+      margin: 5px 8px;
+      padding: 6px 12px;
       color: white;
       text-decoration: none;
       font-weight: bold;
       font-size: 0.85rem;
-      border: 1px solid white; /* Added border for the box outline */
-      border-radius: 4px; /* Added rounded corners to the box */
+      border: 1px solid white;
+      border-radius: 4px;
       white-space: nowrap;
-      transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover */
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     nav a:hover {
-      background-color: white; /* Change background on hover */
-      color: #4CAF50; /* Change text color on hover */
+      background-color: white;
+      color: #4CAF50;
     }
     #google_translate_element {
-      margin-left: 8px; /* Keeps the translate element spaced from the last menu item */
+      margin-left: 8px;
       display: inline-block;
-      vertical-align: middle; /* Align with the middle of the menu items */
+      vertical-align: middle;
     }
     .goog-te-combo {
       padding: 2px;
@@ -80,8 +80,8 @@
       background-color: #4CAF50;
       color: white;
       font-size: 0.85rem;
-      height: auto; /* Ensure it aligns well if text size changes */
-      line-height: normal; /* Ensure consistent line height */
+      height: auto;
+      line-height: normal;
     }
     .container {
       max-width: calc(100% - 0.8cm);
@@ -216,11 +216,11 @@
       text-align: center;
     }
     .column:nth-child(1) {
-      flex: 1.4; /* 120% width for Latest Video (changed from 1.4) */
+      flex: 1.4;
     }
     .column:nth-child(2),
     .column:nth-child(3) {
-      flex: 0.8; /* 90% width for Article Insights and Important Links (changed from 0.8) */
+      flex: 0.8;
     }
     .column h3 {
       color: #4CAF50;
@@ -271,8 +271,8 @@
         width: 150px;
       }
       nav a {
-        font-size: 0.8rem; /* Slightly smaller font for smaller screens if needed */
-        padding: 5px 10px; /* Adjust padding for smaller screens */
+        font-size: 0.8rem;
+        padding: 5px 10px;
       }
     }
     @media (max-width: 480px) {
@@ -294,22 +294,22 @@
         height: 18px;
       }
       nav {
-        flex-direction: column; /* Stack nav items vertically */
+        flex-direction: column;
       }
       nav a {
-        margin: 4px 0; /* Adjust margin for stacked items */
-        width: calc(100% - 20px); /* Make nav items take more width */
+        margin: 4px 0;
+        width: calc(100% - 20px);
         box-sizing: border-box;
         text-align: center;
       }
       #google_translate_element {
         margin-left: 0;
-        margin-top: 5px; /* Add some space above translate element when stacked */
-        width: calc(100% - 20px); /* Make translate element take more width */
+        margin-top: 5px;
+        width: calc(100% - 20px);
         box-sizing: border-box;
       }
       .goog-te-combo {
-        width: 100%; /* Make dropdown full width */
+        width: 100%;
       }
     }
   </style>
@@ -379,7 +379,6 @@
       <div class="columns">
         <div class="column">
           <h3>Latest Video</h3>
-          <div id="video-title" style="font-size: 0.9rem; margin-bottom: 10px; color: #333;">Loading title...</div>
           <iframe id="youtube-video" src="https://www.youtube.com/embed/dsE_M_rkASY" frameborder="0" allowfullscreen></iframe>
         </div>
         <div class="column">
@@ -411,44 +410,5 @@
     }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  <script>
-    (function () {
-      const iframe = document.getElementById("youtube-video");
-      if (iframe) {
-        const videoIdMatch = iframe.src.match(/embed\/([a-zA-Z0-9_-]{11})/);
-        if (videoIdMatch) {
-          const videoId = videoIdMatch[1];
-          const videoTitleElement = document.getElementById("video-title");
-          
-          // Use YouTube's oEmbed endpoint with JSONP callback
-          const script = document.createElement('script');
-          script.src = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json&callback=handleVideoTitle`;
-          document.body.appendChild(script);
-          
-          // Define the callback function
-          window.handleVideoTitle = function(data) {
-            if (data && data.title) {
-              videoTitleElement.textContent = data.title;
-            } else {
-              videoTitleElement.textContent = "Title not available";
-            }
-            document.body.removeChild(script);
-            delete window.handleVideoTitle;
-          };
-          
-          // Set timeout in case the request fails
-          setTimeout(() => {
-            if (videoTitleElement.textContent === "Loading title...") {
-              videoTitleElement.textContent = "Unable to load video title";
-              if (document.body.contains(script)) {
-                document.body.removeChild(script);
-              }
-              delete window.handleVideoTitle;
-            }
-          }, 3000);
-        }
-      }
-    })();
-  </script>
 </body>
 </html>
