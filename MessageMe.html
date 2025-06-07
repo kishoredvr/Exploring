@@ -2,103 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.9"> <!-- 90% zoom effect -->
-    <title>Message Me | Exploring</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            transform: scale(0.9); /* 90% zoom */
-            transform-origin: top center;
-            width: 111.11%; /* Counteract the scaling */
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
-        nav {
-            background-color: #f9f9f9; /* Changed to light gray */
-            padding: 15px 0;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        nav ul {
-            list-style-type: none;
+        * {
             margin: 0;
             padding: 0;
-            display: inline-flex; /* Changed to inline-flex */
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        /* Navigation Menu */
+        nav {
+            background: #4285f4;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        ul {
+            list-style-type: none;
+            display: flex;
             justify-content: center;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            padding: 5px;
+            flex-wrap: wrap;
         }
         
-        nav li {
-            margin: 0 10px;
+        li {
+            margin: 0;
         }
         
-        nav a {
-            color: #305c4c;
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 16px 20px;
             text-decoration: none;
             font-weight: 500;
-            padding: 8px 15px;
-            border-radius: 3px;
-            transition: all 0.3s;
-            border: 1px solid #ddd; /* Box outline */
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
         }
         
-        nav a:hover {
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        li a:hover {
+            background-color: #3367d6;
         }
         
-        #ff-compose {
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         
-        footer {
+        .form-header {
+            background: #4285f4;
+            color: white;
+            padding: 25px;
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            color: #7f8c8d;
-            font-size: 0.9em;
         }
         
-        @media (max-width: 600px) {
-            body {
-                transform: scale(1);
-                width: 100%;
-                padding: 10px;
-            }
-            
-            nav ul {
+        .form-header h1 {
+            font-weight: 500;
+            font-size: 28px;
+            margin: 0;
+        }
+        
+        .form-description {
+            padding: 15px 25px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 15px;
+            color: #555;
+            text-align: center;
+        }
+        
+        .form-iframe {
+            width: 100%;
+            height: 1200px;
+            border: none;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            ul {
                 flex-direction: column;
-                display: flex;
+                align-items: center;
             }
             
-            nav li {
-                margin: 5px 0;
+            li {
                 width: 100%;
             }
             
-            nav a {
-                display: block;
-                text-align: center;
+            li a {
+                padding: 12px;
+            }
+            
+            .form-container {
+                margin: 0 auto;
+                border-radius: 0;
+            }
+            
+            .form-header {
+                padding: 20px;
+            }
+            
+            .form-header h1 {
+                font-size: 22px;
+            }
+            
+            .form-iframe {
+                height: 1400px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Menu -->
     <nav>
         <ul>
             <li><a href="https://kishoredvr.github.io/Exploring/">Home</a></li>
@@ -107,15 +136,37 @@
             <li><a href="#">Message Me</a></li>
         </ul>
     </nav>
-    
-    <main>
-        <div id="ff-compose"></div>
-    </main>
-    
-    <footer>
-        <p>© <script>document.write(new Date().getFullYear())</script> Exploring. All rights reserved.</p>
-    </footer>
-    
-    <script async defer src="https://formfacade.com/include/103546035502759958267/form/1FAIpQLSfuV7hCStetkvdGxelUHVVIImjV03FmC1AndfHZ0b0nLARI4A/classic.js?div=ff-compose"></script>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Contact Us</h1>
+        </div>
+        <div class="form-description">
+            Please fill out the form below and we'll get back to you soon.
+        </div>
+        <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?embedded=true"></iframe>
+    </div>
+
+    <script>
+        // Adjust iframe height to fit content
+        function adjustIframeHeight() {
+            const iframe = document.querySelector('.form-iframe');
+            try {
+                const body = iframe.contentWindow.document.body;
+                iframe.style.height = Math.max(body.scrollHeight, body.offsetHeight) + 'px';
+            } catch (e) {
+                console.log("Adjusting iframe height:", e);
+            }
+        }
+
+        // Adjust height periodically
+        setInterval(adjustIframeHeight, 1000);
+        
+        // Initial adjustment
+        window.addEventListener('load', function() {
+            setTimeout(adjustIframeHeight, 3000);
+        });
+    </script>
 </body>
 </html>
