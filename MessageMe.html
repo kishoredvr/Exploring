@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Me</title>
+    <title>Contact Form</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
@@ -23,7 +23,7 @@
         
         /* Navigation Menu */
         nav {
-            background: #1dc228;
+            background: #4CAF50; /* Green color */
             border-radius: 8px;
             margin-bottom: 30px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -51,7 +51,7 @@
         }
         
         li a:hover {
-            background-color: #119136;
+            background-color: #3d8b40; /* Darker green */
         }
         
         /* Form Container */
@@ -65,7 +65,7 @@
         }
         
         .form-header {
-            background: #18ab33;
+            background: #4CAF50; /* Green color */
             color: white;
             padding: 25px;
             text-align: center;
@@ -79,18 +79,18 @@
         
         .form-description {
             padding: 15px 25px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e0e0e0;
+            background: #e8f5e9; /* Light green background */
+            border-bottom: 1px solid #c8e6c9;
             font-size: 15px;
-            color: #555;
+            color: #2e7d32; /* Dark green text */
             text-align: center;
         }
         
         .form-iframe {
             width: 100%;
-            height: 1200px;
             border: none;
             display: block;
+            min-height: 500px; /* Minimum height */
         }
         
         @media (max-width: 768px) {
@@ -119,10 +119,6 @@
             .form-header h1 {
                 font-size: 22px;
             }
-            
-            .form-iframe {
-                height: 1400px;
-            }
         }
     </style>
 </head>
@@ -145,28 +141,49 @@
         <div class="form-description">
             Please fill out the form below and we'll get back to you soon.
         </div>
-        <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?embedded=true"></iframe>
+        <iframe class="form-iframe" id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?embedded=true"></iframe>
     </div>
 
     <script>
-        // Adjust iframe height to fit content
+        // Improved iframe height adjustment
         function adjustIframeHeight() {
-            const iframe = document.querySelector('.form-iframe');
+            const iframe = document.getElementById('googleForm');
             try {
-                const body = iframe.contentWindow.document.body;
-                iframe.style.height = Math.max(body.scrollHeight, body.offsetHeight) + 'px';
+                // Post a message to the iframe to request its height
+                iframe.contentWindow.postMessage({
+                    type: 'getHeight',
+                    id: 'googleForm'
+                }, '*');
             } catch (e) {
-                console.log("Adjusting iframe height:", e);
+                console.log("Error adjusting iframe height:", e);
             }
         }
 
-        // Adjust height periodically
-        setInterval(adjustIframeHeight, 1000);
-        
-        // Initial adjustment
-        window.addEventListener('load', function() {
-            setTimeout(adjustIframeHeight, 3000);
+        // Listen for messages from the iframe
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'iframeHeight' && event.data.id === 'googleForm') {
+                document.getElementById('googleForm').style.height = event.data.height + 'px';
+            }
         });
+
+        // Adjust height periodically and after certain events
+        const adjustEvents = ['load', 'resize', 'orientationchange'];
+        adjustEvents.forEach(event => {
+            window.addEventListener(event, function() {
+                setTimeout(adjustIframeHeight, 100);
+            });
+        });
+
+        // Initial adjustment with delay to allow form to load
+        window.addEventListener('load', function() {
+            setTimeout(adjustIframeHeight, 2000);
+        });
+
+        // Add resize observer for dynamic content changes
+        if (typeof ResizeObserver !== 'undefined') {
+            const observer = new ResizeObserver(adjustIframeHeight);
+            observer.observe(document.body);
+        }
     </script>
 </body>
 </html>
