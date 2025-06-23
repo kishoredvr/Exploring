@@ -1,420 +1,575 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Exploring The World</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f9f9f9 0%, #eef2f5 100%);transform: scale(0.6);transform-origin: top left;width: 166.67%;
       color: #333;
+      line-height: 1.6;
       overflow-x: hidden;
     }
-    .scale-container {
-      transform: scale(0.8);
-      transform-origin: 0 0;
-      width: 125%;
+    
+    .container-wrapper {
+      width: 100%;
+      background: white;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
     }
+    
     header {
-      background-color: #4CAF50;
+      background: linear-gradient(90deg, #2E7D32 0%, #4CAF50 100%);
       color: white;
-      padding: 5px 0;
+      padding: 20px 0;
       text-align: center;
       position: relative;
-      z-index: 10;
     }
-    .header-container {
-      max-width: calc(100% - 0.8cm);
-      margin: 0 auto;
-      padding: 0 15px;
+    
+    .header-content {
+      padding: 0 30px;
     }
-    header h1 {
-      font-size: 1.2rem;
-      margin: 5px 0;
-    }
+    
     nav {
-      margin: 5px 0;
-      text-align: center;
-      padding: 5px 0;
       display: flex;
       justify-content: center;
-      align-items: center;
       flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      gap: 10px;
+      margin-top: 20px;
     }
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
+    
     nav a {
-      margin: 5px 8px;
-      padding: 6px 12px;
+      padding: 10px 20px;
       color: white;
       text-decoration: none;
-      font-weight: bold;
-      font-size: 0.85rem;
-      border: 1px solid white;
-      border-radius: 4px;
-      white-space: nowrap;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      transition: all 0.3s ease;margin-right: 20px;margin-left: 20px;
+      background: rgba(255, 255, 255, 0.1);transform: scale(1.2);
+
     }
+    
     nav a:hover {
       background-color: white;
       color: #4CAF50;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    #google_translate_element {
-      margin-left: 8px;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .goog-te-combo {
-      padding: 2px;
-      border-radius: 3px;
-      border: 1px solid #fff;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 0.85rem;
-      height: auto;
-      line-height: normal;
-    }
-    .container {
-      max-width: calc(100% - 0.8cm);
-      margin: 0 auto;
-      padding: 15px;
-      box-sizing: border-box;
-      position: relative;
-    }
+    
     .main-content {
       display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-      align-items: stretch;
+      padding: 30px;
+      gap: 30px;
+      background: #fff;
     }
-    .profile-container {
-      flex: 7;
-      display: flex;
-      background: #ffffff;
-      padding: 15px;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-      min-height: 250px;
-    }
-    .profile-container img {
-      border-radius: 10px;
-      width: 180px;
-      height: auto;
-      object-fit: cover;
-      margin-right: 15px;
-    }
-    .profile-text {
-      flex: 2;
-    }
-    .profile-container p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.4;
-      text-align: justify;
-    }
-    .profile-container ul {
-      padding-left: 0;
-      margin: 10px 0 10px 15px;
-    }
-    .profile-container li {
-      list-style-type: none;
-      margin: 8px 0;
-      padding-left: 20px;
-      position: relative;
-      line-height: 1.3;
-      font-size: 15px;
-    }
-    .profile-container li:before {
-      content: "•";
-      color: #4a6fa5;
-      font-size: 18px;
-      position: absolute;
-      left: 0;
-      top: -2px;
-    }
-    .vertical-topics {
-      flex: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      justify-content: space-between;
-    }
-    .topic {
-      border: 1px solid #4CAF50;
-      padding: 6px;
-      border-radius: 5px;
-      background-color: #e8f5e9;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-height: calc(250px / 3 - 12px);
-    }
-    .topic h4 {
-      color: #4CAF50;
-      margin: 0 0 4px 0;
-      font-size: 0.8rem;
-      text-align: center;
-      line-height: 1.2;
-    }
-    .topic ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    
+    .profile-section {
       flex: 1;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      gap: 30px;
     }
-    .topic li {
-      margin: 2px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.65rem;
-      white-space: nowrap;
+    
+    .profile-image {
+      flex: 0 0 350px;
+      border-radius: 60%;
       overflow: hidden;
-      text-overflow: ellipsis;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      height: 400px;
+      width: 400px;margin-top: 80px;transform: scale(1.2);
     }
-    .topic li img {
-      width: 21px;
-      height: 21px;
-      flex-shrink: 0;
+    
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
     }
-    .topic li a {
-      color: #4CAF50;
-      text-decoration: none;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    
+    .profile-image img:hover {
+      transform: scale(1.10);
     }
-    .topic li a:hover {
-      text-decoration: underline;
+    
+    .profile-info {
+      flex: 1;
     }
-    .columns {
+    
+    .profile-info h1 {
+      color: #2E7D32;
+      margin-bottom: 20px;
+      font-size: 2.8rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .profile-info h1::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      
+      border-radius: 2px;
+    }
+    .underline-word {
+   	position: relative;
+	display: inline-block;
+   	color: #2E7D32;
+ 	  }
+
+    .underline-word::after {
+	  content: "";
+	  position: absolute;
+	  bottom: -5px; /* slight space below the word */
+	  left: 0;
+	  width: 100%;
+	  height: 4px;
+	  background: linear-gradient(90deg, #4CAF50, #2E7D32);
+	  border-radius: 2px;
+	}
+    .profile-info p {
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #444;
+    }
+    
+    .social-topics {
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
       gap: 15px;
-      margin-top: 20px;
+      margin-top: 30px;transform: scale(0.9);
+
     }
+    
+    .social-topic {
+      flex: 1;
+      min-width: 140px;
+      border-radius: 15px;
+      padding: 20px;
+      background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+      transition: all 0.4s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      text-align: center;
+    }
+    
+    .social-topic:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(76, 175, 80, 0.15);
+    }
+    
+    .social-topic h3 {
+      color: #2E7D32;
+      margin-bottom: 15px;
+      font-size: 2.2rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .social-topic h3::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 3px;
+      background: #4CAF50;
+      border-radius: 3px;
+    }
+    
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: white;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .social-link:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      color: #2E7D32;
+    }
+    
+    .social-link img {
+      width: 30px;
+      height: 30px;
+      margin-right: 12px;
+      border-radius: 6px;transform: scale(1.4);
+
+    }
+    
+    .social-link span {
+      flex: 1;
+      text-align: left;
+      font-weight: 500;
+      font-size: 1.4rem;
+    }
+    
+    .content-columns {
+      display: flex;
+      gap: 30px;
+      padding: 0 30px 30px;
+    }
+    
     .column {
       flex: 1;
-      min-width: 250px;
-      background: #ffffff;
-      padding: 12px;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+    }
+    
+    /* Video columns (first and third) - increased by 20% */
+    .column:first-child,
+    .column:last-child {
+      flex: 1.25; /* Increased from 1 to 1.2 (20% increase) */
+    }
+    
+    /* Important links column (middle) - reduced by 40% */
+    .column:nth-child(2) {
+      flex: 0.5; /* Reduced from 1 to 0.6 (40% decrease) */
+    }
+    
+    .column:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(76, 175, 80, 0.15);
+    }
+    
+    .column-header {
+      background: linear-gradient(90deg, #4CAF50, #2E7D32);
+      color: white;
+      padding: 15px 20px;
       text-align: center;
     }
-    .column:nth-child(1) {
-      flex: 1.5;
+    
+    .column-content {
+      padding: 20px;
     }
-    .column:nth-child(2) {
-      flex: 0.75;
+    
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 10px;
     }
-    .column:nth-child(3) {
-      flex: 1.5;
+    
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
     }
-    .column h3 {
-      color: #4CAF50;
-      font-size: 1rem;
-      margin: 0 0 10px 0;
+    
+    .links-list {
+      list-style: none;
     }
-    .column iframe {
-      max-width: 100%;
-      height: 300px;
-      aspect-ratio: 18/9;
+    
+    .links-list li {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f8fdf8;
+      border-radius: 10px;
+      transition: all 0.3s ease;
     }
-    .more {
-      display: block;
-      margin-top: 8px;
-      color: #4CAF50;
-      text-align: right;
+    
+    .links-list li:hover {
+      background: #e8f5e9;
+      transform: translateX(5px);
+    }
+    
+    .links-list a {
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      font-size: 0.8rem;
+      color: #333;
+      font-weight: 500; transform: scale(1.2)
     }
-
-    /* Responsive Styles */
+    
+    .links-list a:hover {
+      color: #2E7D32;
+    }
+    
+    .links-list img {
+      width: 30px;
+      height: 30px;
+      margin-right: 12px;
+      border-radius: 5px; transform: scale(1.2);
+    }
+    
+    .more-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .more-link:hover {
+      color: #2E7D32;
+      text-decoration: underline;
+    }
+    
     @media (max-width: 992px) {
       .main-content {
         flex-direction: column;
       }
-      .profile-container {
+      
+      .profile-section {
         flex-direction: column;
       }
-      .vertical-topics {
-        flex-direction: row;
+      
+      .profile-image {
+        flex: 0 0 auto;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      
+      .social-topics {
         flex-wrap: wrap;
       }
-      .topic {
-        flex: 1 1 150px;
-      }
-      .column:nth-child(1),
-      .column:nth-child(2),
-      .column:nth-child(3) {
-        flex: 1;
+      
+      .social-topic {
+        min-width: calc(50% - 15px);
       }
     }
+    
     @media (max-width: 768px) {
-      .container {
-        max-width: calc(100% - 20px);
-        padding: 10px;
+      .content-columns {
+        flex-direction: column;
       }
-      .profile-container img {
-        width: 150px;
+      
+      .social-topic {
+        min-width: 80%;
       }
-      nav a {
-        font-size: 0.8rem;
-        padding: 5px 10px;
-      }
-    }
-    @media (max-width: 480px) {
-      .profile-container img {
-        width: 120px;
-      }
-      .profile-container p,
-      .profile-container li {
-        font-size: 14px;
-      }
-      .topic h4 {
-        font-size: 0.75rem;
-      }
-      .topic li {
-        font-size: 0.6rem;
-      }
-      .topic li img {
-        width: 18px;
-        height: 18px;
-      }
+      
       nav {
         flex-direction: column;
       }
+      
       nav a {
-        margin: 4px 0;
-        width: calc(100% - 20px);
-        box-sizing: border-box;
+        width: 100%;
         text-align: center;
       }
-      #google_translate_element {
-        margin-left: 0;
-        margin-top: 5px;
-        width: calc(100% - 20px);
-        box-sizing: border-box;
+      
+      /* Reset flex values for mobile */
+      .column:first-child,
+      .column:last-child,
+      .column:nth-child(2) {
+        flex: 1;
       }
-      .goog-te-combo {
-        width: 100%;
+    }
+    
+    @media (max-width: 480px) {
+      .profile-image {
+        height: 250px;
+        width: 250px;
+      }
+      
+      .profile-info h1 {
+        font-size: 1.8rem;
+      }
+      
+      .main-content {
+        padding: 20px;
+      }
+      
+      .content-columns {
+        padding: 0 20px 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="scale-container">
+  <div class="container-wrapper">
     <header>
-      <div class="header-container">
+      <div class="header-content">
+        
         <nav>
-          <div class="nav-links">
-            <a href="https://kishoredvr.github.io/Exploring/">Home</a>
-            <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
-            <a href="https://astrostudy.github.io/Articles/">My Articles</a>
-            <a href="https://astrostudy.github.io/Articles/Resume">My Resume</a>
-            <a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Message Me</a>
-            
-          </div>
+          <a href="https://kishoredvr.github.io/Exploring/">Home</a>
+          <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
+          <a href="https://astrostudy.github.io/Articles/">My Articles</a>
+          <a href="https://astrostudy.github.io/Articles/Resume">My Resume</a>
+          <a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Message Me</a>
         </nav>
       </div>
     </header>
-    <div class="container">
-      <div class="main-content">
-        <div class="profile-container">
-          <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Your Profile Picture" onerror="this.onerror=null; this.src='https://placehold.co/180x250/cccccc/000000?text=Profile+Image';">
-          <div class="profile-text">
-            <p>Hello, I'm Kishore DVR.</p>
-            <p><br>Welcome to a digital sanctuary where innovation meets destiny. I share my thoughts and insights on these interesting topics. Join me to explore and enjoy my the thoughts and resources. Please check here videos, articles, and resources about:</p>
-            <ul>
-              <li>Digital Reliability</li>
-              <li>Vedic Astrology</li>
-              <li>National Economies</li>
-            </ul>
-          </div>
+    
+    <div class="main-content">
+      <div class="profile-section"><br>
+        <div class="profile-image">
+	 <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Kishore DVR" onerror="this.onerror=null; this.src='https://placehold.co/300x400/cccccc/000000?text=Profile+Image';">
         </div>
-        <div class="vertical-topics">
-          <div class="topic">
-            <h4>Digital Reliability</h4>
-            <ul>
-              <li>
-                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=YT';"></a>
-                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=IG';"></a>
-                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=FB';"></a>             
-              </li>
-            </ul>
-          </div>
-          <div class="topic">
-            <h4>AstroTechnics</h4>
-            <ul>
-              <li>
-                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=YT';"></a>
-                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=IG';"></a>
-                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=FB';"></a>
-                
-              </li>
-            </ul>
-          </div>
-          <div class="topic">
-            <h4>National Economies</h4>
-            <ul>
-              <li>
-                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=YT';"></a>
-                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=IG';"></a>
-                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" onerror="this.onerror=null; this.src='https://placehold.co/21x21/EFEFEF/AAAAAA?text=FB';"></a>
-                
-              </li>
-            </ul>
+        
+        <div class="profile-info">
+          <h1 style="text-align: center;"><span class="underline-word">Hello,</span> I'm Kishore DVR</h1>
+          <p style="font-size: 30px;">Welcome to a digital sanctuary where innovation meets destiny. I share my thoughts and insights on these interesting topics. Join me to explore and enjoy my thoughts and resources in the fields of </p>
+         <div style="width: 100%; height: 20%">
+          <div class="social-topics">
+            <div class="social-topic">
+              <h3>Digital Reliability</h3>
+              <div class="social-links">
+                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+                  <span>YouTube Channel</span>
+                </a>
+                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                  <span>Instagram Profile</span>
+                </a>
+                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+                  <span>Facebook Page</span>
+                </a>
+              </div>
+            </div>
+            <div class="social-topic">
+              <h3>AstroTechnics</h3>
+              <div class="social-links">
+                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+                  <span>YouTube Channel</span>
+                </a>
+                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                  <span>Instagram Profile</span>
+                </a>
+                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+                  <span>Facebook Page</span>
+                </a>
+              </div>
+            </div>
+	 
+            <div class="social-topic">
+              <h3>National Economies</h3>
+              <div class="social-links">
+                <a href="https://www.youtube.com/@NationalEconomies" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
+                  <span>YouTube Channel</span>
+                </a>
+                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                  <span>Instagram Profile</span>
+                </a>
+                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank" class="social-link">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+                  <span>Facebook Page</span>
+                </a>
+              </div>
+            </div>
+           </div>
           </div>
         </div>
       </div>
-
-      <div class="columns">
-        <div class="column">
-          <h3>Latest Video</h3>
-          <iframe id="youtube-video" src="https://www.youtube.com/embed/ZcjYJUXrTbQ" frameborder="0" allowfullscreen></iframe>
-        </div>
-        
+    </div>
     
-        
-        <div class="column">
-          <h3>Important Links</h3>
-         
-          <ul style="text-align: left; padding-left: 20px; margin: 0;">
-            <li><a href="https://github.com/digitalreliability/Sharing" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
-                <br><img src="GH.png" alt="GitHub" style="max-height: 20px; width: auto;"><br><br><br>
-            <li><a href="https://kishoredvr.github.io/Antharyami-DataBank/">Astrology Data Bank</a></li><br>
-            <li><a href="https://www.linkedin.com/in/venkata-ravi-kishore-dontharaju-24b9ba254/" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
-                <br><img src="LinkedIn-Logo.png" alt="LinkedIn" style="max-height: 20px; width: auto;">
-           
-                </a>
-              </li>
-            </ul>
-
-          </ul> 
-          <a href="#" class="more">More yet to come</a>
+    <div class="content-columns">
+      <div class="column">
+        <div class="column-header">
+          <h2>Latest Video</h2>
         </div>
-    <div class="column">
-
-         <h3>Website Tour</h3>
-          <iframe id="youtube-video" src="https://www.youtube.com/embed/xRgUAteViQc" frameborder="0" allowfullscreen></iframe>
+        <div class="column-content">
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/ZcjYJUXrTbQ" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+      
+      <div class="column">
+        <div class="column-header">
+          <h2>Important Links</h2>
+        </div>
+        <div class="column-content">
+          <ul class="links-list">
+            <li>
+              <a href="https://github.com/digitalreliability/Sharing" target="_blank">
+                <img src="GH.png" alt="GitHub" onerror="this.onerror=null; this.src='https://placehold.co/30x30/000000/FFFFFF?text=GH';">
+                GitHub Repository
+              </a>
+            </li>
+            <li>
+              <a href="https://kishoredvr.github.io/Antharyami-DataBank/">
+                <img src="https://cdn-icons-png.flaticon.com/512/2172/2172831.png" alt="Astrology">
+                Astrology Data Bank
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/venkata-ravi-kishore-dontharaju-24b9ba254/" target="_blank">
+                <img src="LinkedIn-Logo.png" alt="LinkedIn" onerror="this.onerror=null; this.src='https://placehold.co/30x30/0077B5/FFFFFF?text=IN';">
+                LinkedIn Profile
+              </a>
+            </li>
+          </ul>
+          <a href="#" class="more-link">More yet to come →</a>
+        </div>
+      </div>
+      
+      <div class="column">
+        <div class="column-header">
+          <h2>Website Tour</h2>
+        </div>
+        <div class="column-content">
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/xRgUAteViQc" frameborder="0" allowfullscreen></iframe>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
   
+  <script>
+    // Add subtle animation to header on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const header = document.querySelector('header');
+      header.style.opacity = '0';
+      header.style.transform = 'translateY(-20px)';
+      
+      setTimeout(() => {
+        header.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        header.style.opacity = '1';
+        header.style.transform = 'translateY(0)';
+      }, 300);
+      
+      // Add hover effect to social topics
+      const socialTopics = document.querySelectorAll('.social-topic');
+      socialTopics.forEach(topic => {
+        topic.addEventListener('mouseenter', function() {
+          this.style.background = 'linear-gradient(135deg, #e8f5e9 0%, #dcedc8 100%)';
+        });
+        
+        topic.addEventListener('mouseleave', function() {
+          this.style.background = 'linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%)';
+        });
+      });
+    });
+  </script>
+</body>
 </html>
