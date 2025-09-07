@@ -1,192 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Me</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 5px;
-        }
-        
-        /* Navigation Menu - Updated to blue theme */
-        nav {
-            background: #0987b5; /* New blue color */
-            border-radius: 8px; 
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        ul {
-            list-style-type: none;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        li {
-            margin: 0;
-        }
-        
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 8px 10px; 
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
-        }
-        
-        li a:hover {
-            background-color: #08709a; /* Darker blue */
-        }
-        
-        /* Form Container - Updated to blue theme */
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .form-header {
-            background: #0987b5; /* New blue color */
-            color: white;
-            padding: 5px;
-            text-align: center;
-        }
-        
-        .form-header h1 {
-            font-weight: 500;
-            font-size: 18px;
-            margin: 0;
-        }
-        
-        .form-description {
-            padding: 15px 25px;
-            background: #e6f4fc; /* Light blue background */
-            border-bottom: 1px solid #b8e0fc;
-            font-size: 15px;
-            color: #096a8f; /* Dark blue text */
-            text-align: center;
-        }
-        
-        .form-iframe {
-            width: 100%;
-            border: none;
-            display: block;
-            min-height: 500px; /* Minimum height */
-        }
-        
-        @media (max-width: 768px) {
-            ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            li {
-                width: 100%;
-            }
-            
-            li a {
-                padding: 12px; gap: 10px;
-            }
-            
-            .form-container {
-                margin: 0 auto;
-                border-radius: 0;
-            }
-            
-            .form-header {
-                padding: 14px;
-            }
-            
-            .form-header h1 {
-                font-size: 22px;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Site Under Maintenance</title>
+
+  <!-- Keep original fonts & icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* Base resets */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height: 100%; }
+
+    /* Theme matching the provided file */
+    body{
+      font-family: 'Lora', serif;
+      background: linear-gradient(to bottom, rgba(220,220,220,0.95), rgba(245,245,245,0.95)),
+                  url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%230987b5" opacity="0.05"/></svg>');
+      background-size: 150px;
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      background: linear-gradient(135deg, #0987b5, #076a91);
+      padding: 8px 3%;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-radius: 10px;
+      margin-bottom: 28px;
+    }
+    .nav-links { display:flex; gap:18px; align-items:center; flex-wrap:wrap; max-width:1600px; width:100%; justify-content:center; }
+    nav a {
+      padding:6px 12px;
+      color:#e8f4ff;
+      text-decoration:none;
+      font-family: 'Open Sans', sans-serif;
+      font-weight:600;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      transform: scale(0.9);
+    }
+    nav a:hover { background:white; color:#0987b5; transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.08); }
+
+    /* Center card */
+    .center-wrap {
+      flex: 1 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 20px;
+    }
+    .card {
+      max-width:900px;
+      width:100%;
+      background: linear-gradient(to bottom, #ffffff, #fbfeff);
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+      padding: 48px;
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 68px;
+      color: #0987b5;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 34px;
+      color: #076a91;
+      margin-bottom: 8px;
+    }
+
+    p.lead {
+      color: #5a9ec9;
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    p.notice {
+      color: #33475b;
+      font-size: 18px;
+      margin: 14px 0 22px;
+    }
+
+    .muted {
+      color:#7f8c8d;
+      font-size:14px;
+      margin-bottom: 18px;
+    }
+
+    .btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 8px; }
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight:600;
+      font-family: 'Open Sans', sans-serif;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: linear-gradient(90deg,#0987b5,#5ac3f0); color:white; box-shadow:0 6px 18px rgba(9,135,181,0.18); }
+    .btn-muted { background: #f0f4f7; color: #076a91; border: 1px solid rgba(7,106,145,0.06); }
+
+    footer {
+      text-align:center;
+      padding:14px 8px;
+      color:#6b7c86;
+      font-size:13px;
+      margin-top: 28px;
+    }
+
+    @media (max-width:900px){
+      .card { padding: 28px; border-radius:14px; }
+      h1 { font-size:26px; }
+      .icon { font-size:56px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation Menu -->
-    <nav>
-        <ul>
-            <li><a href="https://kishoredvr.github.io/Exploring/">Home</a></li>
-            <li><a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin of Thoughts</a></li>
-            <li><a href="https://astrostudy.github.io/Articles/">My Articles</a></li>
-            <li><a href="#">Message Me</a></li>
-        </ul>
-    </nav>
-
-    <!-- Form Container -->
-    <div class="form-container">
-        <div class="form-header">
-            <h1>Message Me</h1>
-        </div>
-        
-        <div class="form-description">
-            Fill out the form below to send me a message. I'll get back to you as soon as possible!
-        </div>
-        
-        <iframe class="form-iframe" id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSdM_eKzDRgqgfaokbaEI2nRi4ROqIqbWHviMTkFArBECH2htw/viewform?embedded=true"></iframe>
+  <nav>
+    <div class="nav-links">
+      <a href="https://kishoredvr.github.io/Exploring/">Home</a>
+      <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
+      <a href="https://astrostudy.github.io/Articles/">My Articles</a>
+      <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="active">Message Me</a>
     </div>
+  </nav>
 
-    <script>
-        // Improved iframe height adjustment
-        function adjustIframeHeight() {
-            const iframe = document.getElementById('googleForm');
-            try {
-                // Post a message to the iframe to request its height
-                iframe.contentWindow.postMessage({
-                    type: 'getHeight',
-                    id: 'googleForm'
-                }, '*');
-            } catch (e) {
-                console.log("Error adjusting iframe height:", e);
-            }
-        }
+  <main class="center-wrap" role="main">
+    <section class="card" aria-labelledby="maintenance-title">
+      <div class="icon" aria-hidden="true"><i class="fa-solid fa-tools"></i></div>
+      <h1 id="maintenance-title">Site Temporarily Unavailable</h1>
 
-        // Listen for messages from the iframe
-        window.addEventListener('message', function(event) {
-            if (event.data.type === 'iframeHeight' && event.data.id === 'googleForm') {
-                document.getElementById('googleForm').style.height = event.data.height + 'px';
-            }
-        });
+      <!-- Exact message requested (kept user wording but slightly cleaned for readability) -->
+      <p class="lead">Due to maintenance and development this page is not available as of now. So please visit after few days.</p>
 
-        // Adjust height periodically and after certain events
-        const adjustEvents = ['load', 'resize', 'orientationchange'];
-        adjustEvents.forEach(event => {
-            window.addEventListener(event, function() {
-                setTimeout(adjustIframeHeight, 100);
-            });
-        });
+      <p class="notice">We're working to improve the site — thank you for your patience.</p>
+      <p class="muted">If you need immediate assistance, try the links below or check back soon.</p>
 
-        // Initial adjustment with delay to allow form to load
-        window.addEventListener('load', function() {
-            setTimeout(adjustIframeHeight, 2000);
-        });
+      <div class="btns" role="navigation" aria-label="helpful links">
+        <a class="btn btn-primary" href="https://kishoredvr.github.io/Exploring/">Go to Home</a>
+        <a class="btn btn-muted" href="mailto:contact@yourdomain.com">Contact</a>
+      </div>
+    </section>
+  </main>
 
-        // Add resize observer for dynamic content changes
-        if (typeof ResizeObserver !== 'undefined') {
-            const observer = new ResizeObserver(adjustIframeHeight);
-            observer.observe(document.body);
-        }
-    </script>
+  <footer>
+    © <span id="year"></span> Kishore DVR — All rights reserved.
+  </footer>
+
+  <script>
+    // set year dynamically
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
-
