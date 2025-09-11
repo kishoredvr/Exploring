@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
   <title>Let's Connect</title>
 
   <!-- Fonts & Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400,500,600,700&family=Open+Sans:wght@400,500,600,700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
@@ -244,7 +244,7 @@
 
   <script>
     // ----------------- CONFIGURATION (replace this) -----------------
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec'; // <-- replace with your Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec'; // <-- your Apps Script Web App URL
     // -----------------------------------------------------------------
 
     const form = document.getElementById('astrology-consultation-form');
@@ -333,7 +333,7 @@
         // show service tier select when Astrology is chosen
         astroServiceWrapper.style.display = 'block';
         // set hidden input to current selection
-        astroServiceTierHidden.value = astroServiceSelect.value;
+        if (astroServiceSelect) astroServiceTierHidden.value = astroServiceSelect.value;
       }
     }
 
@@ -377,9 +377,11 @@
     genderOther.addEventListener('change', toggleGenderOtherInput);
 
     // update hidden tier on change
-    astroServiceSelect.addEventListener('change', () => {
-      astroServiceTierHidden.value = astroServiceSelect.value;
-    });
+    if (astroServiceSelect) {
+      astroServiceSelect.addEventListener('change', () => {
+        astroServiceTierHidden.value = astroServiceSelect.value;
+      });
+    }
 
     expectations.addEventListener('input', () => {
       const text = expectations.value;
@@ -434,10 +436,12 @@
     }
 
     // Helper: request order creation from Apps Script
-    //async function createOrderOnServer(amountINR) {
-      //if (!scriptURL || scriptURL === 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec') {
-        //throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
-      //}
+    async function createOrderOnServer(amountINR) {
+      // FIXED guard: only treat the placeholder as invalid. Allow your real Apps Script URL.
+      if (!scriptURL || scriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+        throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
+      }
+
       const url = scriptURL + '?action=createOrder';
       const body = new URLSearchParams();
       body.append('amountINR', String(amountINR));
@@ -613,5 +617,3 @@
   </script>
 </body>
 </html>
-
-
