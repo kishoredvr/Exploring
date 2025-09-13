@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
   <title>Let's Connect</title>
 
   <!-- Fonts & Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400,500,600,700&family=Open+Sans:wght@400,500,600,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
@@ -223,6 +223,14 @@
         </div>
       </div>
 
+      <!-- TERMS: shown only for Astrology purpose -->
+      <div id="termsWrapper" class="form-section centered-section" style="display:none; margin-top:8px;">
+        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+          <input type="checkbox" id="termsAgree" name="termsAgree" style="width:5%;">
+          <label for="termsAgree" style="font-weight:600;">I agree to the <a href="https://parishodana.xyz/Terms.html" id="termsLink" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>.</label>
+        </div>
+      </div>
+
       <div class="action-buttons">
         <button id="clearButton" type="button" style="background:#ccc;color:#222;">Clear All</button>
         <button id="submitBtn" type="submit">Submit Consultation Request</button>
@@ -244,7 +252,7 @@
 
   <script>
     // ----------------- CONFIGURATION (replace this) -----------------
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec'; // <-- your Apps Script Web App URL
+    const scriptURL = 'AKfycbwbtgVfbRZUeM4cqfTDSzeQyE3xZRHOKq5ZAGJNiaf1'; // <-- replace with your Apps Script Web App URL
     // -----------------------------------------------------------------
 
     const form = document.getElementById('astrology-consultation-form');
@@ -281,6 +289,10 @@
     const astroServiceSelect = document.getElementById('astroServiceSelect');
     const astroServiceTierHidden = document.getElementById('astro_service_tier');
 
+    // TERMS elements
+    const termsWrapper = document.getElementById('termsWrapper');
+    const termsAgree = document.getElementById('termsAgree');
+
     function toggleSections() {
       if (purposeOther.checked) {
         birthDetailsSection.classList.add('disabled-section');
@@ -308,6 +320,13 @@
         // hide service tier select when Other is chosen
         astroServiceWrapper.style.display = 'none';
         astroServiceTierHidden.value = '';
+
+        // hide terms when Other
+        if (termsWrapper) {
+          termsWrapper.style.display = 'none';
+          termsAgree.checked = false;
+          termsAgree.removeAttribute('required');
+        }
       } else {
         birthDetailsSection.classList.remove('disabled-section');
         birthLocationSection.classList.remove('disabled-section');
@@ -333,7 +352,13 @@
         // show service tier select when Astrology is chosen
         astroServiceWrapper.style.display = 'block';
         // set hidden input to current selection
-        if (astroServiceSelect) astroServiceTierHidden.value = astroServiceSelect.value;
+        astroServiceTierHidden.value = astroServiceSelect.value;
+
+        // show terms when Astrology
+        if (termsWrapper) {
+          termsWrapper.style.display = 'block';
+          termsAgree.setAttribute('required', 'true');
+        }
       }
     }
 
@@ -377,11 +402,9 @@
     genderOther.addEventListener('change', toggleGenderOtherInput);
 
     // update hidden tier on change
-    if (astroServiceSelect) {
-      astroServiceSelect.addEventListener('change', () => {
-        astroServiceTierHidden.value = astroServiceSelect.value;
-      });
-    }
+    astroServiceSelect.addEventListener('change', () => {
+      astroServiceTierHidden.value = astroServiceSelect.value;
+    });
 
     expectations.addEventListener('input', () => {
       const text = expectations.value;
@@ -406,6 +429,12 @@
       genderOtherInputWrapper.classList.add('hide');
       genderOtherInput.removeAttribute('required');
       genderOtherInput.value = '';
+
+      // reset terms checkbox
+      if (termsAgree) {
+        termsAgree.checked = false;
+        termsAgree.removeAttribute('required');
+      }
 
       successMessage.style.display = 'none';
       errorMessage.style.display = 'none';
@@ -437,11 +466,9 @@
 
     // Helper: request order creation from Apps Script
     async function createOrderOnServer(amountINR) {
-      // FIXED guard: only treat the placeholder as invalid. Allow your real Apps Script URL.
-      if (!scriptURL || scriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+      if (!scriptURL || scriptURL === 'AKfycbwbtgVfbRZUeM4cqfTDSzeQyE3xZRHOKq5ZAGJNiaf1') {
         throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
       }
-
       const url = scriptURL + '?action=createOrder';
       const body = new URLSearchParams();
       body.append('amountINR', String(amountINR));
@@ -523,6 +550,15 @@
       }
 
       const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
+
+      // TERMS agreement check for Astrology
+      if (purpose === 'Astrology') {
+        if (!termsAgree || !termsAgree.checked) {
+          alert('Please agree to the Terms and Conditions before submitting for Astrology service.');
+          if (termsAgree) termsAgree.focus();
+          return;
+        }
+      }
 
       // Prevent double clicks
       const submitButton = document.getElementById('submitBtn');
