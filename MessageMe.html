@@ -255,7 +255,7 @@
     // This should be your Apps Script / backend URL (include full URL). Example:
     // const scriptURL = 'https://script.google.com/macros/s/YOUR_DEPLOY_ID/exec';
     // Your backend must implement two actions: createPhonePePayment and submitForm (or verify)
-    const scriptURL = 'AKfycbwbtgVfbRZUeM4cqfTDSzeQyE3xZRHOKq5ZAGJNiaf1'; // <-- replace with your Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec'; // <-- replace with your Apps Script Web App URL
     // -----------------------------------------------------------------
 
     const form = document.getElementById('astrology-consultation-form');
@@ -471,7 +471,7 @@
     // Backend endpoint (Apps Script) MUST call PhonePe create/init APIs with merchant credentials,
     // and return JSON: { success: true, checkout_url: "...", phonepe_order_id: "...", amount: 1000 }
     async function createPhonePePayment(amountINR) {
-      if (!scriptURL || scriptURL === 'AKfycbwbtgVfbRZUeM4cqfTDSzeQyE3xZRHOKq5ZAGJNiaf1') {
+      if (!scriptURL || scriptURL === 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec') {
         throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
       }
 
@@ -688,3 +688,4 @@
   </script>
 </body>
 </html>
+
