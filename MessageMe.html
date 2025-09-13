@@ -471,7 +471,7 @@
     // Backend endpoint (Apps Script) MUST call PhonePe create/init APIs with merchant credentials,
     // and return JSON: { success: true, checkout_url: "...", phonepe_order_id: "...", amount: 1000 }
     async function createPhonePePayment(amountINR) {
-      if (!scriptURL || scriptURL === 'https://script.google.com/macros/s/AKfycbxxOB8Sfi87udQI9ieQwfT1uizwuQA4x3ymrpH6B7SigMLlXig5B_TrqYraHNrTO29zHQ/exec') {
+      if (!scriptURL){
         throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
       }
 
@@ -688,4 +688,5 @@
   </script>
 </body>
 </html>
+
 
