@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
-    /* (styles unchanged from your original file) */
+    /* (kept your styles almost unchanged) */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     html, body { height: 100%; }
     body { font-family: 'Lora', serif; background: linear-gradient(to bottom, rgba(220, 220, 220, 0.95), rgba(245, 245, 245, 0.95)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%230987b5" opacity="0.05"/></svg>'); background-size: 150px; color: #333; line-height: 1.6; padding: 20px; min-height: 100vh; }
@@ -226,7 +226,7 @@
       <!-- TERMS: shown only for Astrology purpose -->
       <div id="termsWrapper" class="form-section centered-section" style="display:none; margin-top:8px;">
         <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-          <input type="checkbox" id="termsAgree" name="termsAgree" style="width:5%;">
+          <input type="checkbox" id="termsAgree" name="termsAgree" style="width:5%;"/>
           <label for="termsAgree" style="font-weight:600;">I agree to the <a href="https://parishodana.xyz/Terms.html" id="termsLink" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>.</label>
         </div>
       </div>
@@ -236,22 +236,25 @@
         <button id="submitBtn" type="submit">Submit Consultation Request</button>
       </div>
 
-      <!-- Hidden fields that will be filled with payment info when payment succeeds -->
-      <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id" />
-      <input type="hidden" name="razorpay_signature" id="razorpay_signature" />
-      <input type="hidden" name="razorpay_order_id" id="razorpay_order_id" />
+      <!-- Hidden fields for PhonePe payment result (server will verify) -->
+      <input type="hidden" name="phonepe_txn_id" id="phonepe_txn_id" />
+      <input type="hidden" name="phonepe_order_id" id="phonepe_order_id" />
       <input type="hidden" name="payment_amount" id="payment_amount" />
       <input type="hidden" name="payment_status" id="payment_status" />
-      <!-- also add hidden select value so Apps Script can see selected tier -->
       <input type="hidden" name="astro_service_tier" id="astro_service_tier" />
     </form>
   </div>
 
-  <!-- Razorpay checkout script -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- NOTE: PhonePe provides a standard JS checkout and also supports redirect/iframe flows.
+       We do not include a vendor script here (PhonePe checkout script path may change).
+       Instead we call your backend which uses PhonePe server-side API to init and return checkout URL/info.
+  -->
 
   <script>
     // ----------------- CONFIGURATION (replace this) -----------------
+    // This should be your Apps Script / backend URL (include full URL). Example:
+    // const scriptURL = 'https://script.google.com/macros/s/YOUR_DEPLOY_ID/exec';
+    // Your backend must implement two actions: createPhonePePayment and submitForm (or verify)
     const scriptURL = 'AKfycbwbtgVfbRZUeM4cqfTDSzeQyE3xZRHOKq5ZAGJNiaf1'; // <-- replace with your Apps Script Web App URL
     // -----------------------------------------------------------------
 
@@ -464,62 +467,55 @@
       return isNaN(amt) ? 1000 : amt;
     }
 
-    // Helper: request order creation from Apps Script
-    async function createOrderOnServer(amountINR) {
+    // Helper: request PhonePe payment creation from backend
+    // Backend endpoint (Apps Script) MUST call PhonePe create/init APIs with merchant credentials,
+    // and return JSON: { success: true, checkout_url: "...", phonepe_order_id: "...", amount: 1000 }
+    async function createPhonePePayment(amountINR) {
       if (!scriptURL || scriptURL === 'AKfycbwbtgVfbRZUeM4cqfTDSzeQyE3xZRHOKq5ZAGJNiaf1') {
         throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
       }
-      const url = scriptURL + '?action=createOrder';
+
+      // We call your backend with action=createPhonePePayment
+      const url = scriptURL + '?action=createPhonePePayment';
       const body = new URLSearchParams();
       body.append('amountINR', String(amountINR));
       body.append('receiptId', 'rcpt_' + Date.now());
-      // include tier info so server logs/receipt can contain it
       body.append('service_tier', astroServiceSelect ? astroServiceSelect.value : 'Basic');
+      // Add any other fields you want the backend to store in the order (name/email)
+      body.append('name', document.getElementById('name')?.value || '');
+      body.append('email', document.getElementById('email')?.value || '');
+
       const res = await fetch(url, { method: 'POST', body: body });
       if (!res.ok) {
         const text = await res.text();
         throw new Error('Order creation failed: ' + text);
       }
-      return res.json();
+      const json = await res.json();
+      if (!json || !json.success) {
+        throw new Error('Order creation failed: ' + (json && json.message ? json.message : 'no details'));
+      }
+      // expected keys: checkout_url (or redirect_url), phonepe_order_id, amount
+      return json;
     }
 
-    // Open Razorpay checkout using server-created order
-    function openRazorpayCheckout(orderObj, prefill) {
-      return new Promise((resolve, reject) => {
-        if (!orderObj || !orderObj.order_id) {
-          reject(new Error('Invalid order object'));
-          return;
-        }
-        const options = {
-          key: orderObj.key_id, // server returns key_id
-          amount: orderObj.amount,
-          currency: orderObj.currency || 'INR',
-          name: 'Vedic Astrology Consultation',
-          description: 'Consultation Fee',
-          order_id: orderObj.order_id,
-          prefill: prefill || {},
-          notes: {
-            purpose: document.querySelector('input[name="purpose"]:checked')?.value || '',
-            contact_email: document.getElementById('email')?.value || ''
-          },
-          modal: {
-            ondismiss: function() {
-              reject(new Error('Payment popup closed by user'));
-            }
-          },
-          handler: function(response) {
-            resolve(response);
-          }
-        };
-        const rzp = new Razorpay(options);
-        rzp.open();
-      });
+    // After phonepe checkout completes (user returns to your site or backend callback),
+    // your backend should verify the payment with PhonePe and then you can submit the full form data to backend.
+    // Here, we open the checkout URL returned by backend (either in new tab or iframe).
+    function openPhonePeCheckout(url, inNewTab = true) {
+      if (!url) throw new Error('Invalid PhonePe checkout URL');
+      if (inNewTab) {
+        // open new tab/window for UPI apps to handle, or PhonePe web checkout
+        window.open(url, '_blank');
+      } else {
+        // If you implement iframe flow, you can inject into page (not done here).
+        window.location.href = url;
+      }
     }
 
-    // Submit form data to Apps Script for verification & email
+    // Submit form data to Apps Script for verification & email after server-side verification
+    // We expect your backend to accept a POST with action=submitForm and return { status: 'ok' }
     async function submitFormToServer(formData) {
       formData.set('action', 'submitForm');
-      // attach astro tier name for server
       if (astroServiceSelect) formData.set('astro_service_tier', astroServiceSelect.value);
       formData.set('email_recipient', 'vedicastrologyguide@gmail.com');
       const res = await fetch(scriptURL, { method: 'POST', body: formData });
@@ -574,53 +570,92 @@
             throw new Error('Invalid selected amount for Astrology.');
           }
 
-          // 1) create order on server
-          const orderResp = await createOrderOnServer(amountINR);
+          // 1) create PhonePe payment on your server (server uses PhonePe API + merchant credentials)
+          const orderResp = await createPhonePePayment(amountINR);
 
-          // 2) open checkout
-          const prefill = {
-            name: document.getElementById('name')?.value || '',
-            email: document.getElementById('email')?.value || ''
+          // 2) open checkout URL returned by server
+          //   orderResp.checkout_url  <- an URL where PhonePe checkout is available (or deep link)
+          //   orderResp.phonepe_order_id <- your server's order id / phonepe txn id
+          openPhonePeCheckout(orderResp.checkout_url, true);
+
+          // IMPORTANT: The actual payment verification must happen on the server (server callback)
+          // After the server verifies the payment with PhonePe, it should mark the order paid.
+          //
+          // There are two common approaches:
+          //  A) After creating the order you opened the checkout_url where the user paid.
+          //     PhonePe will callback your backend (webhook) and your backend should verify & store status.
+          //     You can optionally have the checkout redirect the user to a "return" page on your site
+          //     (e.g. /payment-return) where the frontend then polls the server for final status,
+          //     and then calls submitFormToServer(formData) once payment is confirmed.
+          //
+          //  B) After payment completes, user returns to your site and you call backend verify API with order id
+          //     to check status. Then submit the full form to server (including txn id).
+          //
+          // Below we implement a simple polling loop to wait for server confirmation (option A/B hybrid).
+          // This expects your backend to provide an endpoint scriptURL?action=checkPaymentStatus&orderId=...
+          // which returns { success: true, status: 'PAID', phonepe_txn_id: '...' } when done.
+          //
+          // Polling loop (tries for ~30 seconds)
+          const checkPaymentStatus = async (orderId) => {
+            const statusUrl = scriptURL + '?action=checkPaymentStatus&orderId=' + encodeURIComponent(orderId);
+            const resp = await fetch(statusUrl, { method: 'GET' });
+            if (!resp.ok) {
+              const text = await resp.text();
+              throw new Error('Status check failed: ' + text);
+            }
+            return resp.json();
           };
 
-          let paymentResponse;
-          try {
-            paymentResponse = await openRazorpayCheckout({
-              order_id: orderResp.order_id,
-              amount: orderResp.amount,
-              currency: orderResp.currency,
-              key_id: orderResp.key_id
-            }, prefill);
-          } catch (payErr) {
-            console.error('Payment error or cancelled:', payErr);
-            alert('Payment was not completed. Your request was not submitted.');
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-            return;
+          // start polling (only if your backend supports checkPaymentStatus)
+          let attempts = 0;
+          const maxAttempts = 15; // ~15 * 2s = 30s
+          const pollIntervalMs = 2000;
+          let finalStatus = null;
+          if (orderResp.phonepe_order_id) {
+            while (attempts < maxAttempts) {
+              attempts++;
+              try {
+                const st = await checkPaymentStatus(orderResp.phonepe_order_id);
+                // expect st = { success:true, status: 'PAID'|'FAILED'|'PENDING', phonepe_txn_id: '...' }
+                if (st && st.success && (st.status === 'PAID' || st.status === 'FAILED')) {
+                  finalStatus = st;
+                  break;
+                }
+              } catch (err) {
+                // ignore transient errors - continue polling
+                console.warn('poll error', err);
+              }
+              // wait
+              await new Promise(r => setTimeout(r, pollIntervalMs));
+            }
           }
 
-          // fill hidden payment fields
-          document.getElementById('razorpay_payment_id').value = paymentResponse.razorpay_payment_id || '';
-          document.getElementById('razorpay_order_id').value = paymentResponse.razorpay_order_id || '';
-          document.getElementById('razorpay_signature').value = paymentResponse.razorpay_signature || '';
-          document.getElementById('payment_amount').value = amountINR;
-          document.getElementById('payment_status').value = 'paid';
-          document.getElementById('astro_service_tier').value = astroServiceSelect ? astroServiceSelect.value : '';
+          // If finalStatus indicates PAID, submit full form to server (for emails, records)
+          if (finalStatus && finalStatus.status === 'PAID') {
+            document.getElementById('phonepe_txn_id').value = finalStatus.phonepe_txn_id || '';
+            document.getElementById('phonepe_order_id').value = orderResp.phonepe_order_id || '';
+            document.getElementById('payment_amount').value = amountINR;
+            document.getElementById('payment_status').value = 'paid';
 
-          // 4) send form data to server for verification & email
-          const data = formDataFromForm();
-          const resJson = await submitFormToServer(data);
-          if (resJson && resJson.status === 'ok') {
-            successMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-            form.reset();
-            wordCount.textContent = '0';
-            toggleSections();
-            handleAccuracyExplanation();
-            toggleGenderOtherInput();
+            const data = formDataFromForm();
+            const resJson = await submitFormToServer(data);
+            if (resJson && resJson.status === 'ok') {
+              successMessage.style.display = 'block';
+              errorMessage.style.display = 'none';
+              form.reset();
+              wordCount.textContent = '0';
+              toggleSections();
+              handleAccuracyExplanation();
+              toggleGenderOtherInput();
+            } else {
+              throw new Error('Server replied: ' + JSON.stringify(resJson));
+            }
           } else {
-            throw new Error('Server replied: ' + JSON.stringify(resJson));
+            // if payment still pending or polling failed, inform user to check
+            alert('Payment not confirmed yet. If you completed payment, please wait a few moments and refresh the page. Alternatively check your email for confirmation.');
+            throw new Error('Payment not confirmed (status unknown).');
           }
+
         } else {
           // Other purpose: skip payment
           const data = formDataFromForm();
@@ -653,4 +688,3 @@
   </script>
 </body>
 </html>
-
