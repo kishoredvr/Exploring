@@ -247,15 +247,13 @@
 
   <!-- NOTE: PhonePe provides a standard JS checkout and also supports redirect/iframe flows.
        We do not include a vendor script here (PhonePe checkout script path may change).
-       Instead we call your backend which uses PhonePe server-side API to init and return checkout URL/info.
+       Instead we call your Supabase Edge Functions which call PhonePe server-side and return checkout URL/info.
   -->
 
   <script>
     // ----------------- CONFIGURATION (replace this) -----------------
-    // This should be your Apps Script / backend URL (include full URL). Example:
-    // const scriptURL = 'https://script.google.com/macros/s/YOUR_DEPLOY_ID/exec';
-    // Your backend must implement two actions: createPhonePePayment and submitForm (or verify)
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwTDr4qXVhGpDgLFuEGcefrz29dFyotjay0S207zAplPUag1T2-9xopU82KiNMW3rizFw/exec'; // <-- replace with your Apps Script Web App URL
+    // Supabase Functions base URL (your deployed functions)
+    const SUPABASE_FUNCTION_BASE = 'https://<your-project>.functions.supabase.co'; // <-- REPLACE
     // -----------------------------------------------------------------
 
     const form = document.getElementById('astrology-consultation-form');
@@ -467,25 +465,28 @@
       return isNaN(amt) ? 1000 : amt;
     }
 
-    // Helper: request PhonePe payment creation from backend
-    // Backend endpoint (Apps Script) MUST call PhonePe create/init APIs with merchant credentials,
-    // and return JSON: { success: true, checkout_url: "...", phonepe_order_id: "...", amount: 1000 }
+    // ---------------- Supabase-backed helpers ----------------
+
+    // createPhonePePayment: POST JSON to Supabase function /create-order
     async function createPhonePePayment(amountINR) {
-      if (!scriptURL){
-        throw new Error('Please configure the scriptURL variable in the page to point to your Apps Script Web App URL.');
+      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
 
-      // We call your backend with action=createPhonePePayment
-      const url = scriptURL + '?action=createPhonePePayment';
-      const body = new URLSearchParams();
-      body.append('amountINR', String(amountINR));
-      body.append('receiptId', 'rcpt_' + Date.now());
-      body.append('service_tier', astroServiceSelect ? astroServiceSelect.value : 'Basic');
-      // Add any other fields you want the backend to store in the order (name/email)
-      body.append('name', document.getElementById('name')?.value || '');
-      body.append('email', document.getElementById('email')?.value || '');
+      const url = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/create-order';
+      const body = {
+        amountINR: Number(amountINR),
+        receiptId: 'rcpt_' + Date.now(),
+        service_tier: astroServiceSelect ? astroServiceSelect.value : 'Basic',
+        name: document.getElementById('name')?.value || '',
+        email: document.getElementById('email')?.value || ''
+      };
 
-      const res = await fetch(url, { method: 'POST', body: body });
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error('Order creation failed: ' + text);
@@ -498,32 +499,54 @@
       return json;
     }
 
-    // After phonepe checkout completes (user returns to your site or backend callback),
-    // your backend should verify the payment with PhonePe and then you can submit the full form data to backend.
-    // Here, we open the checkout URL returned by backend (either in new tab or iframe).
-    function openPhonePeCheckout(url, inNewTab = true) {
-      if (!url) throw new Error('Invalid PhonePe checkout URL');
-      if (inNewTab) {
-        // open new tab/window for UPI apps to handle, or PhonePe web checkout
-        window.open(url, '_blank');
-      } else {
-        // If you implement iframe flow, you can inject into page (not done here).
-        window.location.href = url;
+    // Polling helper that calls Supabase /check-payment
+    const checkPaymentStatus = async (orderId) => {
+      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
-    }
+      const statusUrl = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/check-payment?orderId=' + encodeURIComponent(orderId);
+      const resp = await fetch(statusUrl, { method: 'GET' });
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error('Status check failed: ' + text);
+      }
+      return resp.json(); // expects { success:true, status:'PAID'|'FAILED'|'PENDING', phonepe_txn_id }
+    };
 
-    // Submit form data to Apps Script for verification & email after server-side verification
-    // We expect your backend to accept a POST with action=submitForm and return { status: 'ok' }
+    // Submit form data to Supabase submit-form function (expects JSON)
     async function submitFormToServer(formData) {
-      formData.set('action', 'submitForm');
-      if (astroServiceSelect) formData.set('astro_service_tier', astroServiceSelect.value);
-      formData.set('email_recipient', 'vedicastrologyguide@gmail.com');
-      const res = await fetch(scriptURL, { method: 'POST', body: formData });
+      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      }
+      // convert FormData -> simple object
+      const obj = {};
+      for (const [k, v] of formData.entries()) obj[k] = v;
+
+      // ensure astro_service_tier present if select exists
+      if (astroServiceSelect && !obj.astro_service_tier) obj.astro_service_tier = astroServiceSelect.value || '';
+
+      const url = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/submit-form';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error('Submission failed: ' + text);
       }
       return res.json();
+    }
+
+    // After phonepe checkout completes (user returns to your site or backend callback),
+    // your backend should verify the payment with PhonePe and then you can submit the full form data to backend.
+    function openPhonePeCheckout(url, inNewTab = true) {
+      if (!url) throw new Error('Invalid PhonePe checkout URL');
+      if (inNewTab) {
+        window.open(url, '_blank');
+      } else {
+        window.location.href = url;
+      }
     }
 
     // Main submit handler
@@ -570,7 +593,7 @@
             throw new Error('Invalid selected amount for Astrology.');
           }
 
-          // 1) create PhonePe payment on your server (server uses PhonePe API + merchant credentials)
+          // 1) create PhonePe payment on your Supabase Edge Function (server uses PhonePe API + merchant credentials)
           const orderResp = await createPhonePePayment(amountINR);
 
           // 2) open checkout URL returned by server
@@ -578,35 +601,10 @@
           //   orderResp.phonepe_order_id <- your server's order id / phonepe txn id
           openPhonePeCheckout(orderResp.checkout_url, true);
 
-          // IMPORTANT: The actual payment verification must happen on the server (server callback)
+          // IMPORTANT: The actual payment verification must happen on the server (server webhook)
           // After the server verifies the payment with PhonePe, it should mark the order paid.
           //
-          // There are two common approaches:
-          //  A) After creating the order you opened the checkout_url where the user paid.
-          //     PhonePe will callback your backend (webhook) and your backend should verify & store status.
-          //     You can optionally have the checkout redirect the user to a "return" page on your site
-          //     (e.g. /payment-return) where the frontend then polls the server for final status,
-          //     and then calls submitFormToServer(formData) once payment is confirmed.
-          //
-          //  B) After payment completes, user returns to your site and you call backend verify API with order id
-          //     to check status. Then submit the full form to server (including txn id).
-          //
-          // Below we implement a simple polling loop to wait for server confirmation (option A/B hybrid).
-          // This expects your backend to provide an endpoint scriptURL?action=checkPaymentStatus&orderId=...
-          // which returns { success: true, status: 'PAID', phonepe_txn_id: '...' } when done.
-          //
-          // Polling loop (tries for ~30 seconds)
-          const checkPaymentStatus = async (orderId) => {
-            const statusUrl = scriptURL + '?action=checkPaymentStatus&orderId=' + encodeURIComponent(orderId);
-            const resp = await fetch(statusUrl, { method: 'GET' });
-            if (!resp.ok) {
-              const text = await resp.text();
-              throw new Error('Status check failed: ' + text);
-            }
-            return resp.json();
-          };
-
-          // start polling (only if your backend supports checkPaymentStatus)
+          // We implement a simple polling loop to wait for server confirmation (expects your check-payment function).
           let attempts = 0;
           const maxAttempts = 15; // ~15 * 2s = 30s
           const pollIntervalMs = 2000;
@@ -616,21 +614,17 @@
               attempts++;
               try {
                 const st = await checkPaymentStatus(orderResp.phonepe_order_id);
-                // expect st = { success:true, status: 'PAID'|'FAILED'|'PENDING', phonepe_txn_id: '...' }
                 if (st && st.success && (st.status === 'PAID' || st.status === 'FAILED')) {
                   finalStatus = st;
                   break;
                 }
               } catch (err) {
-                // ignore transient errors - continue polling
                 console.warn('poll error', err);
               }
-              // wait
               await new Promise(r => setTimeout(r, pollIntervalMs));
             }
           }
 
-          // If finalStatus indicates PAID, submit full form to server (for emails, records)
           if (finalStatus && finalStatus.status === 'PAID') {
             document.getElementById('phonepe_txn_id').value = finalStatus.phonepe_txn_id || '';
             document.getElementById('phonepe_order_id').value = orderResp.phonepe_order_id || '';
@@ -639,7 +633,7 @@
 
             const data = formDataFromForm();
             const resJson = await submitFormToServer(data);
-            if (resJson && resJson.status === 'ok') {
+            if (resJson && (resJson.status === 'ok' || resJson.success)) {
               successMessage.style.display = 'block';
               errorMessage.style.display = 'none';
               form.reset();
@@ -651,7 +645,6 @@
               throw new Error('Server replied: ' + JSON.stringify(resJson));
             }
           } else {
-            // if payment still pending or polling failed, inform user to check
             alert('Payment not confirmed yet. If you completed payment, please wait a few moments and refresh the page. Alternatively check your email for confirmation.');
             throw new Error('Payment not confirmed (status unknown).');
           }
@@ -662,7 +655,7 @@
           // ensure astro tier hidden empty
           document.getElementById('astro_service_tier').value = '';
           const resJson = await submitFormToServer(data);
-          if (resJson && resJson.status === 'ok') {
+          if (resJson && (resJson.status === 'ok' || resJson.success)) {
             successMessage.style.display = 'block';
             errorMessage.style.display = 'none';
             form.reset();
@@ -688,7 +681,3 @@
   </script>
 </body>
 </html>
-
-
-
-
