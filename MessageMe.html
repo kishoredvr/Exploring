@@ -253,7 +253,7 @@
   <script>
     // ----------------- CONFIGURATION (replace this) -----------------
     // Supabase Functions base URL (your deployed functions)
-    const SUPABASE_FUNCTION_BASE = 'https://<your-project>.functions.supabase.co'; // <-- REPLACE
+    const CLBASE_FUNCTION_BASE = 'https://<your-project>.functions.supabase.co'; // <-- REPLACE
     // -----------------------------------------------------------------
 
     const form = document.getElementById('astrology-consultation-form');
@@ -469,11 +469,11 @@
 
     // createPhonePePayment: POST JSON to Supabase function /create-order
     async function createPhonePePayment(amountINR) {
-      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
 
-      const url = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/create-order';
+      const url = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/create-order';
       const body = {
         amountINR: Number(amountINR),
         receiptId: 'rcpt_' + Date.now(),
@@ -501,10 +501,10 @@
 
     // Polling helper that calls Supabase /check-payment
     const checkPaymentStatus = async (orderId) => {
-      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
-      const statusUrl = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/check-payment?orderId=' + encodeURIComponent(orderId);
+      const statusUrl = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/check-payment?orderId=' + encodeURIComponent(orderId);
       const resp = await fetch(statusUrl, { method: 'GET' });
       if (!resp.ok) {
         const text = await resp.text();
@@ -515,8 +515,8 @@
 
     // Submit form data to Supabase submit-form function (expects JSON)
     async function submitFormToServer(formData) {
-      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
       // convert FormData -> simple object
       const obj = {};
@@ -525,7 +525,7 @@
       // ensure astro_service_tier present if select exists
       if (astroServiceSelect && !obj.astro_service_tier) obj.astro_service_tier = astroServiceSelect.value || '';
 
-      const url = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/submit-form';
+      const url = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/submit-form';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -681,3 +681,4 @@
   </script>
 </body>
 </html>
+
