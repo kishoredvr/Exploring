@@ -236,7 +236,27 @@
   </div>
 
   <!-- define CLBASE_FUNCTION_BASE for your frontend -->
-  <script>const CLBASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';</script>
+ <script>
+const CLBASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
+
+async function payNow() {
+  const res = await fetch(CLBASE_FUNCTION_BASE + '/create-paylink', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      merchantOrderId: 'ORD-' + Date.now(),
+      amountINR: 1,
+      message: 'Test Payment'
+    })
+  });
+  const data = await res.json();
+  if (data.success && data.payLink) {
+    window.open(data.payLink, '_blank');
+  } else {
+    alert('Error: ' + JSON.stringify(data));
+  }
+}
+</script>
 
   <script>
     // All client code uses CLBASE_FUNCTION_BASE now (no secrets exposed)
@@ -633,4 +653,5 @@
   </script>
 </body>
 </html>
+
 
