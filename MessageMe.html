@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
-    /* (kept your styles almost unchanged) */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     html, body { height: 100%; }
     body { font-family: 'Lora', serif; background: linear-gradient(to bottom, rgba(220, 220, 220, 0.95), rgba(245, 245, 245, 0.95)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%230987b5" opacity="0.05"/></svg>'); background-size: 150px; color: #333; line-height: 1.6; padding: 20px; min-height: 100vh; }
@@ -22,7 +20,12 @@
     nav a.active { background-color: rgba(255, 255, 255, 0.28); border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
     .container { max-width: 1000px; margin: 20px auto; background: linear-gradient(to bottom, #ffffff, #fbfeff); padding: 32px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
     .header { text-align: center; margin-bottom: 12px; }
-    .header h1 { color: #076a91; margin-bottom: 8px; font-size: 30px; font-family: 'Open Sans', sans-serif; }    .header p { color: #5a9ec9; font-size: 16px; }    .form-section { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #eee; }    .form-section h2 { color: #076a91; margin-bottom: 10px; font-size: 20px; display: flex; align-items: center; font-family: 'Open Sans', sans-serif; }    .form-section h2::before { content: "✦"; margin-right: 10px; font-size: 20px; color: rgba(9,135,181,0.9); }    .form-group { margin-bottom: 10px; }
+    .header h1 { color: #076a91; margin-bottom: 8px; font-size: 30px; font-family: 'Open Sans', sans-serif; }
+    .header p { color: #5a9ec9; font-size: 16px; }
+    .form-section { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+    .form-section h2 { color: #076a91; margin-bottom: 10px; font-size: 20px; display: flex; align-items: center; font-family: 'Open Sans', sans-serif; }
+    .form-section h2::before { content: "✦"; margin-right: 10px; font-size: 20px; color: rgba(9,135,181,0.9); }
+    .form-group { margin-bottom: 10px; }
     label { display: block; margin-bottom: 4px; font-weight: 600; color: #2c3e50; font-family: 'Open Sans', sans-serif; }
     .required::after { content: " *"; color: #e74c3c; }
     input, select, textarea { width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; transition: all 0.2s; font-family: inherit; }
@@ -46,15 +49,10 @@
     .consultation-note { background-color: #f8f9fa; border-left: 4px solid #0987b5; padding: 12px 16px; margin: 12px 0; border-radius: 4px; font-size: 14px; color: #2c3e50; display: none; }
     @media (max-width: 900px) { .two-column { grid-template-columns: 1fr; } .centered-section { max-width: 100%; padding: 0 8px; } .time-fields { flex-direction: row; gap: 10px; } button { width: 48%; } }
     @page { size: A4; margin: 10mm; }
-    @media print { /* print styles unchanged */ html, body { background: white !important; color: #000 !important; width: 100% !important; height: auto !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; font-size: 12px !important; } .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 5mm !important; background: white !important; page-break-inside: avoid; } .header h1 { font-size: 20px !important; margin-bottom: 4px !important; } .header p { font-size: 12px !important; color: #333 !important; margin-bottom: 8px !important; } .form-section { margin-bottom: 8px !important; padding-bottom: 6px !important; page-break-inside: avoid; } .form-group { margin-bottom: 6px !important; } .two-column { grid-template-columns: 1fr 1fr !important; gap: 10px !important; page-break-inside: avoid; } .time-fields { display: flex !important; gap: 2px !important; width: 60% !important; } .time-fields .form-group { flex: 1 !important; margin-bottom: 0 !important; } input[type="number"].time-input { width: 80% !important; padding: 4px !important; font-size: 12px !important; } [style*="margin-left"] { margin-left: 0 !important; } [style*="width:160%"], [style*="width:120%"] { width: 100% !important; } input, select, textarea { width: 100% !important; border: 1px solid #999 !important; box-shadow: none !important; background: transparent !important; color: #000 !important; padding: 4px 6px !important; font-size: 12px !important; page-break-inside: avoid; } textarea { max-width: 100% !important; min-height: 50px !important; } button, .action-buttons { display: none !important; } .success-message, .error-message { display: none !important; } .consultation-note { display: block !important; background-color: transparent !important; border-left: 2px solid #0987b5 !important; padding: 6px 8px !important; margin: 8px 0 !important; font-size: 11px !important; color: #000 !important; page-break-inside: avoid; } .radio-group { gap: 8px !important; flex-wrap: nowrap !important; } .radio-option { white-space: nowrap !important; font-size: 12px !important; } #birth-details-section { margin-left: 0 !important; } .form-section h2 { font-size: 16px !important; margin-bottom: 6px !important; } label { font-size: 12px !important; margin-bottom: 2px !important; } input[type="date"] { width: 36% !important; } .word-count { font-size: 10px !important; margin-top: 2px !important; } .centered-section { max-width: 100% !important; padding: 0 !important; } #gender-other-input-wrapper { margin-left: 0 !important; } .form-section, .two-column, .time-fields { page-break-inside: avoid; } }
+    @media print { html, body { background: white !important; color: #000 !important; width: 100% !important; height: auto !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; font-size: 12px !important; } .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 5mm !important; background: white !important; page-break-inside: avoid; } .header h1 { font-size: 20px !important; margin-bottom: 4px !important; } .header p { font-size: 12px !important; color: #333 !important; margin-bottom: 8px !important; } .form-section { margin-bottom: 8px !important; padding-bottom: 6px !important; page-break-inside: avoid; } .form-group { margin-bottom: 6px !important; } .two-column { grid-template-columns: 1fr 1fr !important; gap: 10px !important; page-break-inside: avoid; } .time-fields { display: flex !important; gap: 2px !important; width: 60% !important; } .time-fields .form-group { flex: 1 !important; margin-bottom: 0 !important; } input[type="number"].time-input { width: 80% !important; padding: 4px !important; font-size: 12px !important; } [style*="margin-left"] { margin-left: 0 !important; } [style*="width:160%"], [style*="width:120%"] { width: 100% !important; } input, select, textarea { width: 100% !important; border: 1px solid #999 !important; box-shadow: none !important; background: transparent !important; color: #000 !important; padding: 4px 6px !important; font-size: 12px !important; page-break-inside: avoid; } textarea { max-width: 100% !important; min-height: 50px !important; } button, .action-buttons { display: none !important; } .success-message, .error-message { display: none !important; } .consultation-note { display: block !important; background-color: transparent !important; border-left: 2px solid #0987b5 !important; padding: 6px 8px !important; margin: 8px 0 !important; font-size: 11px !important; color: #000 !important; page-break-inside: avoid; } .radio-group { gap: 8px !important; flex-wrap: nowrap !important; } .radio-option { white-space: nowrap !important; font-size: 12px !important; } #birth-details-section { margin-left: 0 !important; } .form-section h2 { font-size: 16px !important; margin-bottom: 6px !important; } label { font-size: 12px !important; margin-bottom: 2px !important; } input[type="date"] { width: 36% !important; } .word-count { font-size: 10px !important; margin-top: 2px !important; } .centered-section { max-width: 100% !important; padding: 0 !important; } #gender-other-input-wrapper { margin-left: 0 !important; } .form-section, .two-column, .time-fields { page-break-inside: avoid; } }
   </style>
 </head>
-<script>const CLBASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co/functions/v1';</script>
-<script>const SUPABASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co/functions/v1';</script>
-
 <body>
-
-  <!-- Navigation bar -->
   <nav>
     <div class="nav-links">
       <a href="https://kishoredvr.github.io/Exploring/">Home</a>
@@ -74,22 +72,19 @@
     <div id="errorMessage" class="error-message">There was an error submitting your request. Please try again.</div>
 
     <form id="astrology-consultation-form" novalidate>
-      <!-- Purpose -->
       <div class="form-section always-enabled centered-section" style="text-align: center;">
         <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;">
           <h2 style="margin:0;">Purpose</h2>
           <div class="radio-group" aria-label="Purpose">
-            <label class="radio-option"><input type="radio" id="purpose-astrology" name="purpose" value="Astrology" required checked > Astrology Consultation</label>
+            <label class="radio-option"><input type="radio" id="purpose-astrology" name="purpose" value="Astrology" required checked> Astrology Consultation</label>
             <label class="radio-option"><input type="radio" id="purpose-other" name="purpose" value="Other"> Other Purpose</label>
           </div>
         </div>
 
-        <!-- Consultation note that appears when Astrology Consultation is selected -->
         <div id="consultationNote" class="consultation-note">
           <strong>Note:</strong> Select a service tier below and pay the applicable fee.
         </div>
 
-        <!-- NEW: service tier select shown only when Astrology is selected -->
         <div id="astroServiceWrapper" class="form-group centered-section" style="max-width:380px; margin: 12px auto 0; display:none;">
           <label for="astroServiceSelect">Choose Astrology Service</label>
           <select id="astroServiceSelect" name="astroServiceSelect">
@@ -100,7 +95,6 @@
         </div>
       </div>
 
-      <!-- Contact Information -->
       <div class="form-section centered-section">
         <h2>Contact Information</h2>
         <div class="two-column">
@@ -116,10 +110,9 @@
         </div>
       </div>
 
-      <!-- Two-column sections -->
       <div class="two-column">
         <div>
-          <div class="form-section" id="birth-details-section" Style="margin-left:90px;">
+          <div class="form-section" id="birth-details-section" style="margin-left:90px;">
             <h2>Birth Details</h2>
             <div class="form-group">
               <label for="birthDetailsAvailable" class="required">Are your birth details available?</label>
@@ -131,23 +124,23 @@
 
             <div class="form-group">
               <label for="dob">Date of Birth</label>
-              <input type="date" id="dob" name="dob" Style="width:40%;">
+              <input type="date" id="dob" name="dob" style="width:40%;">
             </div>
 
             <div class="form-group">
-              <label for="tob" Style="margin-bottom:-2px;">Time of Birth</label>
+              <label for="tob" style="margin-bottom:-2px;">Time of Birth</label>
               <div class="time-fields">
                 <div class="form-group">
-                  <label for="hour" Style="margin-left:8px;" >Hrs</label>
-                  <input type="number" id="hour" name="hour" min="0" max="23" placeholder="HH" class="time-input" Style="width:50%;">
+                  <label for="hour" style="margin-left:8px;">Hrs</label>
+                  <input type="number" id="hour" name="hour" min="0" max="23" placeholder="HH" class="time-input" style="width:50%;">
                 </div>
                 <div class="form-group">
-                  <label for="minute" Style="margin-left:-60px;">Mins</label>
-                  <input type="number" id="minute" name="minute" min="0" max="59" placeholder="MM" class="time-input" Style="width:50%;margin-left:-60px;">
+                  <label for="minute" style="margin-left:-60px;">Mins</label>
+                  <input type="number" id="minute" name="minute" min="0" max="59" placeholder="MM" class="time-input" style="width:50%;margin-left:-60px;">
                 </div>
                 <div class="form-group">
-                  <label for="second" Style="margin-left:-120px;">Secs</label>
-                  <input type="number" id="second" name="second" min="0" max="59" placeholder="SS" class="time-input" Style="width:50%;margin-left:-120px;">
+                  <label for="second" style="margin-left:-120px;">Secs</label>
+                  <input type="number" id="second" name="second" min="0" max="59" placeholder="SS" class="time-input" style="width:50%;margin-left:-120px;">
                 </div>
               </div>
             </div>
@@ -178,11 +171,10 @@
         </div>
       </div>
 
-      <!-- Gender + Accuracy side by side -->
       <div class="two-column">
         <div>
-          <div class="form-group" Style="margin-left:90px;">
-            <label for="gender" class="required" >Gender</label>
+          <div class="form-group" style="margin-left:90px;">
+            <label for="gender" class="required">Gender</label>
             <div class="radio-group" role="radiogroup" aria-labelledby="gender">
               <label class="radio-option"><input type="radio" id="gender-male" name="gender" value="Male" required> Male</label>
               <label class="radio-option"><input type="radio" id="gender-female" name="gender" value="Female"> Female</label>
@@ -214,7 +206,6 @@
         </div>
       </div>
 
-      <!-- Expectations centered -->
       <div class="form-section always-enabled centered-section" style="margin-top: 12px;">
         <h2>Let me know your intentions for contacting me</h2>
         <div class="form-group">
@@ -223,7 +214,6 @@
         </div>
       </div>
 
-      <!-- TERMS: shown only for Astrology purpose -->
       <div id="termsWrapper" class="form-section centered-section" style="display:none; margin-top:8px;">
         <div class="form-group" style="display:flex;align-items:center;gap:10px;">
           <input type="checkbox" id="termsAgree" name="termsAgree" style="width:5%;"/>
@@ -245,17 +235,11 @@
     </form>
   </div>
 
-  <!-- NOTE: PhonePe provides a standard JS checkout and also supports redirect/iframe flows.
-       We do not include a vendor script here (PhonePe checkout script path may change).
-       Instead we call your Supabase Edge Functions which call PhonePe server-side and return checkout URL/info.
-  -->
+  <!-- define CLBASE_FUNCTION_BASE for your frontend -->
+  <script>const CLBASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co/functions/v1';</script>
 
   <script>
-    // ----------------- CONFIGURATION (replace this) -----------------
-    // Supabase Functions base URL (your deployed functions)
-    const SUPABASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co'; // <-- REPLACE with your functions base URL
-    // -----------------------------------------------------------------
-
+    // All client code uses CLBASE_FUNCTION_BASE now (no secrets exposed)
     const form = document.getElementById('astrology-consultation-form');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
@@ -278,19 +262,16 @@
     const accuracySection = document.getElementById('accuracy-section');
     const clearButton = document.getElementById('clearButton');
 
-    // Gender elements for 'Other' handling
     const genderMale = document.getElementById('gender-male');
     const genderFemale = document.getElementById('gender-female');
     const genderOther = document.getElementById('gender-other');
     const genderOtherInputWrapper = document.getElementById('gender-other-input-wrapper');
     const genderOtherInput = document.getElementById('genderOtherInput');
 
-    // NEW: service tier select elements
     const astroServiceWrapper = document.getElementById('astroServiceWrapper');
     const astroServiceSelect = document.getElementById('astroServiceSelect');
     const astroServiceTierHidden = document.getElementById('astro_service_tier');
 
-    // TERMS elements
     const termsWrapper = document.getElementById('termsWrapper');
     const termsAgree = document.getElementById('termsAgree');
 
@@ -318,11 +299,9 @@
         contactCountryField.removeAttribute('disabled');
         contactCountryField.setAttribute('required', 'true');
 
-        // hide service tier select when Other is chosen
         astroServiceWrapper.style.display = 'none';
         astroServiceTierHidden.value = '';
 
-        // hide terms when Other
         if (termsWrapper) {
           termsWrapper.style.display = 'none';
           termsAgree.checked = false;
@@ -350,12 +329,9 @@
         contactCountryField.setAttribute('disabled', 'true');
         contactCountryField.removeAttribute('required');
 
-        // show service tier select when Astrology is chosen
         astroServiceWrapper.style.display = 'block';
-        // set hidden input to current selection
         astroServiceTierHidden.value = astroServiceSelect.value;
 
-        // show terms when Astrology
         if (termsWrapper) {
           termsWrapper.style.display = 'block';
           termsAgree.setAttribute('required', 'true');
@@ -386,12 +362,10 @@
       }
     }
 
-    // initial toggles on load
     toggleSections();
     handleAccuracyExplanation();
     toggleGenderOtherInput();
 
-    // event listeners
     purposeAstrology.addEventListener('change', toggleSections);
     purposeOther.addEventListener('change', toggleSections);
 
@@ -402,7 +376,6 @@
     genderFemale.addEventListener('change', toggleGenderOtherInput);
     genderOther.addEventListener('change', toggleGenderOtherInput);
 
-    // update hidden tier on change
     astroServiceSelect.addEventListener('change', () => {
       astroServiceTierHidden.value = astroServiceSelect.value;
     });
@@ -431,7 +404,6 @@
       genderOtherInput.removeAttribute('required');
       genderOtherInput.value = '';
 
-      // reset terms checkbox
       if (termsAgree) {
         termsAgree.checked = false;
         termsAgree.removeAttribute('required');
@@ -447,33 +419,28 @@
       window.scrollTo(0, 0);
     });
 
-    // Helper: serialize form to FormData (includes hidden inputs set by payment)
     function formDataFromForm() {
       return new FormData(form);
     }
 
-    // Helper: read selected astrology tier amount (INR)
     function getSelectedAstroAmount() {
-      // If purpose is other -> 0
       const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
       if (purpose !== 'Astrology') return 0;
       const sel = document.getElementById('astroServiceSelect');
       if (!sel) return 1000;
-      // get data-amt attribute from selected option, fallback to 1000
       const opt = sel.options[sel.selectedIndex];
       const amt = opt ? parseInt(opt.getAttribute('data-amt') || opt.value || '1000', 10) : 1000;
       return isNaN(amt) ? 1000 : amt;
     }
 
-    // ---------------- Supabase-backed helpers ----------------
+    // ---------------- CLBASE-backed helpers ----------------
 
-    // createPhonePePayment: POST JSON to Supabase function /create-order
     async function createPhonePePayment(amountINR) {
-      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
 
-      const url = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/create-order';
+      const url = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/create-order';
       const body = {
         amountINR: Number(amountINR),
         receiptId: 'rcpt_' + Date.now(),
@@ -493,39 +460,34 @@
       }
       const json = await res.json();
       if (!json || !json.success) {
-        throw new Error('Order creation failed: ' + (json && json.message ? json.message : 'no details'));
+        throw new Error('Order creation failed: ' + (json && json.message ? json.message : JSON.stringify(json)));
       }
       // expected keys: checkout_url (or redirect_url), phonepe_order_id, amount
       return json;
     }
 
-    // Polling helper that calls Supabase /check-payment
     const checkPaymentStatus = async (orderId) => {
-      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
-      const statusUrl = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/check-payment?orderId=' + encodeURIComponent(orderId);
+      const statusUrl = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/check-payment?orderId=' + encodeURIComponent(orderId);
       const resp = await fetch(statusUrl, { method: 'GET' });
       if (!resp.ok) {
         const text = await resp.text();
         throw new Error('Status check failed: ' + text);
       }
-      return resp.json(); // expects { success:true, status:'PAID'|'FAILED'|'PENDING', phonepe_txn_id }
+      return resp.json();
     };
 
-    // Submit form data to Supabase submit-form function (expects JSON)
     async function submitFormToServer(formData) {
-      if (!SUPABASE_FUNCTION_BASE || SUPABASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure SUPABASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
+        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
       }
-      // convert FormData -> simple object
       const obj = {};
       for (const [k, v] of formData.entries()) obj[k] = v;
-
-      // ensure astro_service_tier present if select exists
       if (astroServiceSelect && !obj.astro_service_tier) obj.astro_service_tier = astroServiceSelect.value || '';
 
-      const url = SUPABASE_FUNCTION_BASE.replace(/\/+$/, '') + '/submit-form';
+      const url = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/submit-form';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -538,8 +500,6 @@
       return res.json();
     }
 
-    // After phonepe checkout completes (user returns to your site or backend callback),
-    // your backend should verify the payment with PhonePe and then you can submit the full form data to backend.
     function openPhonePeCheckout(url, inNewTab = true) {
       if (!url) throw new Error('Invalid PhonePe checkout URL');
       if (inNewTab) {
@@ -549,11 +509,9 @@
       }
     }
 
-    // Main submit handler
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // simple front-end validation (word count)
       const text = expectations.value;
       const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
       if (words > 5000) {
@@ -570,7 +528,6 @@
 
       const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
 
-      // TERMS agreement check for Astrology
       if (purpose === 'Astrology') {
         if (!termsAgree || !termsAgree.checked) {
           alert('Please agree to the Terms and Conditions before submitting for Astrology service.');
@@ -579,7 +536,6 @@
         }
       }
 
-      // Prevent double clicks
       const submitButton = document.getElementById('submitBtn');
       const originalText = submitButton.textContent;
       submitButton.disabled = true;
@@ -587,33 +543,31 @@
 
       try {
         if (purpose === 'Astrology') {
-          // determine amount from selected tier
           const amountINR = getSelectedAstroAmount();
-          if (!amountINR || amountINR <= 0) {
-            throw new Error('Invalid selected amount for Astrology.');
-          }
+          if (!amountINR || amountINR <= 0) throw new Error('Invalid selected amount for Astrology.');
 
-          // 1) create PhonePe payment on your Supabase Edge Function (server uses PhonePe API + merchant credentials)
           const orderResp = await createPhonePePayment(amountINR);
 
-          // 2) open checkout URL returned by server
-          //   orderResp.checkout_url  <- an URL where PhonePe checkout is available (or deep link)
-          //   orderResp.phonepe_order_id <- your server's order id / phonepe txn id
-          openPhonePeCheckout(orderResp.checkout_url, true);
+          // open checkout (server should return a checkout_url or redirect_url)
+          const checkoutUrl = orderResp.checkout_url || orderResp.redirectUrl || orderResp.data?.checkout_url || orderResp.data?.redirectUrl;
+          const phonepeOrderId = orderResp.phonepe_order_id || orderResp.data?.phonepe_order_id || orderResp.data?.orderId || orderResp.orderId;
 
-          // IMPORTANT: The actual payment verification must happen on the server (server webhook)
-          // After the server verifies the payment with PhonePe, it should mark the order paid.
-          //
-          // We implement a simple polling loop to wait for server confirmation (expects your check-payment function).
+          if (!checkoutUrl) {
+            throw new Error('No checkout URL returned by server. Inspect server response: ' + JSON.stringify(orderResp));
+          }
+
+          openPhonePeCheckout(checkoutUrl, true);
+
+          // Poll server to verify payment final state (server side must validate webhook or call PhonePe)
           let attempts = 0;
-          const maxAttempts = 15; // ~15 * 2s = 30s
+          const maxAttempts = 15;
           const pollIntervalMs = 2000;
           let finalStatus = null;
-          if (orderResp.phonepe_order_id) {
+          if (phonepeOrderId) {
             while (attempts < maxAttempts) {
               attempts++;
               try {
-                const st = await checkPaymentStatus(orderResp.phonepe_order_id);
+                const st = await checkPaymentStatus(phonepeOrderId);
                 if (st && st.success && (st.status === 'PAID' || st.status === 'FAILED')) {
                   finalStatus = st;
                   break;
@@ -627,7 +581,7 @@
 
           if (finalStatus && finalStatus.status === 'PAID') {
             document.getElementById('phonepe_txn_id').value = finalStatus.phonepe_txn_id || '';
-            document.getElementById('phonepe_order_id').value = orderResp.phonepe_order_id || '';
+            document.getElementById('phonepe_order_id').value = phonepeOrderId || '';
             document.getElementById('payment_amount').value = amountINR;
             document.getElementById('payment_status').value = 'paid';
 
@@ -650,9 +604,7 @@
           }
 
         } else {
-          // Other purpose: skip payment
           const data = formDataFromForm();
-          // ensure astro tier hidden empty
           document.getElementById('astro_service_tier').value = '';
           const resJson = await submitFormToServer(data);
           if (resJson && (resJson.status === 'ok' || resJson.success)) {
@@ -681,5 +633,3 @@
   </script>
 </body>
 </html>
-
-
