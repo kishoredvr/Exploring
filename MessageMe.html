@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroPayment - Under Development</title>
+    <title>AstroPayment - Maintenance Notice</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -37,7 +37,7 @@
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            max-width: 600px;
+            max-width: 700px;
             width: 90%;
             backdrop-filter: blur(10px);
         }
@@ -55,10 +55,51 @@
             letter-spacing: 2px;
         }
         
+        .highlight {
+            color: #fdbb2d;
+            font-weight: bold;
+        }
+        
         p {
             font-size: 1.2rem;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             line-height: 1.6;
+        }
+        
+        .maintenance-details {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .maintenance-details h2 {
+            margin-bottom: 15px;
+            color: #fdbb2d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .maintenance-details ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        
+        .maintenance-details li {
+            margin-bottom: 10px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .maintenance-details li:before {
+            content: "•";
+            color: #fdbb2d;
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -5px;
         }
         
         .progress-container {
@@ -72,15 +113,40 @@
         
         .progress-bar {
             height: 100%;
-            width: 65%;
+            width: 35%;
             background: linear-gradient(90deg, #fdbb2d, #b21f1f);
             border-radius: 10px;
             animation: progress 2s ease-in-out infinite alternate;
         }
         
         @keyframes progress {
-            0% { width: 65%; }
-            100% { width: 70%; }
+            0% { width: 35%; }
+            100% { width: 40%; }
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fdbb2d;
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
         }
         
         .contact-info {
@@ -107,16 +173,6 @@
             color: #fdbb2d;
         }
         
-        .countdown {
-            margin: 20px 0;
-            font-size: 1.2rem;
-        }
-        
-        .countdown span {
-            font-weight: bold;
-            color: #fdbb2d;
-        }
-        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -129,32 +185,65 @@
             .container {
                 padding: 30px 20px;
             }
+            
+            .countdown {
+                flex-wrap: wrap;
+            }
+            
+            .countdown-item {
+                min-width: 70px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <i class="fas fa-rocket"></i>
+            <i class="fas fa-tools"></i>
         </div>
         
-        <h1>Site Under Development</h1>
+        <h1>Site <span class="highlight">Maintenance</span></h1>
         
-        <p>We're working hard to bring you an amazing experience. Our website is currently under development and will be launched soon.</p>
+        <p>We're currently performing scheduled maintenance to improve your experience. Our website will be back online in:</p>
+        
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-value" id="days">2</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
         
         <div class="progress-container">
             <div class="progress-bar"></div>
         </div>
         
-        <p>Thank you for your patience. We'll be back with something great!</p>
-        
-        <div class="countdown">
-            Estimated time until launch: <span id="days">2</span> days, <span id="hours">12</span> hours
+        <div class="maintenance-details">
+            <h2><i class="fas fa-info-circle"></i> Maintenance Details</h2>
+            <ul>
+                <li>We're upgrading our payment processing system for better security</li>
+                <li>Implementing new features for a smoother user experience</li>
+                <li>Performing database optimization for faster performance</li>
+                <li>Expected completion: 2 days from now</li>
+            </ul>
         </div>
         
+        <p>We apologize for any inconvenience and appreciate your patience.</p>
+        
         <div class="contact-info">
-            <p></p>
-            <p><i class="fas fa-envelope"></i> </p>
+            <p>For urgent inquiries, please contact us at:</p>
+            <p><i class="fas fa-envelope"></i> support@astropayment.com</p>
             
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
@@ -166,34 +255,39 @@
     </div>
 
     <script>
-        // Simple countdown timer (updates every minute)
+        // Set the maintenance end date (2 days from now)
+        const maintenanceDays = 2;
+        const now = new Date();
+        const endDate = new Date(now.getTime() + (maintenanceDays * 24 * 60 * 60 * 1000));
+        
         function updateCountdown() {
-            // Set your launch date here (year, month-1, day, hour, minute)
-            const launchDate = new Date(2025, 9, 5, 12, 0);
             const now = new Date();
-            
-            const diff = launchDate - now;
+            const diff = endDate - now;
             
             if (diff <= 0) {
-                document.querySelector('.countdown').innerHTML = "We're launching very soon!";
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
                 return;
             }
             
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             
             document.getElementById('days').textContent = days;
-            document.getElementById('hours').textContent = hours;
+            document.getElementById('hours').textContent = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').textContent = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').textContent = seconds < 10 ? '0' + seconds : seconds;
         }
         
         // Initial update
         updateCountdown();
         
-        // Update every minute
-        setInterval(updateCountdown, 60000);
+        // Update every second
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
-
-
-
