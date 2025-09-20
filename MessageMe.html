@@ -511,11 +511,14 @@
 
       const mobileNumber = document.getElementById('mobileNumber').value;
       const url = BACKEND_BASE + '/initiate-payment';
+      
+      const amountINR = getSelectedAstroAmount(); // e.g. 1000 rupees
+      const amountPaise = amountINR * 100;       // 1000 -> 100000 paise
+
       const body = {
-        amount: amountINR,
+        amount: amountPaise,
         userId: document.getElementById('email').value,
-        mobileNumber: mobileNumber,
-        // optionally include redirectUrl; if not provided the function will use PUBLIC_RETURN_URL env var
+        mobileNumber: document.getElementById('mobileNumber').value,
         redirectUrl: BACKEND_BASE + '/return-handler'
       };
 
@@ -747,3 +750,4 @@
   </script>
 </body>
 </html>
+
