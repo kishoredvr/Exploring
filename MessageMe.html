@@ -505,20 +505,21 @@
     // ---------------- Backend helpers (now using BACKEND_BASE) ----------------
 
     async function createPhonePePayment(amountINR) {
-      if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
-        throw new Error('Please configure BACKEND_BASE with your backend URL.');
+      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
+        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
       }
 
-      const mobileNumber = document.getElementById('mobileNumber').value;
-      const url = BACKEND_BASE + '/initiate-payment';
+      // convert rupees to paise before sending
+      const amountPaise = amountINR * 100;
+
       const body = {
-        amount: amountINR,
+        amount: amountPaise,
         userId: document.getElementById('email').value,
-        mobileNumber: mobileNumber,
-        // optionally include redirectUrl; if not provided the function will use PUBLIC_RETURN_URL env var
-        redirectUrl: BACKEND_BASE + '/return-handler'
+        mobileNumber: document.getElementById('mobileNumber').value,
+        redirectUrl: FIREBASE_BACKEND_BASE + '/return-handler'
       };
 
+      const url = FIREBASE_BACKEND_BASE + '/initiate-payment';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -747,3 +748,4 @@
   </script>
 </body>
 </html>
+
