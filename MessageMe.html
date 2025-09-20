@@ -303,10 +303,11 @@
   </div>
 
   <script>
-    // Your Firebase backend URL - replace with your actual backend URL
-    const FIREBASE_BACKEND_BASE = 'https://AstroPayment.herokuapp.com'; // Replace with your deployed backend URL
+    // Set this to your Supabase Functions base URL (or other server that exposes these endpoints).
+    // Example: const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
+    const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co'; // <-- replace with your functions domain
 
-    // All client code uses FIREBASE_BACKEND_BASE now
+    // All client code uses BACKEND_BASE now
     const form = document.getElementById('astrology-consultation-form');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
@@ -501,19 +502,21 @@
       return isNaN(amt) ? 1000 : amt;
     }
 
-    // ---------------- Firebase-backed helpers ----------------
+    // ---------------- Backend helpers (now using BACKEND_BASE) ----------------
 
     async function createPhonePePayment(amountINR) {
-      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
-        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
+      if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
+        throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
 
       const mobileNumber = document.getElementById('mobileNumber').value;
-      const url = FIREBASE_BACKEND_BASE + '/initiate-payment';
+      const url = BACKEND_BASE + '/initiate-payment';
       const body = {
         amount: amountINR,
         userId: document.getElementById('email').value,
-        mobileNumber: mobileNumber
+        mobileNumber: mobileNumber,
+        // optionally include redirectUrl; if not provided the function will use PUBLIC_RETURN_URL env var
+        redirectUrl: BACKEND_BASE + '/return-handler'
       };
 
       const res = await fetch(url, {
@@ -527,16 +530,17 @@
       }
       const json = await res.json();
       if (!json || !json.success) {
-        throw new Error('Payment initiation failed: ' + (json && json.message ? json.message : JSON.stringify(json)));
+        throw new Error('Payment initiation failed: ' + (json && (json.error || json.message) ? (json.error || json.message) : JSON.stringify(json)));
       }
       return json;
     }
 
     const checkPaymentStatus = async (transactionId) => {
-      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
-        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
+      if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
+        throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
-      const statusUrl = FIREBASE_BACKEND_BASE + '/payment-status/' + encodeURIComponent(transactionId);
+      // use query param form: /payment-status?txn=<id>
+      const statusUrl = `${BACKEND_BASE}/payment-status?txn=${encodeURIComponent(transactionId)}`;
       const resp = await fetch(statusUrl, { method: 'GET' });
       if (!resp.ok) {
         const text = await resp.text();
@@ -546,14 +550,15 @@
     };
 
     async function submitFormToServer(formData) {
-      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
-        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
+      if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
+        throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
       const obj = {};
       for (const [k, v] of formData.entries()) obj[k] = v;
       if (astroServiceSelect && !obj.astro_service_tier) obj.astro_service_tier = astroServiceSelect.value || '';
 
-      const url = FIREBASE_BACKEND_BASE + '/submit-form';
+      // NOTE: ensure you have a server endpoint /submit-form at BACKEND_BASE that accepts this JSON
+      const url = BACKEND_BASE + '/submit-form';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -621,29 +626,61 @@
 
           const orderResp = await createPhonePePayment(amountINR);
 
-          // open checkout (server should return a checkout_url or redirect_url)
-          const checkoutUrl = orderResp.data.data.instrumentResponse.redirectInfo.url;
+          // The function returns { success:true, transactionId, data }
           const transactionId = orderResp.transactionId;
+          const phonepeResp = orderResp.data || {};
+
+          // Try common nested locations for the redirect URL (robust)
+          const checkoutUrl =
+            phonepeResp?.data?.instrumentResponse?.redirectInfo?.url ||
+            phonepeResp?.data?.redirectInfo?.url ||
+            phonepeResp?.data?.checkoutUrl ||
+            phonepeResp?.redirectInfo?.url ||
+            phonepeResp?.redirectUrl ||
+            phonepeResp?.data?.checkout?.redirectUrl ||
+            null;
 
           if (!checkoutUrl) {
-            throw new Error('No checkout URL returned by server. Inspect server response: ' + JSON.stringify(orderResp));
+            console.warn('Full PhonePe response:', phonepeResp);
+            throw new Error('No checkout URL returned by server. Inspect server response in console.');
           }
 
+          // open checkout (server should return a checkout_url or redirect_url)
           openPhonePeCheckout(checkoutUrl, true);
 
           // Poll server to verify payment final state (server side must validate webhook or call PhonePe)
           let attempts = 0;
-          const maxAttempts = 15;
-          const pollIntervalMs = 2000;
+          const maxAttempts = 20;
+          const pollIntervalMs = 3000;
           let finalStatus = null;
+
           if (transactionId) {
             while (attempts < maxAttempts) {
               attempts++;
               try {
                 const st = await checkPaymentStatus(transactionId);
-                if (st && st.success && (st.data.status === 'success' || st.data.status === 'failed')) {
-                  finalStatus = st;
-                  break;
+                if (st && st.success) {
+                  // status might come from CLBASE or from PhonePe response object
+                  // Support many shapes: st.data.status, st.data.state, st.data.data.transaction.state, etc.
+                  const payload = st.data || {};
+                  const state =
+                    payload?.status ||
+                    payload?.state ||
+                    payload?.data?.transaction?.state ||
+                    payload?.data?.state ||
+                    payload?.data?.transaction?.status ||
+                    payload?.transaction?.state ||
+                    null;
+
+                  // treat multiple success keywords
+                  if (state && (state.toUpperCase() === 'SUCCESS' || state.toUpperCase() === 'SUCCESSFUL' || state.toLowerCase() === 'success' || state.toLowerCase() === 'paid')) {
+                    finalStatus = { outcome: 'success', payload: st };
+                    break;
+                  }
+                  if (state && (state.toUpperCase() === 'FAILED' || state.toLowerCase() === 'failed' || state.toLowerCase() === 'error')) {
+                    finalStatus = { outcome: 'failed', payload: st };
+                    break;
+                  }
                 }
               } catch (err) {
                 console.warn('poll error', err);
@@ -652,8 +689,11 @@
             }
           }
 
-          if (finalStatus && finalStatus.data.status === 'success') {
-            document.getElementById('phonepe_txn_id').value = finalStatus.data.phonepeResponse.data.transactionId || '';
+          if (finalStatus && finalStatus.outcome === 'success') {
+            // Fill hidden fields and submit final form data to server
+            try {
+              document.getElementById('phonepe_txn_id').value = (finalStatus.payload?.data?.phonepeResponse?.data?.transactionId) || '';
+            } catch (e) {}
             document.getElementById('phonepe_order_id').value = transactionId;
             document.getElementById('payment_amount').value = amountINR;
             document.getElementById('payment_status').value = 'paid';
