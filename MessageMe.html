@@ -47,6 +47,55 @@
     .hide { display: none; }
     input[type="number"].time-input { width: 100%; padding: 8px; }
     .consultation-note { background-color: #f8f9fa; border-left: 4px solid #0987b5; padding: 12px 16px; margin: 12px 0; border-radius: 4px; font-size: 14px; color: #2c3e50; display: none; }
+    
+    /* Payment processing modal */
+    .payment-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+    .payment-modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    .payment-modal h3 {
+      color: #076a91;
+      margin-bottom: 15px;
+    }
+    .payment-modal p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .payment-processing {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .payment-processing .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #0987b5;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
     @media (max-width: 900px) { .two-column { grid-template-columns: 1fr; } .centered-section { max-width: 100%; padding: 0 8px; } .time-fields { flex-direction: row; gap: 10px; } button { width: 48%; } }
     @page { size: A4; margin: 10mm; }
     @media print { html, body { background: white !important; color: #000 !important; width: 100% !important; height: auto !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; font-size: 12px !important; } .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 5mm !important; background: white !important; page-break-inside: avoid; } .header h1 { font-size: 20px !important; margin-bottom: 4px !important; } .header p { font-size: 12px !important; color: #333 !important; margin-bottom: 8px !important; } .form-section { margin-bottom: 8px !important; padding-bottom: 6px !important; page-break-inside: avoid; } .form-group { margin-bottom: 6px !important; } .two-column { grid-template-columns: 1fr 1fr !important; gap: 10px !important; page-break-inside: avoid; } .time-fields { display: flex !important; gap: 2px !important; width: 60% !important; } .time-fields .form-group { flex: 1 !important; margin-bottom: 0 !important; } input[type="number"].time-input { width: 80% !important; padding: 4px !important; font-size: 12px !important; } [style*="margin-left"] { margin-left: 0 !important; } [style*="width:160%"], [style*="width:120%"] { width: 100% !important; } input, select, textarea { width: 100% !important; border: 1px solid #999 !important; box-shadow: none !important; background: transparent !important; color: #000 !important; padding: 4px 6px !important; font-size: 12px !important; page-break-inside: avoid; } textarea { max-width: 100% !important; min-height: 50px !important; } button, .action-buttons { display: none !important; } .success-message, .error-message { display: none !important; } .consultation-note { display: block !important; background-color: transparent !important; border-left: 2px solid #0987b5 !important; padding: 6px 8px !important; margin: 8px 0 !important; font-size: 11px !important; color: #000 !important; page-break-inside: avoid; } .radio-group { gap: 8px !important; flex-wrap: nowrap !important; } .radio-option { white-space: nowrap !important; font-size: 12px !important; } #birth-details-section { margin-left: 0 !important; } .form-section h2 { font-size: 16px !important; margin-bottom: 6px !important; } label { font-size: 12px !important; margin-bottom: 2px !important; } input[type="date"] { width: 36% !important; } .word-count { font-size: 10px !important; margin-top: 2px !important; } .centered-section { max-width: 100% !important; padding: 0 !important; } #gender-other-input-wrapper { margin-left: 0 !important; } .form-section, .two-column, .time-fields { page-break-inside: avoid; } }
@@ -107,6 +156,12 @@
             <label for="email" class="required">Email Address</label>
             <input type="email" id="email" name="email" required>
           </div>
+        </div>
+        
+        <!-- Added mobile number field for PhonePe payment -->
+        <div class="form-group">
+          <label for="mobileNumber" class="required">Mobile Number (for Payment)</label>
+          <input type="tel" id="mobileNumber" name="mobileNumber" required>
         </div>
       </div>
 
@@ -235,34 +290,27 @@
     </form>
   </div>
 
-  <!-- define CLBASE_FUNCTION_BASE for your frontend -->
- <script>
-const CLBASE_FUNCTION_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
-
-async function payNow() {
-  const res = await fetch(CLBASE_FUNCTION_BASE + '/create-paylink', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      merchantOrderId: 'ORD-' + Date.now(),
-      amountINR: 1,
-      message: 'Test Payment'
-    })
-  });
-  const data = await res.json();
-  if (data.success && data.payLink) {
-    window.open(data.payLink, '_blank');
-  } else {
-    alert('Error: ' + JSON.stringify(data));
-  }
-}
-</script>
+  <!-- Payment Processing Modal -->
+  <div class="payment-modal" id="paymentModal">
+    <div class="payment-modal-content">
+      <h3>Processing Payment</h3>
+      <p>Please wait while we redirect you to PhonePe for secure payment processing.</p>
+      <div class="payment-processing">
+        <div class="spinner"></div>
+      </div>
+      <p>Do not refresh or close this window.</p>
+    </div>
+  </div>
 
   <script>
-    // All client code uses CLBASE_FUNCTION_BASE now (no secrets exposed)
+    // Your Firebase backend URL - replace with your actual backend URL
+    const FIREBASE_BACKEND_BASE = 'https://your-firebase-backend-url.herokuapp.com'; // Replace with your deployed backend URL
+
+    // All client code uses FIREBASE_BACKEND_BASE now
     const form = document.getElementById('astrology-consultation-form');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
+    const paymentModal = document.getElementById('paymentModal');
 
     const accuracyYes = document.getElementById('accuracy-yes');
     const accuracyNo = document.getElementById('accuracy-no');
@@ -453,20 +501,19 @@ async function payNow() {
       return isNaN(amt) ? 1000 : amt;
     }
 
-    // ---------------- CLBASE-backed helpers ----------------
+    // ---------------- Firebase-backed helpers ----------------
 
     async function createPhonePePayment(amountINR) {
-      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
+        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
       }
 
-      const url = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/create-order';
+      const mobileNumber = document.getElementById('mobileNumber').value;
+      const url = FIREBASE_BACKEND_BASE + '/initiate-payment';
       const body = {
-        amountINR: Number(amountINR),
-        receiptId: 'rcpt_' + Date.now(),
-        service_tier: astroServiceSelect ? astroServiceSelect.value : 'Basic',
-        name: document.getElementById('name')?.value || '',
-        email: document.getElementById('email')?.value || ''
+        amount: amountINR,
+        userId: document.getElementById('email').value,
+        mobileNumber: mobileNumber
       };
 
       const res = await fetch(url, {
@@ -476,21 +523,20 @@ async function payNow() {
       });
       if (!res.ok) {
         const text = await res.text();
-        throw new Error('Order creation failed: ' + text);
+        throw new Error('Payment initiation failed: ' + text);
       }
       const json = await res.json();
       if (!json || !json.success) {
-        throw new Error('Order creation failed: ' + (json && json.message ? json.message : JSON.stringify(json)));
+        throw new Error('Payment initiation failed: ' + (json && json.message ? json.message : JSON.stringify(json)));
       }
-      // expected keys: checkout_url (or redirect_url), phonepe_order_id, amount
       return json;
     }
 
-    const checkPaymentStatus = async (orderId) => {
-      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+    const checkPaymentStatus = async (transactionId) => {
+      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
+        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
       }
-      const statusUrl = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/check-payment?orderId=' + encodeURIComponent(orderId);
+      const statusUrl = FIREBASE_BACKEND_BASE + '/payment-status/' + encodeURIComponent(transactionId);
       const resp = await fetch(statusUrl, { method: 'GET' });
       if (!resp.ok) {
         const text = await resp.text();
@@ -500,14 +546,14 @@ async function payNow() {
     };
 
     async function submitFormToServer(formData) {
-      if (!CLBASE_FUNCTION_BASE || CLBASE_FUNCTION_BASE.includes('<your-project>')) {
-        throw new Error('Please configure CLBASE_FUNCTION_BASE at top of script with your Supabase functions URL.');
+      if (!FIREBASE_BACKEND_BASE || FIREBASE_BACKEND_BASE.includes('your-firebase-backend-url')) {
+        throw new Error('Please configure FIREBASE_BACKEND_BASE with your backend URL.');
       }
       const obj = {};
       for (const [k, v] of formData.entries()) obj[k] = v;
       if (astroServiceSelect && !obj.astro_service_tier) obj.astro_service_tier = astroServiceSelect.value || '';
 
-      const url = CLBASE_FUNCTION_BASE.replace(/\/+$/, '') + '/submit-form';
+      const url = FIREBASE_BACKEND_BASE + '/submit-form';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -522,11 +568,18 @@ async function payNow() {
 
     function openPhonePeCheckout(url, inNewTab = true) {
       if (!url) throw new Error('Invalid PhonePe checkout URL');
+      paymentModal.style.display = 'flex';
+      
       if (inNewTab) {
         window.open(url, '_blank');
       } else {
         window.location.href = url;
       }
+      
+      // Hide modal after 5 seconds (user should be redirected by then)
+      setTimeout(() => {
+        paymentModal.style.display = 'none';
+      }, 5000);
     }
 
     form.addEventListener('submit', async (e) => {
@@ -569,8 +622,8 @@ async function payNow() {
           const orderResp = await createPhonePePayment(amountINR);
 
           // open checkout (server should return a checkout_url or redirect_url)
-          const checkoutUrl = orderResp.checkout_url || orderResp.redirectUrl || orderResp.data?.checkout_url || orderResp.data?.redirectUrl;
-          const phonepeOrderId = orderResp.phonepe_order_id || orderResp.data?.phonepe_order_id || orderResp.data?.orderId || orderResp.orderId;
+          const checkoutUrl = orderResp.data.data.instrumentResponse.redirectInfo.url;
+          const transactionId = orderResp.transactionId;
 
           if (!checkoutUrl) {
             throw new Error('No checkout URL returned by server. Inspect server response: ' + JSON.stringify(orderResp));
@@ -583,12 +636,12 @@ async function payNow() {
           const maxAttempts = 15;
           const pollIntervalMs = 2000;
           let finalStatus = null;
-          if (phonepeOrderId) {
+          if (transactionId) {
             while (attempts < maxAttempts) {
               attempts++;
               try {
-                const st = await checkPaymentStatus(phonepeOrderId);
-                if (st && st.success && (st.status === 'PAID' || st.status === 'FAILED')) {
+                const st = await checkPaymentStatus(transactionId);
+                if (st && st.success && (st.data.status === 'success' || st.data.status === 'failed')) {
                   finalStatus = st;
                   break;
                 }
@@ -599,9 +652,9 @@ async function payNow() {
             }
           }
 
-          if (finalStatus && finalStatus.status === 'PAID') {
-            document.getElementById('phonepe_txn_id').value = finalStatus.phonepe_txn_id || '';
-            document.getElementById('phonepe_order_id').value = phonepeOrderId || '';
+          if (finalStatus && finalStatus.data.status === 'success') {
+            document.getElementById('phonepe_txn_id').value = finalStatus.data.phonepeResponse.data.transactionId || '';
+            document.getElementById('phonepe_order_id').value = transactionId;
             document.getElementById('payment_amount').value = amountINR;
             document.getElementById('payment_status').value = 'paid';
 
@@ -647,6 +700,7 @@ async function payNow() {
       } finally {
         submitButton.textContent = originalText;
         submitButton.disabled = false;
+        paymentModal.style.display = 'none';
         window.scrollTo(0, 0);
       }
     });
