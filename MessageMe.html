@@ -789,8 +789,35 @@
               throw new Error('Server replied: ' + JSON.stringify(resJson));
             }
           } else {
-            alert('Payment not confirmed yet. If you completed payment, please wait a few moments and refresh the page. Alternatively check your email for confirmation.');
-            throw new Error('Payment not confirmed (status unknown).');
+            // *** NEW BEHAVIOR: if payment not confirmed (cancel/timeout) send an "unpaid" submission ***
+            try {
+              // populate hidden fields so collected object contains payment info
+              document.getElementById('phonepe_order_id').value = transactionId || '';
+              document.getElementById('payment_amount').value = amountINR;
+              document.getElementById('payment_status').value = 'unpaid';
+
+              const dataObj = collectFormObject();
+              // make sure payment_status is explicitly "unpaid"
+              dataObj.payment_status = 'unpaid';
+              const res = await submitFormToServer(dataObj);
+              console.log('Submitted unpaid fallback:', res);
+              // inform user gracefully
+              alert('Payment was not completed. Your request has been submitted as unpaid — we will contact you.');
+              successMessage.style.display = 'block';
+              errorMessage.style.display = 'none';
+              form.reset();
+              wordCount.textContent = '0';
+              toggleSections();
+              handleAccuracyExplanation();
+              toggleGenderOtherInput();
+            } catch (e) {
+              console.error('Failed to submit unpaid fallback:', e);
+              // show error UI but avoid swallowing the original failure
+              errorMessage.style.display = 'block';
+              successMessage.style.display = 'none';
+              alert('There was an issue submitting your request after payment was not confirmed. Please contact us.');
+            }
+            // do not re-throw — we've attempted to send unpaid submission and returned control to user
           }
 
         } else {
