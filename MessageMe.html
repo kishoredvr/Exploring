@@ -550,20 +550,97 @@
       return resp.json();
     };
 
-    async function submitFormToServer(formData) {
+    // ---------------- NEW: collectFormObject & JSON submit ----------------
+
+    // Collect all expected fields into an object; set "Not applicable" for empty ones.
+    function collectFormObject() {
+      // list every field you want in the email/DB (use the element id or name)
+      const fields = [
+        "name","email","mobileNumber",
+        "purpose","astroServiceSelect","astro_service_tier",
+        "birthDetailsAvailable","dob","hour","minute","second","explanation",
+        "city","state","country",
+        "gender","genderOtherInput",
+        "accuracy",
+        "contactCountry",
+        "expectations",
+        // payment/hidden fields
+        "phonepe_txn_id","phonepe_order_id","payment_amount","payment_status"
+      ];
+
+      const out = {};
+      // helper to read radio groups by name
+      function readRadio(name) {
+        const r = document.querySelector(`input[name="${name}"]:checked`);
+        return r ? r.value : null;
+      }
+
+      // ensure astro_service_tier current
+      try {
+        if (astroServiceSelect && astroServiceSelect.value) {
+          astroServiceTierHidden.value = astroServiceSelect.value;
+        }
+      } catch(e){}
+
+      for (const idOrName of fields) {
+        // prefer element by id, else try by name
+        let el = document.getElementById(idOrName);
+        if (!el) {
+          // try to find by name (radios etc.)
+          const byName = document.getElementsByName(idOrName);
+          if (byName && byName.length === 1) el = byName[0];
+        }
+
+        let val = null;
+        if (el) {
+          // radio/checkbox individual
+          if (el.type === "radio") {
+            val = readRadio(el.name || idOrName);
+          } else {
+            val = el.value;
+          }
+        } else {
+          // if no element by id, try reading radio group directly
+          const rVal = readRadio(idOrName);
+          if (rVal !== null) val = rVal;
+        }
+
+        // normalize special items (genderOtherInput uses different id)
+        if ((idOrName === "gender") && !val) {
+          // if 'Other' selected, include the other text if provided
+          const g = readRadio("gender");
+          if (g === "Other") {
+            const other = document.getElementById("genderOtherInput");
+            if (other && other.value) val = `Other: ${other.value}`;
+            else val = "Other";
+          }
+        }
+
+        // final assignment: if blank -> "Not applicable"
+        if (val === null || val === undefined || String(val).trim() === "") {
+          out[idOrName] = "Not applicable";
+        } else {
+          out[idOrName] = String(val).trim();
+        }
+      }
+
+      // also include some meta
+      out.submittedAt = new Date().toISOString();
+
+      return out;
+    }
+
+    // Replace submitFormToServer to accept a plain object and send JSON
+    async function submitFormToServer(formObj) {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
-      const obj = {};
-      for (const [k, v] of formData.entries()) obj[k] = v;
-      if (astroServiceSelect && !obj.astro_service_tier) obj.astro_service_tier = astroServiceSelect.value || '';
 
-      // NOTE: ensure you have a server endpoint /submit-form at BACKEND_BASE that accepts this JSON
       const url = BACKEND_BASE + '/submit-form';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(obj)
+        body: JSON.stringify(formObj)
       });
       if (!res.ok) {
         const text = await res.text();
@@ -661,8 +738,6 @@
               try {
                 const st = await checkPaymentStatus(transactionId);
                 if (st && st.success) {
-                  // status might come from CLBASE or from PhonePe response object
-                  // Support many shapes: st.data.status, st.data.state, st.data.data.transaction.state, etc.
                   const payload = st.data || {};
                   const state =
                     payload?.status ||
@@ -673,7 +748,6 @@
                     payload?.transaction?.state ||
                     null;
 
-                  // treat multiple success keywords
                   if (state && (state.toUpperCase() === 'SUCCESS' || state.toUpperCase() === 'SUCCESSFUL' || state.toLowerCase() === 'success' || state.toLowerCase() === 'paid')) {
                     finalStatus = { outcome: 'success', payload: st };
                     break;
@@ -700,8 +774,9 @@
             document.getElementById('payment_amount').value = amountINR;
             document.getElementById('payment_status').value = 'paid';
 
-            const data = formDataFromForm();
-            const resJson = await submitFormToServer(data);
+            // collect full object (every field; "Not applicable" used for empty)
+            const dataObj = collectFormObject();
+            const resJson = await submitFormToServer(dataObj);
             if (resJson && (resJson.status === 'ok' || resJson.success)) {
               successMessage.style.display = 'block';
               errorMessage.style.display = 'none';
@@ -719,9 +794,11 @@
           }
 
         } else {
-          const data = formDataFromForm();
-          document.getElementById('astro_service_tier').value = '';
-          const resJson = await submitFormToServer(data);
+          // non-payment path: send full JSON object with "Not applicable" for empty fields
+          const dataObj = collectFormObject();
+          // ensure astro_service_tier empty for non-astro submissions
+          dataObj.astro_service_tier = dataObj.astro_service_tier || "Not applicable";
+          const resJson = await submitFormToServer(dataObj);
           if (resJson && (resJson.status === 'ok' || resJson.success)) {
             successMessage.style.display = 'block';
             errorMessage.style.display = 'none';
