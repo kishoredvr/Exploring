@@ -13,98 +13,120 @@
       box-sizing: border-box;
     }
 
-  html, body {
-    height: 100%;
-  }
-	  
+    :root {
+      --primary-blue: #1a365d;
+      --accent-gold: #d4af37;
+      --dark-navy: #0f1a3c;
+      --light-gray: #f5f7fa;
+      --medium-gray: #e2e8f0;
+      --text-dark: #2d3748;
+      --text-light: #718096;
+      --vedic-purple: #7c3aed;
+      --cyber-teal: #0ea5e9;
+      --financial-green: #059669;
+      --background-gradient: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 50%, #f5f9ff 100%);
+    }
+
+    html, body {
+      height: 100%;
+    }
+    
     body {
-      font-family: 'Lora', serif;
-      background: #f0f9fd;
-      color: #333;
-      line-height: 1.8;
-      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(249, 252, 255, 0.95)), 
-                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%230987b5" opacity="0.05"/></svg>');
-      background-size: 150px;
-    transform: scale(0.5);
-    transform-origin: top left;
-    width: 200%; /* Counteract the scaling */
-    height: 200%; /* Counteract the scaling */
-    overflow-x: hidden; /* Prevent horizontal scroll */
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--background-gradient);
+      color: var(--text-dark);
+      line-height: 1.7;
     }
 
     nav {
-      background: linear-gradient(135deg, #0987b5, #076a91);
-      padding: 15px 3%;
+      background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+      padding: 15px 0;
       display: flex;
       justify-content: center;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
       position: sticky;
       top: 0;
-      z-index: 100;transform: scale(1.0);
+      z-index: 100;
+    }
+
+    .nav-container {
+      width: 90%;
+      max-width: 1400px;
+      display: flex;
+      justify-content: center;
     }
 
     .nav-links {
       display: flex;
-      gap: 10px;
+      gap: 15px;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 1200px;
       width: 100%;
     }
 
     nav a {
-      padding: 10px 22px;
-      color: #e8f4ff;
+      padding: 12px 28px;
+      color: white;
       text-decoration: none;
-      font-family: 'Open Sans', sans-serif;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       border-radius: 30px;
       transition: all 0.3s ease;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      flex-grow: 1;
       text-align: center;
-      max-width: 180px;margin-left: 45px;margin-right: 45px;
-      background: rgba(255, 255, 255, 0.08);transform: scale(1.5);
+      background: rgba(255, 255, 255, 0.1);
+      min-width: 160px;
     }
 
     nav a:hover {
-      background-color: white;
-      color: #0987b5;
+      background-color: var(--accent-gold);
+      color: var(--dark-navy);
       transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
     nav a.active {
-      background-color: rgba(255, 255, 255, 0.3);
+      background-color: rgba(255, 255, 255, 0.25);
       border-color: rgba(255, 255, 255, 0.5);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .essay-container {
-      max-width: 2000px; /* Increased width for more words per line */
-      margin: 50px auto;
-      padding: 0 40px;transform: scale(1.0);
+      width: 90%;
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .essay-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-gold), var(--primary-blue));
     }
 
     .essay-header {
-      text-align: center;max-width: scale(2.0)
-      margin-bottom: 45px;
-      padding: 0 20px;
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 0 10px;
     }
 
     .essay-header h1 {
-      font-family: 'Open Sans', sans-serif;
       font-weight: 700;
-      font-size: 2.8rem;
-      color: #076a91;
+      font-size: 2.4rem;
+      color: var(--primary-blue);
       margin-bottom: 15px;
       line-height: 1.3;
       position: relative;
       padding-bottom: 20px;
-      max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .essay-header h1::after {
@@ -113,17 +135,16 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 150px;
+      width: 120px;
       height: 4px;
-      background: linear-gradient(90deg, #0987b5, #5ac3f0);
+      background: var(--accent-gold);
       border-radius: 3px;
     }
 
     .essay-header .subtitle {
-      font-size: 2.0rem;
-      color: #5a9ec9;
+      font-size: 1.6rem;
+      color: var(--text-light);
       font-style: italic;
-      max-width: 900px;
       margin: 0 auto 12px;
       font-weight: 500;
       letter-spacing: 0.2px;
@@ -131,33 +152,30 @@
 
     .author-line {
       margin-top: 15px;
-      font-size: 2.0rem;
-      color: #7a8ca5;
+      font-size: 1.4rem;
+      color: var(--text-light);
       font-weight: 500;
     }
 
     .essay-content {
-      font-size: 1.1rem; /* Slightly larger font for better readability */
-      color: #3a4a5a;
-      line-height: 1.85;
+      font-size: 1.05rem;
+      color: var(--text-dark);
+      line-height: 1.75;
       position: relative;
-      max-width: 1000px;
-      margin: 0 auto;transform: scale(1.8);
     }
 
     .essay-content p {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       text-align: justify;
     }
 
     .section-title {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 1.0rem;
+      font-size: 1.8rem;
       font-weight: 700;
-      color: #076a91;
-      margin: 55px 0 28px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #e0e7f3;
+      color: var(--primary-blue);
+      margin: 45px 0 22px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--medium-gray);
       position: relative;
     }
 
@@ -166,58 +184,53 @@
       position: absolute;
       bottom: -1px;
       left: 0;
-      width: 120px;
+      width: 100px;
       height: 3px;
-      background: linear-gradient(90deg, #0987b5, #5ac3f0);
+      background: var(--accent-gold);
     }
 
     .highlight-quote {
-      background: linear-gradient(to right, rgba(240, 247, 251, 0.5), rgba(245, 250, 255, 0.6));
-      border-left: 4px solid #0987b5;
-      padding: 28px 40px;
-      margin: 40px 0;
+      background: linear-gradient(to right, rgba(240, 247, 251, 0.7), rgba(245, 250, 255, 0.8));
+      border-left: 4px solid var(--accent-gold);
+      padding: 24px 30px;
+      margin: 35px 0;
       font-style: italic;
-      color: #0987b5;
+      color: var(--primary-blue);
       border-radius: 0 6px 6px 0;
       position: relative;
-      font-size: 1.25rem;
-      line-height: 1.85;
+      font-size: 1.15rem;
+      line-height: 1.7;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;transform: scale(0.8)
     }
 
     .highlight-quote::before {
       content: """;
       position: absolute;
-      top: -20px;
+      top: -15px;
       left: 10px;
-      font-size: 5rem;
-      color: rgba(9, 135, 181, 0.15);
+      font-size: 4rem;
+      color: rgba(212, 175, 55, 0.15);
       font-family: Georgia, serif;
       font-weight: bold;
     }
 
     .section-divider {
       height: 1px;
-      background: linear-gradient(to right, transparent, #0987b5, transparent);
-      margin: 45px auto;
+      background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+      margin: 40px auto;
       max-width: 400px;
     }
 
     .conclusion {
-      margin: 60px 0 40px;
-      padding: 40px;
-      background: linear-gradient(to bottom, #f0f7fb, #e5f1f8);
+      margin: 50px 0 35px;
+      padding: 35px;
+      background: linear-gradient(to bottom, var(--light-gray), var(--medium-gray));
       border-radius: 8px;
       text-align: center;
-      border: 1px solid #d1e4f1;
+      border: 1px solid var(--medium-gray);
       position: relative;
       overflow: hidden;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     }
 
     .conclusion::before {
@@ -227,27 +240,26 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, #0987b5, #5ac3f0);
+      background: var(--accent-gold);
     }
 
     .conclusion p {
-      font-size: 1.0rem;
-      color: #0987b5;
+      font-size: 1.1rem;
+      color: var(--primary-blue);
       font-weight: 500;
       margin-bottom: 0;
-      line-height: 1.85;
+      line-height: 1.75;
     }
 
     .signature {
       text-align: right;
-      margin-top: 28px;
-      font-family: 'Open Sans', sans-serif;
-      font-size: 1.4rem;
-      color: #0987b5;
+      margin-top: 25px;
+      font-size: 1.3rem;
+      color: var(--primary-blue);
       font-weight: 700;
       position: relative;
       display: inline-block;
-      padding-right: 35px;
+      padding-right: 30px;
     }
 
     .signature::after {
@@ -255,17 +267,17 @@
       position: absolute;
       top: 50%;
       right: 0;
-      width: 25px;
+      width: 20px;
       height: 2px;
-      background: #0987b5;
+      background: var(--primary-blue);
     }
 
     .exploration-section {
-      margin: 45px 0;
+      margin: 40px 0;
     }
 
     .exploration-item {
-      margin-bottom: 45px;
+      margin-bottom: 40px;
       position: relative;
       padding-left: 25px;
     }
@@ -278,15 +290,14 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #0987b5;
+      background: var(--accent-gold);
     }
 
     .item-title {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
-      color: #0987b5;
-      margin-bottom: 15px;
+      color: var(--primary-blue);
+      margin-bottom: 12px;
       position: relative;
       display: inline-block;
       padding-bottom: 5px;
@@ -299,155 +310,63 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: linear-gradient(90deg, #0987b5, rgba(9, 135, 181, 0.2));
+      background: linear-gradient(90deg, var(--primary-blue), rgba(26, 54, 93, 0.2));
     }
 
     .footer {
       text-align: center;
-      padding: 35px 0;
-      margin-top: 60px;
-      color: #7a8ca5;
-      font-size: 0.95rem;
-      border-top: 1px solid #e0e7f3;
+      padding: 30px 0;
+      margin-top: 50px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--medium-gray);
     }
 
-    @media (max-width: 1200px) {
-      .essay-container {
-        max-width: 1000px;
-      }
-    }
-
-    @media (max-width: 992px) {
-      .essay-container {
-        max-width: 900px;
-        padding: 0 30px;
-      }
-      
-      .essay-header h1 {
-        font-size: 2.4rem;
-      }
-      
-      .essay-content {
-        font-size: 1.15rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .essay-container {
-        padding: 0 20px;
-      }
-      
-      nav a {
-        font-size: 0.85rem;
-        padding: 8px 16px;
-      }
-
-      .essay-header h1 {
-        font-size: 2.1rem;
-      }
-
-      .essay-content {
-        font-size: 1.1rem;
-      }
-
-      .section-title {
-        font-size: 1.6rem;
-      }
-      
-      .highlight-quote {
-        padding: 22px;
-        font-size: 1.15rem;
-      }
-
-      .conclusion p {
-        font-size: 1.2rem;
-      }
-
-      .signature {
-        font-size: 1.25rem;
-      }
-      
-      .item-title {
-        font-size: 1.35rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .essay-header h1 {
-        font-size: 1.85rem;
-      }
-      
-      .essay-header .subtitle {
-        font-size: 1.15rem;
-      }
-
-      .section-title {
-        font-size: 1.4rem;
-      }
-
-      .highlight-quote {
-        padding: 20px;
-        font-size: 0.8rem;
-      }
-
-      .conclusion p {
-        font-size: 1.15rem;
-      }
-
-      .signature {
-        font-size: 1.2rem;
-      }
-      
-      .item-title {
-        font-size: 1.25rem;
-      }
-    }
-    
     .intro-paragraph {
-      font-size: 1.10rem;
-      background: rgba(249, 252, 255, 0.7);
-      padding: 10px;
+      font-size: 1.1rem;
+      background: rgba(245, 247, 250, 0.7);
+      padding: 20px;
       border-radius: 8px;
-      margin-bottom: 40px;
-      border-left: 4px solid #0987b5;
-      color: #3a4a5a;
+      margin-bottom: 35px;
+      border-left: 4px solid var(--accent-gold);
+      color: var(--text-dark);
     }
     
     .decoration {
       position: absolute;
-      opacity: 0.05;
+      opacity: 0.03;
       z-index: -1;
     }
     
     .decoration-1 {
-      top: 15%;
+      top: 10%;
       right: 5%;
-      font-size: 12rem;
-      color: #0987b5;
+      font-size: 15rem;
+      color: var(--primary-blue);
       transform: rotate(15deg);
     }
     
     .decoration-2 {
-      bottom: 20%;
+      bottom: 15%;
       left: 5%;
-      font-size: 10rem;
-      color: #0987b5;
+      font-size: 12rem;
+      color: var(--primary-blue);
       transform: rotate(-10deg);
     }
     
     .thought-divider {
       text-align: center;
-      margin: 40px 0;
+      margin: 35px 0;
       position: relative;
     }
     
     .thought-divider span {
       display: inline-block;
       padding: 0 20px;
-      font-size: 1.4rem;
-      color: #5a9ec9;
+      font-size: 1.3rem;
+      color: var(--text-light);
       font-style: italic;
-      background: #fafafa;
+      background: white;
       position: relative;
       z-index: 2;
     }
@@ -459,18 +378,168 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(to right, transparent, #0987b5, transparent);
+      background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
       z-index: 1;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0) 70%);
+      z-index: -1;
+    }
+
+    .floating-1 {
+      top: 10%;
+      right: 10%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .floating-2 {
+      bottom: 15%;
+      left: 10%;
+      animation: float 18s infinite ease-in-out reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    @media (max-width: 1200px) {
+      .essay-container {
+        width: 92%;
+        max-width: 1200px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .essay-container {
+        width: 94%;
+        padding: 25px;
+      }
+      
+      .essay-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .essay-content {
+        font-size: 1.05rem;
+      }
+
+      .floating-element {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .essay-container {
+        width: 96%;
+        padding: 20px;
+      }
+      
+      nav a {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+        min-width: 140px;
+      }
+
+      .essay-header h1 {
+        font-size: 2.0rem;
+      }
+
+      .essay-content {
+        font-size: 1.0rem;
+      }
+
+      .section-title {
+        font-size: 1.6rem;
+      }
+      
+      .highlight-quote {
+        padding: 20px;
+        font-size: 1.1rem;
+      }
+
+      .conclusion p {
+        font-size: 1.05rem;
+      }
+
+      .signature {
+        font-size: 1.2rem;
+      }
+      
+      .item-title {
+        font-size: 1.3rem;
+      }
+
+      .floating-element {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .essay-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .essay-header .subtitle {
+        font-size: 1.3rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .highlight-quote {
+        padding: 18px;
+        font-size: 1.05rem;
+      }
+
+      .conclusion p {
+        font-size: 1.0rem;
+      }
+
+      .signature {
+        font-size: 1.15rem;
+      }
+      
+      .item-title {
+        font-size: 1.25rem;
+      }
+
+      .nav-links {
+        gap: 10px;
+      }
+
+      nav a {
+        min-width: 120px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+
+      .floating-element {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="floating-element floating-1"></div>
+  <div class="floating-element floating-2"></div>
+
   <nav>
-    <div class="nav-links">
-      <a href="https://kishoredvr.github.io/Exploring/">Home</a>
-      <a href="https://kishoredvr.github.io/Exploring/AboutMe.html" class="active">Origin Of Thoughts</a>
-      <a href="https://parishodana.xyz/Articles.html">My Articles</a>
-      <a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Let's Connect</a>
+    <div class="nav-container">
+      <div class="nav-links">
+        <a href="https://kishoredvr.github.io/Exploring/">Home</a>
+        <a href="https://kishoredvr.github.io/Exploring/AboutMe.html" class="active">Origin Of Thoughts</a>
+        <a href="https://parishodana.xyz/Articles.html">My Articles</a>
+        <a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Let's Connect</a>
+      </div>
     </div>
   </nav>
 
@@ -487,7 +556,7 @@
       <h1>My Journey of Thoughts<br> Exploring Life's Unanswered Questions</h1>
       <div class="author-line">Reflections on Consciousness, Cosmos, and Connection</div>
     </div>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    
     <div class="essay-content">
       <div class="intro-paragraph">
         <p>Have you ever found yourself pondering why some individuals seem to navigate life with greater ease or achieve different outcomes than others? This fundamental question has captivated my mind since childhood, serving as a constant catalyst for deeper exploration. My lifelong quest to unravel these mysteries has naturally led me to blend the wisdom of ancient traditions with the sharp insights of modern understanding. This exciting journey has specifically guided me into three interconnected fields: the intriguing realm of Astrology, the insightful study of National Economies and Cultures, and the empowering utilization of Digital Resources.</p>
@@ -553,9 +622,3 @@
   </div>
 </body>
 </html>
-
-
-
-
-
-
