@@ -1,589 +1,1035 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Exploring The World</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-  html, body {
-    height: 100%;
-  }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f9f9f9 0%, #eef2f5 100%);transform: scale(0.6);transform-origin: top left;width: 166.67%;
-      color: #333;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    
-    .container-wrapper {
-      width: 100%;
-      background: white;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-    
-    header {
-      background: linear-gradient(90deg, #08729a 0%, #0987b5 100%);
-      color: white;
-      padding: 10px 0;
-      text-align: center;
-      position: relative;
-    }
-    
-    .header-content {
-      padding: 0 30px; transform: scale(0.9);
-    }
-    
-    nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 40px;
-      margin-top: 10px;
-    }
-    
-    nav a {
-      padding: 5px 10px;
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 25px;
-      transition: all 0.3s ease;margin-right: 20px;margin-left: 20px;
-      background: rgba(255, 255, 255, 0.1);transform: scale(1.4);
-
-    }
-    
-    nav a:hover {
-      background-color: white;
-      color: #0987b5;
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .main-content {
-      display: flex;
-      padding: 30px;
-      gap: 30px;
-      background: #fff;
-    }
-    
-    .profile-section {
-      flex: 1;
-      display: flex;
-      gap: 30px;
-    }
-    
-    .profile-image {
-      flex: 0 0 350px;
-      border-radius: 60%;
-      overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-      height: 400px;
-      width: 400px;margin-top: 80px;transform: scale(1.2);
-    }
-    
-    .profile-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    
-    .profile-image img:hover {
-      transform: scale(1.10);
-    }
-    
-    .profile-info {
-      flex: 1;
-    }
-    
-    .profile-info h1 {
-      color: #08729a;
-      margin-bottom: 20px;
-      font-size: 2.8rem;
-      position: relative;
-      padding-bottom: 10px;
-    }
-    
-    .profile-info h1::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 80px;
-      height: 4px;
-      
-      border-radius: 2px;
-    }
-    .underline-word {
-   	position: relative;
-	display: inline-block;
-   	color: #08729a;
- 	  }
-
-    .underline-word::after {
-	  content: "";
-	  position: absolute;
-	  bottom: -5px; /* slight space below the word */
-	  left: 0;
-	  width: 100%;
-	  height: 4px;
-	  background: linear-gradient(90deg, #0987b5, #08729a);
-	  border-radius: 2px;
-	}
-    .profile-info p {
-      margin-bottom: 25px;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: #444;
-    }
-    
-    .social-topics {
-      display: flex;
-      gap: 15px;
-      margin-top: 30px;transform: scale(0.9);
-
-    }
-    
-    .social-topic {
-      flex: 1;
-      min-width: 140px;
-      border-radius: 15px;
-      padding: 20px;
-      background: linear-gradient(135deg, #e6f4fa 0%, #d0e8f2 100%);
-      transition: all 0.4s ease;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      border: 1px solid rgba(9, 135, 181, 0.2);
-      text-align: center;
-    }
-    
-    .social-topic:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 25px rgba(9, 135, 181, 0.15);
-    }
-    
-    .social-topic h3 {
-      color: #08729a;
-      margin-bottom: 15px;
-      font-size: 2.2rem;
-      position: relative;
-      padding-bottom: 10px;
-    }
-    
-    .social-topic h3::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 3px;
-      background: #0987b5;
-      border-radius: 3px;
-    }
-    
-    .social-links {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 15px;
-    }
-    
-    .social-link {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      background: white;
-      border-radius: 10px;
-      text-decoration: none;
-      color: #333;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    }
-    
-    .social-link:hover {
-      transform: translateX(5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      color: #08729a;
-    }
-    
-    .social-link img {
-      width: 30px;
-      height: 30px;
-      margin-right: 12px;
-      border-radius: 6px;transform: scale(1.4);
-
-    }
-    
-    .social-link span {
-      flex: 1;
-      text-align: left;
-      font-weight: 500;
-      font-size: 1.4rem;
-    }
-    
-    .content-columns {
-      display: flex;
-      gap: 30px;
-      padding: 0 30px 30px;
-    }
-    
-    .column {
-      flex: 1;
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      transition: all 0.4s ease;
-    }
-    
-    /* Video columns (first and third) - increased by 20% */
-    .column:first-child,
-    .column:last-child {
-      flex: 1.25; /* Increased from 1 to 1.2 (20% increase) */
-    }
-    
-    /* Important links column (middle) - reduced by 40% */
-    .column:nth-child(2) {
-      flex: 0.5; /* Reduced from 1 to 0.6 (40% decrease) */
-    }
-    
-    .column:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(9, 135, 181, 0.15);
-    }
-    
-    .column-header {
-      background: linear-gradient(90deg, #0987b5, #08729a);
-      color: white;
-      padding: 15px 20px;
-      text-align: center;
-    }
-    
-    .column-content {
-      padding: 20px;
-    }
-    
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-    
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    
-    .links-list {
-      list-style: none;
-    }
-    
-    .links-list li {
-      margin: 15px 0;
-      padding: 15px;
-      background: #f0f9ff;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-    }
-    
-    .links-list li:hover {
-      background: #e6f4fa;
-      transform: translateX(5px);
-    }
-    
-    .links-list a {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: #333;
-      font-weight: 500; transform: scale(1.2)
-    }
-    
-    .links-list a:hover {
-      color: #08729a;
-    }
-    
-    .links-list img {
-      width: 30px;
-      height: 30px;
-      margin-right: 12px;
-      border-radius: 5px; transform: scale(1.2);
-    }
-    
-    .more-link {
-      display: block;
-      margin-top: 20px;
-      text-align: center;
-      color: #0987b5;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    
-    .more-link:hover {
-      color: #08729a;
-      text-decoration: underline;
-    }
-    
-    @media (max-width: 992px) {
-      .main-content {
-        flex-direction: column;
-      }
-      
-      .profile-section {
-        flex-direction: column;
-      }
-      
-      .profile-image {
-        flex: 0 0 auto;
-        max-width: 300px;
-        margin: 0 auto;
-      }
-      
-      .social-topics {
-        flex-wrap: wrap;
-      }
-      
-      .social-topic {
-        min-width: calc(50% - 15px);
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .content-columns {
-        flex-direction: column;
-      }
-      
-      .social-topic {
-        min-width: 80%;
-      }
-      
-      nav {
-        flex-direction: column;
-      }
-      
-      nav a {
-        width: 100%;
-        text-align: center;
-      }
-      
-      /* Reset flex values for mobile */
-      .column:first-child,
-      .column:last-child,
-      .column:nth-child(2) {
-        flex: 1;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .profile-image {
-        height: 250px;
-        width: 250px;
-      }
-      
-      .profile-info h1 {
-        font-size: 1.8rem;
-      }
-      
-      .main-content {
-        padding: 20px;
-      }
-      
-      .content-columns {
-        padding: 0 20px 20px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganesh Solutions | Astrology Services & Digital Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        :root {
+            --primary-blue: #1a365d;
+            --accent-gold: #d4af37;
+            --dark-navy: #0f1a3c;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --vedic-purple: #7c3aed;
+            --cyber-teal: #0ea5e9;
+            --financial-green: #059669;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            /* Add scroll padding to account for fixed header */
+            scroll-padding-top: 100px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-image {
+            height: 70px;
+            width: auto; 
+            margin-top: 10px;
+            margin-right: 30px;
+            transform: scale(1.5);
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-gold);
+        }
+        
+        /* Dropdown Styles */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        nav ul li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu a {
+            color: var(--text-dark);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--medium-gray);
+            transition: all 0.2s;
+        }
+        
+        .dropdown-menu a:hover {
+            background: var(--light-gray);
+            color: var(--primary-blue);
+            padding-left: 25px;
+        }
+        
+        .dropdown-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+        
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Updated Hero Section */
+        .hero {
+            padding: 50px 0;
+            background: linear-gradient(rgba(26, 54, 93, 0.9), rgba(26, 54, 93, 0.9)), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero-profile-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-buttons {
+            display: flex; margin-right: 120px;
+            flex-direction: column;margin-left: 120px;
+            gap: 80px;
+        }
+        
+        .hero h1 {
+            font-size: 42px; margin-left: 80px;
+            margin-bottom: 20px;margin-right: 80px;
+            font-weight: 600;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .quote {
+            font-style: italic;
+            padding: 25px;
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 4px;
+            margin: 40px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .cta-primary {
+            background: var(--accent-gold);
+            color: var(--dark-navy);
+        }
+        
+        .cta-primary:hover {
+            background: #e6b325;
+            transform: translateY(-3px);
+        }
+        
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--accent-gold);
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 40px 0;
+            background: white;
+            /* Add scroll margin to account for fixed header */
+            scroll-margin-top: 100px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent-gold);
+        }
+        
+        .section-title p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--medium-gray);
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            color: white;
+        }
+        
+        .astrology .service-icon {
+            background: var(--vedic-purple);
+        }
+        
+        .digital .service-icon {
+            background: var(--cyber-teal);
+        }
+        
+        .economy .service-icon {
+            background: var(--financial-green);
+        }
+        
+        .service-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+        
+        .service-card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .service-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+        
+        .service-features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .service-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+        
+        .service-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .service-link:hover {
+            background: var(--dark-navy);
+            transform: translateY(-2px);
+        }
+        
+        /* Business Info Section */
+        .business-info {
+            padding: 20px 0;
+            background: var(--light-gray);
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;text-aling:center-justified;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--medium-gray);
+            margin-bottom: 30px;
+        }
+        
+        .info-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .info-value {
+            color: var(--text-dark);
+        }
+        
+        /* Content Section */
+        .content-section {
+            padding: 40px 0;
+            background: white;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .content-card {
+            background: var(--light-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .card-header h3 {
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 4px;
+        }
+        
+        .links-list {
+            list-style: none;
+        }
+        
+        .links-list li {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .links-list li:hover {
+            background: var(--medium-gray);
+            transform: translateX(5px);
+        }
+        
+        .links-list a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+        
+        .links-list i {
+            margin-right: 10px;
+            font-size: 20px;
+            color: var(--primary-blue);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark-navy);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--accent-gold);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--accent-gold);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark-navy);
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: rgba(255,255,255,0.05);
+                margin-top: 10px;
+                margin-left: 20px;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header-content {
+                position: relative;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .hero-profile-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero-buttons {
+                flex-direction: row;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .logo-image {
+                height: 60px;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            /* Adjust scroll padding for mobile */
+            body {
+                scroll-padding-top: 140px;
+            }
+            
+            .services {
+                scroll-margin-top: 140px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-image {
+                height: 50px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container-wrapper">
+    <!-- Header -->
     <header>
-      <div class="header-content">
-        
-        <nav>
-          <a href="https://kishoredvr.github.io/Exploring/">Home</a>   
-	  <a href="https://kishoredvr.github.io/Exploring/AboutMe.html">Origin Of Thoughts</a>
-          <a href="https://parishodana.xyz/Articles.html">My Articles</a>
-          <a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Let's Connect</a>
-	 
-        </nav>
-      </div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="GS-Logo.png" alt="Ganesh Solutions Logo" class="logo-image">
+                    <div>
+                        <div class="logo-text">Ganesh Solutions</div>
+                        <div class="tagline">Traditional And Technical Solutions</div>
+                    </div>
+                </div>
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li>
+                            <a href="#">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA=="><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#">Digital Reliability<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/digital.reliability.dvrk/"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#">National Economies<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="https://www.youtube.com/@NationalEconomies"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA=="><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/16KYrHXEJb/"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+                            </div>
+                        </li>
+			<li><a href="https://parishodana.xyz/Articles.html">My Articles</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </header>
-    
-    <div class="main-content">
-      <div class="profile-section"><br>
-        <div class="profile-image">
-	 <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Kishore DVR" onerror="this.onerror=null; this.src='https://placehold.co/300x400/cccccc/000000?text=Profile+Image';">
-        </div>
-        
-        <div class="profile-info">
-          <h1 style="text-align: center;"><span class="underline-word">Hello,</span> I'm Kishore DVR</h1>
-          <p style="font-size: 30px;">Welcome to a digital sanctuary where innovation meets destiny. I share my thoughts and insights on these interesting topics. Join me to explore and enjoy my thoughts and resources in the fields mentioned below.</p> <p style="margin-right: 7px; margin-left:60px;font-size:20px;"><i>"Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant" - From my experience</i></p>
-         <div style="width: 100%; height: 20%">
-          <div class="social-topics">
-            <div class="social-topic">
-              <h3>Digital Reliability</h3>
-              <div class="social-links">
-                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-                  <span>YouTube Channel</span>
-                </a>
-                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                  <span>Instagram Profile</span>
-                </a>
-                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-                  <span>Facebook Page</span>
-                </a>
-              </div>
+
+    <!-- Updated Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-profile-row">
+                    <!-- Left Button: Learn About Our Services -->
+                    <div class="hero-buttons">
+                        <a href="#services" class="cta-button cta-secondary">Learn About Our Services</a>
+                    </div>
+                    
+                    <!-- Profile Picture -->
+                    <div class="profile-container">
+                        <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/Profilepic.jpg" alt="Kishore DVR" class="profile-image" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                    
+                    <!-- Right Button: Book Consultation -->
+                    <div class="hero-buttons">
+                        <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="cta-button cta-primary">Book Astrology Consultation</a>
+                    </div>
+                </div>
+                
+                <h1>Ganesh Solutions</h1>
+                <p>Professional Astrology Services with Digital & Economic Research</p>
+                <div class="quote">
+                    "Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant"
+                </div>
             </div>
-            <div class="social-topic">
-              <h3>AstroTechnics</h3>
-              <div class="social-links">
-                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-                  <span>YouTube Channel</span>
-                </a>
-                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                  <span>Instagram Profile</span>
-                </a>
-                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-                  <span>Facebook Page</span>
-                </a>
-              </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Professional services tailored to meet your spiritual, digital, and analytical needs</p>
             </div>
-	 
-            <div class="social-topic">
-              <h3>National Economies</h3>
-              <div class="social-links">
-                <a href="https://www.youtube.com/@NationalEconomies" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
-                  <span>YouTube Channel</span>
-                </a>
-                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                  <span>Instagram Profile</span>
-                </a>
-                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank" class="social-link">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-                  <span>Facebook Page</span>
-                </a>
-              </div>
+            <div class="services-grid">
+                <!-- Astrology Services -->
+                <div class="service-card astrology">
+                    <div class="service-icon">
+                        <i class="fas fa-om"></i>
+                    </div>
+                    <h3>Astrology Services</h3>
+                    <p>Professional Vedic astrology consultations and spiritual guidance</p>
+                    <ul class="service-features">
+                        <li>Personalized horoscope analysis</li>
+                        <li>Compatibility and relationship guidance</li>
+                        <li>Career and financial prospects</li>
+                        <li>Remedial solutions and spiritual guidance</li>
+                    </ul>
+                    <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="service-link">Book Consultation</a>
+                </div>
+                
+                <!-- Digital Solutions -->
+                <div class="service-card digital">
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Digital Solutions</h3>
+                    <p>Comprehensive digital security and software development services</p>
+                    <ul class="service-features">
+                        <li>Website and application development</li>
+                        <li>Digital security and penetration testing</li>
+                        <li>Software programming and customization</li>
+                        <li>IT consultancy and solutions</li>
+                    </ul>
+                    <a href="#" class="service-link">Coming soon..</a>
+                </div>
+                
+                <!-- Economic Research -->
+                <div class="service-card economy">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Economic Research</h3>
+                    <p>In-depth analysis of national and global economic trends</p>
+                    <ul class="service-features">
+                        <li>National economy performance analysis</li>
+                        <li>Global economic trend monitoring</li>
+                        <li>Investment and market insights</li>
+                        <li>Policy impact assessment</li>
+                    </ul>
+                    <a href="#" class="service-link">View Research</a>
+                </div>
             </div>
-           </div>
-          </div>
         </div>
-      </div>
-    </div>
-    
-    <div class="content-columns">
-      <div class="column">
-        <div class="column-header">
-          <h2>Latest Video</h2>
+    </section>
+
+    <!-- Business Info Section -->
+    <section class="business-info">
+        <div class="container">
+            <div class="section-title">
+                <h2>Business Information</h2>
+                <p>Registered micro-enterprise under the Ministry of MSME, Government of India</p>
+            </div>
+            <div class="info-card">
+                <h3>Enterprise Details</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Enterprise Name</div>
+                        <div class="info-value">Ganesh Solutions</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">UDYAM Registration</div>
+                        <div class="info-value">UDYAM-AP-04-0110794</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Enterprise Type</div>
+                        <div class="info-value">Micro Enterprise</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Date of Registration</div>
+                        <div class="info-value">29/08/2025</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Major Activity</div>
+                        <div class="info-value">Services</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">NIC Codes</div>
+                        <div class="info-value">62, 63, 96 (Computer programming, Information services, Astrological activities)</div>
+                    </div>
+                </div>
+            </div>
+           
         </div>
-        <div class="column-content">
-          <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/Uop3WpuJ-c8" frameborder="0" allowfullscreen></iframe>
-          </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Content</h2>
+                <p>Latest videos, resources, and important links from our services</p>
+            </div>
+            <div class="content-grid">
+                <!-- Latest Video -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <i class="fas fa-play-circle"></i>
+                        <h3>Latest Video</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/Uop3WpuJ-c8" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Important Links -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <i class="fas fa-link"></i>
+                        <h3>Important Links</h3>
+                    </div>
+                    <div class="card-content">
+                        <ul class="links-list">
+                            <li>
+                                <a href="https://github.com/digitalreliability/Sharing" target="_blank">
+                                    <i class="fab fa-github"></i> GitHub Repository
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://kishoredvr.github.io/Antharyami-DataBank/">
+                                    <i class="fas fa-database"></i> Astrology Data Bank
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <i class="fas fa-arrow-right"></i> Click here for more
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Website Tour -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <i class="fas fa-video"></i>
+                        <h3>Website Tour</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/xRgUAteViQc" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      
-      <div class="column">
-        <div class="column-header">
-          <h2>Important Links</h2>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Astrology Consultations</a></li>
+                        <li><a href="#">Digital Reliability</a></li>
+                        <li><a href="#">App Development</a></li>
+                        <li><a href="#">Economic Research</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Astrology Data Bank</a></li>
+                        <li><a href="#">GitHub Repository</a></li>
+                        <li><a href="#">Research Articles</a></li>
+                        <li><a href="#">Tools & Utilities</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="#">YouTube Channels</a></li>
+                        <li><a href="#">Social Media</a></li>
+                        <li><a href="#">E-Newsletter</a></li>
+                        <li><a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Contact Form</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Philosophy</a></li>
+                        <li><a href="#">UDYAM Registration</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>Ganesh Solutions (UDYAM-AP-04-0110794). All Rights Reserved.</p>
+            </div>
         </div>
-        <div class="column-content">
-          <ul class="links-list">
-            <li>
-              <a href="https://github.com/digitalreliability/Sharing" target="_blank">🔥    .
-                <img src="GH.png" alt="GitHub" style="max-height: 20px; width: auto;align:center">
-              
-              </a>
-            </li>
-            <li>
-              <a href="https://kishoredvr.github.io/Antharyami-DataBank/">
-                <img src="https://cdn-icons-png.flaticon.com/512/2172/2172831.png" alt="Astrology">
-                Astrology Data Bank
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/venkata-ravi-kishore-dontharaju-24b9ba254/" target="_blank"> 🔥    .
-                <img src="LinkedIn-Logo.png" alt="LinkedIn" style="max-height: 20px; width: auto;">
-              
-              </a>
-            </li>
-          </ul>
-          <a href="#" class="more-link">More yet to come →</a>
-        </div>
-      </div>
-      
-      <div class="column">
-        <div class="column-header">
-          <h2>Website Tour</h2>
-        </div>
-        <div class="column-content">
-          <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/xRgUAteViQc" frameborder="0" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <script>
-    // Add subtle animation to header on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      const header = document.querySelector('header');
-      header.style.opacity = '0';
-      header.style.transform = 'translateY(-20px)';
-      
-      setTimeout(() => {
-        header.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        header.style.opacity = '1';
-        header.style.transform = 'translateY(0)';
-      }, 300);
-      
-      // Add hover effect to social topics
-      const socialTopics = document.querySelectorAll('.social-topic');
-      socialTopics.forEach(topic => {
-        topic.addEventListener('mouseenter', function() {
-          this.style.background = 'linear-gradient(135deg, #d0e8f2 0%, #b9dcec 100%)';
+    </footer>
+
+    <script>
+        // Simple script for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navMenu = document.querySelector('nav ul');
+            
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('show');
+            });
+            
+            // Add active class to clicked nav items
+            const navItems = document.querySelectorAll('nav ul li a');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Don't prevent default for dropdown links
+                    if (!this.querySelector('i.fa-chevron-down')) {
+                        navItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                    
+                    // Close mobile menu after clicking a link
+                    if (window.innerWidth <= 992) {
+                        navMenu.classList.remove('show');
+                    }
+                });
+            });
+            
+            // Add subtle animation to service cards on scroll
+            const serviceCards = document.querySelectorAll('.service-card');
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            serviceCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('nav ul li')) {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.style.opacity = '0';
+                        menu.style.visibility = 'hidden';
+                        menu.style.transform = 'translateY(-10px)';
+                    });
+                }
+            });
         });
-        
-        topic.addEventListener('mouseleave', function() {
-          this.style.background = 'linear-gradient(135deg, #e6f4fa 0%, #d0e8f2 100%)';
-        });
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
