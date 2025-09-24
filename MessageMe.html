@@ -698,7 +698,10 @@
       submitButton.textContent = 'Processing...';
 
       try {
+        const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
+
         if (purpose === 'Astrology') {
+          // ASTROLOGY CONSULTATION FLOW - WITH PAYMENT
           const amountINR = getSelectedAstroAmount();
           if (!amountINR || amountINR <= 0) throw new Error('Invalid selected amount for Astrology.');
 
@@ -789,19 +792,16 @@
               throw new Error('Server replied: ' + JSON.stringify(resJson));
             }
           } else {
-            // *** NEW BEHAVIOR: if payment not confirmed (cancel/timeout) send an "unpaid" submission ***
+            // Payment not confirmed (cancel/timeout) - send as "unpaid"
             try {
-              // populate hidden fields so collected object contains payment info
               document.getElementById('phonepe_order_id').value = transactionId || '';
               document.getElementById('payment_amount').value = amountINR;
               document.getElementById('payment_status').value = 'unpaid';
 
               const dataObj = collectFormObject();
-              // make sure payment_status is explicitly "unpaid"
               dataObj.payment_status = 'unpaid';
               const res = await submitFormToServer(dataObj);
               console.log('Submitted unpaid fallback:', res);
-              // inform user gracefully
               alert('Payment was not completed. Your request has been submitted as unpaid — we will contact you.');
               successMessage.style.display = 'block';
               errorMessage.style.display = 'none';
@@ -812,19 +812,31 @@
               toggleGenderOtherInput();
             } catch (e) {
               console.error('Failed to submit unpaid fallback:', e);
-              // show error UI but avoid swallowing the original failure
               errorMessage.style.display = 'block';
               successMessage.style.display = 'none';
               alert('There was an issue submitting your request after payment was not confirmed. Please contact us.');
             }
-            // do not re-throw — we've attempted to send unpaid submission and returned control to user
           }
 
         } else {
-          // non-payment path: send full JSON object with "Not applicable" for empty fields
+          // OTHER PURPOSE FLOW - DIRECT SUBMISSION WITHOUT PAYMENT
+          // Set payment-related fields to empty or "Not applicable"
+          document.getElementById('phonepe_txn_id').value = '';
+          document.getElementById('phonepe_order_id').value = '';
+          document.getElementById('payment_amount').value = '0';
+          document.getElementById('payment_status').value = 'not applicable';
+          document.getElementById('astro_service_tier').value = 'not applicable';
+
+          // collect full object
           const dataObj = collectFormObject();
-          // ensure astro_service_tier empty for non-astro submissions
-          dataObj.astro_service_tier = dataObj.astro_service_tier || "Not applicable";
+          
+          // Ensure payment-related fields are properly set for non-payment submissions
+          dataObj.payment_amount = '0';
+          dataObj.payment_status = 'not applicable';
+          dataObj.astro_service_tier = 'not applicable';
+          dataObj.phonepe_txn_id = '';
+          dataObj.phonepe_order_id = '';
+
           const resJson = await submitFormToServer(dataObj);
           if (resJson && (resJson.status === 'ok' || resJson.success)) {
             successMessage.style.display = 'block';
@@ -853,4 +865,3 @@
   </script>
 </body>
 </html>
-
