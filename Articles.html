@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Articles | Ganesh Solutions</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary-blue: #1a365d;
@@ -68,15 +68,19 @@
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: var(--accent-gold);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-right: 12px;
-      font-size: 18px;
-      color: var(--dark-navy);
+      overflow: hidden;
       box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .logo-text {
@@ -639,7 +643,7 @@
     <div class="header-content">
       <div class="page-logo">
         <div class="logo-icon">
-          <i class="fas fa-om"></i>
+          <img src="GS-Logo.png" alt="Ganesh Solutions Logo">
         </div>
         <div>
           <div class="logo-text">Ganesh Solutions</div>
@@ -893,4 +897,3 @@
   </script>
 </body>
 </html>
-
