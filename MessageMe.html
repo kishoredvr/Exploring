@@ -137,11 +137,11 @@
         <div id="astroServiceWrapper" class="form-group centered-section" style="max-width:380px; margin: 12px auto 0; display:none;">
           <label for="astroServiceSelect">Choose Astrology Service</label>
           <select id="astroServiceSelect" name="astroServiceSelect">
-            <option value="Basic" data-amt="1000">TestRun — ₹10</option>
-            <option value="Basic" data-amt="1000">Basic — ₹1000</option>
-            <option value="Detailed" data-amt="2000">Detailed — ₹2000</option>
-            <option value="Premium" data-amt="5000">Premium — ₹5000</option>
-          </select>
+          <option value="testrun" data-amt="10" selected>TestRun — ₹10</option>
+          <option value="basic" data-amt="1000">Basic — ₹1000</option>
+          <option value="detailed" data-amt="2000">Detailed — ₹2000</option>
+          <option value="premium" data-amt="5000">Premium — ₹5000</option>
+        </select>
         </div>
       </div>
 
@@ -496,11 +496,22 @@
     function getSelectedAstroAmount() {
       const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
       if (purpose !== 'Astrology') return 0;
+
       const sel = document.getElementById('astroServiceSelect');
       if (!sel) return 1000;
+
       const opt = sel.options[sel.selectedIndex];
-      const amt = opt ? parseInt(opt.getAttribute('data-amt') || opt.value || '1000', 10) : 1000;
-      return isNaN(amt) ? 1000 : amt;
+      if (!opt) return 1000;
+
+      // Try data-amt first, then the value, then fallback
+      const raw = (opt.getAttribute('data-amt') ?? opt.value ?? '').toString().trim();
+
+      // parse as float (support decimals)
+      const amt = parseFloat(raw.replace(/[^\d.-]/g, '')); // remove stray chars
+
+      const final = (isFinite(amt) && amt > 0) ? Math.round(amt) : 1000; // rupees integer fallback
+      console.log('getSelectedAstroAmount -> raw:', raw, 'parsed:', amt, 'final (rupees):', final);
+      return final;
     }
 
     // ---------------- Backend helpers (now using BACKEND_BASE) ----------------
@@ -916,5 +927,6 @@
   </script>
 </body>
 </html>
+
 
 
