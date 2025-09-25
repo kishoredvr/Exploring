@@ -516,8 +516,8 @@
         amount: amountPaise,
         userId: document.getElementById('email').value,
         mobileNumber: document.getElementById('mobileNumber').value,
-        // keep redirect to your site - server/return-handler may still be used
-        redirectUrl: 'https://parishodana.xyz/MessageMe.html'
+        // Let the server handle redirect -> return-handler will patch DB and then redirect to final page
+        redirectUrl: BACKEND_BASE + '/return-handler'
       };
 
       const url = BACKEND_BASE + '/initiate-payment';
