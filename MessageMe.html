@@ -516,6 +516,7 @@
         amount: amountPaise,
         userId: document.getElementById('email').value,
         mobileNumber: document.getElementById('mobileNumber').value,
+        // keep redirect to your site - server/return-handler may still be used
         redirectUrl: 'https://parishodana.xyz/MessageMe.html'
       };
 
@@ -536,6 +537,7 @@
       return json;
     }
 
+    // NOTE: keep original checkPaymentStatus available for any other uses
     const checkPaymentStatus = async (transactionId) => {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
@@ -549,6 +551,23 @@
       }
       return resp.json();
     };
+
+    // New: more robust/detailed status fetch (returns ok/status/body) + logs
+    async function checkPaymentStatusDetailed(transactionId) {
+      if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
+        return { ok: false, error: 'BACKEND_BASE not configured' };
+      }
+      const statusUrl = `${BACKEND_BASE}/payment-status?txn=${encodeURIComponent(transactionId)}`;
+      try {
+        const resp = await fetch(statusUrl, { method: 'GET' });
+        const txt = await resp.text().catch(() => "");
+        let body = null;
+        try { body = txt ? JSON.parse(txt) : null; } catch (e) { body = { raw: txt }; }
+        return { ok: resp.ok, status: resp.status, body };
+      } catch (err) {
+        return { ok: false, error: String(err) };
+      }
+    }
 
     // ---------------- NEW: collectFormObject & JSON submit ----------------
 
@@ -706,6 +725,7 @@
           if (!amountINR || amountINR <= 0) throw new Error('Invalid selected amount for Astrology.');
 
           const orderResp = await createPhonePePayment(amountINR);
+          console.log("createPhonePePayment returned:", orderResp);
 
           // The function returns { success:true, transactionId, data }
           const transactionId = orderResp.transactionId;
@@ -721,6 +741,8 @@
             phonepeResp?.data?.checkout?.redirectUrl ||
             null;
 
+          console.log("transactionId:", transactionId, "checkoutUrl:", checkoutUrl);
+
           if (!checkoutUrl) {
             console.warn('Full PhonePe response:', phonepeResp);
             throw new Error('No checkout URL returned by server. Inspect server response in console.');
@@ -731,17 +753,20 @@
 
           // Poll server to verify payment final state (server side must validate webhook or call PhonePe)
           let attempts = 0;
-          const maxAttempts = 20;
-          const pollIntervalMs = 3000;
+          const maxAttempts = 60;       // increased polling attempts
+          const pollIntervalMs = 5000;  // poll every 5s (gives server/webhook time)
           let finalStatus = null;
 
           if (transactionId) {
             while (attempts < maxAttempts) {
               attempts++;
               try {
-                const st = await checkPaymentStatus(transactionId);
-                if (st && st.success) {
-                  const payload = st.data || {};
+                const stResp = await checkPaymentStatusDetailed(transactionId);
+                console.log("payment-status attempt", attempts, stResp);
+
+                if (stResp.ok && stResp.body) {
+                  // stResp.body is the parsed JSON (or { raw: text })
+                  const payload = stResp.body.data || stResp.body || {};
                   const state =
                     payload?.status ||
                     payload?.state ||
@@ -751,26 +776,51 @@
                     payload?.transaction?.state ||
                     null;
 
-                  if (state && (state.toUpperCase() === 'SUCCESS' || state.toUpperCase() === 'SUCCESSFUL' || state.toLowerCase() === 'success' || state.toLowerCase() === 'paid')) {
-                    finalStatus = { outcome: 'success', payload: st };
+                  // Normalize to string safely
+                  const stateStr = state ? String(state).toLowerCase() : "";
+
+                  if (stateStr && (stateStr.includes('success') || stateStr.includes('paid') || stateStr.includes('completed'))) {
+                    finalStatus = { outcome: 'success', payload: stResp.body };
                     break;
                   }
-                  if (state && (state.toUpperCase() === 'FAILED' || state.toLowerCase() === 'failed' || state.toLowerCase() === 'error')) {
-                    finalStatus = { outcome: 'failed', payload: st };
+                  if (stateStr && (stateStr.includes('failed') || stateStr.includes('error'))) {
+                    finalStatus = { outcome: 'failed', payload: stResp.body };
                     break;
                   }
+
+                  // Also accept server-level shorthand: success:true
+                  if (stResp.body && (stResp.body.success === true || stResp.body.status === 'ok' || stResp.body.paid === true)) {
+                    finalStatus = { outcome: 'success', payload: stResp.body };
+                    break;
+                  }
+                } else {
+                  // not OK - log and continue
+                  console.warn('payment-status non-ok response', stResp);
                 }
               } catch (err) {
                 console.warn('poll error', err);
               }
+              // wait before next attempt
               await new Promise(r => setTimeout(r, pollIntervalMs));
             }
+          } else {
+            console.warn('No transactionId returned from initiate-payment; skipping polling.');
           }
 
           if (finalStatus && finalStatus.outcome === 'success') {
             // Fill hidden fields and submit final form data to server
             try {
-              document.getElementById('phonepe_txn_id').value = (finalStatus.payload?.data?.phonepeResponse?.data?.transactionId) || '';
+              // try a few places for txn id inside payload (best-effort)
+              let extractedTxn = "";
+              try {
+                extractedTxn =
+                  finalStatus.payload?.data?.phonepeResponse?.data?.transactionId ||
+                  finalStatus.payload?.data?.transactionId ||
+                  finalStatus.payload?.transactionId ||
+                  finalStatus.payload?.data?.phonepeResponse?.data?.orderId ||
+                  "";
+              } catch (e) {}
+              document.getElementById('phonepe_txn_id').value = extractedTxn || "";
             } catch (e) {}
             document.getElementById('phonepe_order_id').value = transactionId;
             // store rupees for human readability
@@ -865,4 +915,3 @@
   </script>
 </body>
 </html>
-
