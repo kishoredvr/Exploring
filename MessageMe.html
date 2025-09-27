@@ -219,13 +219,15 @@
               <label for="state" class="required">State/Province</label>
               <input type="text" id="state" name="state" required>
             </div>
-            <div class="form-group">
-              <label for="country" class="required">Country</label>
-              <input type="text" id="country" name="country" required>
-            </div>
-            <div class="form-group">
-              <label for="pincode" class="required">Pincode</label>
-              <input type="text" id="country" name="country" required>
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label for="country" class="required">Country</label>
+                <input type="text" id="country" name="country" required>
+              </div>
+              <div>
+                <label for="pincode" class="required">Pincode</label>
+                <input type="text" id="pincode" name="pincode" required>
+              </div>
             </div>
           </div>
         </div>
@@ -594,7 +596,7 @@
         "name","email","mobileNumber",
         "purpose","astroServiceSelect","astro_service_tier",
         "birthDetailsAvailable","dob","hour","minute","second","explanation",
-        "city","state","country",
+        "city","state","country","pincode",
         "gender","genderOtherInput",
         "accuracy",
         "contactCountry",
@@ -931,9 +933,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
