@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -509,13 +509,9 @@
       const opt = sel.options[sel.selectedIndex];
       if (!opt) return 1000;
 
-      // Try data-amt first, then the value, then fallback
       const raw = (opt.getAttribute('data-amt') ?? opt.value ?? '').toString().trim();
-
-      // parse as float (support decimals)
-      const amt = parseFloat(raw.replace(/[^\d.-]/g, '')); // remove stray chars
-
-      const final = (isFinite(amt) && amt > 0) ? Math.round(amt) : 1000; // rupees integer fallback
+      const amt = parseFloat(raw.replace(/[^\d.-]/g, ''));
+      const final = (isFinite(amt) && amt > 0) ? Math.round(amt) : 1000;
       console.log('getSelectedAstroAmount -> raw:', raw, 'parsed:', amt, 'final (rupees):', final);
       return final;
     }
@@ -526,18 +522,13 @@
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
-
-      // convert rupees to paise before sending
       const amountPaise = Number(amountINR) * 100;
-
       const body = {
         amount: amountPaise,
         userId: document.getElementById('email').value,
         mobileNumber: document.getElementById('mobileNumber').value,
-        // Let the server handle redirect -> return-handler will patch DB and then redirect to final page
         redirectUrl: BACKEND_BASE + '/return-handler'
       };
-
       const url = BACKEND_BASE + '/initiate-payment';
       const res = await fetch(url, {
         method: 'POST',
@@ -555,12 +546,10 @@
       return json;
     }
 
-    // NOTE: keep original checkPaymentStatus available for any other uses
     const checkPaymentStatus = async (transactionId) => {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
-      // use query param form: /payment-status?txn=<id>
       const statusUrl = `${BACKEND_BASE}/payment-status?txn=${encodeURIComponent(transactionId)}`;
       const resp = await fetch(statusUrl, { method: 'GET' });
       if (!resp.ok) {
@@ -570,7 +559,6 @@
       return resp.json();
     };
 
-    // New: more robust/detailed status fetch (returns ok/status/body) + logs
     async function checkPaymentStatusDetailed(transactionId) {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         return { ok: false, error: 'BACKEND_BASE not configured' };
@@ -587,32 +575,41 @@
       }
     }
 
-    // ---------------- NEW: collectFormObject & JSON submit ----------------
+    // ---------- NEW: robust redirect extractor ----------
+    function extractCheckoutUrl(orderResp) {
+      const r = orderResp?.data && typeof orderResp.data === 'object' ? orderResp.data : orderResp;
+      return (
+        r?.data?.instrumentResponse?.redirectInfo?.url ||
+        r?.data?.redirectInfo?.url ||
+        r?.data?.checkoutUrl ||
+        r?.redirectInfo?.url ||
+        r?.redirectUrl ||
+        r?.data?.checkout?.redirectUrl ||
+        null
+      );
+    }
 
-    // Collect all expected fields into an object; set "Not applicable" for empty ones.
+    // ---------------- collect & submit ----------------
+
     function collectFormObject() {
-      // list every field you want in the email/DB (use the element id or name)
       const fields = [
         "name","email","mobileNumber",
         "purpose","astroServiceSelect","astro_service_tier",
         "birthDetailsAvailable","dob","hour","minute","second","explanation",
-        "city","state","country","pincode", // ← Make sure "pincode" is here
+        "city","state","country","pincode",
         "gender","genderOtherInput",
         "accuracy",
         "contactCountry",
         "expectations",
-        // payment/hidden fields
         "phonepe_txn_id","phonepe_order_id","payment_amount","payment_status"
       ];
 
       const out = {};
-      // helper to read radio groups by name
       function readRadio(name) {
         const r = document.querySelector(`input[name="${name}"]:checked`);
         return r ? r.value : null;
       }
 
-      // ensure astro_service_tier current
       try {
         if (astroServiceSelect && astroServiceSelect.value) {
           astroServiceTierHidden.value = astroServiceSelect.value;
@@ -620,31 +617,25 @@
       } catch(e){}
 
       for (const idOrName of fields) {
-        // prefer element by id, else try by name
         let el = document.getElementById(idOrName);
         if (!el) {
-          // try to find by name (radios etc.)
           const byName = document.getElementsByName(idOrName);
           if (byName && byName.length === 1) el = byName[0];
         }
 
         let val = null;
         if (el) {
-          // radio/checkbox individual
           if (el.type === "radio") {
             val = readRadio(el.name || idOrName);
           } else {
             val = el.value;
           }
         } else {
-          // if no element by id, try reading radio group directly
           const rVal = readRadio(idOrName);
           if (rVal !== null) val = rVal;
         }
 
-        // normalize special items (genderOtherInput uses different id)
         if ((idOrName === "gender") && !val) {
-          // if 'Other' selected, include the other text if provided
           const g = readRadio("gender");
           if (g === "Other") {
             const other = document.getElementById("genderOtherInput");
@@ -653,7 +644,6 @@
           }
         }
 
-        // final assignment: if blank -> "Not applicable"
         if (val === null || val === undefined || String(val).trim() === "") {
           out[idOrName] = "Not applicable";
         } else {
@@ -661,13 +651,10 @@
         }
       }
 
-      // also include some meta
       out.submittedAt = new Date().toISOString();
-
       return out;
     }
 
-    // Replace submitFormToServer to accept a plain object and send JSON
     async function submitFormToServer(formObj) {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
@@ -696,7 +683,6 @@
         window.location.href = url;
       }
       
-      // Hide modal after 5 seconds (user should be redirected by then)
       setTimeout(() => {
         paymentModal.style.display = 'none';
       }, 5000);
@@ -734,6 +720,15 @@
       submitButton.disabled = true;
       submitButton.textContent = 'Processing...';
 
+      // ---------- NEW: pre-open a tab to avoid popup blocking ----------
+      let payWin = null;
+      try {
+        payWin = window.open('', '_blank');
+        if (payWin) {
+          payWin.document.write('<p style="font:14px system-ui;margin:16px">Opening PhonePe…</p>');
+        }
+      } catch (_) {}
+
       try {
         const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
 
@@ -745,34 +740,31 @@
           const orderResp = await createPhonePePayment(amountINR);
           console.log("createPhonePePayment returned:", orderResp);
 
-          // The function returns { success:true, transactionId, data }
           const transactionId = orderResp.transactionId;
-          const phonepeResp = orderResp.data || {};
 
-          // Try common nested locations for the redirect URL (robust)
-          const checkoutUrl =
-            phonepeResp?.data?.instrumentResponse?.redirectInfo?.url ||
-            phonepeResp?.data?.redirectInfo?.url ||
-            phonepeResp?.data?.checkoutUrl ||
-            phonepeResp?.redirectInfo?.url ||
-            phonepeResp?.redirectUrl ||
-            phonepeResp?.data?.checkout?.redirectUrl ||
-            null;
+          // ---------- use robust extractor ----------
+          const checkoutUrl = extractCheckoutUrl(orderResp) || null;
 
           console.log("transactionId:", transactionId, "checkoutUrl:", checkoutUrl);
 
           if (!checkoutUrl) {
-            console.warn('Full PhonePe response:', phonepeResp);
+            if (payWin) { try { payWin.close(); } catch {} }
+            console.warn('Full PhonePe response:', orderResp);
             throw new Error('No checkout URL returned by server. Inspect server response in console.');
           }
 
-          // open checkout (server should return a checkout_url or redirect_url)
-          openPhonePeCheckout(checkoutUrl, true);
+          // ---------- navigate the pre-opened tab (or fallback to same-tab) ----------
+          if (payWin) {
+            try { payWin.location.replace(checkoutUrl); }
+            catch { window.location.assign(checkoutUrl); }
+          } else {
+            window.location.assign(checkoutUrl);
+          }
 
-          // Poll server to verify payment final state (server side must validate webhook or call PhonePe)
+          // Poll server to verify payment final state (unchanged)
           let attempts = 0;
-          const maxAttempts = 60;       // increased polling attempts
-          const pollIntervalMs = 5000;  // poll every 5s (gives server/webhook time)
+          const maxAttempts = 60;
+          const pollIntervalMs = 5000;
           let finalStatus = null;
 
           if (transactionId) {
@@ -783,7 +775,6 @@
                 console.log("payment-status attempt", attempts, stResp);
 
                 if (stResp.ok && stResp.body) {
-                  // stResp.body is the parsed JSON (or { raw: text })
                   const payload = stResp.body.data || stResp.body || {};
                   const state =
                     payload?.status ||
@@ -794,7 +785,6 @@
                     payload?.transaction?.state ||
                     null;
 
-                  // Normalize to string safely
                   const stateStr = state ? String(state).toLowerCase() : "";
 
                   if (stateStr && (stateStr.includes('success') || stateStr.includes('paid') || stateStr.includes('completed'))) {
@@ -806,19 +796,16 @@
                     break;
                   }
 
-                  // Also accept server-level shorthand: success:true
                   if (stResp.body && (stResp.body.success === true || stResp.body.status === 'ok' || stResp.body.paid === true)) {
                     finalStatus = { outcome: 'success', payload: stResp.body };
                     break;
                   }
                 } else {
-                  // not OK - log and continue
                   console.warn('payment-status non-ok response', stResp);
                 }
               } catch (err) {
                 console.warn('poll error', err);
               }
-              // wait before next attempt
               await new Promise(r => setTimeout(r, pollIntervalMs));
             }
           } else {
@@ -826,9 +813,7 @@
           }
 
           if (finalStatus && finalStatus.outcome === 'success') {
-            // Fill hidden fields and submit final form data to server
             try {
-              // try a few places for txn id inside payload (best-effort)
               let extractedTxn = "";
               try {
                 extractedTxn =
@@ -841,11 +826,9 @@
               document.getElementById('phonepe_txn_id').value = extractedTxn || "";
             } catch (e) {}
             document.getElementById('phonepe_order_id').value = transactionId;
-            // store rupees for human readability
             document.getElementById('payment_amount').value = amountINR;
             document.getElementById('payment_status').value = 'paid';
 
-            // collect full object (every field; "Not applicable" used for empty)
             const dataObj = collectFormObject();
             const resJson = await submitFormToServer(dataObj);
             if (resJson && (resJson.status === 'ok' || resJson.success)) {
@@ -860,7 +843,6 @@
               throw new Error('Server replied: ' + JSON.stringify(resJson));
             }
           } else {
-            // Payment not confirmed (cancel/timeout) - send as "unpaid"
             try {
               document.getElementById('phonepe_order_id').value = transactionId || '';
               document.getElementById('payment_amount').value = amountINR;
@@ -888,17 +870,13 @@
 
         } else {
           // OTHER PURPOSE FLOW - DIRECT SUBMISSION WITHOUT PAYMENT
-          // Set payment-related fields to empty or "Not applicable"
           document.getElementById('phonepe_txn_id').value = '';
           document.getElementById('phonepe_order_id').value = '';
           document.getElementById('payment_amount').value = '0';
           document.getElementById('payment_status').value = 'not applicable';
           document.getElementById('astro_service_tier').value = 'not applicable';
 
-          // collect full object
           const dataObj = collectFormObject();
-          
-          // Ensure payment-related fields are properly set for non-payment submissions
           dataObj.payment_amount = '0';
           dataObj.payment_status = 'not applicable';
           dataObj.astro_service_tier = 'not applicable';
@@ -933,7 +911,3 @@
   </script>
 </body>
 </html>
-
-
-
-
