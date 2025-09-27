@@ -518,6 +518,24 @@
 
     // ---------------- Backend helpers (now using BACKEND_BASE) ----------------
 
+    // NEW FUNCTION: Save form data immediately before payment
+    async function saveFormDataImmediately() {
+        const formData = collectFormObject();
+        formData.payment_status = 'pending'; // Mark as pending payment
+        
+        try {
+            const response = await fetch(BACKEND_BASE + '/submit-form', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            return response.ok;
+        } catch (error) {
+            console.error('Failed to save form data:', error);
+            return false;
+        }
+    }
+
     async function createPhonePePayment(amountINR) {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
@@ -734,6 +752,14 @@
 
         if (purpose === 'Astrology') {
           // ASTROLOGY CONSULTATION FLOW - WITH PAYMENT
+          
+          // === ADD THIS: Save form data immediately ===
+          const saved = await saveFormDataImmediately();
+          if (!saved) {
+            console.warn('Failed to save form data initially, but continuing with payment...');
+          }
+          // === END ADDITION ===
+
           const amountINR = getSelectedAstroAmount();
           if (!amountINR || amountINR <= 0) throw new Error('Invalid selected amount for Astrology.');
 
