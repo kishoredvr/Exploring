@@ -607,6 +607,19 @@
       );
     }
 
+    // ---------- NEW: robust transactionId extractor ----------
+    function extractTxnId(r) {
+      const d = r?.data || r;
+      return (
+        d?.transactionId ||
+        d?.merchantTransactionId ||
+        d?.phonepeResponse?.data?.transactionId ||
+        d?.phonepeResponse?.data?.merchantTransactionId ||
+        d?.data?.transactionId ||
+        null
+      );
+    }
+
     // ---------------- collect & submit ----------------
 
     function collectFormObject() {
@@ -706,6 +719,85 @@
       }, 5000);
     }
 
+    // ---------- NEW: Resume flow when user returns to this page ----------
+    document.addEventListener('DOMContentLoaded', async () => {
+      const txn = sessionStorage.getItem('pp_txn_id');
+      const amt = sessionStorage.getItem('pp_amt');
+
+      if (!txn) return;
+
+      try { paymentModal.style.display = 'flex'; } catch (_) {}
+
+      let attempts = 0, finalStatus = null;
+      const maxAttempts = 8, pollIntervalMs = 2000;
+
+      while (attempts < maxAttempts) {
+        attempts++;
+        try {
+          const stResp = await checkPaymentStatusDetailed(txn);
+          if (stResp.ok && stResp.body) {
+            const payload = stResp.body.data || stResp.body || {};
+            const state =
+              payload?.status ||
+              payload?.state ||
+              payload?.data?.transaction?.state ||
+              payload?.data?.state ||
+              payload?.data?.transaction?.status ||
+              payload?.transaction?.state ||
+              null;
+            const s = (state || '').toString().toLowerCase();
+
+            if (['success','paid','completed','captured'].some(x => s.includes(x)) ||
+                stResp.body.success === true || stResp.body.paid === true) {
+              finalStatus = { outcome: 'success', payload: stResp.body };
+              break;
+            }
+            if (['failed','error','declined'].some(x => s.includes(x))) {
+              finalStatus = { outcome: 'failed', payload: stResp.body };
+              break;
+            }
+          }
+        } catch (_) {}
+        await new Promise(r => setTimeout(r, pollIntervalMs));
+      }
+
+      sessionStorage.removeItem('pp_txn_id');
+      sessionStorage.removeItem('pp_amt');
+
+      try { paymentModal.style.display = 'none'; } catch (_) {}
+
+      if (finalStatus?.outcome === 'success') {
+        try {
+          const extractedTxn =
+            finalStatus.payload?.data?.phonepeResponse?.data?.transactionId ||
+            finalStatus.payload?.data?.transactionId ||
+            finalStatus.payload?.transactionId || txn;
+
+          document.getElementById('phonepe_txn_id').value = extractedTxn || '';
+        } catch (_) {}
+        document.getElementById('phonepe_order_id').value = txn;
+        document.getElementById('payment_amount').value = amt || '';
+        document.getElementById('payment_status').value = 'paid';
+
+        const dataObj = collectFormObject();
+        const resJson = await submitFormToServer(dataObj);
+        if (resJson && (resJson.status === 'ok' || resJson.success)) {
+          successMessage.style.display = 'block';
+          errorMessage.style.display = 'none';
+          form.reset();
+          wordCount.textContent = '0';
+          toggleSections(); handleAccuracyExplanation(); toggleGenderOtherInput();
+        } else {
+          alert('Payment succeeded but final submission failed: ' + JSON.stringify(resJson));
+        }
+      } else if (finalStatus?.outcome === 'failed') {
+        alert('Payment failed. Your request remains pending. You can retry the payment.');
+      } else {
+        alert('Payment status not confirmed yet. If you completed payment, we will email you once it clears.');
+      }
+    });
+
+    // --------------- SUBMIT HANDLER ---------------
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -744,12 +836,11 @@
         if (purpose === 'Astrology') {
           // ASTROLOGY CONSULTATION FLOW - WITH PAYMENT
           
-          // === ADD THIS: Save form data immediately ===
+          // Save form data immediately (pending)
           const saved = await saveFormDataImmediately();
           if (!saved) {
             console.warn('Failed to save form data initially, but continuing with payment...');
           }
-          // === END ADDITION ===
 
           const amountINR = getSelectedAstroAmount();
           if (!amountINR || amountINR <= 0) throw new Error('Invalid selected amount for Astrology.');
@@ -757,9 +848,10 @@
           const orderResp = await createPhonePePayment(amountINR);
           console.log("createPhonePePayment returned:", orderResp);
 
-          const transactionId = orderResp.transactionId;
+          // NEW: robust transaction id extraction
+          const transactionId = extractTxnId(orderResp);
 
-          // ---------- use robust extractor ----------
+          // Extract checkout URL
           const checkoutUrl = extractCheckoutUrl(orderResp) || null;
 
           console.log("transactionId:", transactionId, "checkoutUrl:", checkoutUrl);
@@ -769,129 +861,11 @@
             throw new Error('No checkout URL returned by server. Inspect server response in console.');
           }
 
-          // ---------- Move tab opening code HERE (only for Astrology flow) ----------
-          let payWin = null;
-          try {
-            payWin = window.open('', '_blank');
-            if (payWin) {
-              payWin.document.write('<p style="font:14px system-ui;margin:16px">Opening PhonePe…</p>');
-            }
-          } catch (_) {}
-
-          // ---------- navigate the pre-opened tab (or fallback to same-tab) ----------
-          if (payWin) {
-            try { payWin.location.replace(checkoutUrl); }
-            catch { window.location.assign(checkoutUrl); }
-          } else {
-            window.location.assign(checkoutUrl);
-          }
-
-          // Poll server to verify payment final state (unchanged)
-          let attempts = 0;
-          const maxAttempts = 60;
-          const pollIntervalMs = 5000;
-          let finalStatus = null;
-
-          if (transactionId) {
-            while (attempts < maxAttempts) {
-              attempts++;
-              try {
-                const stResp = await checkPaymentStatusDetailed(transactionId);
-                console.log("payment-status attempt", attempts, stResp);
-
-                if (stResp.ok && stResp.body) {
-                  const payload = stResp.body.data || stResp.body || {};
-                  const state =
-                    payload?.status ||
-                    payload?.state ||
-                    payload?.data?.transaction?.state ||
-                    payload?.data?.state ||
-                    payload?.data?.transaction?.status ||
-                    payload?.transaction?.state ||
-                    null;
-
-                  const stateStr = state ? String(state).toLowerCase() : "";
-
-                  if (stateStr && (stateStr.includes('success') || stateStr.includes('paid') || stateStr.includes('completed'))) {
-                    finalStatus = { outcome: 'success', payload: stResp.body };
-                    break;
-                  }
-                  if (stateStr && (stateStr.includes('failed') || stateStr.includes('error'))) {
-                    finalStatus = { outcome: 'failed', payload: stResp.body };
-                    break;
-                  }
-
-                  if (stResp.body && (stResp.body.success === true || stResp.body.status === 'ok' || stResp.body.paid === true)) {
-                    finalStatus = { outcome: 'success', payload: stResp.body };
-                    break;
-                  }
-                } else {
-                  console.warn('payment-status non-ok response', stResp);
-                }
-              } catch (err) {
-                console.warn('poll error', err);
-              }
-              await new Promise(r => setTimeout(r, pollIntervalMs));
-            }
-          } else {
-            console.warn('No transactionId returned from initiate-payment; skipping polling.');
-          }
-
-          if (finalStatus && finalStatus.outcome === 'success') {
-            try {
-              let extractedTxn = "";
-              try {
-                extractedTxn =
-                  finalStatus.payload?.data?.phonepeResponse?.data?.transactionId ||
-                  finalStatus.payload?.data?.transactionId ||
-                  finalStatus.payload?.transactionId ||
-                  finalStatus.payload?.data?.phonepeResponse?.data?.orderId ||
-                  "";
-              } catch (e) {}
-              document.getElementById('phonepe_txn_id').value = extractedTxn || "";
-            } catch (e) {}
-            document.getElementById('phonepe_order_id').value = transactionId;
-            document.getElementById('payment_amount').value = amountINR;
-            document.getElementById('payment_status').value = 'paid';
-
-            const dataObj = collectFormObject();
-            const resJson = await submitFormToServer(dataObj);
-            if (resJson && (resJson.status === 'ok' || resJson.success)) {
-              successMessage.style.display = 'block';
-              errorMessage.style.display = 'none';
-              form.reset();
-              wordCount.textContent = '0';
-              toggleSections();
-              handleAccuracyExplanation();
-              toggleGenderOtherInput();
-            } else {
-              throw new Error('Server replied: ' + JSON.stringify(resJson));
-            }
-          } else {
-            try {
-              document.getElementById('phonepe_order_id').value = transactionId || '';
-              document.getElementById('payment_amount').value = amountINR;
-              document.getElementById('payment_status').value = 'unpaid';
-
-              const dataObj = collectFormObject();
-              dataObj.payment_status = 'unpaid';
-              const res = await submitFormToServer(dataObj);
-              console.log('Submitted unpaid fallback:', res);
-              alert('Payment was not completed. Your request has been submitted as unpaid — we will contact you.');
-              successMessage.style.display = 'block';
-              errorMessage.style.display = 'none';
-              form.reset();
-              wordCount.textContent = '0';
-              toggleSections();
-              handleAccuracyExplanation();
-              toggleGenderOtherInput();
-            } catch (e) {
-              console.error('Failed to submit unpaid fallback:', e);
-              errorMessage.style.display = 'block';
-              successMessage.style.display = 'none';
-              alert('There was an issue submitting your request after payment was not confirmed. Please contact us.');
-            }
-          }
+          // ---------- OPEN GATEWAY IN SAME TAB & RETURN ----------
+          sessionStorage.setItem('pp_txn_id', transactionId || '');
+          sessionStorage.setItem('pp_amt', String(amountINR));
+          openPhonePeCheckout(checkoutUrl, /* inNewTab = */ false);
+          return; // Stop further code; will resume after redirect back
 
         } else {
           // OTHER PURPOSE FLOW - DIRECT SUBMISSION WITHOUT PAYMENT
