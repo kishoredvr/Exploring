@@ -738,15 +738,6 @@
       submitButton.disabled = true;
       submitButton.textContent = 'Processing...';
 
-      // ---------- NEW: pre-open a tab to avoid popup blocking ----------
-      let payWin = null;
-      try {
-        payWin = window.open('', '_blank');
-        if (payWin) {
-          payWin.document.write('<p style="font:14px system-ui;margin:16px">Opening PhonePe…</p>');
-        }
-      } catch (_) {}
-
       try {
         const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
 
@@ -774,10 +765,18 @@
           console.log("transactionId:", transactionId, "checkoutUrl:", checkoutUrl);
 
           if (!checkoutUrl) {
-            if (payWin) { try { payWin.close(); } catch {} }
             console.warn('Full PhonePe response:', orderResp);
             throw new Error('No checkout URL returned by server. Inspect server response in console.');
           }
+
+          // ---------- Move tab opening code HERE (only for Astrology flow) ----------
+          let payWin = null;
+          try {
+            payWin = window.open('', '_blank');
+            if (payWin) {
+              payWin.document.write('<p style="font:14px system-ui;margin:16px">Opening PhonePe…</p>');
+            }
+          } catch (_) {}
 
           // ---------- navigate the pre-opened tab (or fallback to same-tab) ----------
           if (payWin) {
