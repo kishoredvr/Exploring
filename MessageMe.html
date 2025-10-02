@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>  
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -47,6 +47,28 @@
     .hide { display: none; }
     input[type="number"].time-input { width: 100%; padding: 8px; }
     .consultation-note { background-color: #f8f9fa; border-left: 4px solid #0987b5; padding: 12px 16px; margin: 12px 0; border-radius: 4px; font-size: 14px; color: #2c3e50; display: none; }
+    
+    /* Sample report link styles */
+    .sample-report-link { 
+      margin-top: 8px; 
+      text-align: center; 
+      padding: 8px; 
+      background: #f8f9fa; 
+      border-radius: 6px; 
+      border: 1px dashed #0987b5;
+    }
+    .sample-report-link a {
+      color: #0987b5;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sample-report-link a:hover {
+      color: #076a91;
+      text-decoration: underline;
+    }
     
     /* Payment processing modal */
     .payment-modal {
@@ -137,11 +159,18 @@
         <div id="astroServiceWrapper" class="form-group centered-section" style="max-width:380px; margin: 12px auto 0; display:none;">
           <label for="astroServiceSelect">Choose Astrology Service</label>
           <select id="astroServiceSelect" name="astroServiceSelect">
-          
-          <option value="1000">Basic — ₹1000</option>
-          <option value="2000">Detailed — ₹2000</option>
-          <option value="5000">Premium — ₹5000</option>
+            <option value="1000">Basic — ₹1000</option>
+            <option value="2000">Detailed — ₹2000</option>
+            <option value="5000">Premium — ₹5000</option>
           </select>
+        </div>
+
+        <!-- Sample Report Link -->
+        <div id="sampleReportWrapper" class="sample-report-link" style="display: none;">
+          <a href="#" id="sampleReportLink" target="_blank">
+            <i class="fas fa-external-link-alt"></i>
+            View Sample Report for <span id="serviceTierName">Basic</span> Service
+          </a>
         </div>
       </div>
 
@@ -351,12 +380,46 @@
     const termsWrapper = document.getElementById('termsWrapper');
     const termsAgree = document.getElementById('termsAgree');
 
+    // New elements for sample report
+    const sampleReportWrapper = document.getElementById('sampleReportWrapper');
+    const sampleReportLink = document.getElementById('sampleReportLink');
+    const serviceTierName = document.getElementById('serviceTierName');
+
+    // Sample report URLs
+    const sampleReportUrls = {
+      '1000': 'https://drive.google.com/file/d/1jtcfBBXh1LmH6l6qWNw00c22H65EUiNM/view?usp=sharing', // Basic
+      '2000': 'https://drive.google.com/file/d/1dxJDr1eIaGapTzJBMoebfIi1yWw77A5D/view?usp=sharing', // Detailed
+      '5000': 'https://drive.google.com/file/d/10KgT13w9mr5eNy23FHjbmUCFb_QRJW05/view?usp=sharing'  // Premium
+    };
+
+    // Service tier names
+    const serviceTierNames = {
+      '1000': 'Basic',
+      '2000': 'Detailed', 
+      '5000': 'Premium'
+    };
+
+    function updateSampleReportLink() {
+      const selectedValue = astroServiceSelect.value;
+      const url = sampleReportUrls[selectedValue];
+      const tierName = serviceTierNames[selectedValue];
+      
+      if (url && tierName) {
+        sampleReportLink.href = url;
+        serviceTierName.textContent = tierName;
+        sampleReportWrapper.style.display = 'block';
+      } else {
+        sampleReportWrapper.style.display = 'none';
+      }
+    }
+
     function toggleSections() {
       if (purposeOther.checked) {
         birthDetailsSection.classList.add('disabled-section');
         birthLocationSection.classList.add('disabled-section');
         accuracySection.classList.add('disabled-section');
         consultationNote.style.display = 'none';
+        sampleReportWrapper.style.display = 'none';
 
         document.querySelectorAll('#birth-details-section input, #birth-details-section select, #birth-location-section input').forEach(field => {
           field.removeAttribute('required');
@@ -408,6 +471,9 @@
         astroServiceWrapper.style.display = 'block';
         astroServiceTierHidden.value = astroServiceSelect.value;
 
+        // Update sample report link when astrology is selected
+        updateSampleReportLink();
+
         if (termsWrapper) {
           termsWrapper.style.display = 'block';
           termsAgree.setAttribute('required', 'true');
@@ -454,6 +520,7 @@
 
     astroServiceSelect.addEventListener('change', () => {
       astroServiceTierHidden.value = astroServiceSelect.value;
+      updateSampleReportLink();
     });
 
     expectations.addEventListener('input', () => {
@@ -910,4 +977,3 @@
   </script>
 </body>
 </html>
-
