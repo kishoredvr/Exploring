@@ -746,6 +746,29 @@
             outline: 3px solid rgba(212,175,55,0.25);
             outline-offset: 2px;
         }
+        
+        /* Loading indicator for video */
+        .video-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            background: var(--medium-gray);
+            border-radius: 4px;
+        }
+        
+        .video-loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -934,16 +957,27 @@
                 <p>Latest videos, resources, and important links from our services</p>
             </div>
             <div class="content-grid">
-                <!-- Latest Video -->
+                <!-- Latest Video - Dynamic -->
                 <div class="content-card">
                     <div class="card-header">
                         <i class="fas fa-play-circle"></i>
                         <h3>Latest Video</h3>
                     </div>
                     <div class="card-content">
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/Uop3WpuJ-c8" frameborder="0" allowfullscreen></iframe>
+                        <div id="video-loading" class="video-loading">
+                            <div class="spinner"></div>
                         </div>
+                        <div class="video-container" id="latest-video-container" style="display: none;">
+                            <iframe id="latest-video" src="https://www.youtube.com/embed/Uop3WpuJ-c8" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen
+                                    title="Latest video from our channels">
+                            </iframe>
+                        </div>
+                        <p style="text-align: center; margin-top: 10px; font-size: 14px; color: #666;">
+                            Automatically updates with latest embeddable video from our channels
+                        </p>
                     </div>
                 </div>
                 
@@ -974,7 +1008,7 @@
                     </div>
                 </div>
                 
-                <!-- Website Tour -->
+                <!-- Website Tour - Fixed as requested -->
                 <div class="content-card">
                     <div class="card-header">
                         <i class="fas fa-video"></i>
@@ -982,7 +1016,11 @@
                     </div>
                     <div class="card-content">
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/xRgUAteViQc" frameborder="0" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube.com/embed/xRgUAteViQc" 
+                                    frameborder="0" 
+                                    allowfullscreen
+                                    title="Website tour video">
+                            </iframe>
                         </div>
                     </div>
                 </div>
@@ -1037,6 +1075,83 @@
         </div>
     </footer>
 
+    <!-- Supabase Integration Script -->
+    <script>
+        // YouTube Latest Videos Integration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Supabase - Replace with your actual credentials
+            const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+            const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+            // Function to load and display the latest video
+            async function loadLatestVideo() {
+                try {
+                    // Show loading indicator
+                    document.getElementById('video-loading').style.display = 'flex';
+                    document.getElementById('latest-video-container').style.display = 'none';
+                    
+                    // Get the latest embeddable video from any of the channels
+                    const { data: videos, error } = await supabase
+                        .from('youtube_videos')
+                        .select('*')
+                        .eq('embeddable', true)
+                        .order('published_at', { ascending: false })
+                        .limit(1);
+
+                    if (error) {
+                        console.error('Error fetching latest video:', error);
+                        // Fallback to default video
+                        showDefaultVideo();
+                        return;
+                    }
+
+                    if (videos && videos.length > 0) {
+                        const latestVideo = videos[0];
+                        updateVideoEmbed(latestVideo);
+                    } else {
+                        console.log('No embeddable videos found in database');
+                        // Fallback to default video
+                        showDefaultVideo();
+                    }
+                } catch (error) {
+                    console.error('Error loading latest video:', error);
+                    // Fallback to default video
+                    showDefaultVideo();
+                } finally {
+                    // Hide loading indicator
+                    document.getElementById('video-loading').style.display = 'none';
+                    document.getElementById('latest-video-container').style.display = 'block';
+                }
+            }
+
+            // Function to update the video embed
+            function updateVideoEmbed(video) {
+                const iframe = document.getElementById('latest-video');
+                if (iframe) {
+                    iframe.src = video.embed_url;
+                    console.log('Updated video embed to:', video.title);
+                }
+            }
+
+            // Function to show default video if no videos are found
+            function showDefaultVideo() {
+                const iframe = document.getElementById('latest-video');
+                if (iframe) {
+                    iframe.src = "https://www.youtube.com/embed/Uop3WpuJ-c8";
+                    console.log('Using default video');
+                }
+            }
+
+            // Load the latest video when page loads
+            loadLatestVideo();
+
+            // Optional: Refresh video every 30 minutes
+            setInterval(loadLatestVideo, 30 * 60 * 1000);
+        });
+    </script>
+
+    <!-- Original Script -->
     <script>
     // Simple script for interactive elements
     document.addEventListener('DOMContentLoaded', function() {
@@ -1126,18 +1241,6 @@
             });
         }
         
-        // Remove the problematic dropdown closing code that was interfering with hover
-        // The original code was:
-        // document.addEventListener('click', function(e) {
-        //     if (!e.target.closest('nav ul li')) {
-        //         document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        //             menu.style.opacity = '0';
-        //             menu.style.visibility = 'hidden';
-        //             menu.style.transform = 'translateY(-10px)';
-        //         });
-        //     }
-        // });
-
         // Small enhancement: on resize/orientation change clean up mobile menu and dropdowns
         let resizeTimeout;
         window.addEventListener('resize', () => {
@@ -1150,10 +1253,9 @@
             }, 150);
         });
     });
-</script>
+    </script>
+
+    <!-- Add Supabase client library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
-
-
-
-
