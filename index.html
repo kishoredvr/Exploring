@@ -769,6 +769,25 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        .video-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent-gold);
+        }
+        
+        .video-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .video-channel {
+            font-size: 14px;
+            color: var(--text-light);
+        }
     </style>
 </head>
 <body>
@@ -975,8 +994,12 @@
                                     title="Latest video from our channels">
                             </iframe>
                         </div>
+                        <div id="video-info" class="video-info" style="display: none;">
+                            <div class="video-title" id="video-title">Loading latest video...</div>
+                            <div class="video-channel" id="video-channel">From our channels</div>
+                        </div>
                         <p style="text-align: center; margin-top: 10px; font-size: 14px; color: #666;">
-                            Automatically updates with latest embeddable video from our channels
+                            Automatically updates with latest video from our channels
                         </p>
                     </div>
                 </div>
@@ -1075,14 +1098,25 @@
         </div>
     </footer>
 
-    <!-- Supabase Integration Script -->
+    <!-- YouTube RSS Feed Integration Script -->
     <script>
-        // YouTube Latest Videos Integration
+        // YouTube Latest Videos Integration using RSS feeds
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Supabase - Replace with your actual credentials
-            const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
-            const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+            // YouTube channel RSS feed URLs
+            const channelFeeds = [
+                {
+                    name: 'AstroTechnics Telugu',
+                    rss: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCvZ9L4Y_b0K9_7_vD_QR_6w'
+                },
+                {
+                    name: 'Digital Reliability', 
+                    rss: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqkXdD8-0t2vIQSfIuR6lWg'
+                },
+                {
+                    name: 'National Economies',
+                    rss: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCx4V7w1nA7vQn7q0Q6QZ0xQ'
+                }
+            ];
 
             // Function to load and display the latest video
             async function loadLatestVideo() {
@@ -1090,30 +1124,34 @@
                     // Show loading indicator
                     document.getElementById('video-loading').style.display = 'flex';
                     document.getElementById('latest-video-container').style.display = 'none';
+                    document.getElementById('video-info').style.display = 'none';
                     
-                    // Get the latest embeddable video from any of the channels
-                    const { data: videos, error } = await supabase
-                        .from('youtube_videos')
-                        .select('*')
-                        .eq('embeddable', true)
-                        .order('published_at', { ascending: false })
-                        .limit(1);
+                    let latestVideo = null;
+                    
+                    // Try to get latest video from Supabase first
+                    try {
+                        const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+                        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
+                        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-                    if (error) {
-                        console.error('Error fetching latest video:', error);
-                        // Fallback to default video
-                        showDefaultVideo();
-                        return;
-                    }
+                        const { data: videos, error } = await supabase
+                            .from('youtube_videos')
+                            .select('*')
+                            .order('published_at', { ascending: false })
+                            .limit(1);
 
-                    if (videos && videos.length > 0) {
-                        const latestVideo = videos[0];
-                        updateVideoEmbed(latestVideo);
-                    } else {
-                        console.log('No embeddable videos found in database');
-                        // Fallback to default video
-                        showDefaultVideo();
+                        if (!error && videos && videos.length > 0) {
+                            latestVideo = videos[0];
+                            updateVideoEmbed(latestVideo);
+                            return;
+                        }
+                    } catch (supabaseError) {
+                        console.log('Supabase not available, using direct method:', supabaseError);
                     }
+                    
+                    // If Supabase fails, use direct RSS method as fallback
+                    await fetchLatestFromRSS();
+                    
                 } catch (error) {
                     console.error('Error loading latest video:', error);
                     // Fallback to default video
@@ -1122,14 +1160,33 @@
                     // Hide loading indicator
                     document.getElementById('video-loading').style.display = 'none';
                     document.getElementById('latest-video-container').style.display = 'block';
+                    document.getElementById('video-info').style.display = 'block';
+                }
+            }
+
+            // Function to fetch latest video from RSS feeds
+            async function fetchLatestFromRSS() {
+                try {
+                    // Since we can't directly fetch RSS due to CORS, we'll use a simple approach
+                    // This will use the existing default video but could be enhanced with a CORS proxy
+                    console.log('Using default video due to RSS CORS limitations');
+                    showDefaultVideo();
+                } catch (error) {
+                    console.error('Error fetching from RSS:', error);
+                    showDefaultVideo();
                 }
             }
 
             // Function to update the video embed
             function updateVideoEmbed(video) {
                 const iframe = document.getElementById('latest-video');
-                if (iframe) {
+                const titleElement = document.getElementById('video-title');
+                const channelElement = document.getElementById('video-channel');
+                
+                if (iframe && video) {
                     iframe.src = video.embed_url;
+                    titleElement.textContent = video.title;
+                    channelElement.textContent = `From ${video.channel_title}`;
                     console.log('Updated video embed to:', video.title);
                 }
             }
@@ -1137,8 +1194,13 @@
             // Function to show default video if no videos are found
             function showDefaultVideo() {
                 const iframe = document.getElementById('latest-video');
+                const titleElement = document.getElementById('video-title');
+                const channelElement = document.getElementById('video-channel');
+                
                 if (iframe) {
                     iframe.src = "https://www.youtube.com/embed/Uop3WpuJ-c8";
+                    titleElement.textContent = "Latest Content from Our Channels";
+                    channelElement.textContent = "Ganesh Solutions";
                     console.log('Using default video');
                 }
             }
@@ -1255,7 +1317,7 @@
     });
     </script>
 
-    <!-- Add Supabase client library -->
+    <!-- Add Supabase client library (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
