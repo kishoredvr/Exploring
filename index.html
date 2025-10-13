@@ -1151,13 +1151,13 @@
         </div>
     </footer>
 
-    <!-- Time-Based YouTube Video Integration -->
+    <!-- Time-Based YouTube Video Integration - FIXED -->
     <script>
         // YouTube Latest Videos Integration with Time-Based Updates
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Supabase - Replace with your actual credentials
-            const supabaseUrl = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co'; // Replace with your Supabase URL
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxrdmNicHhrcHdwb3FqbGNkZGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc3NzI2MzIsImV4cCI6MjA3MzM0ODYzMn0.Es6C6G4I65JqjW_9h6d6iWzBr8vQoyiBq3-7wQ6qadU'; // Replace with your Supabase anon key
+            const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+            const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
             const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
             // Video rotation schedule - UPDATE THESE WITH YOUR ACTUAL VIDEO IDs
@@ -1166,19 +1166,19 @@
                     id: 'UCvZ9L4Y_b0K9_7_vD_QR_6w',
                     name: 'AstroTechnics Telugu',
                     handle: '@astrotechnicstelugu',
-                    video_ids: ['Uop3WpuJ-c8', 'xRgUAteViQc'] // Add your actual video IDs here
+                    video_ids: ['Uop3WpuJ-c8', 'ANOTHER_VIDEO_ID_1'] // Replace with actual video IDs
                 },
                 {
                     id: 'UCqkXdD8-0t2vIQSfIuR6lWg',
                     name: 'Digital Reliability',
                     handle: '@kishoredvr-k5k', 
-                    video_ids: ['Uop3WpuJ-c8', 'xRgUAteViQc'] // Add your actual video IDs here
+                    video_ids: ['Uop3WpuJ-c8', 'ANOTHER_VIDEO_ID_2'] // Replace with actual video IDs
                 },
                 {
                     id: 'UCx4V7w1nA7vQn7q0Q6QZ0xQ',
                     name: 'National Economies',
                     handle: '@NationalEconomies',
-                    video_ids: ['Uop3WpuJ-c8', 'xRgUAteViQc'] // Add your actual video IDs here
+                    video_ids: ['Uop3WpuJ-c8', 'ANOTHER_VIDEO_ID_3'] // Replace with actual video IDs
                 }
             ];
 
@@ -1246,6 +1246,28 @@
                 }
             }
 
+            // Function to load and display the latest video from Supabase
+            async function loadLatestVideoFromSupabase() {
+                try {
+                    // Get the latest video from Supabase
+                    const { data: video, error } = await supabase
+                        .from('latest_video')
+                        .select('*')
+                        .eq('id', 'current')
+                        .single();
+
+                    if (error) {
+                        console.error('Error fetching latest video:', error);
+                        return null;
+                    }
+
+                    return video;
+                } catch (error) {
+                    console.error('Error loading latest video:', error);
+                    return null;
+                }
+            }
+
             // Function to load and display the latest video
             async function loadLatestVideo() {
                 try {
@@ -1261,27 +1283,23 @@
                         if (updatedVideo) {
                             updateVideoEmbed(updatedVideo);
                             showUpdateStatus('✅ Video updated automatically at 12:00 PM IST', 'success');
+                        } else {
+                            // If update failed, try to load existing video
+                            const existingVideo = await loadLatestVideoFromSupabase();
+                            if (existingVideo) {
+                                updateVideoEmbed(existingVideo);
+                            } else {
+                                showDefaultVideo();
+                            }
                         }
-                    }
-                    
-                    // Get the latest video from Supabase
-                    const { data: video, error } = await supabase
-                        .from('latest_video')
-                        .select('*')
-                        .eq('id', 'current')
-                        .single();
-
-                    if (error) {
-                        console.error('Error fetching latest video:', error);
-                        showDefaultVideo();
-                        return;
-                    }
-
-                    if (video) {
-                        updateVideoEmbed(video);
                     } else {
-                        console.log('No video found in database');
-                        showDefaultVideo();
+                        // Not update time, just load the current video
+                        const currentVideo = await loadLatestVideoFromSupabase();
+                        if (currentVideo) {
+                            updateVideoEmbed(currentVideo);
+                        } else {
+                            showDefaultVideo();
+                        }
                     }
                 } catch (error) {
                     console.error('Error loading latest video:', error);
@@ -1318,6 +1336,7 @@
                     iframe.src = "https://www.youtube.com/embed/Uop3WpuJ-c8";
                     titleElement.textContent = "Latest Content from Our Channels";
                     channelElement.textContent = "Ganesh Solutions";
+                    console.log('Using default video');
                 }
             }
 
@@ -1334,12 +1353,16 @@
                 }, 5000);
             }
 
-            // Manual update function
+            // Manual update function - FIXED
             window.manualUpdate = async function() {
                 try {
                     showUpdateStatus('🔄 Updating video...', 'info');
+                    
+                    // Update the video in Supabase
                     const updatedVideo = await updateDailyVideo();
+                    
                     if (updatedVideo) {
+                        // Immediately update the display with the new video
                         updateVideoEmbed(updatedVideo);
                         showUpdateStatus('✅ Video updated successfully!', 'success');
                     } else {
@@ -1347,7 +1370,7 @@
                     }
                 } catch (error) {
                     console.error('Manual update error:', error);
-                    showUpdateStatus('❌ Error updating video', 'error');
+                    showUpdateStatus('❌ Error updating video: ' + error.message, 'error');
                 }
             };
 
@@ -1368,17 +1391,6 @@
 
             // Also refresh video every 30 minutes (fallback)
             setInterval(loadLatestVideo, 30 * 60 * 1000);
-            
-            // Display current IST time for debugging
-            function displayISTTime() {
-                const now = new Date();
-                const istOffset = 5.5 * 60 * 60 * 1000;
-                const istTime = new Date(now.getTime() + istOffset);
-                console.log(`🕐 Current IST: ${istTime.toUTCString().replace('GMT', 'IST')}`);
-            }
-            
-            displayISTTime();
-            setInterval(displayISTTime, 60000);
         });
     </script>
 
@@ -1490,4 +1502,3 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
-
