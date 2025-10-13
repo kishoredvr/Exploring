@@ -788,6 +788,50 @@
             font-size: 14px;
             color: var(--text-light);
         }
+        
+        .manual-update-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--accent-gold);
+            color: var(--dark-navy);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        
+        .manual-update-btn:hover {
+            background: #e6b325;
+            transform: translateY(-2px);
+        }
+        
+        .update-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .update-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .update-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .update-status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
     </style>
 </head>
 <body>
@@ -998,8 +1042,17 @@
                             <div class="video-title" id="video-title">Loading latest video...</div>
                             <div class="video-channel" id="video-channel">From our channels</div>
                         </div>
+                        
+                        <!-- Manual Update Button -->
+                        <div style="text-align: center; margin: 15px 0;">
+                            <button class="manual-update-btn" onclick="manualUpdate()">
+                                <i class="fas fa-sync-alt"></i> Update Video Manually
+                            </button>
+                            <div id="update-status" class="update-status" style="display: none;"></div>
+                        </div>
+                        
                         <p style="text-align: center; margin-top: 10px; font-size: 14px; color: #666;">
-                            Automatically updates with latest video from our channels
+                            Automatically updates daily at 12:00 PM IST with latest videos
                         </p>
                     </div>
                 </div>
@@ -1098,25 +1151,100 @@
         </div>
     </footer>
 
-    <!-- YouTube RSS Feed Integration Script -->
+    <!-- Time-Based YouTube Video Integration -->
     <script>
-        // YouTube Latest Videos Integration using RSS feeds
+        // YouTube Latest Videos Integration with Time-Based Updates
         document.addEventListener('DOMContentLoaded', function() {
-            // YouTube channel RSS feed URLs
-            const channelFeeds = [
+            // Initialize Supabase - Replace with your actual credentials
+            const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+            const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+            // Video rotation schedule - UPDATE THESE WITH YOUR ACTUAL VIDEO IDs
+            const CHANNELS = [
                 {
+                    id: 'UCvZ9L4Y_b0K9_7_vD_QR_6w',
                     name: 'AstroTechnics Telugu',
-                    rss: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCvZ9L4Y_b0K9_7_vD_QR_6w'
+                    handle: '@astrotechnicstelugu',
+                    video_ids: ['Uop3WpuJ-c8', 'xRgUAteViQc'] // Add your actual video IDs here
                 },
                 {
-                    name: 'Digital Reliability', 
-                    rss: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqkXdD8-0t2vIQSfIuR6lWg'
+                    id: 'UCqkXdD8-0t2vIQSfIuR6lWg',
+                    name: 'Digital Reliability',
+                    handle: '@kishoredvr-k5k', 
+                    video_ids: ['Uop3WpuJ-c8', 'xRgUAteViQc'] // Add your actual video IDs here
                 },
                 {
+                    id: 'UCx4V7w1nA7vQn7q0Q6QZ0xQ',
                     name: 'National Economies',
-                    rss: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCx4V7w1nA7vQn7q0Q6QZ0xQ'
+                    handle: '@NationalEconomies',
+                    video_ids: ['Uop3WpuJ-c8', 'xRgUAteViQc'] // Add your actual video IDs here
                 }
             ];
+
+            // Function to check if it's time to update (12:00 PM IST)
+            function shouldUpdateVideo() {
+                const now = new Date();
+                
+                // Convert to IST (UTC+5:30)
+                const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
+                const istTime = new Date(now.getTime() + istOffset);
+                
+                const currentHour = istTime.getUTCHours();
+                const currentMinute = istTime.getUTCMinutes();
+                
+                // Check if it's 12:00 PM IST (12:00)
+                console.log(`Current IST: ${currentHour}:${currentMinute}`);
+                return currentHour === 12 && currentMinute === 0;
+            }
+
+            // Function to get today's channel based on date
+            function getTodaysChannel() {
+                const today = new Date();
+                const startOfYear = new Date(today.getFullYear(), 0, 0);
+                const diff = today - startOfYear;
+                const oneDay = 1000 * 60 * 60 * 24;
+                const dayOfYear = Math.floor(diff / oneDay);
+                
+                return CHANNELS[dayOfYear % CHANNELS.length];
+            }
+
+            // Function to update video in Supabase
+            async function updateDailyVideo() {
+                try {
+                    const todaysChannel = getTodaysChannel();
+                    
+                    // Simple rotation through videos
+                    const today = new Date();
+                    const videoIndex = today.getDate() % todaysChannel.video_ids.length;
+                    const videoId = todaysChannel.video_ids[videoIndex];
+                    
+                    const latestVideo = {
+                        id: 'current',
+                        channel_id: todaysChannel.id,
+                        channel_title: todaysChannel.name,
+                        video_id: videoId,
+                        title: `Latest from ${todaysChannel.name}`,
+                        embed_url: `https://www.youtube.com/embed/${videoId}`,
+                        updated_at: new Date().toISOString()
+                    };
+
+                    // Update in Supabase
+                    const { data, error } = await supabase
+                        .from('latest_video')
+                        .upsert([latestVideo])
+                        .select();
+
+                    if (error) throw error;
+                    
+                    console.log(`🔄 Video updated to: ${todaysChannel.name} - ${videoId}`);
+                    return data[0];
+                    
+                } catch (error) {
+                    console.error('Error updating video:', error);
+                    return null;
+                }
+            }
 
             // Function to load and display the latest video
             async function loadLatestVideo() {
@@ -1126,54 +1254,43 @@
                     document.getElementById('latest-video-container').style.display = 'none';
                     document.getElementById('video-info').style.display = 'none';
                     
-                    let latestVideo = null;
-                    
-                    // Try to get latest video from Supabase first
-                    try {
-                        const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
-                        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase anon key
-                        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-                        const { data: videos, error } = await supabase
-                            .from('youtube_videos')
-                            .select('*')
-                            .order('published_at', { ascending: false })
-                            .limit(1);
-
-                        if (!error && videos && videos.length > 0) {
-                            latestVideo = videos[0];
-                            updateVideoEmbed(latestVideo);
-                            return;
+                    // Check if we need to update the video (12:00 PM IST)
+                    if (shouldUpdateVideo()) {
+                        console.log('🕛 12:00 PM IST detected - updating video...');
+                        const updatedVideo = await updateDailyVideo();
+                        if (updatedVideo) {
+                            updateVideoEmbed(updatedVideo);
+                            showUpdateStatus('✅ Video updated automatically at 12:00 PM IST', 'success');
                         }
-                    } catch (supabaseError) {
-                        console.log('Supabase not available, using direct method:', supabaseError);
                     }
                     
-                    // If Supabase fails, use direct RSS method as fallback
-                    await fetchLatestFromRSS();
-                    
+                    // Get the latest video from Supabase
+                    const { data: video, error } = await supabase
+                        .from('latest_video')
+                        .select('*')
+                        .eq('id', 'current')
+                        .single();
+
+                    if (error) {
+                        console.error('Error fetching latest video:', error);
+                        showDefaultVideo();
+                        return;
+                    }
+
+                    if (video) {
+                        updateVideoEmbed(video);
+                    } else {
+                        console.log('No video found in database');
+                        showDefaultVideo();
+                    }
                 } catch (error) {
                     console.error('Error loading latest video:', error);
-                    // Fallback to default video
                     showDefaultVideo();
                 } finally {
                     // Hide loading indicator
                     document.getElementById('video-loading').style.display = 'none';
                     document.getElementById('latest-video-container').style.display = 'block';
                     document.getElementById('video-info').style.display = 'block';
-                }
-            }
-
-            // Function to fetch latest video from RSS feeds
-            async function fetchLatestFromRSS() {
-                try {
-                    // Since we can't directly fetch RSS due to CORS, we'll use a simple approach
-                    // This will use the existing default video but could be enhanced with a CORS proxy
-                    console.log('Using default video due to RSS CORS limitations');
-                    showDefaultVideo();
-                } catch (error) {
-                    console.error('Error fetching from RSS:', error);
-                    showDefaultVideo();
                 }
             }
 
@@ -1191,7 +1308,7 @@
                 }
             }
 
-            // Function to show default video if no videos are found
+            // Function to show default video
             function showDefaultVideo() {
                 const iframe = document.getElementById('latest-video');
                 const titleElement = document.getElementById('video-title');
@@ -1201,15 +1318,67 @@
                     iframe.src = "https://www.youtube.com/embed/Uop3WpuJ-c8";
                     titleElement.textContent = "Latest Content from Our Channels";
                     channelElement.textContent = "Ganesh Solutions";
-                    console.log('Using default video');
                 }
             }
+
+            // Function to show update status
+            function showUpdateStatus(message, type) {
+                const statusElement = document.getElementById('update-status');
+                statusElement.textContent = message;
+                statusElement.className = `update-status ${type}`;
+                statusElement.style.display = 'block';
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 5000);
+            }
+
+            // Manual update function
+            window.manualUpdate = async function() {
+                try {
+                    showUpdateStatus('🔄 Updating video...', 'info');
+                    const updatedVideo = await updateDailyVideo();
+                    if (updatedVideo) {
+                        updateVideoEmbed(updatedVideo);
+                        showUpdateStatus('✅ Video updated successfully!', 'success');
+                    } else {
+                        showUpdateStatus('❌ Failed to update video', 'error');
+                    }
+                } catch (error) {
+                    console.error('Manual update error:', error);
+                    showUpdateStatus('❌ Error updating video', 'error');
+                }
+            };
 
             // Load the latest video when page loads
             loadLatestVideo();
 
-            // Optional: Refresh video every 30 minutes
+            // Check for 12:00 PM IST every minute
+            setInterval(async () => {
+                if (shouldUpdateVideo()) {
+                    console.log('🕛 12:00 PM IST - Auto-updating video...');
+                    const updatedVideo = await updateDailyVideo();
+                    if (updatedVideo) {
+                        updateVideoEmbed(updatedVideo);
+                        showUpdateStatus('✅ Video updated automatically at 12:00 PM IST', 'success');
+                    }
+                }
+            }, 60000); // Check every minute
+
+            // Also refresh video every 30 minutes (fallback)
             setInterval(loadLatestVideo, 30 * 60 * 1000);
+            
+            // Display current IST time for debugging
+            function displayISTTime() {
+                const now = new Date();
+                const istOffset = 5.5 * 60 * 60 * 1000;
+                const istTime = new Date(now.getTime() + istOffset);
+                console.log(`🕐 Current IST: ${istTime.toUTCString().replace('GMT', 'IST')}`);
+            }
+            
+            displayISTTime();
+            setInterval(displayISTTime, 60000);
         });
     </script>
 
@@ -1317,7 +1486,7 @@
     });
     </script>
 
-    <!-- Add Supabase client library (optional) -->
+    <!-- Add Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
