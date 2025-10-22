@@ -324,7 +324,6 @@
             <div class="form-group">
               <label for="explanation" id="explanation-label" style="display:none;">Please explain why the details might not be accurate</label>
               <textarea id="explanation" name="explanation" rows="3" style="display:none;" placeholder="Please provide explanation here..."></textarea>
-              <div class="validation-message" id="explanation-error">Please explain why the details might not be accurate</div>
             </div>
           </div>
         </div>
@@ -653,12 +652,6 @@
         // Accuracy
         if (!validateRadioGroup('accuracy')) {
           showError('accuracy', 'Please select if birth details are accurate');
-          isValid = false;
-        }
-
-        // If accuracy is "No", validate the explanation field
-        if (accuracyNo.checked && (!explanation.value || explanation.value.trim() === '')) {
-          showError('explanation', 'Please explain why the details might not be accurate');
           isValid = false;
         }
 
