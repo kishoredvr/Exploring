@@ -48,6 +48,10 @@
     input[type="number"].time-input { width: 100%; padding: 8px; }
     .consultation-note { background-color: #f8f9fa; border-left: 4px solid #0987b5; padding: 12px 16px; margin: 12px 0; border-radius: 4px; font-size: 14px; color: #2c3e50; display: none; }
     
+    /* Validation error styles */
+    .validation-error { border-color: #e74c3c !important; }
+    .validation-message { color: #e74c3c; font-size: 13px; margin-top: 4px; display: none; }
+    
     /* Sample report link styles */
     .sample-report-link { 
       margin-top: 8px; 
@@ -118,9 +122,92 @@
       100% { transform: rotate(360deg); }
     }
     
-    @media (max-width: 900px) { .two-column { grid-template-columns: 1fr; } .centered-section { max-width: 100%; padding: 0 8px; } .time-fields { flex-direction: row; gap: 10px; } button { width: 48%; } }
+    /* Mobile-specific optimizations */
+    @media (max-width: 900px) { 
+      .two-column { grid-template-columns: 1fr; } 
+      .centered-section { max-width: 100%; padding: 0 8px; } 
+      .time-fields { flex-direction: row; gap: 10px; } 
+      button { width: 48%; } 
+    }
+    
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .container { padding: 20px; border-radius: 16px; margin: 10px auto; }
+      .header h1 { font-size: 24px; }
+      .header p { font-size: 14px; }
+      .form-section h2 { font-size: 18px; }
+      .form-section h2::before { font-size: 18px; margin-right: 8px; }
+      input, select, textarea { font-size: 16px; /* Prevents zoom on iOS */ }
+      button { font-size: 16px; }
+      .action-buttons { flex-direction: column; gap: 12px; }
+      button { width: 100%; }
+      .nav-links { gap: 8px; }
+      nav a { font-size: 0.85rem; padding: 4px 8px; }
+      .radio-group { gap: 8px; }
+      .radio-option { font-size: 14px; }
+    }
+    
+    @media (max-width: 480px) {
+      body { padding: 5px; }
+      .container { padding: 16px; border-radius: 12px; }
+      .header h1 { font-size: 22px; }
+      .header p { font-size: 13px; }
+      .form-section h2 { font-size: 16px; }
+      .form-section h2::before { font-size: 16px; margin-right: 6px; }
+      .time-fields { flex-direction: column; gap: 8px; }
+      .time-fields .form-group { flex: none; }
+      .time-fields .form-group label { margin-left: 0 !important; }
+      .time-fields .form-group input { width: 100% !important; margin-left: 0 !important; }
+      .two-column .form-section { margin-left: 0 !important; }
+      .two-column .form-group { margin-left: 0 !important; }
+      #birth-details-section { margin-left: 0 !important; }
+      .payment-modal-content { padding: 20px; }
+      .payment-modal h3 { font-size: 18px; }
+      .payment-modal p { font-size: 14px; }
+      .sample-report-link { padding: 6px; font-size: 14px; }
+    }
+    
+    @media (max-width: 360px) {
+      .container { padding: 12px; }
+      .header h1 { font-size: 20px; }
+      .header p { font-size: 12px; }
+      .form-section h2 { font-size: 15px; }
+      .radio-group { flex-direction: column; gap: 6px; }
+      .radio-option { font-size: 13px; }
+      nav a { font-size: 0.8rem; padding: 3px 6px; }
+    }
+    
+    /* Print styles */
     @page { size: A4; margin: 10mm; }
-    @media print { html, body { background: white !important; color: #000 !important; width: 100% !important; height: auto !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; font-size: 12px !important; } .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 5mm !important; background: white !important; page-break-inside: avoid; } .header h1 { font-size: 20px !important; margin-bottom: 4px !important; } .header p { font-size: 12px !important; color: #333 !important; margin-bottom: 8px !important; } .form-section { margin-bottom: 8px !important; padding-bottom: 6px !important; page-break-inside: avoid; } .form-group { margin-bottom: 6px !important; } .two-column { grid-template-columns: 1fr 1fr !important; gap: 10px !important; page-break-inside: avoid; } .time-fields { display: flex !important; gap: 2px !important; width: 60% !important; } .time-fields .form-group { flex: 1 !important; margin-bottom: 0 !important; } input[type="number"].time-input { width: 80% !important; padding: 4px !important; font-size: 12px !important; } [style*="margin-left"] { margin-left: 0 !important; } [style*="width:160%"], [style*="width:120%"] { width: 100% !important; } input, select, textarea { width: 100% !important; border: 1px solid #999 !important; box-shadow: none !important; background: transparent !important; color: #000 !important; padding: 4px 6px !important; font-size: 12px !important; page-break-inside: avoid; } textarea { max-width: 100% !important; min-height: 50px !important; } button, .action-buttons { display: none !important; } .success-message, .error-message { display: none !important; } .consultation-note { display: block !important; background-color: transparent !important; border-left: 2px solid #0987b5 !important; padding: 6px 8px !important; margin: 8px 0 !important; font-size: 11px !important; color: #000 !important; page-break-inside: avoid; } .radio-group { gap: 8px !important; flex-wrap: nowrap !important; } .radio-option { white-space: nowrap !important; font-size: 12px !important; } #birth-details-section { margin-left: 0 !important; } .form-section h2 { font-size: 16px !important; margin-bottom: 6px !important; } label { font-size: 12px !important; margin-bottom: 2px !important; } input[type="date"] { width: 36% !important; } .word-count { font-size: 10px !important; margin-top: 2px !important; } .centered-section { max-width: 100% !important; padding: 0 !important; } #gender-other-input-wrapper { margin-left: 0 !important; } .form-section, .two-column, .time-fields { page-break-inside: avoid; } }
+    @media print { 
+      html, body { background: white !important; color: #000 !important; width: 100% !important; height: auto !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; font-size: 12px !important; } 
+      .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 5mm !important; background: white !important; page-break-inside: avoid; } 
+      .header h1 { font-size: 20px !important; margin-bottom: 4px !important; } 
+      .header p { font-size: 12px !important; color: #333 !important; margin-bottom: 8px !important; } 
+      .form-section { margin-bottom: 8px !important; padding-bottom: 6px !important; page-break-inside: avoid; } 
+      .form-group { margin-bottom: 6px !important; } 
+      .two-column { grid-template-columns: 1fr 1fr !important; gap: 10px !important; page-break-inside: avoid; } 
+      .time-fields { display: flex !important; gap: 2px !important; width: 60% !important; } 
+      .time-fields .form-group { flex: 1 !important; margin-bottom: 0 !important; } 
+      input[type="number"].time-input { width: 80% !important; padding: 4px !important; font-size: 12px !important; } 
+      [style*="margin-left"] { margin-left: 0 !important; } 
+      [style*="width:160%"], [style*="width:120%"] { width: 100% !important; } 
+      input, select, textarea { width: 100% !important; border: 1px solid #999 !important; box-shadow: none !important; background: transparent !important; color: #000 !important; padding: 4px 6px !important; font-size: 12px !important; page-break-inside: avoid; } 
+      textarea { max-width: 100% !important; min-height: 50px !important; } 
+      button, .action-buttons { display: none !important; } 
+      .success-message, .error-message { display: none !important; } 
+      .consultation-note { display: block !important; background-color: transparent !important; border-left: 2px solid #0987b5 !important; padding: 6px 8px !important; margin: 8px 0 !important; font-size: 11px !important; color: #000 !important; page-break-inside: avoid; } 
+      .radio-group { gap: 8px !important; flex-wrap: nowrap !important; } 
+      .radio-option { white-space: nowrap !important; font-size: 12px !important; } 
+      #birth-details-section { margin-left: 0 !important; } 
+      .form-section h2 { font-size: 16px !important; margin-bottom: 6px !important; } 
+      label { font-size: 12px !important; margin-bottom: 2px !important; } 
+      input[type="date"] { width: 36% !important; } 
+      .word-count { font-size: 10px !important; margin-top: 2px !important; } 
+      .centered-section { max-width: 100% !important; padding: 0 !important; } 
+      #gender-other-input-wrapper { margin-left: 0 !important; } 
+      .form-section, .two-column, .time-fields { page-break-inside: avoid; } 
+    }
   </style>
 </head>
 <body>
@@ -162,7 +249,6 @@
             <option value="1000">Basic — ₹1000</option>
             <option value="2000">Detailed — ₹2000</option>
             <option value="5000">Premium — ₹5000</option>
-            
           </select>
         </div>
 
@@ -181,11 +267,13 @@
           <div class="form-group">
             <label for="name" class="required">Full Name</label>
             <input type="text" id="name" name="name" required>
+            <div class="validation-message" id="name-error">Please enter your full name</div>
           </div>
 
           <div class="form-group">
             <label for="email" class="required">Email Address</label>
             <input type="email" id="email" name="email" required>
+            <div class="validation-message" id="email-error">Please enter a valid email address</div>
           </div>
         </div>
         
@@ -193,6 +281,7 @@
         <div class="form-group">
           <label for="mobileNumber" class="required">Mobile Number (for Payment)</label>
           <input type="tel" id="mobileNumber" name="mobileNumber" required>
+          <div class="validation-message" id="mobileNumber-error">Please enter a valid mobile number</div>
         </div>
       </div>
 
@@ -202,10 +291,11 @@
             <h2>Birth Details</h2>
             <div class="form-group">
               <label for="birthDetailsAvailable" class="required">Are your birth details available?</label>
-              <div class="radio-group">
+              <div class="radio-group" id="birthDetailsAvailable-group">
                 <label class="radio-option"><input type="radio" id="birth-yes" name="birthDetailsAvailable" value="Yes" required> Yes</label>
                 <label class="radio-option"><input type="radio" id="birth-no" name="birthDetailsAvailable" value="No"> No</label>
               </div>
+              <div class="validation-message" id="birthDetailsAvailable-error">Please select if birth details are available</div>
             </div>
 
             <div class="form-group">
@@ -234,6 +324,7 @@
             <div class="form-group">
               <label for="explanation" id="explanation-label" style="display:none;">Please explain why the details might not be accurate</label>
               <textarea id="explanation" name="explanation" rows="3" style="display:none;" placeholder="Please provide explanation here..."></textarea>
+              <div class="validation-message" id="explanation-error">Please explain why the details might not be accurate</div>
             </div>
           </div>
         </div>
@@ -244,19 +335,23 @@
             <div class="form-group">
               <label for="city" class="required">City/Village</label>
               <input type="text" id="city" name="city" required>
+              <div class="validation-message" id="city-error">Please enter your city/village</div>
             </div>
             <div class="form-group">
               <label for="state" class="required">State/Province</label>
               <input type="text" id="state" name="state" required>
+              <div class="validation-message" id="state-error">Please enter your state/province</div>
             </div>
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div><br>
                 <label for="country" class="required">Country</label>
                 <input type="text" id="country" name="country" required>
+                <div class="validation-message" id="country-error">Please enter your country</div>
               </div>
               <div><br>
                 <label for="pincode" class="required">Pincode</label>
                 <input type="text" id="pincode" name="pincode" required>
+                <div class="validation-message" id="pincode-error">Please enter your pincode</div>
               </div>
             </div>
           </div>
@@ -267,15 +362,17 @@
         <div>
           <div class="form-group" style="margin-left:90px;">
             <label for="gender" class="required">Gender</label>
-            <div class="radio-group" role="radiogroup" aria-labelledby="gender">
+            <div class="radio-group" role="radiogroup" aria-labelledby="gender" id="gender-group">
               <label class="radio-option"><input type="radio" id="gender-male" name="gender" value="Male" required> Male</label>
               <label class="radio-option"><input type="radio" id="gender-female" name="gender" value="Female"> Female</label>
               <label class="radio-option"><input type="radio" id="gender-other" name="gender" value="Other"> Other</label>
             </div>
+            <div class="validation-message" id="gender-error">Please select your gender</div>
 
             <div id="gender-other-input-wrapper" class="form-group hide" style="margin-top:4px;">
               <label for="genderOtherInput">Please explain for better understanding</label>
               <input type="text" id="genderOtherInput" name="genderOtherInput" placeholder="Explanation">
+              <div class="validation-message" id="genderOtherInput-error">Please provide explanation for gender</div>
             </div>
           </div>
         </div>
@@ -283,10 +380,11 @@
         <div>
           <div class="form-group" id="accuracy-section">
             <label for="accuracy" class="required">Are the birth details provided accurate?</label>
-            <div class="radio-group">
+            <div class="radio-group" id="accuracy-group">
               <label class="radio-option"><input type="radio" id="accuracy-yes" name="accuracy" value="Yes" required> Yes</label>
               <label class="radio-option"><input type="radio" id="accuracy-no" name="accuracy" value="No"> No</label>
             </div>
+            <div class="validation-message" id="accuracy-error">Please select if birth details are accurate</div>
           </div>
         </div>
       </div>
@@ -295,6 +393,7 @@
         <div class="form-group" id="country-field">
           <label for="contactCountry" class="required">Which country you belong to?</label>
           <input type="text" id="contactCountry" name="contactCountry" required>
+          <div class="validation-message" id="contactCountry-error">Please enter your country</div>
         </div>
       </div>
 
@@ -302,6 +401,7 @@
         <h2>Let me know your intentions for contacting me</h2>
         <div class="form-group">
           <textarea id="expectations" name="expectations" rows="6" required placeholder="Please describe your intentions and expectations in detail..."></textarea>
+          <div class="validation-message" id="expectations-error">Please describe your intentions and expectations</div>
           <div class="word-count">Maximum 5000 words: <span id="wordCount">0</span>/5000</div>
         </div>
       </div>
@@ -311,6 +411,7 @@
           <input type="checkbox" id="termsAgree" name="termsAgree" style="width:5%;"/>
           <label for="termsAgree" style="font-weight:600;">I agree to the <a href="https://parishodana.xyz/Terms.html" id="termsLink" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>.</label>
         </div>
+        <div class="validation-message" id="termsAgree-error">Please agree to the terms and conditions</div>
       </div>
 
       <div class="action-buttons">
@@ -400,6 +501,202 @@
       '5000': 'Premium'
     };
 
+    // Function to show validation error
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(`${fieldId}-error`);
+      
+      if (field) {
+        field.classList.add('validation-error');
+      }
+      
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+      }
+    }
+
+    // Function to clear validation error
+    function clearError(fieldId) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(`${fieldId}-error`);
+      
+      if (field) {
+        field.classList.remove('validation-error');
+      }
+      
+      if (errorElement) {
+        errorElement.style.display = 'none';
+      }
+    }
+
+    // Function to validate email format
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // Function to validate mobile number
+    function validateMobile(mobile) {
+      const re = /^[0-9]{10}$/;
+      return re.test(mobile);
+    }
+
+    // Function to validate required radio groups
+    function validateRadioGroup(groupName) {
+      const selected = document.querySelector(`input[name="${groupName}"]:checked`);
+      return selected !== null;
+    }
+
+    // Get the current purpose
+    function getCurrentPurpose() {
+      return document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
+    }
+
+    // Main form validation function
+    function validateForm() {
+      let isValid = true;
+      const purpose = getCurrentPurpose();
+
+      // Clear all previous errors
+      document.querySelectorAll('.validation-error').forEach(el => {
+        el.classList.remove('validation-error');
+      });
+      document.querySelectorAll('.validation-message').forEach(el => {
+        el.style.display = 'none';
+      });
+
+      // COMMON FIELDS (required for both purposes)
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        showError('name', 'Please enter your full name');
+        isValid = false;
+      }
+
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        showError('email', 'Please enter your email address');
+        isValid = false;
+      } else if (!validateEmail(email)) {
+        showError('email', 'Please enter a valid email address');
+        isValid = false;
+      }
+
+      const mobileNumber = document.getElementById('mobileNumber').value.trim();
+      if (!mobileNumber) {
+        showError('mobileNumber', 'Please enter your mobile number');
+        isValid = false;
+      } else if (!validateMobile(mobileNumber)) {
+        showError('mobileNumber', 'Please enter a valid 10-digit mobile number');
+        isValid = false;
+      }
+
+      const contactCountry = document.getElementById('contactCountry').value.trim();
+      if (!contactCountry) {
+        showError('contactCountry', 'Please enter your country');
+        isValid = false;
+      }
+
+      const expectationsText = document.getElementById('expectations').value.trim();
+      if (!expectationsText) {
+        showError('expectations', 'Please describe your intentions and expectations');
+        isValid = false;
+      }
+
+      // CONDITIONAL VALIDATION BASED ON PURPOSE
+      if (purpose === 'Astrology') {
+        // ASTROLOGY-SPECIFIC VALIDATION
+        
+        // Birth details available
+        if (!validateRadioGroup('birthDetailsAvailable')) {
+          showError('birthDetailsAvailable', 'Please select if birth details are available');
+          isValid = false;
+        }
+
+        // Birth location fields
+        const city = document.getElementById('city').value.trim();
+        if (!city) {
+          showError('city', 'Please enter your city/village');
+          isValid = false;
+        }
+
+        const state = document.getElementById('state').value.trim();
+        if (!state) {
+          showError('state', 'Please enter your state/province');
+          isValid = false;
+        }
+
+        const country = document.getElementById('country').value.trim();
+        if (!country) {
+          showError('country', 'Please enter your country');
+          isValid = false;
+        }
+
+        const pincode = document.getElementById('pincode').value.trim();
+        if (!pincode) {
+          showError('pincode', 'Please enter your pincode');
+          isValid = false;
+        }
+
+        // Gender
+        if (!validateRadioGroup('gender')) {
+          showError('gender', 'Please select your gender');
+          isValid = false;
+        }
+
+        // If gender is "Other", validate the explanation field
+        if (genderOther.checked && (!genderOtherInput.value || genderOtherInput.value.trim() === '')) {
+          showError('genderOtherInput', 'Please provide explanation for gender');
+          isValid = false;
+        }
+
+        // Accuracy
+        if (!validateRadioGroup('accuracy')) {
+          showError('accuracy', 'Please select if birth details are accurate');
+          isValid = false;
+        }
+
+        // If accuracy is "No", validate the explanation field
+        if (accuracyNo.checked && (!explanation.value || explanation.value.trim() === '')) {
+          showError('explanation', 'Please explain why the details might not be accurate');
+          isValid = false;
+        }
+
+        // Terms and conditions
+        if (!termsAgree.checked) {
+          showError('termsAgree', 'Please agree to the terms and conditions');
+          isValid = false;
+        }
+      } else {
+        // OTHER PURPOSE VALIDATION
+        // For "Other Purpose", only the common fields are required
+        // Birth details, location, gender, accuracy, and terms are NOT required
+      }
+
+      return isValid;
+    }
+
+    // Add event listeners to clear errors when user starts typing
+    document.querySelectorAll('input, textarea, select').forEach(field => {
+      field.addEventListener('input', () => {
+        clearError(field.id);
+      });
+    });
+
+    // Add event listeners for radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        clearError(radio.name);
+      });
+    });
+
+    // Add event listener for checkbox
+    if (termsAgree) {
+      termsAgree.addEventListener('change', () => {
+        clearError('termsAgree');
+      });
+    }
+
     function updateSampleReportLink() {
       const selectedValue = astroServiceSelect.value;
       const url = sampleReportUrls[selectedValue];
@@ -415,7 +712,9 @@
     }
 
     function toggleSections() {
-      if (purposeOther.checked) {
+      const purpose = getCurrentPurpose();
+      
+      if (purpose === 'Other') {
         birthDetailsSection.classList.add('disabled-section');
         birthLocationSection.classList.add('disabled-section');
         accuracySection.classList.add('disabled-section');
@@ -505,6 +804,7 @@
       }
     }
 
+    // Initialize form state
     toggleSections();
     handleAccuracyExplanation();
     toggleGenderOtherInput();
@@ -556,6 +856,14 @@
       successMessage.style.display = 'none';
       errorMessage.style.display = 'none';
 
+      // Clear all validation errors
+      document.querySelectorAll('.validation-error').forEach(el => {
+        el.classList.remove('validation-error');
+      });
+      document.querySelectorAll('.validation-message').forEach(el => {
+        el.style.display = 'none';
+      });
+
       toggleSections();
       handleAccuracyExplanation();
       toggleGenderOtherInput();
@@ -568,7 +876,7 @@
     }
 
     function getSelectedAstroAmount() {
-      const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
+      const purpose = getCurrentPurpose();
       if (purpose !== 'Astrology') return 0;
 
       const sel = document.getElementById('astroServiceSelect');
@@ -869,6 +1177,20 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // Validate form before proceeding
+      if (!validateForm()) {
+        errorMessage.textContent = 'Please fill in all required fields correctly.';
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none';
+        
+        // Scroll to first error
+        const firstError = document.querySelector('.validation-error');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
       const text = expectations.value;
       const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
       if (words > 5000) {
@@ -877,15 +1199,15 @@
         return;
       }
 
-      if (!genderOtherInputWrapper.classList.contains('hide') && (!genderOtherInput.value || genderOtherInput.value.trim() === '')) {
-        alert('Please specify your gender in the provided field.');
-        genderOtherInput.focus();
-        return;
-      }
-
-      const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
+      const purpose = getCurrentPurpose();
 
       if (purpose === 'Astrology') {
+        if (!genderOtherInputWrapper.classList.contains('hide') && (!genderOtherInput.value || genderOtherInput.value.trim() === '')) {
+          alert('Please specify your gender in the provided field.');
+          genderOtherInput.focus();
+          return;
+        }
+
         if (!termsAgree || !termsAgree.checked) {
           alert('Please agree to the Terms and Conditions before submitting for Astrology service.');
           if (termsAgree) termsAgree.focus();
@@ -899,7 +1221,7 @@
       submitButton.textContent = 'Processing...';
 
       try {
-        const purpose = document.querySelector('input[name="purpose"]:checked')?.value || 'Astrology';
+        const purpose = getCurrentPurpose();
 
         if (purpose === 'Astrology') {
           // ASTROLOGY CONSULTATION FLOW - WITH PAYMENT
@@ -978,6 +1300,3 @@
   </script>
 </body>
 </html>
-
-
-
