@@ -392,7 +392,7 @@
       <div class="form-section always-enabled centered-section" style="margin-top: 12px;">
         <div class="form-group" id="country-field">
           <label for="contactCountry" class="required">Which country you belong to?</label>
-          <input type="text" id="contactCountry" name="contactCountry" required>
+          <input type="text" id="contactCountry" name="contactCountry">
           <div class="validation-message" id="contactCountry-error">Please enter your country</div>
         </div>
       </div>
@@ -591,10 +591,13 @@
         isValid = false;
       }
 
-      const contactCountry = document.getElementById('contactCountry').value.trim();
-      if (!contactCountry) {
-        showError('contactCountry', 'Please enter your country');
-        isValid = false;
+      // Only validate contactCountry for "Other Purpose", not for "Astrology"
+      if (purpose === 'Other') {
+        const contactCountry = document.getElementById('contactCountry').value.trim();
+        if (!contactCountry) {
+          showError('contactCountry', 'Please enter your country');
+          isValid = false;
+        }
       }
 
       const expectationsText = document.getElementById('expectations').value.trim();
@@ -1294,5 +1297,3 @@
   </script>
 </body>
 </html>
-
-
