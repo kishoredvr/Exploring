@@ -43,6 +43,46 @@
             width: 100%;
         }
         
+        /* NEW: Mobile Header for Mobile Devices */
+        .mobile-header {
+            display: none;
+            padding: 15px 0;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu-toggle:active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
         /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
@@ -90,41 +130,6 @@
             font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
             margin-top: 5px;
-        }
-        
-        /* NEW: Mobile Header for Mobile Devices */
-        .mobile-header {
-            display: none;
-            padding: 15px 0;
-            background-color: var(--dark-navy);
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-        
-        .mobile-header .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .mobile-menu-toggle {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-        
-        .mobile-menu-toggle:active {
-            background-color: rgba(255, 255, 255, 0.1);
         }
         
         nav ul {
@@ -1143,249 +1148,6 @@
         </div>
     </footer>
 
-    <!-- Time-Based YouTube Video Integration - FIXED -->
-    <script>
-        // YouTube Latest Videos Integration with Time-Based Updates
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Supabase - Replace with your actual credentials
-            const supabaseUrl = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co'; // Replace with your Supabase URL
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxrdmNicHhrcHdwb3FqbGNkZGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc3NzI2MzIsImV4cCI6MjA3MzM0ODYzMn0.Es6C6G4I65JqjW_9h6d6iWzBr8vQoyiBq3-7wQ6qadU'; // Replace with your Supabase anon key
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-            // Video rotation schedule - UPDATE THESE WITH YOUR ACTUAL VIDEO IDs
-            const CHANNELS = [
-                {
-                    id: 'UCvZ9L4Y_b0K9_7_vD_QR_6w',
-                    name: 'AstroTechnics Telugu',
-                    handle: '@astrotechnicstelugu',
-                    video_ids: ['Uop3WpuJ-c8', 'ANOTHER_VIDEO_ID_1'] // Replace with actual video IDs
-                },
-                {
-                    id: 'UCqkXdD8-0t2vIQSfIuR6lWg',
-                    name: 'Digital Reliability',
-                    handle: '@kishoredvr-k5k', 
-                    video_ids: ['Uop3WpuJ-c8', 'ANOTHER_VIDEO_ID_2'] // Replace with actual video IDs
-                },
-                {
-                    id: 'UCx4V7w1nA7vQn7q0Q6QZ0xQ',
-                    name: 'National Economies',
-                    handle: '@NationalEconomies',
-                    video_ids: ['Uop3WpuJ-c8', 'ANOTHER_VIDEO_ID_3'] // Replace with actual video IDs
-                }
-            ];
-
-            // Function to check if it's time to update (12:00 PM IST)
-            function shouldUpdateVideo() {
-                const now = new Date();
-                
-                // Convert to IST (UTC+5:30)
-                const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
-                const istTime = new Date(now.getTime() + istOffset);
-                
-                const currentHour = istTime.getUTCHours();
-                const currentMinute = istTime.getUTCMinutes();
-                
-                // Check if it's 12:00 PM IST (12:00)
-                console.log(`Current IST: ${currentHour}:${currentMinute}`);
-                return currentHour === 12 && currentMinute === 0;
-            }
-
-            // Function to get today's channel based on date
-            function getTodaysChannel() {
-                const today = new Date();
-                const startOfYear = new Date(today.getFullYear(), 0, 0);
-                const diff = today - startOfYear;
-                const oneDay = 1000 * 60 * 60 * 24;
-                const dayOfYear = Math.floor(diff / oneDay);
-                
-                return CHANNELS[dayOfYear % CHANNELS.length];
-            }
-
-            // Function to update video in Supabase
-            async function updateDailyVideo() {
-                try {
-                    const todaysChannel = getTodaysChannel();
-                    
-                    // Simple rotation through videos
-                    const today = new Date();
-                    const videoIndex = today.getDate() % todaysChannel.video_ids.length;
-                    const videoId = todaysChannel.video_ids[videoIndex];
-                    
-                    const latestVideo = {
-                        id: 'current',
-                        channel_id: todaysChannel.id,
-                        channel_title: todaysChannel.name,
-                        video_id: videoId,
-                        title: `Latest from ${todaysChannel.name}`,
-                        embed_url: `https://www.youtube.com/embed/${videoId}`,
-                        updated_at: new Date().toISOString()
-                    };
-
-                    // Update in Supabase
-                    const { data, error } = await supabase
-                        .from('latest_video')
-                        .upsert([latestVideo])
-                        .select();
-
-                    if (error) throw error;
-                    
-                    console.log(`🔄 Video updated to: ${todaysChannel.name} - ${videoId}`);
-                    return data[0];
-                    
-                } catch (error) {
-                    console.error('Error updating video:', error);
-                    return null;
-                }
-            }
-
-            // Function to load and display the latest video from Supabase
-            async function loadLatestVideoFromSupabase() {
-                try {
-                    // Get the latest video from Supabase
-                    const { data: video, error } = await supabase
-                        .from('latest_video')
-                        .select('*')
-                        .eq('id', 'current')
-                        .single();
-
-                    if (error) {
-                        console.error('Error fetching latest video:', error);
-                        return null;
-                    }
-
-                    return video;
-                } catch (error) {
-                    console.error('Error loading latest video:', error);
-                    return null;
-                }
-            }
-
-            // Function to load and display the latest video
-            async function loadLatestVideo() {
-                try {
-                    // Show loading indicator
-                    document.getElementById('video-loading').style.display = 'flex';
-                    document.getElementById('latest-video-container').style.display = 'none';
-                    document.getElementById('video-info').style.display = 'none';
-                    
-                    // Check if we need to update the video (12:00 PM IST)
-                    if (shouldUpdateVideo()) {
-                        console.log('🕛 12:00 PM IST detected - updating video...');
-                        const updatedVideo = await updateDailyVideo();
-                        if (updatedVideo) {
-                            updateVideoEmbed(updatedVideo);
-                            showUpdateStatus('✅ Video updated automatically at 12:00 PM IST', 'success');
-                        } else {
-                            // If update failed, try to load existing video
-                            const existingVideo = await loadLatestVideoFromSupabase();
-                            if (existingVideo) {
-                                updateVideoEmbed(existingVideo);
-                            } else {
-                                showDefaultVideo();
-                            }
-                        }
-                    } else {
-                        // Not update time, just load the current video
-                        const currentVideo = await loadLatestVideoFromSupabase();
-                        if (currentVideo) {
-                            updateVideoEmbed(currentVideo);
-                        } else {
-                            showDefaultVideo();
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error loading latest video:', error);
-                    showDefaultVideo();
-                } finally {
-                    // Hide loading indicator
-                    document.getElementById('video-loading').style.display = 'none';
-                    document.getElementById('latest-video-container').style.display = 'block';
-                    document.getElementById('video-info').style.display = 'block';
-                }
-            }
-
-            // Function to update the video embed
-            function updateVideoEmbed(video) {
-                const iframe = document.getElementById('latest-video');
-                const titleElement = document.getElementById('video-title');
-                const channelElement = document.getElementById('video-channel');
-                
-                if (iframe && video) {
-                    iframe.src = video.embed_url;
-                    titleElement.textContent = video.title;
-                    channelElement.textContent = `From ${video.channel_title}`;
-                    console.log('Updated video embed to:', video.title);
-                }
-            }
-
-            // Function to show default video
-            function showDefaultVideo() {
-                const iframe = document.getElementById('latest-video');
-                const titleElement = document.getElementById('video-title');
-                const channelElement = document.getElementById('video-channel');
-                
-                if (iframe) {
-                    iframe.src = "https://www.youtube.com/embed/Uop3WpuJ-c8";
-                    titleElement.textContent = "Latest Content from Our Channels";
-                    channelElement.textContent = "Ganesh Solutions";
-                    console.log('Using default video');
-                }
-            }
-
-            // Function to show update status
-            function showUpdateStatus(message, type) {
-                const statusElement = document.getElementById('update-status');
-                statusElement.textContent = message;
-                statusElement.className = `update-status ${type}`;
-                statusElement.style.display = 'block';
-                
-                // Hide after 5 seconds
-                setTimeout(() => {
-                    statusElement.style.display = 'none';
-                }, 5000);
-            }
-
-            // Manual update function - FIXED
-            window.manualUpdate = async function() {
-                try {
-                    showUpdateStatus('🔄 Updating video...', 'info');
-                    
-                    // Update the video in Supabase
-                    const updatedVideo = await updateDailyVideo();
-                    
-                    if (updatedVideo) {
-                        // Immediately update the display with the new video
-                        updateVideoEmbed(updatedVideo);
-                        showUpdateStatus('✅ Video updated successfully!', 'success');
-                    } else {
-                        showUpdateStatus('❌ Failed to update video', 'error');
-                    }
-                } catch (error) {
-                    console.error('Manual update error:', error);
-                    showUpdateStatus('❌ Error updating video: ' + error.message, 'error');
-                }
-            };
-
-            // Load the latest video when page loads
-            loadLatestVideo();
-
-            // Check for 12:00 PM IST every minute
-            setInterval(async () => {
-                if (shouldUpdateVideo()) {
-                    console.log('🕛 12:00 PM IST - Auto-updating video...');
-                    const updatedVideo = await updateDailyVideo();
-                    if (updatedVideo) {
-                        updateVideoEmbed(updatedVideo);
-                        showUpdateStatus('✅ Video updated automatically at 12:00 PM IST', 'success');
-                    }
-                }
-            }, 60000); // Check every minute
-
-            // Also refresh video every 30 minutes (fallback)
-            setInterval(loadLatestVideo, 30 * 60 * 1000);
-        });
-    </script>
-
     <!-- Improved Mobile Navigation Script -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -1395,16 +1157,18 @@
         const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
         
         // Mobile menu functionality
-        mobileMenuToggle.addEventListener('click', function() {
-            mainNav.classList.toggle('active');
-            if (mainNav.classList.contains('active')) {
-                mobileMenuToggle.innerHTML = '<i class="fas fa-times"></i>';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
-            } else {
-                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                document.body.style.overflow = ''; // Restore scrolling
-            }
-        });
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+                if (mainNav.classList.contains('active')) {
+                    mobileMenuToggle.innerHTML = '<i class="fas fa-times"></i>';
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+                } else {
+                    mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = ''; // Restore scrolling
+                }
+            });
+        }
         
         // Mobile dropdown functionality
         dropdownToggles.forEach(toggle => {
@@ -1431,7 +1195,9 @@
             link.addEventListener('click', function() {
                 if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
                     mainNav.classList.remove('active');
-                    mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    if (mobileMenuToggle) {
+                        mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
                     document.body.style.overflow = ''; // Restore scrolling
                 }
             });
@@ -1444,7 +1210,9 @@
                 !mobileMenuToggle.contains(event.target) &&
                 mainNav.classList.contains('active')) {
                 mainNav.classList.remove('active');
-                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
                 document.body.style.overflow = ''; // Restore scrolling
             }
         });
@@ -1453,107 +1221,11 @@
         window.addEventListener('resize', function() {
             if (window.innerWidth > 992 && mainNav.classList.contains('active')) {
                 mainNav.classList.remove('active');
-                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
                 document.body.style.overflow = ''; // Restore scrolling
             }
-        });
-        
-        // Original script for interactive elements
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navMenu = document.querySelector('nav ul');
-        
-        menuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('show');
-        });
-        
-        // Add active class to clicked nav items
-        const navItems = document.querySelectorAll('nav ul li a');
-        navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                // Don't prevent default for dropdown links
-                if (!this.querySelector('i.fa-chevron-down')) {
-                    navItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                }
-                
-                // Close mobile menu after clicking a link
-                if (window.innerWidth <= 992) {
-                    navMenu.classList.remove('show');
-                    // also close any open dropdowns
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
-                }
-            });
-        });
-        
-        // Add subtle animation to service cards on scroll
-        const serviceCards = document.querySelectorAll('.service-card');
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        serviceCards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(card);
-        });
-        
-        // Improved dropdown handling - only for desktop devices
-        let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        
-        if (isTouchDevice && window.innerWidth > 992) {
-            // For touch devices, add click handlers for dropdowns
-            const dropdownParents = document.querySelectorAll('nav ul li:has(.dropdown-menu)');
-            
-            dropdownParents.forEach(parent => {
-                const dropdownLink = parent.querySelector('a');
-                const dropdownMenu = parent.querySelector('.dropdown-menu');
-                
-                dropdownLink.addEventListener('click', function(e) {
-                    if (window.innerWidth <= 992) {
-                        e.preventDefault();
-                        // Close all other dropdowns
-                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                            if (menu !== dropdownMenu) {
-                                menu.classList.remove('active');
-                            }
-                        });
-                        // Toggle current dropdown
-                        dropdownMenu.classList.toggle('active');
-                    }
-                });
-            });
-            
-            // Close dropdowns when clicking outside (for mobile)
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('nav ul li:has(.dropdown-menu)')) {
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                        menu.classList.remove('active');
-                    });
-                }
-            });
-        }
-        
-        // Small enhancement: on resize/orientation change clean up mobile menu and dropdowns
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                if (window.innerWidth > 992) {
-                    navMenu.classList.remove('show');
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
-                }
-            }, 150);
         });
     });
     </script>
