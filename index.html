@@ -104,6 +104,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0; /* Prevent logo from shrinking */
         }
         
         /* Make logo image responsive and remove large scale on small screens */
@@ -115,20 +116,34 @@
             transform: scale(1.5);
             transition: transform .2s, height .2s, margin .2s;
             max-width: 100%;
-			border-radius: 50%;
-    		object-fit: cover;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* CHANGED: Added nowrap and adjusted text sizing */
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: hidden;
         }
         
         .logo-text {
             font-size: 24px;
             font-weight: 600;
             color: white;
+            white-space: nowrap; /* Ensure text stays on one line */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis if text overflows */
         }
         
         .tagline {
             font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
             margin-top: 5px;
+            white-space: nowrap; /* Ensure text stays on one line */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis if text overflows */
         }
         
         nav ul {
@@ -735,8 +750,23 @@
                 display: none;
             }
             
-            .logo-text { font-size: 20px; }
-            .tagline { font-size: 13px; }
+            /* CHANGED: Adjusted font sizes for mobile to prevent wrapping */
+            .logo-text { 
+                font-size: 18px; 
+            }
+            .tagline { 
+                font-size: 12px; 
+            }
+            
+            /* CHANGED: Adjusted mobile header logo layout */
+            .mobile-header .logo {
+                flex: 1;
+                justify-content: flex-start;
+            }
+            
+            .mobile-header .logo-image {
+                margin-right: 10px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -774,6 +804,14 @@
             .services {
                 scroll-margin-top: 140px;
             }
+            
+            /* CHANGED: Further adjusted font sizes for smaller screens */
+            .logo-text { 
+                font-size: 16px; 
+            }
+            .tagline { 
+                font-size: 11px; 
+            }
         }
         
         @media (max-width: 480px) {
@@ -801,6 +839,18 @@
             nav ul li a {
                 padding: 10px;
                 display: block;
+            }
+            
+            /* CHANGED: Final adjustments for very small screens */
+            .logo-text { 
+                font-size: 14px; 
+            }
+            .tagline { 
+                font-size: 10px; 
+            }
+            
+            .mobile-header .logo-image {
+                height: 40px;
             }
         }
 
@@ -900,11 +950,11 @@
 <body>
     <!-- NEW: Mobile Header for Mobile Devices -->
     <div class="mobile-header container">
-        <div class="logo" style="margin-left: -800px;">
+        <div class="logo">
             <img src="GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
-            <div>
-                <div class="logo-text" style="width: 100%;">Ganesh Solutions</div>
-                <div class="tagline" style="width: 100%;">Traditional And Technical Solutions</div>
+            <div class="logo-text-container">
+                <div class="logo-text">Ganesh Solutions</div>
+                <div class="tagline">Traditional And Technical Solutions</div>
             </div>
         </div>
         <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
@@ -918,7 +968,7 @@
             <div class="header-content">
                 <div class="logo">
                     <img src="GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
-                    <div>
+                    <div class="logo-text-container">
                         <div class="logo-text">Ganesh Solutions</div>
                         <div class="tagline">Traditional And Technical Solutions</div>
                     </div>
@@ -1208,10 +1258,3 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
-
-
-
-
-
-
-
