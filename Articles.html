@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles | Your Name</title>
+    <title>Blog & Articles | Your Name</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- LUNAR ASTRO STYLE CSS --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* --- RESET & BASICS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary-color: #1a237e; /* Deep Navy */
-            --accent-color: #d84315;  /* Saffron */
+            --primary-color: #1a237e; /* Deep Navy Blue */
+            --accent-color: #d84315;  /* Deep Orange/Saffron */
             --text-dark: #2c3e50;
             --text-light: #546e7a;
             --bg-light: #f4f6f8;
@@ -23,176 +27,286 @@
             --font-body: 'Open Sans', sans-serif;
         }
 
-        body { 
-            font-family: var(--font-body); 
-            line-height: 1.7; 
-            color: var(--text-dark); 
-            background-color: var(--bg-light); 
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            font-size: 16px;
         }
 
-        a { text-decoration: none; color: inherit; transition: 0.3s ease; }
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s ease;
+        }
+
+        ul {
+            list-style: none;
+        }
 
         /* --- HEADER --- */
-        header { 
-            background: var(--white); 
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            border-top: 4px solid var(--accent-color); 
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-top: 4px solid var(--accent-color);
         }
 
-        .navbar { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 15px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .logo { 
-            font-family: var(--font-heading); 
-            font-weight: 900; 
-            font-size: 1.5rem; 
-            color: var(--primary-color); 
-            display: flex; 
-            align-items: center; 
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
-        
-        .logo img { width: 40px; height: 40px; border-radius: 50%; }
 
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 600; color: var(--text-dark); }
-        .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
-
-        /* --- LAYOUT --- */
-        .container { 
-            max-width: 1200px; 
-            margin: 40px auto; 
-            padding: 0 20px; 
-            min-height: 60vh;
+        .logo img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
-        /* --- TITLES --- */
-        .page-header { 
-            text-align: center; 
-            margin-bottom: 50px; 
-            border-bottom: 1px solid #e0e0e0; 
-            padding-bottom: 20px; 
+        .nav-links {
+            display: flex;
+            gap: 30px;
         }
-        
-        .page-header h1 { 
-            font-family: var(--font-heading); 
-            font-size: 3rem; 
-            color: var(--primary-color); 
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-color);
+        }
+
+        /* --- PAGE LAYOUT --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 3fr 1fr; /* Main Content vs Sidebar */
+            gap: 40px;
+        }
+
+        /* --- HERO / PAGE TITLE --- */
+        .page-header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: var(--primary-color);
             margin-bottom: 10px;
         }
 
         .page-header p {
-             color: var(--text-light);
-             font-size: 1.1rem;
+            font-family: var(--font-heading);
+            font-style: italic;
+            color: var(--text-light);
+            font-size: 1.2rem;
         }
 
         /* --- ARTICLE GRID --- */
-        .articles-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 30px; 
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        /* --- ARTICLE CARD --- */
-        .article-card { 
-            background: var(--white); 
-            border: 1px solid #eee; 
-            border-radius: 6px; 
-            overflow: hidden; 
-            transition: transform 0.3s, box-shadow 0.3s; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
+        .article-card {
+            background: var(--white);
+            border: 1px solid #eee;
+            border-radius: 4px; /* Slight radius, sharper look */
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            border-color: var(--accent-color);
+        }
+
+        .article-image {
+            height: 200px;
+            background-color: #ddd;
             position: relative;
+            overflow: hidden;
         }
-
-        .article-card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-            border-color: var(--accent-color); 
-        }
-
-        .article-link-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
-        }
-
-        .article-image { 
-            height: 200px; 
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%); 
-            display: flex; 
-            align-items: center; 
+        
+        /* Placeholder for images to ensure they fill nicely */
+        .article-image img, .article-image div {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            color: white;
             font-size: 3rem;
+            background: #f0f0f0;
+            color: #ccc;
         }
 
-        .article-content { 
-            padding: 25px; 
-            display: flex; 
-            flex-direction: column; 
-            flex-grow: 1; 
+        .article-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
-        .article-date { 
-            font-size: 0.8rem; 
-            color: var(--accent-color); 
-            font-weight: 700; 
-            margin-bottom: 10px; 
+        .article-meta {
+            font-size: 0.8rem;
+            color: var(--accent-color);
             text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
-        .article-content h3 { 
-            font-family: var(--font-heading); 
-            font-size: 1.4rem; 
-            color: var(--text-dark); 
-            margin-bottom: 15px; 
-            line-height: 1.3; 
+        .article-content h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.3;
         }
 
-        .article-content p { 
-            color: var(--text-light); 
-            font-size: 0.95rem; 
-            margin-bottom: 20px; 
-            flex-grow: 1; 
+        .article-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .read-more-btn { 
-            margin-top: auto; 
-            font-weight: 700; 
-            color: var(--primary-color); 
-            font-size: 0.9rem; 
-            z-index: 2; 
+        .read-more-btn {
+            margin-top: auto;
+            display: inline-block;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            border-bottom: 2px solid transparent;
+            width: fit-content;
         }
 
-        /* Loading State */
-        #loading-msg { text-align: center; color: var(--text-light); font-style: italic; margin-top: 50px;}
+        .article-card:hover .read-more-btn {
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        /* --- SIDEBAR (Classic Blog Feature) --- */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar-widget {
+            background: var(--white);
+            padding: 25px;
+            border: 1px solid #eee;
+            border-top: 3px solid var(--primary-color);
+        }
+
+        .sidebar-widget h4 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .category-list li {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 8px 0;
+        }
+        
+        .category-list li:last-child { border: none; }
+
+        .category-list a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
 
         /* --- FOOTER --- */
         footer {
-            margin-top: 80px;
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 60px 0;
+            margin-top: 60px;
             text-align: center;
-            padding: 40px;
-            border-top: 1px solid #eee;
-            color: var(--text-light);
-            font-size: 0.9rem;
+        }
+
+        .footer-content h2 {
+            font-family: var(--font-heading);
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .footer-links a { opacity: 0.8; }
+        .footer-links a:hover { opacity: 1; color: var(--accent-color); }
+
+        .copyright {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: inline-block;
+            width: 80%;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr; /* Stack sidebar below content */
+            }
+            .sidebar {
+                display: none; /* Optional: Hide sidebar on mobile or move to bottom */
+            }
         }
 
         @media (max-width: 768px) {
-            .navbar { flex-direction: column; gap: 15px; }
-            .page-header h1 { font-size: 2rem; }
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -201,8 +315,8 @@
     <header>
         <div class="navbar">
             <div class="logo">
-                <img src="Profilepic.jpg" alt="Logo" onerror="this.style.display='none'"> 
-                <span>Your Name</span>
+                <img src="Profilepic.jpg" alt="Logo">
+                <span>Your Brand</span>
             </div>
             <nav class="nav-links">
                 <a href="index.html">Home</a>
@@ -214,93 +328,110 @@
     </header>
 
     <div class="container">
+        
         <div class="page-header">
             <h1>Knowledge Base</h1>
-            <p>Exploring Vedic Astrology, Meditation & Life Patterns</p>
+            <p>Insights on Astrology, Spirituality, and Life.</p>
         </div>
 
-        <div id="articles-container" class="articles-grid">
+        <main>
+            <div class="articles-grid">
+                
+                <article class="article-card">
+                    <div class="article-image">
+                        <div>🌙</div> 
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta">Vedic Astrology • Jan 20, 2024</div>
+                        <h3>Moon Phases and Meditation</h3>
+                        <p>Discover how the waxing and waning of the moon impacts your mental state and meditation practices according to ancient texts.</p>
+                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image">
+                        <div>🪐</div>
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta">Planetary Transits • Jan 15, 2024</div>
+                        <h3>The Impact of Saturn Transit</h3>
+                        <p>Saturn is the great judge of the zodiac. Learn what this major transit means for your ascendant and how to prepare.</p>
+                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image">
+                        <div>🔮</div>
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta">Spirituality • Dec 10, 2023</div>
+                        <h3>Understanding Karma</h3>
+                        <p>A deep dive into the philosophy of cause and effect. How our past actions shape our present reality.</p>
+                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-image">
+                        <div>✨</div>
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta">Remedies • Nov 22, 2023</div>
+                        <h3>Simple Remedies for Peace</h3>
+                        <p>Practical astrological remedies you can perform at home to bring peace and stability to your environment.</p>
+                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                    </div>
+                </article>
+
             </div>
-        
-        <div id="loading-msg">Loading articles from blog...</div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h4>Categories</h4>
+                <ul class="category-list">
+                    <li><a href="#">Vedic Astrology (12)</a></li>
+                    <li><a href="#">Meditation (8)</a></li>
+                    <li><a href="#">Case Studies (5)</a></li>
+                    <li><a href="#">Spirituality (15)</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h4>Featured Course</h4>
+                <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px;">Learn the basics of reading a chart in our upcoming workshop.</p>
+                <a href="#" style="background: var(--primary-color); color: white; padding: 10px 20px; display: block; text-align: center; border-radius: 4px; font-weight: 600;">View Details</a>
+            </div>
+        </aside>
+
     </div>
 
     <footer>
-        &copy; 2025 Your Name. All rights reserved.
+        <div class="footer-content">
+            <h2>Your Brand Name</h2>
+            <div class="footer-links">
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact</a>
+            </div>
+            <span class="copyright">&copy; 2024 Your Name. All rights reserved.</span>
+        </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Path to your feed.xml inside the blog folder
-            const feedUrl = 'blog/feed.xml';
-            const container = document.getElementById('articles-container');
-            const loadingMsg = document.getElementById('loading-msg');
-
-            fetch(feedUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Feed not found");
-                    return response.text();
-                })
-                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-                .then(data => {
-                    const items = data.querySelectorAll("item");
-                    
-                    if(items.length === 0) {
-                        loadingMsg.textContent = "No articles found yet.";
-                        return;
-                    }
-
-                    loadingMsg.style.display = 'none';
-
-                    items.forEach(item => {
-                        // Extract data from XML
-                        const title = item.querySelector("title").textContent;
-                        const link = item.querySelector("link").textContent;
-                        const pubDate = new Date(item.querySelector("pubDate").textContent);
-                        
-                        // Create readable date
-                        const dateStr = pubDate.toLocaleDateString('en-US', { 
-                            year: 'numeric', month: 'short', day: 'numeric' 
-                        });
-
-                        // Get description (stripped of HTML tags for preview)
-                        let description = item.querySelector("description").textContent;
-                        const tempDiv = document.createElement("div");
-                        tempDiv.innerHTML = description;
-                        const plainText = tempDiv.textContent || tempDiv.innerText || "";
-                        const snippet = plainText.substring(0, 120) + "...";
-
-                        // Build Card HTML
-                        const card = document.createElement('article');
-                        card.className = 'article-card';
-                        
-                        card.innerHTML = `
-                            <a href="${link}" class="article-link-overlay"></a>
-                            <div class="article-image">
-                                <div>🌙</div> 
-                            </div>
-                            <div class="article-content">
-                                <div class="article-date">${dateStr}</div>
-                                <h3>${title}</h3>
-                                <p>${snippet}</p>
-                                <span class="read-more-btn">Read Full Article →</span>
-                            </div>
-                        `;
-                        
-                        container.appendChild(card);
-                    });
-                })
-                .catch(err => {
-                    console.error(err);
-                    loadingMsg.innerHTML = `
-                        Unable to load articles.<br>
-                        <a href="blog/index.html" style="color:#d84315; font-weight:bold; text-decoration:underline; margin-top:10px; display:inline-block;">
-                            Click here to visit the Blog directly
-                        </a>
-                    `;
-                });
+        // Simple script to make whole card clickable for better UX
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Find the link inside the card
+                const link = this.querySelector('a.read-more-btn');
+                if(link && e.target !== link) {
+                    link.click();
+                }
+            });
+            card.style.cursor = 'pointer';
         });
     </script>
-
 </body>
 </html>
