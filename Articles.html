@@ -146,6 +146,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .article-card:hover {
@@ -170,8 +171,8 @@
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            background: #f0f0f0;
-            color: #ccc;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
         .article-content {
@@ -188,6 +189,16 @@
             font-weight: 700;
             margin-bottom: 10px;
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .article-date {
+            background: rgba(216, 67, 21, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
         }
 
         .article-content h3 {
@@ -216,10 +227,21 @@
             font-size: 0.9rem;
             border-bottom: 2px solid transparent;
             width: fit-content;
+            padding-bottom: 3px;
         }
 
         .article-card:hover .read-more-btn {
             border-bottom: 2px solid var(--accent-color);
+        }
+
+        /* Article link overlay for better UX */
+        .article-link-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
 
         /* --- SIDEBAR (Classic Blog Feature) --- */
@@ -295,7 +317,8 @@
                 grid-template-columns: 1fr; /* Stack sidebar below content */
             }
             .sidebar {
-                display: none; /* Optional: Hide sidebar on mobile or move to bottom */
+                order: 3;
+                margin-top: 40px;
             }
         }
 
@@ -307,6 +330,68 @@
             .page-header h1 {
                 font-size: 2rem;
             }
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Article page styling */
+        .article-page {
+            grid-column: 1 / -1;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 50px;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .article-page .article-image {
+            height: 300px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .article-page h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .article-content-full {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .article-content-full h2 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            margin: 40px 0 20px 0;
+            font-size: 1.8rem;
+        }
+
+        .article-content-full p {
+            margin-bottom: 25px;
+        }
+
+        .back-to-articles {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-to-articles:hover {
+            background: var(--accent-color);
+            color: white;
         }
     </style>
 </head>
@@ -337,52 +422,76 @@
         <main>
             <div class="articles-grid">
                 
+                <!-- Article 1 -->
                 <article class="article-card">
                     <div class="article-image">
                         <div>🌙</div> 
                     </div>
                     <div class="article-content">
-                        <div class="article-meta">Vedic Astrology • Jan 20, 2024</div>
+                        <div class="article-meta">
+                            <span class="article-category">Vedic Astrology</span>
+                            <span class="article-date">Jan 20, 2024</span>
+                        </div>
                         <h3>Moon Phases and Meditation</h3>
                         <p>Discover how the waxing and waning of the moon impacts your mental state and meditation practices according to ancient texts.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                        <a href="blog/2024/01/20/moon-phases-meditation.html" class="read-more-btn">Read Full Article →</a>
                     </div>
+                    <!-- Overlay for whole card click -->
+                    <a href="blog/2024/01/20/moon-phases-meditation.html" class="article-link-overlay" aria-label="Read article: Moon Phases and Meditation"></a>
                 </article>
 
+                <!-- Article 2 -->
                 <article class="article-card">
                     <div class="article-image">
                         <div>🪐</div>
                     </div>
                     <div class="article-content">
-                        <div class="article-meta">Planetary Transits • Jan 15, 2024</div>
+                        <div class="article-meta">
+                            <span class="article-category">Planetary Transits</span>
+                            <span class="article-date">Jan 15, 2024</span>
+                        </div>
                         <h3>The Impact of Saturn Transit</h3>
                         <p>Saturn is the great judge of the zodiac. Learn what this major transit means for your ascendant and how to prepare.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                        <a href="blog/2024/01/15/article-1.html" class="read-more-btn">Read Full Article →</a>
                     </div>
+                    <!-- Overlay for whole card click -->
+                    <a href="blog/2024/01/15/article-1.html" class="article-link-overlay" aria-label="Read article: The Impact of Saturn Transit"></a>
                 </article>
 
+                <!-- Article 3 -->
                 <article class="article-card">
                     <div class="article-image">
                         <div>🔮</div>
                     </div>
                     <div class="article-content">
-                        <div class="article-meta">Spirituality • Dec 10, 2023</div>
+                        <div class="article-meta">
+                            <span class="article-category">Spirituality</span>
+                            <span class="article-date">Dec 10, 2023</span>
+                        </div>
                         <h3>Understanding Karma</h3>
                         <p>A deep dive into the philosophy of cause and effect. How our past actions shape our present reality.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                        <a href="blog/2023/12/10/understanding-karma.html" class="read-more-btn">Read Full Article →</a>
                     </div>
+                    <!-- Overlay for whole card click -->
+                    <a href="blog/2023/12/10/understanding-karma.html" class="article-link-overlay" aria-label="Read article: Understanding Karma"></a>
                 </article>
 
+                <!-- Article 4 -->
                 <article class="article-card">
                     <div class="article-image">
                         <div>✨</div>
                     </div>
                     <div class="article-content">
-                        <div class="article-meta">Remedies • Nov 22, 2023</div>
+                        <div class="article-meta">
+                            <span class="article-category">Remedies</span>
+                            <span class="article-date">Nov 22, 2023</span>
+                        </div>
                         <h3>Simple Remedies for Peace</h3>
                         <p>Practical astrological remedies you can perform at home to bring peace and stability to your environment.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                        <a href="blog/2023/11/22/simple-remedies-for-peace.html" class="read-more-btn">Read Full Article →</a>
                     </div>
+                    <!-- Overlay for whole card click -->
+                    <a href="blog/2023/11/22/simple-remedies-for-peace.html" class="article-link-overlay" aria-label="Read article: Simple Remedies for Peace"></a>
                 </article>
 
             </div>
@@ -392,10 +501,10 @@
             <div class="sidebar-widget">
                 <h4>Categories</h4>
                 <ul class="category-list">
-                    <li><a href="#">Vedic Astrology (12)</a></li>
-                    <li><a href="#">Meditation (8)</a></li>
-                    <li><a href="#">Case Studies (5)</a></li>
-                    <li><a href="#">Spirituality (15)</a></li>
+                    <li><a href="#" onclick="filterArticles('vedic-astrology')">Vedic Astrology (12)</a></li>
+                    <li><a href="#" onclick="filterArticles('meditation')">Meditation (8)</a></li>
+                    <li><a href="#" onclick="filterArticles('case-studies')">Case Studies (5)</a></li>
+                    <li><a href="#" onclick="filterArticles('spirituality')">Spirituality (15)</a></li>
                 </ul>
             </div>
 
@@ -403,6 +512,15 @@
                 <h4>Featured Course</h4>
                 <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px;">Learn the basics of reading a chart in our upcoming workshop.</p>
                 <a href="#" style="background: var(--primary-color); color: white; padding: 10px 20px; display: block; text-align: center; border-radius: 4px; font-weight: 600;">View Details</a>
+            </div>
+
+            <div class="sidebar-widget">
+                <h4>Quick Links</h4>
+                <ul class="category-list">
+                    <li><a href="blog/index.html">Full Blog Index</a></li>
+                    <li><a href="AboutMe.html">About the Author</a></li>
+                    <li><a href="MessageMe.html">Book a Consultation</a></li>
+                </ul>
             </div>
         </aside>
 
@@ -412,26 +530,97 @@
         <div class="footer-content">
             <h2>Your Brand Name</h2>
             <div class="footer-links">
-                <a href="#">Terms & Conditions</a>
+                <a href="Terms.html">Terms & Conditions</a>
                 <a href="#">Privacy Policy</a>
-                <a href="#">Contact</a>
+                <a href="MessageMe.html">Contact</a>
             </div>
             <span class="copyright">&copy; 2024 Your Name. All rights reserved.</span>
         </div>
     </footer>
 
     <script>
-        // Simple script to make whole card clickable for better UX
-        document.querySelectorAll('.article-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                // Find the link inside the card
-                const link = this.querySelector('a.read-more-btn');
-                if(link && e.target !== link) {
-                    link.click();
-                }
+        // Enhanced click handling for article cards
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make entire article card clickable
+            document.querySelectorAll('.article-card').forEach(card => {
+                card.style.cursor = 'pointer';
+                
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on the "Read More" link or overlay
+                    if (!e.target.classList.contains('read-more-btn') && 
+                        !e.target.classList.contains('article-link-overlay')) {
+                        
+                        // Find the main article link
+                        const link = this.querySelector('.read-more-btn');
+                        if (link && link.href) {
+                            window.location.href = link.href;
+                        }
+                    }
+                });
+
+                // Add keyboard navigation
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const link = this.querySelector('.read-more-btn');
+                        if (link && link.href) {
+                            window.location.href = link.href;
+                        }
+                    }
+                });
             });
-            card.style.cursor = 'pointer';
+
+            // Check if we're on GitHub Pages and adjust links if needed
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            if (isGitHubPages) {
+                // Update article links for GitHub Pages structure
+                const repoName = window.location.pathname.split('/')[1] || 'Exploring';
+                
+                document.querySelectorAll('.read-more-btn').forEach(link => {
+                    if (link.href.includes('blog/')) {
+                        const currentHref = link.getAttribute('href');
+                        // Only prepend if it's a relative path
+                        if (currentHref.startsWith('blog/')) {
+                            link.setAttribute('href', `/${repoName}/${currentHref}`);
+                        }
+                    }
+                });
+            }
+
+            // Category filter function (if you want to implement filtering)
+            window.filterArticles = function(category) {
+                alert(`Filtering by ${category} - This feature can be implemented with JavaScript filtering. For now, all articles are shown.`);
+                return false;
+            };
         });
+
+        // Simple URL parameter handler for blog post loading
+        function loadArticleFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const article = urlParams.get('article');
+            
+            if (article) {
+                // This would load article content dynamically
+                console.log(`Loading article: ${article}`);
+                // In a real implementation, you would fetch and display the article here
+            }
+        }
+
+        // Initialize
+        loadArticleFromURL();
     </script>
+
+    <!-- Fallback for browsers without JavaScript -->
+    <noscript>
+        <style>
+            .article-link-overlay {
+                display: none;
+            }
+            .article-card {
+                cursor: default;
+            }
+        </style>
+    </noscript>
 </body>
 </html>
