@@ -1,43 +1,52 @@
 # .github/workflows/deploy-blog.yml
-name: Deploy Blog Only
+name: Deploy Blog
 
 on:
   push:
     paths:
-      - 'blog/**'           # Only trigger on blog changes
-      - '.github/workflows/deploy-blog.yml'
-  workflow_dispatch:        # Allow manual trigger
+      - 'blog/**'
+  workflow_dispatch:
 
-# Add this to prevent conflicts with static.yml
-concurrency:
-  group: "pages-blog"      # Different group than your main site
+percurrency:
+  group: "blog-${{ github.ref }}"
   cancel-in-progress: false
 
 jobs:
-  build-blog:
+  build-and-deploy-blog:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # ← CRITICAL: Add this line
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Setup Ruby for Jekyll
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
+          bundler-cache: true
           
-      - name: Build Jekyll Blog
+      - name: Install Jekyll
         run: |
-          echo "🚀 Building only the blog..."
           cd blog
-          gem install jekyll --no-document
-          jekyll build --destination ../_site/blog
-          echo "✅ Blog built at _site/blog/"
+          gem install jekyll bundler --no-document
+          bundle install  # if you have Gemfile
+          
+      - name: Build Jekyll site
+        run: |
+          cd blog
+          jekyll build --verbose --trace --destination ../_site/blog
+          ls -la ../_site/blog/  # Debug: List built files
           
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4  # ← Use v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site/blog          # Deploy only blog
-          destination_dir: ./blog             # Output to /blog subfolder
-          keep_files: false                   # Don't keep other files
+          publish_dir: ./_site/blog
+          destination_dir: ./blog
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy Blog: ${{ github.sha }}'
