@@ -1,0 +1,39 @@
+<!-- blog/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/blog.css' | relative_url }}">
+    <style>
+        /* Inline critical CSS for speed */
+        .blog-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .post { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .post-title a { color: #1a237e; text-decoration: none; }
+        .post-title a:hover { text-decoration: underline; }
+        .back-home { display: inline-block; margin-bottom: 20px; color: #4a148c; }
+    </style>
+</head>
+<body class="blog-container">
+    <a href="/" class="back-home">← Back to Main Site</a>
+    <h1>{{ site.title }}</h1>
+    <p>{{ site.description }}</p>
+    
+    <div class="posts">
+        {% for post in site.posts %}
+        <article class="post">
+            <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+            <div class="post-meta">{{ post.date | date: "%B %d, %Y" }}</div>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            <a href="{{ post.url }}">Read more →</a>
+        </article>
+        {% endfor %}
+    </div>
+    
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+        <p>© {{ site.time | date: '%Y' }} {{ site.title }}</p>
+        <p><a href="/blog/feed.xml">RSS Feed</a> • <a href="/">Main Site</a></p>
+    </footer>
+</body>
+</html>
