@@ -6,7 +6,6 @@
     <title>Articles | Your Name</title>
     <link rel="stylesheet" href="blog/assets/blog.css">
     <style>
-        /* Additional styles for the articles page */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +30,6 @@
             margin-top: 20px;
         }
 
-        /* Header & Navigation */
         header {
             display: flex;
             justify-content: space-between;
@@ -84,7 +82,6 @@
             border-bottom: 2px solid #3498db;
         }
 
-        /* Page Header */
         .page-header {
             text-align: center;
             margin-bottom: 50px;
@@ -105,7 +102,54 @@
             margin: 0 auto;
         }
 
-        /* Articles Grid */
+        .blog-redirect {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .blog-redirect h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .blog-redirect p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: white;
+            color: #764ba2;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .featured-articles {
+            margin-top: 60px;
+        }
+
+        .featured-articles h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            font-size: 1.8em;
+        }
+
         .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -167,7 +211,7 @@
             color: #666;
         }
 
-        .article-content h2 {
+        .article-content h3 {
             font-size: 1.4em;
             color: #2c3e50;
             margin-bottom: 15px;
@@ -199,38 +243,6 @@
             color: white;
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #eee;
-        }
-
-        .pagination a {
-            padding: 8px 16px;
-            text-decoration: none;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #555;
-            transition: all 0.3s;
-        }
-
-        .pagination a:hover {
-            background: #3498db;
-            color: white;
-            border-color: #3498db;
-        }
-
-        .pagination a.active {
-            background: #3498db;
-            color: white;
-            border-color: #3498db;
-        }
-
-        /* Footer */
         footer {
             text-align: center;
             padding: 40px 0;
@@ -256,7 +268,6 @@
             color: #3498db;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -281,19 +292,9 @@
             .page-header h1 {
                 font-size: 2em;
             }
-        }
 
-        @media (max-width: 480px) {
-            .logo h1 {
-                font-size: 20px;
-            }
-
-            .article-image {
-                height: 150px;
-            }
-
-            .article-content {
-                padding: 15px;
+            .blog-redirect {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -318,68 +319,70 @@
 
         <!-- Page Header -->
         <section class="page-header">
-            <h1>Latest Articles</h1>
-            <p>Exploring thoughts, ideas, and insights on various topics. Dive into my latest writings and discoveries.</p>
+            <h1>Blog & Articles</h1>
+            <p>Welcome to my blog! Here you'll find my latest writings, thoughts, and explorations.</p>
         </section>
 
-        <!-- Articles Grid -->
-        <div class="articles-grid">
-            <!-- Article 1 -->
-            <article class="article-card">
-                <div class="article-image">
-                    <span>🌙</span>
-                </div>
-                <div class="article-content">
-                    <div class="article-meta">
-                        <span class="article-date">January 20, 2024</span>
-                        <span class="article-tag">Meditation</span>
-                    </div>
-                    <h2>Moon Phases and Their Impact on Meditation</h2>
-                    <p>Explore how different moon phases can enhance your meditation practice and spiritual connection. Learn to align your inner rhythm with the lunar cycle...</p>
-                    <a href="blog/_posts/2024-01-20-moon-phases-meditation.md" class="read-more">Read Article →</a>
-                </div>
-            </article>
+        <!-- Blog Redirect Banner -->
+        <section class="blog-redirect">
+            <h2>Visit the Blog</h2>
+            <p>For the best reading experience with formatted articles, comments, and full features, visit my dedicated blog page.</p>
+            <a href="blog/index.html" class="btn-primary">Go to Full Blog →</a>
+        </section>
 
-            <!-- Article 2 -->
-            <article class="article-card">
-                <div class="article-image">
-                    <span>✨</span>
-                </div>
-                <div class="article-content">
-                    <div class="article-meta">
-                        <span class="article-date">January 15, 2024</span>
-                        <span class="article-tag">Astronomy</span>
+        <!-- Featured Articles -->
+        <section class="featured-articles">
+            <h2>Featured Articles</h2>
+            <div class="articles-grid">
+                <!-- Article 1 -->
+                <article class="article-card">
+                    <div class="article-image">
+                        <span>🌙</span>
                     </div>
-                    <h2>Understanding Cosmic Patterns</h2>
-                    <p>A deep dive into the fascinating patterns that govern our universe and how they influence our daily lives. Discover the cosmic connections...</p>
-                    <a href="blog/_posts/2024-01-15-article-1.md" class="read-more">Read Article →</a>
-                </div>
-            </article>
-
-            <!-- Article 3 (Example - add more as needed) -->
-            <article class="article-card">
-                <div class="article-image">
-                    <span>🌟</span>
-                </div>
-                <div class="article-content">
-                    <div class="article-meta">
-                        <span class="article-date">December 28, 2023</span>
-                        <span class="article-tag">Reflection</span>
+                    <div class="article-content">
+                        <div class="article-meta">
+                            <span class="article-date">January 20, 2024</span>
+                            <span class="article-tag">Meditation</span>
+                        </div>
+                        <h3>Moon Phases and Their Impact on Meditation</h3>
+                        <p>Explore how different moon phases can enhance your meditation practice and spiritual connection. Learn to align your inner rhythm with the lunar cycle.</p>
+                        <a href="blog/2024/01/20/moon-phases-meditation.html" class="read-more">Read Article →</a>
                     </div>
-                    <h2>Year-End Reflections and Future Projections</h2>
-                    <p>Looking back at the lessons learned and setting intentions for the coming year. A journey through self-discovery and growth...</p>
-                    <a href="#" class="read-more">Read Article →</a>
-                </div>
-            </article>
-        </div>
+                </article>
 
-        <!-- Pagination -->
-        <div class="pagination">
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">Next →</a>
-        </div>
+                <!-- Article 2 -->
+                <article class="article-card">
+                    <div class="article-image">
+                        <span>✨</span>
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta">
+                            <span class="article-date">January 15, 2024</span>
+                            <span class="article-tag">Astronomy</span>
+                        </div>
+                        <h3>Understanding Cosmic Patterns</h3>
+                        <p>A deep dive into the fascinating patterns that govern our universe and how they influence our daily lives. Discover the cosmic connections.</p>
+                        <a href="blog/2024/01/15/article-1.html" class="read-more">Read Article →</a>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="article-card">
+                    <div class="article-image">
+                        <span>🔭</span>
+                    </div>
+                    <div class="article-content">
+                        <div class="article-meta">
+                            <span class="article-date">December 10, 2023</span>
+                            <span class="article-tag">Science</span>
+                        </div>
+                        <h3>The Science Behind Starlight</h3>
+                        <p>Understanding how light travels across the universe and what it tells us about distant stars and galaxies.</p>
+                        <a href="blog/index.html" class="read-more">View in Blog →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
     </div>
 
     <!-- Footer -->
@@ -393,8 +396,8 @@
     </footer>
 
     <script>
-        // Simple script for active navigation
         document.addEventListener('DOMContentLoaded', function() {
+            // Set active nav link
             const currentPage = window.location.pathname.split('/').pop();
             const navLinks = document.querySelectorAll('nav a');
             
@@ -404,15 +407,15 @@
                 }
             });
 
-            // Article click handling
+            // Make entire article card clickable
             const articleCards = document.querySelectorAll('.article-card');
             articleCards.forEach(card => {
+                const link = card.querySelector('.read-more');
+                card.style.cursor = 'pointer';
+                
                 card.addEventListener('click', function(e) {
                     if (!e.target.classList.contains('read-more')) {
-                        const link = this.querySelector('.read-more');
-                        if (link) {
-                            window.location.href = link.getAttribute('href');
-                        }
+                        window.location.href = link.getAttribute('href');
                     }
                 });
             });
