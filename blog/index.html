@@ -1,39 +1,176 @@
-<!-- blog/index.html -->
+---
+layout: default
+title: Blog
+permalink: /blog/
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ site.title }}</title>
+    <title>{{ page.title }}</title>
     <link rel="stylesheet" href="{{ '/assets/blog.css' | relative_url }}">
     <style>
-        /* Inline critical CSS for speed */
-        .blog-container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .post { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-        .post-title a { color: #1a237e; text-decoration: none; }
-        .post-title a:hover { text-decoration: underline; }
-        .back-home { display: inline-block; margin-bottom: 20px; color: #4a148c; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .site-title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .site-description {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .back-to-home {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-to-home:hover {
+            text-decoration: underline;
+        }
+
+        .post-list {
+            list-style: none;
+        }
+
+        .post-item {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .post-date {
+            background: #f0f7ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #3498db;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .post-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .post-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .post-title a:hover {
+            color: #3498db;
+        }
+
+        .post-excerpt {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .read-more:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
     </style>
 </head>
-<body class="blog-container">
-    <a href="/" class="back-home">← Back to Main Site</a>
-    <h1>{{ site.title }}</h1>
-    <p>{{ site.description }}</p>
-    
-    <div class="posts">
-        {% for post in site.posts %}
-        <article class="post">
-            <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
-            <div class="post-meta">{{ post.date | date: "%B %d, %Y" }}</div>
-            <p class="post-excerpt">{{ post.excerpt }}</p>
-            <a href="{{ post.url }}">Read more →</a>
-        </article>
-        {% endfor %}
+<body>
+    <div class="container">
+        <a href="/" class="back-to-home">← Back to Home</a>
+        
+        <header>
+            <h1 class="site-title">Blog</h1>
+            <p class="site-description">Thoughts, ideas, and explorations</p>
+        </header>
+
+        <ul class="post-list">
+            {% for post in site.posts %}
+            <li class="post-item">
+                <div class="post-meta">
+                    <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+                </div>
+                <h2 class="post-title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                </h2>
+                <div class="post-excerpt">
+                    {{ post.excerpt | strip_html | truncatewords: 50 }}
+                </div>
+                <a href="{{ post.url | relative_url }}" class="read-more">Read More →</a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <footer>
+            <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}</p>
+        </footer>
     </div>
-    
-    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
-        <p>© {{ site.time | date: '%Y' }} {{ site.title }}</p>
-        <p><a href="/blog/feed.xml">RSS Feed</a> • <a href="/">Main Site</a></p>
-    </footer>
 </body>
 </html>
