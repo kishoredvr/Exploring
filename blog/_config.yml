@@ -1,24 +1,15 @@
 # blog/_config.yml
-title: "Parishodana Insights"
-description: "Spiritual wisdom and Vedic astrology articles"
-baseurl: "/blog"  # Critical: This makes it work at /blog
-url: "https://parishodana.xyz"
+title: "Your Blog Name"
+description: "Your blog description"
+baseurl: "/blog"  # This is important!
+url: "https://parishodana.xyz"  # or your GitHub Pages URL
 
-# Minimal setup - no plugins needed
+# Build settings
 markdown: kramdown
-permalink: /blog/:title/
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
 
-# Exclude from processing
-exclude:
-  - README.md
-  - Gemfile
-  - Gemfile.lock
-  - node_modules
-
-# Defaults
-defaults:
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
+# Permalinks
+permalink: /:categories/:year/:month/:day/:title:output_ext
