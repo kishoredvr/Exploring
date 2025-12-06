@@ -236,7 +236,6 @@
             border-radius: 4px;
             margin-bottom: 20px;
             border-left: 3px solid var(--accent-color);
-            position: relative;
         }
 
         .comment-header {
@@ -258,29 +257,6 @@
 
         .comment-content {
             color: var(--text-dark);
-        }
-
-        .delete-comment-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .comment:hover .delete-comment-btn {
-            opacity: 1;
-        }
-
-        .delete-comment-btn:hover {
-            background: #ff5252;
         }
 
         /* Comment Form */
@@ -331,8 +307,8 @@
             background: #0d1a5c;
         }
 
-        /* Admin Badge */
-        .admin-badge {
+        /* Author Badge */
+        .author-badge {
             background: var(--accent-color);
             color: white;
             padding: 2px 8px;
@@ -393,6 +369,26 @@
             .article-image {
                 height: 200px;
             }
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+            border: 1px dashed #ccc;
+        }
+
+        .admin-panel h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .admin-instructions {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -464,6 +460,21 @@
                         <button type="submit" class="submit-btn">Post Response</button>
                     </form>
                 </div>
+
+                <!-- Admin Instructions Panel -->
+                <div class="admin-panel">
+                    <h4>🗂️ Comments Management</h4>
+                    <p class="admin-instructions">
+                        <strong>To manage comments (edit or delete):</strong><br>
+                        1. Open browser DevTools (F12 or Right-click > Inspect)<br>
+                        2. Go to "Application" tab → "Local Storage" → "{{ site.url }}"<br>
+                        3. Look for key: <code>comments_{{ page.url | slugify }}</code><br>
+                        4. Edit/Delete the JSON data as needed<br>
+                        5. Refresh page to see changes
+                    </p>
+                    <button onclick="viewAllComments()" style="background: var(--accent-color); color: white; border: none; padding: 8px 15px; border-radius: 4px; margin-right: 10px; cursor: pointer;">View All Comments (Console)</button>
+                    <button onclick="clearAllComments()" style="background: #ff6b6b; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Clear All Comments</button>
+                </div>
             </section>
         </div>
     </div>
@@ -481,10 +492,9 @@
     </footer>
 
     <script>
-        // Comments System
+        // Simple Comments System - No Password Required
         document.addEventListener('DOMContentLoaded', function() {
             const articleId = '{{ page.url | slugify }}';
-            const adminPassword = 'YOUR_ADMIN_PASSWORD'; // Change this!
             
             // Load comments from localStorage
             function loadComments() {
@@ -496,29 +506,21 @@
                     return;
                 }
                 
-                container.innerHTML = comments.map((comment, index) => `
-                    <div class="comment" data-index="${index}">
+                container.innerHTML = comments.map(comment => `
+                    <div class="comment">
                         <div class="comment-header">
                             <div>
                                 <span class="comment-author">${comment.name}</span>
-                                ${comment.isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+                                ${comment.isAuthor ? '<span class="author-badge">Author</span>' : ''}
                             </div>
                             <span class="comment-date">${new Date(comment.date).toLocaleDateString()}</span>
                         </div>
                         <div class="comment-content">${comment.message}</div>
-                        <button class="delete-comment-btn" onclick="deleteComment(${index})">Delete</button>
                     </div>
                 `).join('');
-                
-                // Only show delete buttons if admin is logged in
-                const deleteBtns = document.querySelectorAll('.delete-comment-btn');
-                const isAdminLoggedIn = localStorage.getItem('admin_logged_in') === 'true';
-                deleteBtns.forEach(btn => {
-                    btn.style.display = isAdminLoggedIn ? 'block' : 'none';
-                });
             }
             
-            // Save comment
+            // Save new comment
             document.getElementById('comment-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -531,7 +533,7 @@
                     email: email || '',
                     message: message,
                     date: new Date().toISOString(),
-                    isAdmin: false
+                    isAuthor: false // Mark as author if needed
                 };
                 
                 // Save to localStorage
@@ -546,84 +548,59 @@
                 loadComments();
                 
                 // Show success message
-                alert('Thank you for your response! It has been posted.');
+                alert('Thank you for your response! Your comment has been posted.');
             });
             
-            // Admin login function
-            window.loginAsAdmin = function() {
-                const password = prompt('Enter admin password:');
-                if (password === adminPassword) {
-                    localStorage.setItem('admin_logged_in', 'true');
-                    alert('Admin mode activated. You can now delete comments.');
+            // View all comments in console (for management)
+            window.viewAllComments = function() {
+                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
+                console.log('All comments for this article:');
+                console.log(comments);
+                console.log('To edit/delete:');
+                console.log('1. Copy the comments array above');
+                console.log('2. Edit as needed');
+                console.log('3. Run in console: localStorage.setItem("comments_{{ page.url | slugify }}", JSON.stringify(editedArray))');
+                alert('Check browser console (F12) to view all comments');
+            };
+            
+            // Clear all comments
+            window.clearAllComments = function() {
+                if (confirm('Are you sure you want to delete ALL comments on this article? This cannot be undone.')) {
+                    localStorage.removeItem(`comments_${articleId}`);
                     loadComments();
-                } else {
-                    alert('Incorrect password.');
+                    alert('All comments have been cleared.');
                 }
             };
             
-            // Delete comment function
-            window.deleteComment = function(index) {
-                if (localStorage.getItem('admin_logged_in') !== 'true') {
-                    alert('Admin login required to delete comments.');
-                    return;
-                }
+            // Auto-mark your own comments as Author
+            function markAuthorComments() {
+                // You can customize this to mark specific emails or names as author
+                const authorEmails = ['you@example.com']; // Add your email(s)
+                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
                 
-                if (confirm('Are you sure you want to delete this comment?')) {
-                    const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                    comments.splice(index, 1);
+                let updated = false;
+                comments.forEach(comment => {
+                    if (authorEmails.includes(comment.email.toLowerCase())) {
+                        comment.isAuthor = true;
+                        updated = true;
+                    }
+                });
+                
+                if (updated) {
                     localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
                     loadComments();
                 }
-            };
-            
-            // Logout function
-            window.logoutAdmin = function() {
-                localStorage.removeItem('admin_logged_in');
-                alert('Admin mode deactivated.');
-                loadComments();
-            };
-            
-            // Load comments on page load
-            loadComments();
-            
-            // Add admin login/logout buttons to page
-            const adminControls = document.createElement('div');
-            adminControls.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                z-index: 1000;
-                display: flex;
-                gap: 10px;
-            `;
-            
-            if (localStorage.getItem('admin_logged_in') === 'true') {
-                adminControls.innerHTML = `
-                    <button onclick="logoutAdmin()" style="
-                        background: #ff6b6b;
-                        color: white;
-                        border: none;
-                        padding: 10px 15px;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        font-weight: 600;
-                    ">Logout Admin</button>
-                `;
-            } else {
-                adminControls.innerHTML = `
-                    <button onclick="loginAsAdmin()" style="
-                        background: var(--primary-color);
-                        color: white;
-                        border: none;
-                        padding: 10px 15px;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        font-weight: 600;
-                    ">Admin Login</button>
-                `;
             }
             
-            document.body.appendChild(adminControls);
+            // Initialize
+            loadComments();
+            markAuthorComments();
+            
+            // Optional: Load pre-defined comments from article front matter
+            // {% if page.comments %}
+            //   const predefinedComments = {{ page.comments | jsonify }};
+            //   // Merge with existing comments
+            // {% endif %}
         });
     </script>
 </body>
