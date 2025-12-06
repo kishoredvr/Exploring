@@ -1,24 +1,24 @@
+---
+layout: null
+title: Articles
+permalink: /articles/
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog & Articles | Your Name</title>
+    <title>{{ page.title }} | {{ site.title }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET & BASICS --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* --- COPY OF THE LUNAR ASTRO STYLE CSS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary-color: #1a237e; /* Deep Navy Blue */
-            --accent-color: #d84315;  /* Deep Orange/Saffron */
+            --primary-color: #1a237e; /* Deep Navy */
+            --accent-color: #d84315;  /* Saffron */
             --text-dark: #2c3e50;
             --text-light: #546e7a;
             --bg-light: #f4f6f8;
@@ -26,303 +26,56 @@
             --font-heading: 'Merriweather', serif;
             --font-body: 'Open Sans', sans-serif;
         }
-
-        body {
-            font-family: var(--font-body);
-            line-height: 1.7;
-            color: var(--text-dark);
-            background-color: var(--bg-light);
-            font-size: 16px;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: 0.3s ease;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        /* --- HEADER --- */
-        header {
-            background: var(--white);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-top: 4px solid var(--accent-color);
-        }
-
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo img {
-            height: 40px;
-            width: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--accent-color);
-        }
-
-        /* --- PAGE LAYOUT --- */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 3fr 1fr; /* Main Content vs Sidebar */
-            gap: 40px;
-        }
-
-        /* --- HERO / PAGE TITLE --- */
-        .page-header {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .page-header h1 {
-            font-family: var(--font-heading);
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            font-family: var(--font-heading);
-            font-style: italic;
-            color: var(--text-light);
-            font-size: 1.2rem;
-        }
-
-        /* --- ARTICLE GRID --- */
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .article-card {
-            background: var(--white);
-            border: 1px solid #eee;
-            border-radius: 4px; /* Slight radius, sharper look */
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            border-color: var(--accent-color);
-        }
-
-        .article-image {
-            height: 200px;
-            background-color: #ddd;
-            position: relative;
-            overflow: hidden;
-        }
+        body { font-family: var(--font-body); line-height: 1.7; color: var(--text-dark); background-color: var(--bg-light); }
+        a { text-decoration: none; color: inherit; transition: 0.3s ease; }
         
-        /* Placeholder for images to ensure they fill nicely */
-        .article-image img, .article-image div {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            background: #f0f0f0;
-            color: #ccc;
-        }
+        /* Header */
+        header { background: var(--white); box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; border-top: 4px solid var(--accent-color); }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-heading); font-weight: 900; font-size: 1.5rem; color: var(--primary-color); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a:hover { color: var(--accent-color); }
 
-        .article-content {
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
+        /* Layout */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 3fr 1fr; gap: 40px; }
+        .page-header { grid-column: 1 / -1; text-align: center; margin-bottom: 40px; border-bottom: 1px solid #e0e0e0; padding-bottom: 20px; }
+        .page-header h1 { font-family: var(--font-heading); font-size: 3rem; color: var(--primary-color); }
 
-        .article-meta {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .article-content h3 {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            line-height: 1.3;
-        }
-
-        .article-content p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .read-more-btn {
-            margin-top: auto;
-            display: inline-block;
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 0.9rem;
-            border-bottom: 2px solid transparent;
-            width: fit-content;
-        }
-
-        .article-card:hover .read-more-btn {
-            border-bottom: 2px solid var(--accent-color);
-        }
-
-        /* --- SIDEBAR (Classic Blog Feature) --- */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .sidebar-widget {
-            background: var(--white);
-            padding: 25px;
-            border: 1px solid #eee;
-            border-top: 3px solid var(--primary-color);
-        }
-
-        .sidebar-widget h4 {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--text-dark);
-        }
-
-        .category-list li {
-            border-bottom: 1px solid #f0f0f0;
-            padding: 8px 0;
-        }
+        /* Grid */
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
         
-        .category-list li:last-child { border: none; }
-
-        .category-list a:hover {
-            color: var(--accent-color);
-            padding-left: 5px;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 60px 0;
-            margin-top: 60px;
-            text-align: center;
-        }
-
-        .footer-content h2 {
-            font-family: var(--font-heading);
-            margin-bottom: 20px;
-        }
-
-        .footer-links {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
+        /* Card Logic */
+        .article-card { background: var(--white); border: 1px solid #eee; border-radius: 4px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; height: 100%; }
+        .article-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-color: var(--accent-color); }
         
-        .footer-links a { opacity: 0.8; }
-        .footer-links a:hover { opacity: 1; color: var(--accent-color); }
+        .article-image { height: 200px; background-color: #eee; overflow: hidden; }
+        .article-image img { width: 100%; height: 100%; object-fit: cover; }
+        .article-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #ccc; background: #f0f0f0; }
 
-        .copyright {
-            font-size: 0.85rem;
-            opacity: 0.6;
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
-            display: inline-block;
-            width: 80%;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr; /* Stack sidebar below content */
-            }
-            .sidebar {
-                display: none; /* Optional: Hide sidebar on mobile or move to bottom */
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .page-header h1 {
-                font-size: 2rem;
-            }
-        }
+        .article-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .article-meta { font-size: 0.8rem; color: var(--accent-color); text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+        .article-content h3 { font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-dark); margin-bottom: 15px; line-height: 1.3; }
+        .article-content p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+        
+        .read-more-btn { margin-top: auto; font-weight: 700; color: var(--primary-color); font-size: 0.9rem; }
+        
+        /* Sidebar */
+        .sidebar-widget { background: var(--white); padding: 25px; border: 1px solid #eee; border-top: 3px solid var(--primary-color); margin-bottom: 30px; }
+        .sidebar-widget h4 { font-family: var(--font-heading); margin-bottom: 15px; }
+        .category-list li { border-bottom: 1px solid #f0f0f0; padding: 8px 0; list-style: none;}
+        
+        /* Responsive */
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
     </style>
 </head>
 <body>
 
     <header>
         <div class="navbar">
-            <div class="logo">
-                <img src="Profilepic.jpg" alt="Logo">
-                <span>Your Brand</span>
-            </div>
+            <div class="logo">Your Brand</div>
             <nav class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="AboutMe.html">About</a>
-                <a href="Articles.html" class="active">Articles</a>
-                <a href="MessageMe.html">Contact</a>
+                <a href="/">Home</a>
+                <a href="/articles/">Articles</a>
             </nav>
         </div>
     </header>
@@ -330,109 +83,55 @@
     <div class="container">
         
         <div class="page-header">
-            <h1>Knowledge Base</h1>
-            <p>Insights on Astrology, Spirituality, and Life.</p>
+            <h1>Latest Articles</h1>
+            <p>Insights on Vedic Astrology & Spirituality</p>
         </div>
 
         <main>
             <div class="articles-grid">
                 
-                <article class="article-card">
+                {% for post in site.posts %}
+                <article class="article-card" onclick="location.href='{{ post.url | relative_url }}';" style="cursor: pointer;">
+                    
                     <div class="article-image">
-                        <div>🌙</div> 
+                        {% if post.image %}
+                            <img src="{{ post.image | relative_url }}" alt="{{ post.title }}">
+                        {% else %}
+                            <div class="article-placeholder">🌙</div>
+                        {% endif %}
                     </div>
+
                     <div class="article-content">
-                        <div class="article-meta">Vedic Astrology • Jan 20, 2024</div>
-                        <h3>Moon Phases and Meditation</h3>
-                        <p>Discover how the waxing and waning of the moon impacts your mental state and meditation practices according to ancient texts.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
+                        <div class="article-meta">
+                            {{ post.date | date: "%b %d, %Y" }} 
+                            {% if post.categories.size > 0 %} • {{ post.categories | first }}{% endif %}
+                        </div>
+                        
+                        <h3>
+                            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                        </h3>
+                        
+                        <p>{{ post.content | strip_html | truncatewords: 25 }}</p>
+                        
+                        <span class="read-more-btn">Read Full Article →</span>
                     </div>
                 </article>
-
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>🪐</div>
-                    </div>
-                    <div class="article-content">
-                        <div class="article-meta">Planetary Transits • Jan 15, 2024</div>
-                        <h3>The Impact of Saturn Transit</h3>
-                        <p>Saturn is the great judge of the zodiac. Learn what this major transit means for your ascendant and how to prepare.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                </article>
-
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>🔮</div>
-                    </div>
-                    <div class="article-content">
-                        <div class="article-meta">Spirituality • Dec 10, 2023</div>
-                        <h3>Understanding Karma</h3>
-                        <p>A deep dive into the philosophy of cause and effect. How our past actions shape our present reality.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                </article>
-
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>✨</div>
-                    </div>
-                    <div class="article-content">
-                        <div class="article-meta">Remedies • Nov 22, 2023</div>
-                        <h3>Simple Remedies for Peace</h3>
-                        <p>Practical astrological remedies you can perform at home to bring peace and stability to your environment.</p>
-                        <a href="#" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                </article>
-
-            </div>
+                {% endfor %}
+                </div>
         </main>
 
         <aside class="sidebar">
             <div class="sidebar-widget">
-                <h4>Categories</h4>
+                <h4>Recent Posts</h4>
                 <ul class="category-list">
-                    <li><a href="#">Vedic Astrology (12)</a></li>
-                    <li><a href="#">Meditation (8)</a></li>
-                    <li><a href="#">Case Studies (5)</a></li>
-                    <li><a href="#">Spirituality (15)</a></li>
+                    {% for post in site.posts limit:5 %}
+                        <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
                 </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h4>Featured Course</h4>
-                <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px;">Learn the basics of reading a chart in our upcoming workshop.</p>
-                <a href="#" style="background: var(--primary-color); color: white; padding: 10px 20px; display: block; text-align: center; border-radius: 4px; font-weight: 600;">View Details</a>
             </div>
         </aside>
 
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <h2>Your Brand Name</h2>
-            <div class="footer-links">
-                <a href="#">Terms & Conditions</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Contact</a>
-            </div>
-            <span class="copyright">Kishore DVR</span>
-        </div>
-    </footer>
-
-    <script>
-        // Simple script to make whole card clickable for better UX
-        document.querySelectorAll('.article-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                // Find the link inside the card
-                const link = this.querySelector('a.read-more-btn');
-                if(link && e.target !== link) {
-                    link.click();
-                }
-            });
-            card.style.cursor = 'pointer';
-        });
-    </script>
 </body>
 </html>
-
