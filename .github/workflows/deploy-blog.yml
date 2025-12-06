@@ -1,40 +1,43 @@
 # .github/workflows/deploy-blog.yml
-name: Deploy Jekyll Blog
+name: Deploy Blog Only
 
 on:
   push:
     paths:
-      - 'blog/**'
+      - 'blog/**'           # Only trigger on blog changes
       - '.github/workflows/deploy-blog.yml'
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:        # Allow manual trigger
+
+# Add this to prevent conflicts with static.yml
+concurrency:
+  group: "pages-blog"      # Different group than your main site
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build-blog:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          
-      - name: Setup Ruby
+        
+      - name: Setup Ruby for Jekyll
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
           
-      - name: Install Jekyll
+      - name: Build Jekyll Blog
         run: |
+          echo "🚀 Building only the blog..."
           cd blog
           gem install jekyll --no-document
-          
-      - name: Build Blog
-        run: |
-          cd blog
           jekyll build --destination ../_site/blog
+          echo "✅ Blog built at _site/blog/"
           
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: gh-pages  # Or your main branch
+          publish_dir: ./_site/blog          # Deploy only blog
+          destination_dir: ./blog             # Output to /blog subfolder
+          keep_files: false                   # Don't keep other files
