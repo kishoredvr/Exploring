@@ -1,87 +1,422 @@
-<!-- Update your existing Articles.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Articles - Parishodana</title>
-    <!-- Your existing CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Minimal blog preview CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles | Your Name</title>
+    <link rel="stylesheet" href="blog/assets/blog.css">
     <style>
-        .blog-preview { max-width: 800px; margin: 2rem auto; }
-        .blog-item { margin: 1.5rem 0; padding: 1rem; background: #f9f9f9; border-radius: 5px; }
-        .blog-title { color: #1a237e; margin-bottom: 0.5rem; }
-        .blog-excerpt { color: #555; margin-bottom: 0.5rem; }
-        .blog-meta { color: #777; font-size: 0.9em; }
-        .view-all { text-align: center; margin: 2rem 0; }
+        /* Additional styles for the articles page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            color: #3498db;
+            background-color: #f0f7ff;
+        }
+
+        nav a.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .article-content {
+            padding: 25px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .article-date {
+            background: #f0f7ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .article-tag {
+            margin-left: 10px;
+            background: #f8f9fa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #666;
+        }
+
+        .article-content h2 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .article-content p {
+            color: #555;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .pagination a {
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #555;
+            transition: all 0.3s;
+        }
+
+        .pagination a:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .pagination a.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #3498db;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 20px;
+            }
+
+            .article-image {
+                height: 150px;
+            }
+
+            .article-content {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- YOUR EXISTING HEADER/NAV -->
-    
-    <div class="blog-preview">
-        <h1>Spiritual Articles</h1>
-        <p>Explore writings on Vedic wisdom, meditation, and spiritual growth.</p>
-        
-        <!-- Blog preview will load here -->
-        <div id="blog-preview-container">
-            <p>Loading recent articles...</p>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <img src="Profilepic.jpg" alt="Profile Picture">
+                <h1>Your Name</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="AboutMe.html">About</a></li>
+                    <li><a href="Articles.html" class="active">Articles</a></li>
+                    <li><a href="MessageMe.html">Message Me</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1>Latest Articles</h1>
+            <p>Exploring thoughts, ideas, and insights on various topics. Dive into my latest writings and discoveries.</p>
+        </section>
+
+        <!-- Articles Grid -->
+        <div class="articles-grid">
+            <!-- Article 1 -->
+            <article class="article-card">
+                <div class="article-image">
+                    <span>🌙</span>
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span class="article-date">January 20, 2024</span>
+                        <span class="article-tag">Meditation</span>
+                    </div>
+                    <h2>Moon Phases and Their Impact on Meditation</h2>
+                    <p>Explore how different moon phases can enhance your meditation practice and spiritual connection. Learn to align your inner rhythm with the lunar cycle...</p>
+                    <a href="blog/_posts/2024-01-20-moon-phases-meditation.md" class="read-more">Read Article →</a>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="article-card">
+                <div class="article-image">
+                    <span>✨</span>
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span class="article-date">January 15, 2024</span>
+                        <span class="article-tag">Astronomy</span>
+                    </div>
+                    <h2>Understanding Cosmic Patterns</h2>
+                    <p>A deep dive into the fascinating patterns that govern our universe and how they influence our daily lives. Discover the cosmic connections...</p>
+                    <a href="blog/_posts/2024-01-15-article-1.md" class="read-more">Read Article →</a>
+                </div>
+            </article>
+
+            <!-- Article 3 (Example - add more as needed) -->
+            <article class="article-card">
+                <div class="article-image">
+                    <span>🌟</span>
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span class="article-date">December 28, 2023</span>
+                        <span class="article-tag">Reflection</span>
+                    </div>
+                    <h2>Year-End Reflections and Future Projections</h2>
+                    <p>Looking back at the lessons learned and setting intentions for the coming year. A journey through self-discovery and growth...</p>
+                    <a href="#" class="read-more">Read Article →</a>
+                </div>
+            </article>
         </div>
-        
-        <div class="view-all">
-            <a href="/blog/" class="btn">View All Articles →</a>
-            <a href="/blog/feed.xml" style="margin-left: 1rem;">Subscribe via RSS</a>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">Next →</a>
         </div>
     </div>
-    
-    <!-- YOUR EXISTING FOOTER -->
-    
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="Terms.html">Terms & Conditions</a>
+            <a href="MessageMe.html">Contact</a>
+            <a href="AboutMe.html">About</a>
+        </div>
+        <p>&copy; 2024 Your Name. All rights reserved.</p>
+    </footer>
+
     <script>
-    // Load recent posts from blog
-    async function loadBlogPreview() {
-        try {
-            const response = await fetch('/blog/index.json');
-            if (!response.ok) throw new Error('Blog not ready');
+        // Simple script for active navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('nav a');
             
-            const html = await response.text();
-            // Extract posts from blog homepage
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const posts = doc.querySelectorAll('.post');
-            
-            let previewHTML = '';
-            posts.forEach((post, index) => {
-                if (index < 3) { // Show only 3 posts
-                    const title = post.querySelector('.post-title a');
-                    const excerpt = post.querySelector('.post-excerpt');
-                    const meta = post.querySelector('.post-meta');
-                    
-                    if (title) {
-                        previewHTML += `
-                        <div class="blog-item">
-                            <h3 class="blog-title"><a href="${title.href}">${title.textContent}</a></h3>
-                            ${meta ? `<div class="blog-meta">${meta.textContent}</div>` : ''}
-                            ${excerpt ? `<p class="blog-excerpt">${excerpt.textContent}</p>` : ''}
-                            <a href="${title.href}">Read more →</a>
-                        </div>`;
-                    }
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
                 }
             });
-            
-            document.getElementById('blog-preview-container').innerHTML = 
-                previewHTML || '<p>No articles yet. Check back soon!</p>';
-                
-        } catch (error) {
-            document.getElementById('blog-preview-container').innerHTML = 
-                `<p><a href="/blog/">Visit the blog →</a></p>`;
-        }
-    }
-    
-    // Load when page is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadBlogPreview);
-    } else {
-        loadBlogPreview();
-    }
+
+            // Article click handling
+            const articleCards = document.querySelectorAll('.article-card');
+            articleCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('read-more')) {
+                        const link = this.querySelector('.read-more');
+                        if (link) {
+                            window.location.href = link.getAttribute('href');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
