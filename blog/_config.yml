@@ -1,7 +1,7 @@
 title: "My Astrological Journey"
 description: "Exploring the cosmos"
 url: "https://parishodana.xyz" # Replace with your actual GitHub URL
-baseurl: "" 
+baseurl: "/blog" 
 
 markdown: kramdown
 permalink: /:year/:month/:day/:title/
@@ -13,4 +13,5 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
 include: [_posts, blog] # This ensures it looks for posts
+
 
