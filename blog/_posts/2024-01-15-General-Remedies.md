@@ -1,9 +1,11 @@
 ---
 layout: post
-title: "General Remedies"
+title: "Your Article Title"
 date: 2024-01-15
-categories: [healing]
-image: "/GS-Logo.jpg"  # Optional: Add an image
+categories: [spirituality]
+excerpt: "Brief description of your article"
+image: "/path/to/image.jpg"
+tags: [meditation, healing, spirituality]
 ---
 **🪐 General Remedies for Planetary Influences**
 
