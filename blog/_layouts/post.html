@@ -4,235 +4,240 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} | {{ site.title }}</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
+    <meta name="author" content="{{ site.author }}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ page.title }}">
+    <meta property="og:description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
+    <meta property="og:image" content="{% if page.image %}{{ page.image | absolute_url }}{% else %}{{ '/GS-Logo.jpg' | absolute_url }}{% endif %}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="article">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page.title }}">
+    <meta name="twitter:description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
+    <meta name="twitter:image" content="{% if page.image %}{{ page.image | absolute_url }}{% else %}{{ '/GS-Logo.jpg' | absolute_url }}{% endif %}">
+    
     <style>
-        /* --- RESET & BASICS --- */
+        /* ===== BASE STYLES ===== */
+        :root {
+            --primary-dark: #1a1a2e;
+            --primary-light: #16213e;
+            --accent-gold: #d4af37;
+            --accent-teal: #0f4c75;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --border-color: #eaeaea;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 5px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 15px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-color: #0a192f; /* Deep Navy */
-            --accent-color: #ff6b35;  /* Vibrant Orange */
-            --accent-secondary: #00b4d8; /* Teal Blue */
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --bg-light: #f8f9fa;
-            --bg-dark: #0a192f;
-            --white: #ffffff;
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
-            --font-content: 'Source Serif Pro', serif;
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: var(--font-body);
-            line-height: 1.7;
+            font-family: 'Crimson Pro', serif;
+            line-height: 1.8;
             color: var(--text-dark);
-            background-color: var(--bg-light);
-            font-size: 17px;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 107, 53, 0.03) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(0, 180, 216, 0.03) 0%, transparent 20%);
+            background: var(--bg-white);
+            font-size: 18px;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.2rem; margin-top: 2.5rem; }
+        h3 { font-size: 1.8rem; margin-top: 2rem; }
+        h4 { font-size: 1.5rem; margin-top: 1.5rem; }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
 
         a {
+            color: var(--accent-teal);
             text-decoration: none;
-            color: inherit;
             transition: var(--transition);
         }
 
-        ul {
-            list-style: none;
+        a:hover {
+            color: var(--accent-gold);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            font-family: var(--font-body);
-        }
-
-        .btn-primary {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #e55a2b;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.25);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--accent-color);
-            border: 2px solid var(--accent-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--accent-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* --- HEADER --- */
-        header {
-            background: var(--white);
-            box-shadow: 0 4px 20px rgba(10, 25, 47, 0.08);
+        /* ===== HEADER ===== */
+        .site-header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 3px solid var(--accent-color);
+            box-shadow: var(--shadow-sm);
         }
 
-        .navbar {
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 0;
         }
 
-        .logo {
-            font-family: var(--font-heading);
-            font-weight: 800;
-            font-size: 1.8rem;
-            color: var(--primary-color);
+        .site-logo {
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
         }
 
         .logo-img {
-            height: 50px;
-            width: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--accent-color);
+            border: 2px solid var(--accent-gold);
         }
 
-        .nav-links {
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .main-nav {
             display: flex;
-            gap: 35px;
+            gap: 2rem;
         }
 
-        .nav-links a {
-            font-weight: 600;
+        .nav-link {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
             font-size: 0.95rem;
             color: var(--text-dark);
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 0;
             position: relative;
-            padding: 5px 0;
         }
 
-        .nav-links a:after {
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--accent-gold);
+        }
+
+        .nav-link.active::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 2px;
-            background: var(--accent-color);
             bottom: 0;
             left: 0;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover:after,
-        .nav-links a.active:after {
             width: 100%;
+            height: 2px;
+            background: var(--accent-gold);
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--accent-color);
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
         }
 
-        /* --- ARTICLE CONTENT --- */
+        /* ===== ARTICLE HERO ===== */
         .article-hero {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a5f 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2c3e50 100%);
             color: white;
-            padding: 80px 0 60px;
-            margin-bottom: 60px;
+            padding: 4rem 0 3rem;
             position: relative;
             overflow: hidden;
         }
 
-        .article-hero:before {
-            content: '';
+        .hero-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,50 Q25,40 50,50 T100,50" stroke="rgba(255,255,255,0.05)" fill="none" stroke-width="2"/></svg>');
-            opacity: 0.3;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.03)"/></svg>');
+            opacity: 0.2;
         }
 
-        .article-header {
-            max-width: 900px;
+        .hero-container {
+            max-width: 800px;
             margin: 0 auto;
-            text-align: center;
+            padding: 0 2rem;
             position: relative;
             z-index: 2;
+            text-align: center;
         }
 
         .article-breadcrumb {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Inter', sans-serif;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .article-breadcrumb a {
+        .breadcrumb-item {
             color: rgba(255, 255, 255, 0.9);
         }
 
-        .article-breadcrumb a:hover {
-            color: var(--accent-color);
-        }
-
-        .article-breadcrumb i {
-            font-size: 0.8rem;
-            opacity: 0.7;
+        .breadcrumb-separator {
+            opacity: 0.5;
+            margin: 0 0.25rem;
         }
 
         .article-title {
-            font-family: var(--font-heading);
             font-size: 3.2rem;
-            line-height: 1.15;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        .article-subtitle {
-            font-size: 1.3rem;
+        .article-excerpt {
+            font-size: 1.2rem;
             font-weight: 300;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
             line-height: 1.6;
         }
 
@@ -240,175 +245,183 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 25px;
+            gap: 1.5rem;
             flex-wrap: wrap;
-            margin-top: 40px;
+            margin-top: 2rem;
+            font-family: 'Inter', sans-serif;
         }
 
         .meta-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.85);
         }
 
         .meta-item i {
-            color: var(--accent-color);
+            color: var(--accent-gold);
         }
 
-        .article-category {
-            background: rgba(255, 107, 53, 0.15);
+        .category-tag {
+            background: rgba(212, 175, 55, 0.2);
             color: white;
-            padding: 6px 16px;
+            padding: 0.25rem 1rem;
             border-radius: 20px;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 0.85rem;
-            border: 1px solid rgba(255, 107, 53, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
-        .article-content-wrapper {
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
             display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 50px;
-            margin-bottom: 80px;
+            grid-template-columns: 1fr 350px;
+            gap: 3rem;
         }
 
-        .article-main {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 50px;
-            box-shadow: var(--card-shadow);
-            position: relative;
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
         }
 
-        .article-main:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* ===== ARTICLE CONTENT ===== */
+        .article-content {
+            background: var(--bg-white);
+        }
+
+        .featured-image {
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-        }
-
-        .article-image {
-            height: 450px;
-            border-radius: var(--border-radius);
-            margin: 40px 0;
+            height: 400px;
+            border-radius: var(--radius-md);
             overflow: hidden;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-lg);
         }
 
-        .article-image img {
+        .featured-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.7s ease;
         }
 
-        .article-image:hover img {
+        .featured-image:hover img {
             transform: scale(1.05);
         }
 
         .article-body {
-            font-family: var(--font-content);
             font-size: 1.15rem;
             line-height: 1.9;
-            color: var(--text-dark);
+        }
+
+        .article-body > *:first-child {
+            margin-top: 0;
         }
 
         .article-body h2 {
-            font-family: var(--font-heading);
-            color: var(--primary-color);
-            margin: 50px 0 25px 0;
-            font-size: 2rem;
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
         }
 
-        .article-body h2:after {
+        .article-body h2::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
             width: 60px;
             height: 3px;
-            background: var(--accent-color);
-        }
-
-        .article-body h3 {
-            font-family: var(--font-heading);
-            color: var(--text-dark);
-            margin: 40px 0 20px 0;
-            font-size: 1.5rem;
-        }
-
-        .article-body p {
-            margin-bottom: 30px;
+            background: var(--accent-gold);
         }
 
         .article-body blockquote {
-            border-left: 4px solid var(--accent-color);
-            padding: 30px 30px 30px 40px;
-            margin: 40px 0;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
             font-style: italic;
-            color: var(--primary-color);
-            background: rgba(10, 25, 47, 0.03);
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
             font-size: 1.3rem;
             line-height: 1.6;
-            font-weight: 500;
+            background: linear-gradient(to right, rgba(212, 175, 55, 0.05), transparent);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
             position: relative;
         }
 
-        .article-body blockquote:before {
-            content: "“";
+        .article-body blockquote::before {
+            content: "❝";
             position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 4rem;
-            color: var(--accent-color);
-            opacity: 0.2;
-            font-family: var(--font-heading);
+            top: 0.5rem;
+            left: 0.5rem;
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
         }
 
-        .article-body ul, .article-body ol {
-            margin: 25px 0;
-            padding-left: 40px;
-        }
-
-        .article-body ul {
-            list-style: disc;
-        }
-
+        .article-body ul,
         .article-body ol {
-            list-style: decimal;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
         }
 
-        .article-body li {
-            margin-bottom: 12px;
+        .article-body ul li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .article-body ul li::before {
+            content: "•";
+            color: var(--accent-gold);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .article-body strong {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .article-body em {
+            color: var(--text-light);
+            font-style: italic;
         }
 
         .article-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
         }
 
-        .share-buttons {
+        .share-section {
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .share-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .social-share {
+            display: flex;
+            gap: 0.5rem;
         }
 
         .share-btn {
-            width: 45px;
-            height: 45px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -419,45 +432,74 @@
         }
 
         .share-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
 
-        .share-btn.twitter:hover { background: #1da1f2; color: white; }
         .share-btn.facebook:hover { background: #1877f2; color: white; }
+        .share-btn.twitter:hover { background: #1da1f2; color: white; }
         .share-btn.linkedin:hover { background: #0a66c2; color: white; }
-        .share-btn.link:hover { background: var(--accent-color); color: white; }
 
-        /* --- SIDEBAR --- */
-        .article-sidebar {
+        .navigation-links {
             display: flex;
-            flex-direction: column;
-            gap: 30px;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background: var(--bg-white);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-light);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
         }
 
         .sidebar-widget {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--card-shadow);
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
         }
 
         .widget-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(10, 25, 47, 0.1);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
         }
 
         .widget-title i {
-            color: var(--accent-color);
+            color: var(--accent-gold);
         }
 
+        /* Author Widget */
         .author-card {
             text-align: center;
         }
@@ -467,149 +509,242 @@
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--accent-color);
-            margin: 0 auto 20px;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--accent-gold);
+            box-shadow: var(--shadow-md);
         }
 
         .author-name {
-            font-family: var(--font-heading);
+            font-family: 'Playfair Display', serif;
             font-size: 1.4rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
         }
 
         .author-bio {
             color: var(--text-light);
             font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
         }
 
+        .author-social {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--accent-gold);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Newsletter Widget */
+        .newsletter-form {
+            margin-top: 1rem;
+        }
+
+        .newsletter-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .newsletter-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .newsletter-btn:hover {
+            background: #c19c2e;
+            transform: translateY(-2px);
+        }
+
+        /* Related Articles */
         .related-articles {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 1rem;
         }
 
         .related-article {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border-radius: 8px;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
             transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
         }
 
         .related-article:hover {
-            background: rgba(10, 25, 47, 0.03);
+            border-color: var(--accent-gold);
             transform: translateX(5px);
         }
 
-        .related-article img {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
+        .related-thumb {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-sm);
             object-fit: cover;
+            flex-shrink: 0;
         }
 
-        .related-article h4 {
+        .related-content {
+            flex: 1;
+        }
+
+        .related-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
             font-size: 0.95rem;
-            color: var(--primary-color);
+            color: var(--primary-dark);
+            margin-bottom: 0.25rem;
             line-height: 1.4;
         }
 
-        /* --- COMMENTS SECTION --- */
-        .comments-section {
-            margin-bottom: 80px;
+        .related-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
         }
 
-        .section-header {
+        /* Tags Widget */
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            background: var(--accent-gold);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ===== COMMENTS SECTION ===== */
+        .comments-section {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .comments-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 2rem;
         }
 
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 2.2rem;
-            color: var(--primary-color);
+        .comments-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary-dark);
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 0.5rem;
         }
 
-        .section-title:after {
+        .comments-title::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 80px;
+            width: 60px;
             height: 3px;
-            background: var(--accent-color);
+            background: var(--accent-gold);
         }
 
         .comments-count {
-            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
-            color: var(--accent-color);
-            background: rgba(255, 107, 53, 0.1);
-            padding: 8px 20px;
+            color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0.5rem 1.25rem;
             border-radius: 20px;
         }
 
-        .comments-container {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 50px;
-        }
-
-        .comments-list {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 40px;
-            box-shadow: var(--card-shadow);
-        }
-
         .comment {
-            padding: 25px;
-            border-radius: var(--border-radius);
-            margin-bottom: 25px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
             transition: var(--transition);
-            position: relative;
         }
 
         .comment:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-sm);
         }
 
         .comment-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .comment-author-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .comment-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent-color);
+            margin-bottom: 1rem;
         }
 
         .comment-author {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-gold);
+        }
+
+        .comment-meta h4 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
         }
 
         .comment-date {
@@ -617,71 +752,63 @@
             color: var(--text-light);
         }
 
-        .comment-content {
+        .comment-body {
             color: var(--text-dark);
             line-height: 1.7;
-            font-size: 1.05rem;
         }
 
-        .comment-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .comment-action {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.9rem;
+        .empty-comments {
+            text-align: center;
+            padding: 3rem 2rem;
             color: var(--text-light);
-            cursor: pointer;
-            transition: var(--transition);
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
         }
 
-        .comment-action:hover {
-            color: var(--accent-color);
+        .empty-comments i {
+            font-size: 3rem;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
         }
 
-        .comment-action i {
-            font-size: 0.9rem;
+        .comment-form {
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
         }
 
-        .author-badge {
-            background: var(--accent-color);
-            color: white;
-            padding: 3px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-
-        /* Comment Form */
-        .comment-form-container {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 40px;
-            box-shadow: var(--card-shadow);
-            position: sticky;
-            top: 100px;
-        }
-
-        .comment-form-container h3 {
-            font-family: var(--font-heading);
-            color: var(--primary-color);
-            margin-bottom: 25px;
+        .comment-form h3 {
+            font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
             color: var(--text-dark);
             font-size: 0.95rem;
         }
@@ -689,10 +816,10 @@
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: var(--font-body);
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             transition: var(--transition);
         }
@@ -700,732 +827,616 @@
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
         .form-group textarea {
             min-height: 150px;
             resize: vertical;
-            line-height: 1.6;
         }
 
-        .form-footer {
-            display: flex;
-            justify-content: space-between;
+        .submit-btn {
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
             align-items: center;
-            margin-top: 30px;
+            gap: 0.5rem;
         }
 
-        .form-note {
-            font-size: 0.85rem;
-            color: var(--text-light);
+        .submit-btn:hover {
+            background: #c19c2e;
+            transform: translateY(-2px);
         }
 
-        /* Admin Panel */
-        .admin-panel {
-            background: rgba(10, 25, 47, 0.03);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            margin-top: 50px;
-            border-left: 4px solid var(--accent-color);
+        /* ===== FOOTER ===== */
+        .site-footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
         }
 
-        .admin-panel h4 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        .admin-instructions {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.6;
-            margin: 15px 0;
-        }
-
-        .admin-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 80px 0 40px;
-            margin-top: 80px;
-        }
-
-        .footer-content {
+        .footer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 50px;
-            margin-bottom: 50px;
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
 
-        .footer-col h3 {
-            font-family: var(--font-heading);
-            margin-bottom: 25px;
-            font-size: 1.4rem;
-            color: white;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .footer-links a {
-            opacity: 0.8;
-            transition: var(--transition);
-        }
-        
-        .footer-links a:hover {
-            opacity: 1;
-            color: var(--accent-color);
-            transform: translateX(5px);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .social-link:hover {
-            background: var(--accent-color);
-            transform: translateY(-3px);
-        }
-
-        .copyright {
-            font-size: 0.9rem;
-            opacity: 0.6;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1100px) {
-            .article-content-wrapper,
-            .comments-container {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .comment-form-container {
-                position: static;
-            }
-            
-            .footer-content {
+        @media (max-width: 1024px) {
+            .footer-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .article-title {
-                font-size: 2.5rem;
-            }
-            
-            .article-main {
-                padding: 30px 20px;
-            }
-            
-            .article-image {
-                height: 300px;
-            }
-            
-            .article-actions {
-                flex-direction: column;
-                gap: 25px;
-                align-items: flex-start;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .footer-content {
+            .footer-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            background: var(--accent-color);
+        .footer-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             color: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            z-index: 10000;
-            transform: translateX(150%);
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
 
-        .notification.show {
-            transform: translateX(0);
+        .footer-links {
+            list-style: none;
         }
 
-        .notification i {
-            font-size: 1.3rem;
+        .footer-links li {
+            margin-bottom: 0.75rem;
         }
 
-        /* Empty State */
-        .empty-state {
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-gold);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
             text-align: center;
-            padding: 60px 20px;
-            color: var(--text-light);
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
         }
 
-        .empty-state i {
-            font-size: 3rem;
-            color: #ddd;
-            margin-bottom: 20px;
+        .footer-bottom a {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0.5rem;
         }
 
-        .empty-state h4 {
-            color: var(--text-light);
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+        .footer-bottom a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg-white);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-md);
+                border-top: 1px solid var(--border-color);
+            }
+
+            .main-nav.active {
+                display: flex;
+            }
+
+            .article-title {
+                font-size: 2.2rem;
+            }
+
+            .article-excerpt {
+                font-size: 1.1rem;
+            }
+
+            .main-content,
+            .comments-section {
+                padding: 0 1rem;
+            }
+
+            .article-actions {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+            }
+
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-title {
+                font-size: 1.8rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .featured-image {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="container">
-            <div class="navbar">
-                <div class="logo">
-                    <img src="/GS-Logo.jpg" alt="Logo" class="logo-img">
-                    <span>{{ site.title | default: "Your Blog" }}</span>
-                </div>
-                <nav class="nav-links">
-                    <!-- Root level navigation -->
-                    <a href="/">Home</a>
-                    <a href="/AboutMe.html">About</a>
-                    <a href="/blog" class="active">Articles</a>
-                    <a href="/MessageMe.html">Contact</a>
-                </nav>
-            </div>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <img src="/GS-Logo.jpg" alt="{{ site.title }}" class="logo-img">
+                <span class="logo-text">{{ site.title | default: "Spiritual Insights" }}</span>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="main-nav" id="mainNav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/AboutMe.html" class="nav-link">About</a>
+                <a href="/blog" class="nav-link active">Articles</a>
+                <a href="/MessageMe.html" class="nav-link">Contact</a>
+            </nav>
         </div>
     </header>
 
+    <!-- Article Hero Section -->
     <section class="article-hero">
-        <div class="container">
-            <div class="article-header">
-                <div class="article-breadcrumb">
-                    <a href="/">Home</a>
-                    <i class="fas fa-chevron-right"></i>
-                    <a href="/blog">Articles</a>
-                    <i class="fas fa-chevron-right"></i>
-                    <span>{{ page.categories | first | default: 'Article' }}</span>
+        <div class="hero-overlay"></div>
+        <div class="hero-container">
+            <div class="article-breadcrumb">
+                <a href="/" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="/blog" class="breadcrumb-item">Articles</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-item">{{ page.categories | first | default: 'Spiritual' }}</span>
+            </div>
+            
+            <h1 class="article-title">{{ page.title }}</h1>
+            
+            {% if page.excerpt %}
+            <p class="article-excerpt">{{ page.excerpt }}</p>
+            {% endif %}
+            
+            <div class="article-meta">
+                <div class="meta-item">
+                    <i class="far fa-calendar"></i>
+                    <span>{{ page.date | date: "%B %d, %Y" }}</span>
                 </div>
-                
-                <h1 class="article-title">{{ page.title }}</h1>
-                
-                {% if page.subtitle %}
-                <p class="article-subtitle">{{ page.subtitle }}</p>
+                <div class="meta-item">
+                    <i class="far fa-clock"></i>
+                    <span>
+                        {% assign words = content | number_of_words %}
+                        {% if words < 360 %}
+                            1 min read
+                        {% else %}
+                            {{ words | divided_by:180 }} min read
+                        {% endif %}
+                    </span>
+                </div>
+                {% if page.categories %}
+                <span class="category-tag">{{ page.categories | first }}</span>
                 {% endif %}
-                
-                <div class="article-meta">
-                    <div class="meta-item">
-                        <i class="far fa-calendar"></i>
-                        <span>{{ page.date | date: "%B %d, %Y" }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="far fa-clock"></i>
-                        <span>
-                            {% assign words = content | number_of_words %}
-                            {% if words < 360 %}
-                                1 min read
-                            {% else %}
-                                {{ words | divided_by:180 }} min read
-                            {% endif %}
-                        </span>
-                    </div>
-                    {% if page.categories %}
-                    <div class="article-category">{{ page.categories | join: ', ' }}</div>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </section>
 
-    <div class="container">
-        <div class="article-content-wrapper">
-            <main class="article-main">
-                {% if page.image %}
-                <div class="article-image">
-                    <img src="{{ page.image }}" alt="{{ page.title }}">
-                </div>
-                {% elsif page.image contains 'http' %}
-                <div class="article-image">
-                    <img src="{{ page.image }}" alt="{{ page.title }}">
-                </div>
-                {% else %}
-                <div class="article-image" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
-                    {{ page.emoji | default: '📖' }}
-                </div>
-                {% endif %}
-                
-                <article class="article-body">
-                    {{ content }}
-                </article>
-                
-                <div class="article-actions">
-                    <div class="share-buttons">
-                        <span style="font-weight: 600; margin-right: 10px; color: var(--text-light);">Share:</span>
-                        <a href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&url={{ site.url }}{{ page.url }}" class="share-btn twitter" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" class="share-btn facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | uri_escape }}" class="share-btn linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="share-btn link" onclick="copyArticleLink()"><i class="fas fa-link"></i></a>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Article Content -->
+        <main class="article-content">
+            {% if page.image %}
+            <div class="featured-image">
+                <img src="{{ page.image }}" alt="{{ page.title }}">
+            </div>
+            {% endif %}
+            
+            <article class="article-body">
+                {{ content }}
+            </article>
+            
+            <div class="article-actions">
+                <div class="share-section">
+                    <span class="share-label">Share this article:</span>
+                    <div class="social-share">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" 
+                           class="share-btn facebook" target="_blank" title="Share on Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&url={{ site.url }}{{ page.url }}" 
+                           class="share-btn twitter" target="_blank" title="Share on Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | uri_escape }}" 
+                           class="share-btn linkedin" target="_blank" title="Share on LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
                     </div>
-                    <a href="/blog" class="btn btn-secondary">
+                </div>
+                
+                <div class="navigation-links">
+                    <a href="/blog" class="nav-btn">
                         <i class="fas fa-arrow-left"></i> Back to Articles
                     </a>
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="nav-btn">
+                        <i class="fas fa-arrow-up"></i> Back to Top
+                    </button>
                 </div>
-            </main>
-            
-            <aside class="article-sidebar">
-                <div class="sidebar-widget author-card">
-                    <div class="widget-title">
-                        <i class="fas fa-user-edit"></i>
-                        <span>About the Author</span>
-                    </div>
-                    <img src="/Profilepic.jpg" alt="Author" class="author-avatar">
-                    <h3 class="author-name">{{ site.author | default: "Your Name" }}</h3>
-                    <p class="author-bio">{{ site.description | default: "Short bio about yourself. Explain your expertise and what readers can expect from your articles." }}</p>
-                    <a href="/AboutMe.html" class="btn btn-primary" style="width: 100%;">View Profile</a>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Author Card -->
+            <div class="sidebar-widget author-card">
+                <h3 class="widget-title">
+                    <i class="fas fa-user"></i>
+                    About the Author
+                </h3>
+                <img src="/Profilepic.jpg" alt="Author" class="author-avatar">
+                <h4 class="author-name">{{ site.author | default: "Spiritual Guide" }}</h4>
+                <p class="author-bio">
+                    Spiritual teacher and healer with years of experience in meditation, energy healing, 
+                    and spiritual guidance. Dedicated to helping others find inner peace and enlightenment.
+                </p>
+                <div class="author-social">
+                    <a href="#" class="social-icon" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="#" class="social-icon" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
                 </div>
-                
-                <div class="sidebar-widget">
-                    <div class="widget-title">
-                        <i class="fas fa-bookmark"></i>
-                        <span>Related Articles</span>
-                    </div>
-                    <div class="related-articles">
-                        <!-- Manually list related articles or use site.posts -->
-                        {% assign related_posts = site.posts | where_exp:"post", "post.url != page.url" | sample: 3 %}
-                        {% for post in related_posts %}
+            </div>
+
+            <!-- Newsletter -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">
+                    <i class="fas fa-envelope"></i>
+                    Stay Updated
+                </h3>
+                <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 1rem;">
+                    Get spiritual insights and articles delivered to your inbox.
+                </p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                    <button type="submit" class="newsletter-btn">
+                        <i class="fas fa-paper-plane"></i> Subscribe
+                    </button>
+                </form>
+            </div>
+
+            <!-- Related Articles -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">
+                    <i class="fas fa-bookmark"></i>
+                    Related Articles
+                </h3>
+                <div class="related-articles">
+                    {% for post in site.posts limit:3 %}
+                        {% if post.url != page.url %}
                         <a href="{{ post.url }}" class="related-article">
                             {% if post.image %}
-                            <img src="{{ post.image }}" alt="{{ post.title }}">
+                            <img src="{{ post.image }}" alt="{{ post.title }}" class="related-thumb">
                             {% else %}
-                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
-                                {{ post.emoji | default: '📝' }}
+                            <div class="related-thumb" style="background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-gold) 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                                <i class="fas fa-spa"></i>
                             </div>
                             {% endif %}
-                            <div>
-                                <h4>{{ post.title | truncate: 40 }}</h4>
-                                <small>
-                                    {% assign words = post.content | number_of_words %}
-                                    {% if words < 360 %}
-                                        1 min read
-                                    {% else %}
-                                        {{ words | divided_by:180 }} min read
-                                    {% endif %}
-                                </small>
+                            <div class="related-content">
+                                <h4 class="related-title">{{ post.title | truncate: 50 }}</h4>
+                                <div class="related-date">{{ post.date | date: "%b %d, %Y" }}</div>
                             </div>
                         </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                
-                <div class="sidebar-widget">
-                    <div class="widget-title">
-                        <i class="fas fa-hashtag"></i>
-                        <span>Article Tags</span>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        {% for tag in page.tags %}
-                        <span style="background: rgba(10, 25, 47, 0.08); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">{{ tag }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-            </aside>
-        </div>
-        
-        <section class="comments-section">
-            <div class="section-header">
-                <h2 class="section-title">Community Discussion</h2>
-                <div class="comments-count">
-                    <i class="far fa-comments"></i>
-                    <span id="comments-count">0</span> Responses
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-            
-            <div class="comments-container">
-                <div class="comments-list">
-                    <div id="comments-container">
-                        <!-- Comments will be loaded here -->
-                    </div>
-                    
-                    <div id="no-comments" class="empty-state" style="display: none;">
-                        <i class="far fa-comment-dots"></i>
-                        <h4>No Responses Yet</h4>
-                        <p>Be the first to share your thoughts on this article!</p>
-                    </div>
-                </div>
-                
-                <div class="comment-form-container">
-                    <h3>Share Your Thoughts</h3>
-                    <form id="comment-form">
-                        <div class="form-group">
-                            <label for="comment-name">Your Name *</label>
-                            <input type="text" id="comment-name" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="comment-email">Email Address</label>
-                            <input type="email" id="comment-email" placeholder="john@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="comment-message">Your Response *</label>
-                            <textarea id="comment-message" placeholder="Share your thoughts on this article..." required></textarea>
-                        </div>
-                        <div class="form-footer">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Post Response
-                            </button>
-                            <small class="form-note">Your email will not be published.</small>
-                        </div>
-                    </form>
+
+            <!-- Article Tags -->
+            {% if page.tags %}
+            <div class="sidebar-widget">
+                <h3 class="widget-title">
+                    <i class="fas fa-tags"></i>
+                    Article Tags
+                </h3>
+                <div class="tags-cloud">
+                    {% for tag in page.tags %}
+                    <a href="/blog?tag={{ tag | slugify }}" class="tag">{{ tag }}</a>
+                    {% endfor %}
                 </div>
             </div>
-            
-            <!-- Admin Panel -->
-            <div class="admin-panel">
-                <h4><i class="fas fa-user-shield"></i> Comments Management</h4>
-                <p class="admin-instructions">
-                    <strong>To manage comments (edit or delete):</strong><br>
-                    Use the buttons below or open browser DevTools (F12) → Application tab → Local Storage.
-                </p>
-                <div class="admin-actions">
-                    <button onclick="viewAllComments()" class="btn" style="background: var(--accent-secondary); color: white;">
-                        <i class="fas fa-eye"></i> View All Comments
-                    </button>
-                    <button onclick="exportComments()" class="btn" style="background: #10b981; color: white;">
-                        <i class="fas fa-download"></i> Export Comments
-                    </button>
-                    <button onclick="clearAllComments()" class="btn" style="background: #ef4444; color: white;">
-                        <i class="fas fa-trash"></i> Clear All Comments
-                    </button>
-                </div>
-            </div>
-        </section>
+            {% endif %}
+        </aside>
     </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h3>{{ site.title | default: "Your Blog" }}</h3>
-                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 20px;">{{ site.description | default: "Creating valuable content and fostering meaningful discussions." }}</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
+    <!-- Comments Section -->
+    <section class="comments-section">
+        <div class="comments-header">
+            <h2 class="comments-title">Community Discussion</h2>
+            <div class="comments-count">
+                <i class="far fa-comments"></i>
+                <span id="comments-count">0</span> Comments
+            </div>
+        </div>
+        
+        <div id="comments-container">
+            <!-- Comments will be loaded here -->
+        </div>
+        
+        <div id="no-comments" class="empty-comments" style="display: none;">
+            <i class="far fa-comment-dots"></i>
+            <h3>No Comments Yet</h3>
+            <p>Be the first to share your thoughts and insights!</p>
+        </div>
+        
+        <div class="comment-form">
+            <h3>Share Your Thoughts</h3>
+            <form id="comment-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="comment-name">Your Name *</label>
+                        <input type="text" id="comment-name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment-email">Email Address</label>
+                        <input type="email" id="comment-email" placeholder="your@email.com">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="comment-message">Your Comment *</label>
+                    <textarea id="comment-message" placeholder="Share your thoughts, questions, or insights..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Post Comment
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>{{ site.title | default: "Spiritual Insights" }}</h3>
+                    <p style="opacity: 0.8; line-height: 1.6; margin-bottom: 1rem;">
+                        A sacred space for spiritual growth, healing, and enlightenment through ancient wisdom and modern insights.
+                    </p>
+                    <div class="author-social">
+                        <a href="#" class="social-icon" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                
                 <div class="footer-col">
                     <h3>Quick Links</h3>
-                    <div class="footer-links">
-                        <a href="/">Home</a>
-                        <a href="/AboutMe.html">About Me</a>
-                        <a href="/blog">All Articles</a>
-                        <a href="/MessageMe.html">Contact</a>
-                    </div>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/AboutMe.html">About Me</a></li>
+                        <li><a href="/blog">All Articles</a></li>
+                        <li><a href="/MessageMe.html">Contact</a></li>
+                    </ul>
                 </div>
+                
                 <div class="footer-col">
                     <h3>Categories</h3>
-                    <div class="footer-links">
-                        <!-- You can add your categories here -->
-                        <a href="/blog?category=spirituality">Spirituality</a>
-                        <a href="/blog?category=meditation">Meditation</a>
-                        <a href="/blog?category=wellness">Wellness</a>
-                        <a href="/blog?category=healing">Healing</a>
-                    </div>
+                    <ul class="footer-links">
+                        <li><a href="/blog?category=meditation">Meditation</a></li>
+                        <li><a href="/blog?category=healing">Healing</a></li>
+                        <li><a href="/blog?category=spirituality">Spirituality</a></li>
+                        <li><a href="/blog?category=dreams">Dreams</a></li>
+                        <li><a href="/blog?category=energy">Energy Work</a></li>
+                    </ul>
                 </div>
+                
                 <div class="footer-col">
-                    <h3>Stay Updated</h3>
-                    <p style="opacity: 0.8; margin-bottom: 20px;">Subscribe to get notified about new articles and updates.</p>
-                    <form id="newsletter-form" style="display: flex;">
-                        <input type="email" placeholder="Your email" required style="flex: 1; padding: 12px; border: none; border-radius: 8px 0 0 8px;">
-                        <button type="submit" class="btn btn-primary" style="border-radius: 0 8px 8px 0;">Subscribe</button>
-                    </form>
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="/blog/meditation-guides">Meditation Guides</a></li>
+                        <li><a href="/blog/healing-techniques">Healing Techniques</a></li>
+                        <li><a href="/blog/spiritual-tools">Spiritual Tools</a></li>
+                        <li><a href="/blog/books">Recommended Books</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="copyright">
-                &copy; {{ site.time | date: '%Y' }} {{ site.title | default: "Your Blog" }}. All rights reserved. | 
-                <a href="/Terms.html" style="color: inherit; opacity: 0.8;">Terms & Conditions</a> | 
-                <a href="#" style="color: inherit; opacity: 0.8;">Privacy Policy</a>
+            
+            <div class="footer-bottom">
+                &copy; {{ site.time | date: '%Y' }} {{ site.title | default: "Spiritual Insights" }}. All rights reserved.
+                <br>
+                <a href="/Terms.html">Terms of Service</a> | 
+                <a href="#">Privacy Policy</a> | 
+                <a href="/MessageMe.html">Contact Us</a>
             </div>
         </div>
     </footer>
 
-    <!-- Notification Element -->
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notification-text">Your comment has been posted!</span>
-    </div>
-
+    <!-- JavaScript -->
     <script>
-        // Enhanced Comments System
         document.addEventListener('DOMContentLoaded', function() {
-            // Use the current page URL as article ID
-            const articleId = window.location.pathname.replace(/\//g, '_');
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notification-text');
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mainNav = document.getElementById('mainNav');
             
-            // Show notification
-            function showNotification(message, type = 'success') {
-                notificationText.textContent = message;
-                notification.className = 'notification show';
-                notification.style.background = type === 'success' ? 'var(--accent-color)' : 
-                                                type === 'error' ? '#ef4444' : 
-                                                type === 'info' ? 'var(--accent-secondary)' : 'var(--accent-color)';
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
             }
             
-            // Load comments from localStorage
+            // Comments system
+            const articleId = window.location.pathname.replace(/\//g, '_');
+            const commentsContainer = document.getElementById('comments-container');
+            const noComments = document.getElementById('no-comments');
+            const commentsCount = document.getElementById('comments-count');
+            const commentForm = document.getElementById('comment-form');
+            
             function loadComments() {
-                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                const container = document.getElementById('comments-container');
-                const noComments = document.getElementById('no-comments');
-                const commentsCount = document.getElementById('comments-count');
-                
-                // Update count
+                const comments = JSON.parse(localStorage.getItem(`spiritual_comments_${articleId}`)) || [];
                 commentsCount.textContent = comments.length;
                 
                 if (comments.length === 0) {
-                    container.innerHTML = '';
+                    commentsContainer.innerHTML = '';
                     noComments.style.display = 'block';
                     return;
                 }
                 
                 noComments.style.display = 'none';
                 
-                // Sort comments by date (newest first)
+                // Sort by date (newest first)
                 comments.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
-                container.innerHTML = comments.map((comment, index) => `
-                    <div class="comment" data-id="${index}">
+                commentsContainer.innerHTML = comments.map(comment => `
+                    <div class="comment">
                         <div class="comment-header">
-                            <div class="comment-author-info">
-                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(comment.name)}&background=${comment.isAuthor ? 'ff6b35' : '0a192f'}&color=fff" class="comment-avatar" alt="${comment.name}">
-                                <div>
-                                    <span class="comment-author">${comment.name}</span>
-                                    ${comment.isAuthor ? '<span class="author-badge"><i class="fas fa-crown"></i> Author</span>' : ''}
-                                    <div class="comment-date">${new Date(comment.date).toLocaleDateString('en-US', { 
-                                        year: 'numeric', 
-                                        month: 'short', 
+                            <div class="comment-author">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(comment.name)}&background=d4af37&color=fff" 
+                                     alt="${comment.name}" class="comment-avatar">
+                                <div class="comment-meta">
+                                    <h4>${comment.name}</h4>
+                                    <div class="comment-date">${new Date(comment.date).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
                                         day: 'numeric',
                                         hour: '2-digit',
                                         minute: '2-digit'
                                     })}</div>
                                 </div>
                             </div>
-                            <div class="comment-actions">
-                                <span class="comment-action" onclick="likeComment(${index})">
-                                    <i class="far fa-thumbs-up"></i>
-                                    <span class="like-count">${comment.likes || 0}</span>
-                                </span>
-                                <span class="comment-action" onclick="replyToComment(${index}, '${comment.name}')">
-                                    <i class="far fa-comment"></i> Reply
-                                </span>
-                            </div>
                         </div>
-                        <div class="comment-content">${comment.message.replace(/\n/g, '<br>')}</div>
-                        ${comment.replies && comment.replies.length > 0 ? `
-                            <div class="replies" style="margin-top: 20px; padding-left: 20px; border-left: 2px solid rgba(0,0,0,0.1);">
-                                ${comment.replies.map(reply => `
-                                    <div class="comment" style="margin-bottom: 15px;">
-                                        <div class="comment-header">
-                                            <div class="comment-author-info">
-                                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(reply.name)}&background=0a192f&color=fff" style="width: 35px; height: 35px;" alt="${reply.name}">
-                                                <div>
-                                                    <span class="comment-author">${reply.name}</span>
-                                                    <div class="comment-date">${new Date(reply.date).toLocaleDateString()}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="comment-content">${reply.message.replace(/\n/g, '<br>')}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
+                        <div class="comment-body">${comment.message.replace(/\n/g, '<br>')}</div>
                     </div>
                 `).join('');
             }
             
-            // Save new comment
-            document.getElementById('comment-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('comment-name').value.trim();
-                const email = document.getElementById('comment-email').value.trim();
-                const message = document.getElementById('comment-message').value.trim();
-                
-                if (!name || !message) {
-                    showNotification('Please fill in all required fields.', 'error');
-                    return;
-                }
-                
-                const comment = {
-                    name: name,
-                    email: email || '',
-                    message: message,
-                    date: new Date().toISOString(),
-                    isAuthor: false,
-                    likes: 0,
-                    replies: []
-                };
-                
-                // Save to localStorage
-                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                comments.unshift(comment); // Add to beginning
-                localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
-                
-                // Clear form
-                document.getElementById('comment-form').reset();
-                
-                // Reload comments
-                loadComments();
-                
-                // Show success message
-                showNotification('Thank you for your response! Your comment has been posted.');
-                
-                // Scroll to comments
-                document.querySelector('.comments-section').scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('comment-name').value.trim();
+                    const email = document.getElementById('comment-email').value.trim();
+                    const message = document.getElementById('comment-message').value.trim();
+                    
+                    if (!name || !message) {
+                        alert('Please fill in all required fields.');
+                        return;
+                    }
+                    
+                    const comment = {
+                        name: name,
+                        email: email || '',
+                        message: message,
+                        date: new Date().toISOString()
+                    };
+                    
+                    const comments = JSON.parse(localStorage.getItem(`spiritual_comments_${articleId}`)) || [];
+                    comments.unshift(comment);
+                    localStorage.setItem(`spiritual_comments_${articleId}`, JSON.stringify(comments));
+                    
+                    commentForm.reset();
+                    loadComments();
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.style.cssText = 'background: #d4edda; color: #155724; padding: 1rem; border-radius: 6px; margin-top: 1rem;';
+                    successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Thank you for your comment! It has been posted.';
+                    commentForm.parentNode.insertBefore(successMsg, commentForm.nextSibling);
+                    
+                    setTimeout(() => successMsg.remove(), 5000);
                 });
-            });
+            }
             
             // Newsletter form
-            document.getElementById('newsletter-form')?.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = this.querySelector('input[type="email"]').value;
-                if (email) {
-                    // In a real app, you would send this to your backend
-                    localStorage.setItem('subscribed_email', email);
-                    showNotification('Thank you for subscribing!', 'info');
-                    this.reset();
-                }
-            });
-            
-            // Like comment function
-            window.likeComment = function(index) {
-                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                if (comments[index]) {
-                    comments[index].likes = (comments[index].likes || 0) + 1;
-                    localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
-                    loadComments();
-                }
-            };
-            
-            // Reply to comment
-            window.replyToComment = function(index, authorName) {
-                const replyText = prompt(`Reply to ${authorName}:`);
-                if (replyText && replyText.trim()) {
-                    const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                    if (comments[index]) {
-                        if (!comments[index].replies) comments[index].replies = [];
+            const newsletterForm = document.getElementById('newsletterForm');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('.newsletter-input').value;
+                    if (email) {
+                        localStorage.setItem('newsletter_subscription', email);
                         
-                        comments[index].replies.push({
-                            name: 'You', // In a real app, this would be the actual user
-                            message: replyText,
-                            date: new Date().toISOString()
-                        });
+                        // Show success message
+                        const successMsg = document.createElement('div');
+                        successMsg.style.cssText = 'background: #d4edda; color: #155724; padding: 0.75rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem;';
+                        successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Thank you for subscribing!';
+                        this.appendChild(successMsg);
                         
-                        localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
-                        loadComments();
-                        showNotification('Your reply has been posted.');
+                        this.reset();
+                        setTimeout(() => successMsg.remove(), 5000);
                     }
-                }
-            };
-            
-            // View all comments in console
-            window.viewAllComments = function() {
-                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                console.log('All comments for this article:');
-                console.table(comments);
-                console.log('To edit/delete:');
-                console.log('1. Copy the comments array above');
-                console.log('2. Edit as needed');
-                console.log('3. Run in console: localStorage.setItem("comments_' + articleId + '", JSON.stringify(editedArray))');
-                
-                showNotification('Check browser console (F12) to view all comments', 'info');
-            };
-            
-            // Export comments
-            window.exportComments = function() {
-                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                const dataStr = JSON.stringify(comments, null, 2);
-                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-                
-                const exportFileDefaultName = `comments-${articleId}-${new Date().toISOString().slice(0,10)}.json`;
-                
-                const linkElement = document.createElement('a');
-                linkElement.setAttribute('href', dataUri);
-                linkElement.setAttribute('download', exportFileDefaultName);
-                linkElement.click();
-                
-                showNotification('Comments exported successfully!', 'info');
-            };
-            
-            // Clear all comments
-            window.clearAllComments = function() {
-                if (confirm('Are you sure you want to delete ALL comments on this article? This cannot be undone.')) {
-                    localStorage.removeItem(`comments_${articleId}`);
-                    loadComments();
-                    showNotification('All comments have been cleared.', 'info');
-                }
-            };
-            
-            // Copy article link
-            window.copyArticleLink = function() {
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(() => {
-                    showNotification('Article link copied to clipboard!');
                 });
-            };
+            }
             
             // Initialize
             loadComments();
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.header-container') && mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
         });
     </script>
 </body>
