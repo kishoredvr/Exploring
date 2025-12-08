@@ -926,18 +926,15 @@
         <div class="container">
             <div class="navbar">
                 <div class="logo">
-                    {% if site.logo %}
-                    <img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img">
-                    {% else %}
-                    <img src="{{ '/assets/images/Profilepic.jpg' | relative_url }}" alt="Logo" class="logo-img">
-                    {% endif %}
-                    <span>{{ site.title }}</span>
+                    <img src="/GS-Logo.jpg" alt="Logo" class="logo-img">
+                    <span>{{ site.title | default: "Your Blog" }}</span>
                 </div>
                 <nav class="nav-links">
-                    <a href="{{ '/' | relative_url }}">Home</a>
-                    <a href="{{ '/about' | relative_url }}">About</a>
-                    <a href="{{ '/blog' | relative_url }}" class="active">Articles</a>
-                    <a href="{{ '/contact' | relative_url }}">Contact</a>
+                    <!-- Root level navigation -->
+                    <a href="/">Home</a>
+                    <a href="/AboutMe.html">About</a>
+                    <a href="/blog" class="active">Articles</a>
+                    <a href="/MessageMe.html">Contact</a>
                 </nav>
             </div>
         </div>
@@ -947,9 +944,9 @@
         <div class="container">
             <div class="article-header">
                 <div class="article-breadcrumb">
-                    <a href="{{ '/' | relative_url }}">Home</a>
+                    <a href="/">Home</a>
                     <i class="fas fa-chevron-right"></i>
-                    <a href="{{ '/blog' | relative_url }}">Articles</a>
+                    <a href="/blog">Articles</a>
                     <i class="fas fa-chevron-right"></i>
                     <span>{{ page.categories | first | default: 'Article' }}</span>
                 </div>
@@ -989,11 +986,11 @@
             <main class="article-main">
                 {% if page.image %}
                 <div class="article-image">
-                    <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
+                    <img src="{{ page.image }}" alt="{{ page.title }}">
                 </div>
-                {% elsif page.image_url %}
+                {% elsif page.image contains 'http' %}
                 <div class="article-image">
-                    <img src="{{ page.image_url }}" alt="{{ page.title }}">
+                    <img src="{{ page.image }}" alt="{{ page.title }}">
                 </div>
                 {% else %}
                 <div class="article-image" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
@@ -1008,12 +1005,12 @@
                 <div class="article-actions">
                     <div class="share-buttons">
                         <span style="font-weight: 600; margin-right: 10px; color: var(--text-light);">Share:</span>
-                        <a href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&url={{ site.url }}{{ page.url | relative_url }}" class="share-btn twitter" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url | relative_url }}" class="share-btn facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url | relative_url }}&title={{ page.title | uri_escape }}" class="share-btn linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&url={{ site.url }}{{ page.url }}" class="share-btn twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" class="share-btn facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | uri_escape }}" class="share-btn linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" class="share-btn link" onclick="copyArticleLink()"><i class="fas fa-link"></i></a>
                     </div>
-                    <a href="{{ '/blog' | relative_url }}" class="btn btn-secondary">
+                    <a href="/blog" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Back to Articles
                     </a>
                 </div>
@@ -1025,14 +1022,10 @@
                         <i class="fas fa-user-edit"></i>
                         <span>About the Author</span>
                     </div>
-                    {% if site.author_image %}
-                    <img src="{{ site.author_image | relative_url }}" alt="Author" class="author-avatar">
-                    {% else %}
-                    <img src="{{ '/assets/images/Profilepic.jpg' | relative_url }}" alt="Author" class="author-avatar">
-                    {% endif %}
-                    <h3 class="author-name">{{ site.author | default: site.title }}</h3>
-                    <p class="author-bio">{{ site.description }}</p>
-                    <a href="{{ '/about' | relative_url }}" class="btn btn-primary" style="width: 100%;">View Profile</a>
+                    <img src="/Profilepic.jpg" alt="Author" class="author-avatar">
+                    <h3 class="author-name">{{ site.author | default: "Your Name" }}</h3>
+                    <p class="author-bio">{{ site.description | default: "Short bio about yourself. Explain your expertise and what readers can expect from your articles." }}</p>
+                    <a href="/AboutMe.html" class="btn btn-primary" style="width: 100%;">View Profile</a>
                 </div>
                 
                 <div class="sidebar-widget">
@@ -1041,17 +1034,19 @@
                         <span>Related Articles</span>
                     </div>
                     <div class="related-articles">
-                        {% for post in site.related_posts limit:3 %}
-                        <a href="{{ post.url | relative_url }}" class="related-article">
+                        <!-- Manually list related articles or use site.posts -->
+                        {% assign related_posts = site.posts | where_exp:"post", "post.url != page.url" | sample: 3 %}
+                        {% for post in related_posts %}
+                        <a href="{{ post.url }}" class="related-article">
                             {% if post.image %}
-                            <img src="{{ post.image | relative_url }}" alt="{{ post.title }}">
+                            <img src="{{ post.image }}" alt="{{ post.title }}">
                             {% else %}
                             <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
                                 {{ post.emoji | default: '📝' }}
                             </div>
                             {% endif %}
                             <div>
-                                <h4>{{ post.title }}</h4>
+                                <h4>{{ post.title | truncate: 40 }}</h4>
                                 <small>
                                     {% assign words = post.content | number_of_words %}
                                     {% if words < 360 %}
@@ -1073,7 +1068,7 @@
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                         {% for tag in page.tags %}
-                        <a href="{{ '/blog/tags' | relative_url }}#{{ tag | slugify }}" style="background: rgba(10, 25, 47, 0.08); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">{{ tag }}</a>
+                        <span style="background: rgba(10, 25, 47, 0.08); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">{{ tag }}</span>
                         {% endfor %}
                     </div>
                 </div>
@@ -1153,40 +1148,32 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-col">
-                    <h3>{{ site.title }}</h3>
-                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 20px;">{{ site.description }}</p>
-                    {% if site.social_links %}
+                    <h3>{{ site.title | default: "Your Blog" }}</h3>
+                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 20px;">{{ site.description | default: "Creating valuable content and fostering meaningful discussions." }}</p>
                     <div class="social-links">
-                        {% if site.social_links.twitter %}
-                        <a href="{{ site.social_links.twitter }}" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
-                        {% endif %}
-                        {% if site.social_links.linkedin %}
-                        <a href="{{ site.social_links.linkedin }}" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        {% endif %}
-                        {% if site.social_links.github %}
-                        <a href="{{ site.social_links.github }}" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
-                        {% endif %}
-                        {% if site.social_links.youtube %}
-                        <a href="{{ site.social_links.youtube }}" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
-                        {% endif %}
+                        <a href="#" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
                     </div>
-                    {% endif %}
                 </div>
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <div class="footer-links">
-                        <a href="{{ '/' | relative_url }}">Home</a>
-                        <a href="{{ '/about' | relative_url }}">About Me</a>
-                        <a href="{{ '/blog' | relative_url }}">All Articles</a>
-                        <a href="{{ '/contact' | relative_url }}">Contact</a>
+                        <a href="/">Home</a>
+                        <a href="/AboutMe.html">About Me</a>
+                        <a href="/blog">All Articles</a>
+                        <a href="/MessageMe.html">Contact</a>
                     </div>
                 </div>
                 <div class="footer-col">
                     <h3>Categories</h3>
                     <div class="footer-links">
-                        {% for category in site.categories limit:4 %}
-                        <a href="{{ '/blog/categories' | relative_url }}#{{ category[0] | slugify }}">{{ category[0] }}</a>
-                        {% endfor %}
+                        <!-- You can add your categories here -->
+                        <a href="/blog?category=spirituality">Spirituality</a>
+                        <a href="/blog?category=meditation">Meditation</a>
+                        <a href="/blog?category=wellness">Wellness</a>
+                        <a href="/blog?category=healing">Healing</a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -1199,9 +1186,9 @@
                 </div>
             </div>
             <div class="copyright">
-                &copy; {{ site.time | date: '%Y' }} {{ site.title }}. All rights reserved. | 
-                <a href="{{ '/terms' | relative_url }}" style="color: inherit; opacity: 0.8;">Terms & Conditions</a> | 
-                <a href="{{ '/privacy' | relative_url }}" style="color: inherit; opacity: 0.8;">Privacy Policy</a>
+                &copy; {{ site.time | date: '%Y' }} {{ site.title | default: "Your Blog" }}. All rights reserved. | 
+                <a href="/Terms.html" style="color: inherit; opacity: 0.8;">Terms & Conditions</a> | 
+                <a href="#" style="color: inherit; opacity: 0.8;">Privacy Policy</a>
             </div>
         </div>
     </footer>
@@ -1215,7 +1202,8 @@
     <script>
         // Enhanced Comments System
         document.addEventListener('DOMContentLoaded', function() {
-            const articleId = '{{ page.id | default: page.url | slugify }}';
+            // Use the current page URL as article ID
+            const articleId = window.location.pathname.replace(/\//g, '_');
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notification-text');
             
@@ -1352,6 +1340,8 @@
                 e.preventDefault();
                 const email = this.querySelector('input[type="email"]').value;
                 if (email) {
+                    // In a real app, you would send this to your backend
+                    localStorage.setItem('subscribed_email', email);
                     showNotification('Thank you for subscribing!', 'info');
                     this.reset();
                 }
@@ -1434,28 +1424,8 @@
                 });
             };
             
-            // Mark author comments
-            function markAuthorComments() {
-                const authorEmails = ['{{ site.email }}']; // Add your email from config
-                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                
-                let updated = false;
-                comments.forEach(comment => {
-                    if (authorEmails.includes(comment.email.toLowerCase())) {
-                        comment.isAuthor = true;
-                        updated = true;
-                    }
-                });
-                
-                if (updated) {
-                    localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
-                    loadComments();
-                }
-            }
-            
             // Initialize
             loadComments();
-            markAuthorComments();
         });
     </script>
 </body>
