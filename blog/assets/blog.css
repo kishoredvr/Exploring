@@ -99,6 +99,7 @@ a:hover { text-decoration: underline; }
 .widget li { margin-bottom: 10px; border-bottom: 1px solid #f4f4f4; padding-bottom: 10px; }
 .widget li:last-child { border: none; }
 
+
 /* Footer */
 .site-footer {
     text-align: center;
