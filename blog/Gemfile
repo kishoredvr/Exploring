@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+# This installs the exact versions of Jekyll and plugins that GitHub Pages uses
+gem "github-pages", group: :jekyll_plugins
+
+# Required for newer Ruby versions (3.0+) to serve the site locally or build
+gem "webrick"
