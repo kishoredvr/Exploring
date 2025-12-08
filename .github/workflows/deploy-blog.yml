@@ -1,52 +1,44 @@
-# .github/workflows/deploy-blog.yml
-name: Deploy Blog
+name: Deploy Jekyll Blog
 
 on:
   push:
+    branches: [main]
     paths:
       - 'blog/**'
   workflow_dispatch:
 
-percurrency:
-  group: "blog-${{ github.ref }}"
-  cancel-in-progress: false
-
 jobs:
-  build-and-deploy-blog:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # ← CRITICAL: Add this line
     
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          persist-credentials: false
           
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
-          bundler-cache: true
+          cache: 'bundler'
+          cache-dependency-path: 'blog/Gemfile'
           
-      - name: Install Jekyll
+      - name: Install dependencies
         run: |
           cd blog
-          gem install jekyll bundler --no-document
-          bundle install  # if you have Gemfile
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
           
-      - name: Build Jekyll site
+      - name: Build site
         run: |
           cd blog
-          jekyll build --verbose --trace --destination ../_site/blog
-          ls -la ../_site/blog/  # Debug: List built files
+          bundle exec jekyll build --trace --verbose
           
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4  # ← Use v4
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site/blog
+          publish_dir: ./blog/_site
           destination_dir: ./blog
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy Blog: ${{ github.sha }}'
+          cname: parishodana.xyz
