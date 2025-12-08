@@ -1,33 +1,14 @@
-# Author information
-author: "Your Name"
-email: "your.email@example.com"
-description: "Your blog description"
-baseurl: "/blog"
-url: "https://parishodana.xyz"
-author_image: "/assets/images/Profilepic.jpg"
-logo: "/assets/images/logo.png"
+title: "My Astrological Journey"
+description: "Exploring the cosmos"
+url: "https://yourusername.github.io" # Replace with your actual GitHub URL
+baseurl: "/blog" 
 
-# Social links
-social_links:
-  twitter: "https://twitter.com/yourusername"
-  linkedin: "https://linkedin.com/in/yourusername"
-  github: "https://github.com/yourusername"
-  youtube: "https://youtube.com/@yourchannel"
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
 
-# Collections for better organization
-collections:
-  posts:
-    output: true
-    permalink: /:categories/:year/:month/:day/:title
+# This tells Jekyll to use your custom html layouts, not a pre-made theme
+theme: null 
 
-# Default front matter
-defaults:
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
-      comments: true
-
-# Author information
-author: "Your Name"
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
