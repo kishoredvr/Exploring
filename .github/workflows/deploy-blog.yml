@@ -1,44 +1,64 @@
-name: Deploy Jekyll Blog
+name: Deploy Blog to GitHub Pages
 
 on:
   push:
-    branches: [main]
     paths:
       - 'blog/**'
+    branches:
+      - main
   workflow_dispatch:
 
+concurrency:
+  group: "blog-deploy-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          fetch-depth: 0
           
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
-          cache: 'bundler'
-          cache-dependency-path: 'blog/Gemfile'
+          bundler-cache: true
           
-      - name: Install dependencies
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
+        
+      - name: Install Jekyll and dependencies
         run: |
           cd blog
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          gem install jekyll bundler
+          bundle config set --local path 'vendor/bundle'
+          bundle install
           
-      - name: Build site
+      - name: Build with Jekyll
         run: |
           cd blog
-          bundle exec jekyll build --trace --verbose
+          bundle exec jekyll build --baseurl="/blog" --destination="../_site/blog"
+        env:
+          JEKYLL_ENV: production
           
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./blog/_site
-          destination_dir: ./blog
-          cname: parishodana.xyz
+          path: '_site/blog'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
