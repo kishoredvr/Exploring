@@ -1,15 +1,27 @@
-# blog/_config.yml
-title: "Your Blog Name"
-description: "Your blog description"
-baseurl: "/blog"  # This is important!
-url: "https://parishodana.xyz"  # or your GitHub Pages URL
+# Author information
+author: "Your Name"
+email: "your.email@example.com"
+author_image: "/assets/images/Profilepic.jpg"
+logo: "/assets/images/logo.png"
 
-# Build settings
-markdown: kramdown
-theme: minima
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
+# Social links
+social_links:
+  twitter: "https://twitter.com/yourusername"
+  linkedin: "https://linkedin.com/in/yourusername"
+  github: "https://github.com/yourusername"
+  youtube: "https://youtube.com/@yourchannel"
 
-# Permalinks
-permalink: /:categories/:year/:month/:day/:title:output_ext
+# Collections for better organization
+collections:
+  posts:
+    output: true
+    permalink: /:categories/:year/:month/:day/:title
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: true
