@@ -6,7 +6,8 @@
     <title>{{ page.title }} | Your Brand</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- RESET & BASICS --- */
@@ -17,14 +18,20 @@
         }
 
         :root {
-            --primary-color: #1a237e; /* Deep Navy Blue */
-            --accent-color: #d84315;  /* Deep Orange/Saffron */
-            --text-dark: #2c3e50;
-            --text-light: #546e7a;
-            --bg-light: #f4f6f8;
+            --primary-color: #0a192f; /* Deep Navy */
+            --accent-color: #ff6b35;  /* Vibrant Orange */
+            --accent-secondary: #00b4d8; /* Teal Blue */
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --bg-light: #f8f9fa;
+            --bg-dark: #0a192f;
             --white: #ffffff;
-            --font-heading: 'Merriweather', serif;
-            --font-body: 'Open Sans', sans-serif;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-content: 'Source Serif Pro', serif;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
@@ -32,58 +39,101 @@
             line-height: 1.7;
             color: var(--text-dark);
             background-color: var(--bg-light);
-            font-size: 16px;
+            font-size: 17px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 107, 53, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 180, 216, 0.03) 0%, transparent 20%);
         }
 
         a {
             text-decoration: none;
             color: inherit;
-            transition: 0.3s ease;
+            transition: var(--transition);
         }
 
         ul {
             list-style: none;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: var(--font-body);
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
         /* --- HEADER --- */
         header {
             background: var(--white);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(10, 25, 47, 0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-top: 4px solid var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
         }
 
         .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 18px 0;
         }
 
         .logo {
             font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.5rem;
+            font-weight: 800;
+            font-size: 1.8rem;
             color: var(--primary-color);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .logo img {
-            height: 40px;
-            width: 40px;
+        .logo-img {
+            height: 50px;
+            width: 50px;
             border-radius: 50%;
             object-fit: cover;
+            border: 3px solid var(--accent-color);
         }
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 35px;
         }
 
         .nav-links a {
@@ -91,183 +141,541 @@
             font-size: 0.95rem;
             color: var(--text-dark);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            position: relative;
+            padding: 5px 0;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            bottom: 0;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover:after,
+        .nav-links a.active:after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent-color);
         }
 
         /* --- ARTICLE CONTENT --- */
-        .article-container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .article-content-wrapper {
-            background: var(--white);
-            padding: 50px;
-            border-radius: 4px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .back-to-articles {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: var(--accent-color);
-            font-weight: 600;
-            padding: 8px 16px;
-            border: 2px solid var(--accent-color);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .back-to-articles:hover {
-            background: var(--accent-color);
+        .article-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a5f 100%);
             color: white;
+            padding: 80px 0 60px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .article-meta {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
+        .article-hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,50 Q25,40 50,50 T100,50" stroke="rgba(255,255,255,0.05)" fill="none" stroke-width="2"/></svg>');
+            opacity: 0.3;
+        }
+
+        .article-header {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .article-breadcrumb {
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
         }
 
-        .article-date {
-            background: rgba(216, 67, 21, 0.1);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+        .article-breadcrumb a {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .article-breadcrumb a:hover {
+            color: var(--accent-color);
+        }
+
+        .article-breadcrumb i {
+            font-size: 0.8rem;
+            opacity: 0.7;
         }
 
         .article-title {
             font-family: var(--font-heading);
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            line-height: 1.2;
+            font-size: 3.2rem;
+            line-height: 1.15;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .article-subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .meta-item i {
+            color: var(--accent-color);
+        }
+
+        .article-category {
+            background: rgba(255, 107, 53, 0.15);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .article-content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+
+        .article-main {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 50px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+
+        .article-main:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .article-image {
-            height: 300px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 30px 0;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
+            height: 450px;
+            border-radius: var(--border-radius);
+            margin: 40px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .article-image:hover img {
+            transform: scale(1.05);
         }
 
         .article-body {
-            font-size: 1.1rem;
-            line-height: 1.8;
+            font-family: var(--font-content);
+            font-size: 1.15rem;
+            line-height: 1.9;
             color: var(--text-dark);
         }
 
         .article-body h2 {
             font-family: var(--font-heading);
             color: var(--primary-color);
-            margin: 40px 0 20px 0;
-            font-size: 1.8rem;
+            margin: 50px 0 25px 0;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .article-body h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
         }
 
         .article-body h3 {
             font-family: var(--font-heading);
             color: var(--text-dark);
-            margin: 30px 0 15px 0;
-            font-size: 1.4rem;
+            margin: 40px 0 20px 0;
+            font-size: 1.5rem;
         }
 
         .article-body p {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .article-body blockquote {
             border-left: 4px solid var(--accent-color);
-            padding-left: 20px;
-            margin: 30px 0;
+            padding: 30px 30px 30px 40px;
+            margin: 40px 0;
             font-style: italic;
-            color: var(--text-light);
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 0 8px 8px 0;
+            color: var(--primary-color);
+            background: rgba(10, 25, 47, 0.03);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .article-body blockquote:before {
+            content: "“";
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 4rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+            font-family: var(--font-heading);
         }
 
         .article-body ul, .article-body ol {
-            margin: 20px 0;
-            padding-left: 30px;
+            margin: 25px 0;
+            padding-left: 40px;
+        }
+
+        .article-body ul {
+            list-style: disc;
+        }
+
+        .article-body ol {
+            list-style: decimal;
         }
 
         .article-body li {
+            margin-bottom: 12px;
+        }
+
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .share-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-btn.twitter:hover { background: #1da1f2; color: white; }
+        .share-btn.facebook:hover { background: #1877f2; color: white; }
+        .share-btn.linkedin:hover { background: #0a66c2; color: white; }
+        .share-btn.link:hover { background: var(--accent-color); color: white; }
+
+        /* --- SIDEBAR --- */
+        .article-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar-widget {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(10, 25, 47, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-title i {
+            color: var(--accent-color);
+        }
+
+        .author-card {
+            text-align: center;
+        }
+
+        .author-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color);
+            margin: 0 auto 20px;
+        }
+
+        .author-name {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--primary-color);
             margin-bottom: 10px;
+        }
+
+        .author-bio {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .related-articles {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .related-article {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .related-article:hover {
+            background: rgba(10, 25, 47, 0.03);
+            transform: translateX(5px);
+        }
+
+        .related-article img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .related-article h4 {
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            line-height: 1.4;
         }
 
         /* --- COMMENTS SECTION --- */
         .comments-section {
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid #eee;
+            margin-bottom: 80px;
         }
 
-        .comments-section h3 {
-            font-family: var(--font-heading);
-            color: var(--primary-color);
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-        }
-
-        .comments-list {
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 40px;
         }
 
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .comments-count {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            background: rgba(255, 107, 53, 0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+
+        .comments-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 50px;
+        }
+
+        .comments-list {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
         .comment {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border-left: 3px solid var(--accent-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .comment:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
         .comment-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .comment-author-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .comment-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
         }
 
         .comment-author {
             font-weight: 700;
             color: var(--primary-color);
+            font-size: 1.1rem;
         }
 
         .comment-date {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-light);
         }
 
         .comment-content {
             color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comment-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .comment-action:hover {
+            color: var(--accent-color);
+        }
+
+        .comment-action i {
+            font-size: 0.9rem;
+        }
+
+        .author-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
         }
 
         /* Comment Form */
-        .comment-form {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius: 4px;
+        .comment-form-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .comment-form-container h3 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
@@ -275,247 +683,591 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--text-dark);
+            font-size: 0.95rem;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-family: var(--font-body);
             font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
         }
 
         .form-group textarea {
-            min-height: 120px;
+            min-height: 150px;
             resize: vertical;
+            line-height: 1.6;
         }
 
-        .submit-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
         }
 
-        .submit-btn:hover {
-            background: #0d1a5c;
+        .form-note {
+            font-size: 0.85rem;
+            color: var(--text-light);
         }
 
-        /* Author Badge */
-        .author-badge {
-            background: var(--accent-color);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            margin-left: 10px;
+        /* Admin Panel */
+        .admin-panel {
+            background: rgba(10, 25, 47, 0.03);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-top: 50px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .admin-panel h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-instructions {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         /* --- FOOTER --- */
         footer {
             background: var(--primary-color);
             color: var(--white);
-            padding: 60px 0;
-            margin-top: 60px;
-            text-align: center;
+            padding: 80px 0 40px;
+            margin-top: 80px;
         }
 
-        .footer-content h2 {
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col h3 {
             font-family: var(--font-heading);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            color: white;
         }
 
         .footer-links {
-            margin: 20px 0;
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
         }
         
-        .footer-links a { opacity: 0.8; }
-        .footer-links a:hover { opacity: 1; color: var(--accent-color); }
+        .footer-links a {
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
 
         .copyright {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             opacity: 0.6;
-            margin-top: 30px;
+            padding-top: 30px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
-            display: inline-block;
-            width: 80%;
+            text-align: center;
         }
 
         /* --- RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            .article-content-wrapper,
+            .comments-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .comment-form-container {
+                position: static;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
             }
-            .article-container {
-                padding: 0 15px;
+            
+            .article-title {
+                font-size: 2.5rem;
             }
-            .article-content-wrapper {
+            
+            .article-main {
                 padding: 30px 20px;
             }
-            .article-title {
-                font-size: 2rem;
-            }
+            
             .article-image {
-                height: 200px;
+                height: 300px;
+            }
+            
+            .article-actions {
+                flex-direction: column;
+                gap: 25px;
+                align-items: flex-start;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* Admin Panel */
-        .admin-panel {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 40px;
-            border: 1px dashed #ccc;
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .admin-panel h4 {
-            color: var(--primary-color);
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification i {
+            font-size: 1.3rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h4 {
+            color: var(--text-light);
+            font-size: 1.3rem;
             margin-bottom: 10px;
-        }
-
-        .admin-instructions {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 10px 0;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="navbar">
-            <div class="logo">
-                <img src="{{ '/Profilepic.jpg' | relative_url }}" alt="Logo">
-                <span>Your Brand</span>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <img src="{{ '/Profilepic.jpg' | relative_url }}" alt="Logo" class="logo-img">
+                    <span>Your Brand</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="{{ '/' | relative_url }}">Home</a>
+                    <a href="{{ '/AboutMe.html' | relative_url }}">About</a>
+                    <a href="{{ '/Articles.html' | relative_url }}" class="active">Articles</a>
+                    <a href="{{ '/MessageMe.html' | relative_url }}">Contact</a>
+                </nav>
             </div>
-            <nav class="nav-links">
-                <a href="{{ '/' | relative_url }}">Home</a>
-                <a href="{{ '/AboutMe.html' | relative_url }}">About</a>
-                <a href="{{ '/Articles.html' | relative_url }}" class="active">Articles</a>
-                <a href="{{ '/MessageMe.html' | relative_url }}">Contact</a>
-            </nav>
         </div>
     </header>
 
-    <div class="article-container">
-        <div class="article-content-wrapper">
-            <a href="{{ '/Articles.html' | relative_url }}" class="back-to-articles">← Back to Articles</a>
-            
-            <div class="article-meta">
-                <span class="article-category">{{ page.categories | join: ', ' }}</span>
-                <span class="article-date">{{ page.date | date: "%b %d, %Y" }}</span>
-            </div>
-            
-            <h1 class="article-title">{{ page.title }}</h1>
-            
-            {% if page.image %}
-            <div class="article-image" style="background-image: url('{{ page.image | relative_url }}')">
-                <!-- Image will be shown here -->
-            </div>
-            {% else %}
-            <div class="article-image">
-                {{ page.emoji | default: '📖' }}
-            </div>
-            {% endif %}
-            
-            <article class="article-body">
-                {{ content }}
-            </article>
-            
-            <!-- Comments Section -->
-            <section class="comments-section">
-                <h3>Responses & Discussions</h3>
-                
-                <div class="comments-list" id="comments-container">
-                    <!-- Comments will be loaded here -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <div class="article-breadcrumb">
+                    <a href="{{ '/' | relative_url }}">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="{{ '/Articles.html' | relative_url }}">Articles</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>{{ page.categories | first | default: 'Article' }}</span>
                 </div>
                 
-                <div class="comment-form">
-                    <h4>Add Your Response</h4>
+                <h1 class="article-title">{{ page.title }}</h1>
+                
+                {% if page.subtitle %}
+                <p class="article-subtitle">{{ page.subtitle }}</p>
+                {% endif %}
+                
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <i class="far fa-calendar"></i>
+                        <span>{{ page.date | date: "%B %d, %Y" }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="far fa-clock"></i>
+                        <span>{{ page.read_time | default: '5' }} min read</span>
+                    </div>
+                    {% if page.categories %}
+                    <div class="article-category">{{ page.categories | join: ', ' }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="article-content-wrapper">
+            <main class="article-main">
+                {% if page.image %}
+                <div class="article-image">
+                    <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
+                </div>
+                {% else %}
+                <div class="article-image" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+                    {{ page.emoji | default: '📖' }}
+                </div>
+                {% endif %}
+                
+                <article class="article-body">
+                    {{ content }}
+                </article>
+                
+                <div class="article-actions">
+                    <div class="share-buttons">
+                        <span style="font-weight: 600; margin-right: 10px; color: var(--text-light);">Share:</span>
+                        <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="share-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="share-btn link" onclick="copyArticleLink()"><i class="fas fa-link"></i></a>
+                    </div>
+                    <a href="{{ '/Articles.html' | relative_url }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Articles
+                    </a>
+                </div>
+            </main>
+            
+            <aside class="article-sidebar">
+                <div class="sidebar-widget author-card">
+                    <div class="widget-title">
+                        <i class="fas fa-user-edit"></i>
+                        <span>About the Author</span>
+                    </div>
+                    <img src="{{ '/Profilepic.jpg' | relative_url }}" alt="Author" class="author-avatar">
+                    <h3 class="author-name">Your Name</h3>
+                    <p class="author-bio">Short bio about yourself. Explain your expertise and what readers can expect from your articles.</p>
+                    <a href="{{ '/AboutMe.html' | relative_url }}" class="btn btn-primary" style="width: 100%;">View Profile</a>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <div class="widget-title">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Related Articles</span>
+                    </div>
+                    <div class="related-articles">
+                        <!-- You can dynamically populate this -->
+                        <div class="related-article">
+                            <img src="https://via.placeholder.com/60" alt="Related">
+                            <div>
+                                <h4>How to Write Engaging Content</h4>
+                                <small>5 min read</small>
+                            </div>
+                        </div>
+                        <div class="related-article">
+                            <img src="https://via.placeholder.com/60" alt="Related">
+                            <div>
+                                <h4>Advanced Techniques for Bloggers</h4>
+                                <small>8 min read</small>
+                            </div>
+                        </div>
+                        <div class="related-article">
+                            <img src="https://via.placeholder.com/60" alt="Related">
+                            <div>
+                                <h4>Building Your Personal Brand</h4>
+                                <small>6 min read</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <div class="widget-title">
+                        <i class="fas fa-hashtag"></i>
+                        <span>Article Tags</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        {% for tag in page.tags %}
+                        <span style="background: rgba(10, 25, 47, 0.08); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        <section class="comments-section">
+            <div class="section-header">
+                <h2 class="section-title">Community Discussion</h2>
+                <div class="comments-count">
+                    <i class="far fa-comments"></i>
+                    <span id="comments-count">0</span> Responses
+                </div>
+            </div>
+            
+            <div class="comments-container">
+                <div class="comments-list">
+                    <div id="comments-container">
+                        <!-- Comments will be loaded here -->
+                    </div>
+                    
+                    <div id="no-comments" class="empty-state" style="display: none;">
+                        <i class="far fa-comment-dots"></i>
+                        <h4>No Responses Yet</h4>
+                        <p>Be the first to share your thoughts on this article!</p>
+                    </div>
+                </div>
+                
+                <div class="comment-form-container">
+                    <h3>Share Your Thoughts</h3>
                     <form id="comment-form">
                         <div class="form-group">
-                            <label for="comment-name">Name *</label>
-                            <input type="text" id="comment-name" required>
+                            <label for="comment-name">Your Name *</label>
+                            <input type="text" id="comment-name" placeholder="John Doe" required>
                         </div>
                         <div class="form-group">
-                            <label for="comment-email">Email (optional, for notifications)</label>
-                            <input type="email" id="comment-email">
+                            <label for="comment-email">Email Address</label>
+                            <input type="email" id="comment-email" placeholder="john@example.com">
                         </div>
                         <div class="form-group">
-                            <label for="comment-message">Message *</label>
-                            <textarea id="comment-message" required></textarea>
+                            <label for="comment-message">Your Response *</label>
+                            <textarea id="comment-message" placeholder="Share your thoughts on this article..." required></textarea>
                         </div>
-                        <button type="submit" class="submit-btn">Post Response</button>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Post Response
+                            </button>
+                            <small class="form-note">Your email will not be published.</small>
+                        </div>
                     </form>
                 </div>
-
-                <!-- Admin Instructions Panel -->
-                <div class="admin-panel">
-                    <h4>🗂️ Comments Management</h4>
-                    <p class="admin-instructions">
-                        <strong>To manage comments (edit or delete):</strong><br>
-                        1. Open browser DevTools (F12 or Right-click > Inspect)<br>
-                        2. Go to "Application" tab → "Local Storage" → "{{ site.url }}"<br>
-                        3. Look for key: <code>comments_{{ page.url | slugify }}</code><br>
-                        4. Edit/Delete the JSON data as needed<br>
-                        5. Refresh page to see changes
-                    </p>
-                    <button onclick="viewAllComments()" style="background: var(--accent-color); color: white; border: none; padding: 8px 15px; border-radius: 4px; margin-right: 10px; cursor: pointer;">View All Comments (Console)</button>
-                    <button onclick="clearAllComments()" style="background: #ff6b6b; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Clear All Comments</button>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div class="admin-panel">
+                <h4><i class="fas fa-user-shield"></i> Comments Management</h4>
+                <p class="admin-instructions">
+                    <strong>To manage comments (edit or delete):</strong><br>
+                    Use the buttons below or open browser DevTools (F12) → Application tab → Local Storage.
+                </p>
+                <div class="admin-actions">
+                    <button onclick="viewAllComments()" class="btn" style="background: var(--accent-secondary); color: white;">
+                        <i class="fas fa-eye"></i> View All Comments
+                    </button>
+                    <button onclick="exportComments()" class="btn" style="background: #10b981; color: white;">
+                        <i class="fas fa-download"></i> Export Comments
+                    </button>
+                    <button onclick="clearAllComments()" class="btn" style="background: #ef4444; color: white;">
+                        <i class="fas fa-trash"></i> Clear All Comments
+                    </button>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </div>
 
     <footer>
-        <div class="footer-content">
-            <h2>Your Brand Name</h2>
-            <div class="footer-links">
-                <a href="{{ '/Terms.html' | relative_url }}">Terms & Conditions</a>
-                <a href="#">Privacy Policy</a>
-                <a href="{{ '/MessageMe.html' | relative_url }}">Contact</a>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3>Your Brand</h3>
+                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 20px;">Creating valuable content and fostering meaningful discussions.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="{{ '/' | relative_url }}">Home</a>
+                        <a href="{{ '/AboutMe.html' | relative_url }}">About Me</a>
+                        <a href="{{ '/Articles.html' | relative_url }}">All Articles</a>
+                        <a href="{{ '/MessageMe.html' | relative_url }}">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Categories</h3>
+                    <div class="footer-links">
+                        <a href="#">Technology</a>
+                        <a href="#">Business</a>
+                        <a href="#">Personal Development</a>
+                        <a href="#">Creative Writing</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Stay Updated</h3>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">Subscribe to get notified about new articles and updates.</p>
+                    <div style="display: flex;">
+                        <input type="email" placeholder="Your email" style="flex: 1; padding: 12px; border: none; border-radius: 8px 0 0 8px;">
+                        <button class="btn btn-primary" style="border-radius: 0 8px 8px 0;">Subscribe</button>
+                    </div>
+                </div>
             </div>
-            <span class="copyright">&copy; {{ site.time | date: '%Y' }} Your Name. All rights reserved.</span>
+            <div class="copyright">
+                &copy; {{ site.time | date: '%Y' }} Your Brand. All rights reserved. | 
+                <a href="{{ '/Terms.html' | relative_url }}" style="color: inherit; opacity: 0.8;">Terms & Conditions</a> | 
+                <a href="#" style="color: inherit; opacity: 0.8;">Privacy Policy</a>
+            </div>
         </div>
     </footer>
 
+    <!-- Notification Element -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Your comment has been posted!</span>
+    </div>
+
     <script>
-        // Simple Comments System - No Password Required
+        // Enhanced Comments System
         document.addEventListener('DOMContentLoaded', function() {
             const articleId = '{{ page.url | slugify }}';
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            // Show notification
+            function showNotification(message, type = 'success') {
+                notificationText.textContent = message;
+                notification.className = 'notification show';
+                notification.style.background = type === 'success' ? 'var(--accent-color)' : 
+                                                type === 'error' ? '#ef4444' : 
+                                                type === 'info' ? 'var(--accent-secondary)' : 'var(--accent-color)';
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
             
             // Load comments from localStorage
             function loadComments() {
                 const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
                 const container = document.getElementById('comments-container');
+                const noComments = document.getElementById('no-comments');
+                const commentsCount = document.getElementById('comments-count');
+                
+                // Update count
+                commentsCount.textContent = comments.length;
                 
                 if (comments.length === 0) {
-                    container.innerHTML = '<p>No responses yet. Be the first to comment!</p>';
+                    container.innerHTML = '';
+                    noComments.style.display = 'block';
                     return;
                 }
                 
-                container.innerHTML = comments.map(comment => `
-                    <div class="comment">
+                noComments.style.display = 'none';
+                
+                container.innerHTML = comments.map((comment, index) => `
+                    <div class="comment" data-id="${index}">
                         <div class="comment-header">
-                            <div>
-                                <span class="comment-author">${comment.name}</span>
-                                ${comment.isAuthor ? '<span class="author-badge">Author</span>' : ''}
+                            <div class="comment-author-info">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(comment.name)}&background=${comment.isAuthor ? 'ff6b35' : '0a192f'}&color=fff" class="comment-avatar" alt="${comment.name}">
+                                <div>
+                                    <span class="comment-author">${comment.name}</span>
+                                    ${comment.isAuthor ? '<span class="author-badge"><i class="fas fa-crown"></i> Author</span>' : ''}
+                                    <div class="comment-date">${new Date(comment.date).toLocaleDateString('en-US', { 
+                                        year: 'numeric', 
+                                        month: 'short', 
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}</div>
+                                </div>
                             </div>
-                            <span class="comment-date">${new Date(comment.date).toLocaleDateString()}</span>
+                            <div class="comment-actions">
+                                <span class="comment-action" onclick="likeComment(${index})">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span class="like-count">${comment.likes || 0}</span>
+                                </span>
+                                <span class="comment-action" onclick="replyToComment(${index}, '${comment.name}')">
+                                    <i class="far fa-comment"></i> Reply
+                                </span>
+                            </div>
                         </div>
                         <div class="comment-content">${comment.message}</div>
+                        ${comment.replies && comment.replies.length > 0 ? `
+                            <div class="replies" style="margin-top: 20px; padding-left: 20px; border-left: 2px solid rgba(0,0,0,0.1);">
+                                ${comment.replies.map(reply => `
+                                    <div class="comment" style="margin-bottom: 15px;">
+                                        <div class="comment-header">
+                                            <div class="comment-author-info">
+                                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(reply.name)}&background=0a192f&color=fff" style="width: 35px; height: 35px;" alt="${reply.name}">
+                                                <div>
+                                                    <span class="comment-author">${reply.name}</span>
+                                                    <div class="comment-date">${new Date(reply.date).toLocaleDateString()}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comment-content">${reply.message}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
                     </div>
                 `).join('');
             }
@@ -524,21 +1276,28 @@
             document.getElementById('comment-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const name = document.getElementById('comment-name').value;
-                const email = document.getElementById('comment-email').value;
-                const message = document.getElementById('comment-message').value;
+                const name = document.getElementById('comment-name').value.trim();
+                const email = document.getElementById('comment-email').value.trim();
+                const message = document.getElementById('comment-message').value.trim();
+                
+                if (!name || !message) {
+                    showNotification('Please fill in all required fields.', 'error');
+                    return;
+                }
                 
                 const comment = {
                     name: name,
                     email: email || '',
                     message: message,
                     date: new Date().toISOString(),
-                    isAuthor: false // Mark as author if needed
+                    isAuthor: false,
+                    likes: 0,
+                    replies: []
                 };
                 
                 // Save to localStorage
                 const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-                comments.push(comment);
+                comments.unshift(comment); // Add to beginning
                 localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
                 
                 // Clear form
@@ -548,19 +1307,73 @@
                 loadComments();
                 
                 // Show success message
-                alert('Thank you for your response! Your comment has been posted.');
+                showNotification('Thank you for your response! Your comment has been posted.');
+                
+                // Scroll to comments
+                document.querySelector('.comments-section').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             });
             
-            // View all comments in console (for management)
+            // Like comment function
+            window.likeComment = function(index) {
+                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
+                if (comments[index]) {
+                    comments[index].likes = (comments[index].likes || 0) + 1;
+                    localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
+                    loadComments();
+                }
+            };
+            
+            // Reply to comment
+            window.replyToComment = function(index, authorName) {
+                const replyText = prompt(`Reply to ${authorName}:`);
+                if (replyText && replyText.trim()) {
+                    const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
+                    if (comments[index]) {
+                        if (!comments[index].replies) comments[index].replies = [];
+                        
+                        comments[index].replies.push({
+                            name: 'You', // In a real app, this would be the actual user
+                            message: replyText,
+                            date: new Date().toISOString()
+                        });
+                        
+                        localStorage.setItem(`comments_${articleId}`, JSON.stringify(comments));
+                        loadComments();
+                        showNotification('Your reply has been posted.');
+                    }
+                }
+            };
+            
+            // View all comments in console
             window.viewAllComments = function() {
                 const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
                 console.log('All comments for this article:');
-                console.log(comments);
+                console.table(comments);
                 console.log('To edit/delete:');
                 console.log('1. Copy the comments array above');
                 console.log('2. Edit as needed');
                 console.log('3. Run in console: localStorage.setItem("comments_{{ page.url | slugify }}", JSON.stringify(editedArray))');
-                alert('Check browser console (F12) to view all comments');
+                
+                showNotification('Check browser console (F12) to view all comments', 'info');
+            };
+            
+            // Export comments
+            window.exportComments = function() {
+                const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
+                const dataStr = JSON.stringify(comments, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `comments-${articleId}-${new Date().toISOString().slice(0,10)}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showNotification('Comments exported successfully!', 'info');
             };
             
             // Clear all comments
@@ -568,13 +1381,20 @@
                 if (confirm('Are you sure you want to delete ALL comments on this article? This cannot be undone.')) {
                     localStorage.removeItem(`comments_${articleId}`);
                     loadComments();
-                    alert('All comments have been cleared.');
+                    showNotification('All comments have been cleared.', 'info');
                 }
             };
             
-            // Auto-mark your own comments as Author
+            // Copy article link
+            window.copyArticleLink = function() {
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('Article link copied to clipboard!');
+                });
+            };
+            
+            // Mark author comments
             function markAuthorComments() {
-                // You can customize this to mark specific emails or names as author
                 const authorEmails = ['you@example.com']; // Add your email(s)
                 const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
                 
@@ -596,11 +1416,42 @@
             loadComments();
             markAuthorComments();
             
-            // Optional: Load pre-defined comments from article front matter
-            // {% if page.comments %}
-            //   const predefinedComments = {{ page.comments | jsonify }};
-            //   // Merge with existing comments
-            // {% endif %}
+            // Add some sample comments on first visit if none exist
+            const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
+            if (comments.length === 0) {
+                // Uncomment to add sample comments for demo purposes
+                /*
+                const sampleComments = [
+                    {
+                        name: 'Alex Johnson',
+                        email: '',
+                        message: 'This article really resonated with me. The section about personal branding was particularly insightful. Looking forward to more content like this!',
+                        date: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+                        isAuthor: false,
+                        likes: 5,
+                        replies: []
+                    },
+                    {
+                        name: 'Sarah Miller',
+                        email: '',
+                        message: 'I\'ve been following your articles for a while now and this might be your best one yet. Could you expand more on the technical aspects in a future post?',
+                        date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+                        isAuthor: false,
+                        likes: 3,
+                        replies: [
+                            {
+                                name: 'You',
+                                message: 'Thanks Sarah! I\'m planning a more technical deep-dive for next month. Stay tuned!',
+                                date: new Date(Date.now() - 86400000).toISOString()
+                            }
+                        ]
+                    }
+                ];
+                
+                localStorage.setItem(`comments_${articleId}`, JSON.stringify(sampleComments));
+                loadComments();
+                */
+            }
         });
     </script>
 </body>
