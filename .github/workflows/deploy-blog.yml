@@ -1,4 +1,4 @@
-name: Deploy Jekyll Blog site to Pages
+name: Deploy Site to Pages
 
 on:
   push:
@@ -17,10 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./blog  # This tells GitHub to work inside your 'blog' folder
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,22 +26,20 @@ jobs:
         with:
           ruby-version: '3.1'
           bundler-cache: true
-          working-directory: ./blog
+          # working-directory removed (defaults to root)
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Build with Jekyll
-        # This builds the site and puts it in the _site folder
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3 # UPDATED to v3
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./blog/_site
-
+          path: ./_site
 
   deploy:
     environment:
@@ -56,5 +50,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 # UPDATED to v4
-
+        uses: actions/deploy-pages@v4
