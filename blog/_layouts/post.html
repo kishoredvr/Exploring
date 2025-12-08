@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title }} | Your Brand</title>
+    <title>{{ page.title }} | {{ site.title }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Inter:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@300;400;600&display=swap" rel="stylesheet">
@@ -926,14 +926,18 @@
         <div class="container">
             <div class="navbar">
                 <div class="logo">
-                    <img src="{{ '/Profilepic.jpg' | relative_url }}" alt="Logo" class="logo-img">
-                    <span>Your Brand</span>
+                    {% if site.logo %}
+                    <img src="{{ site.logo | relative_url }}" alt="Logo" class="logo-img">
+                    {% else %}
+                    <img src="{{ '/assets/images/Profilepic.jpg' | relative_url }}" alt="Logo" class="logo-img">
+                    {% endif %}
+                    <span>{{ site.title }}</span>
                 </div>
                 <nav class="nav-links">
                     <a href="{{ '/' | relative_url }}">Home</a>
-                    <a href="{{ '/AboutMe.html' | relative_url }}">About</a>
-                    <a href="{{ '/Articles.html' | relative_url }}" class="active">Articles</a>
-                    <a href="{{ '/MessageMe.html' | relative_url }}">Contact</a>
+                    <a href="{{ '/about' | relative_url }}">About</a>
+                    <a href="{{ '/blog' | relative_url }}" class="active">Articles</a>
+                    <a href="{{ '/contact' | relative_url }}">Contact</a>
                 </nav>
             </div>
         </div>
@@ -945,7 +949,7 @@
                 <div class="article-breadcrumb">
                     <a href="{{ '/' | relative_url }}">Home</a>
                     <i class="fas fa-chevron-right"></i>
-                    <a href="{{ '/Articles.html' | relative_url }}">Articles</a>
+                    <a href="{{ '/blog' | relative_url }}">Articles</a>
                     <i class="fas fa-chevron-right"></i>
                     <span>{{ page.categories | first | default: 'Article' }}</span>
                 </div>
@@ -963,7 +967,14 @@
                     </div>
                     <div class="meta-item">
                         <i class="far fa-clock"></i>
-                        <span>{{ page.read_time | default: '5' }} min read</span>
+                        <span>
+                            {% assign words = content | number_of_words %}
+                            {% if words < 360 %}
+                                1 min read
+                            {% else %}
+                                {{ words | divided_by:180 }} min read
+                            {% endif %}
+                        </span>
                     </div>
                     {% if page.categories %}
                     <div class="article-category">{{ page.categories | join: ', ' }}</div>
@@ -980,6 +991,10 @@
                 <div class="article-image">
                     <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
                 </div>
+                {% elsif page.image_url %}
+                <div class="article-image">
+                    <img src="{{ page.image_url }}" alt="{{ page.title }}">
+                </div>
                 {% else %}
                 <div class="article-image" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
                     {{ page.emoji | default: '📖' }}
@@ -993,12 +1008,12 @@
                 <div class="article-actions">
                     <div class="share-buttons">
                         <span style="font-weight: 600; margin-right: 10px; color: var(--text-light);">Share:</span>
-                        <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="share-btn facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&url={{ site.url }}{{ page.url | relative_url }}" class="share-btn twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url | relative_url }}" class="share-btn facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url | relative_url }}&title={{ page.title | uri_escape }}" class="share-btn linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" class="share-btn link" onclick="copyArticleLink()"><i class="fas fa-link"></i></a>
                     </div>
-                    <a href="{{ '/Articles.html' | relative_url }}" class="btn btn-secondary">
+                    <a href="{{ '/blog' | relative_url }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Back to Articles
                     </a>
                 </div>
@@ -1010,10 +1025,14 @@
                         <i class="fas fa-user-edit"></i>
                         <span>About the Author</span>
                     </div>
-                    <img src="{{ '/Profilepic.jpg' | relative_url }}" alt="Author" class="author-avatar">
-                    <h3 class="author-name">Your Name</h3>
-                    <p class="author-bio">Short bio about yourself. Explain your expertise and what readers can expect from your articles.</p>
-                    <a href="{{ '/AboutMe.html' | relative_url }}" class="btn btn-primary" style="width: 100%;">View Profile</a>
+                    {% if site.author_image %}
+                    <img src="{{ site.author_image | relative_url }}" alt="Author" class="author-avatar">
+                    {% else %}
+                    <img src="{{ '/assets/images/Profilepic.jpg' | relative_url }}" alt="Author" class="author-avatar">
+                    {% endif %}
+                    <h3 class="author-name">{{ site.author | default: site.title }}</h3>
+                    <p class="author-bio">{{ site.description }}</p>
+                    <a href="{{ '/about' | relative_url }}" class="btn btn-primary" style="width: 100%;">View Profile</a>
                 </div>
                 
                 <div class="sidebar-widget">
@@ -1022,28 +1041,28 @@
                         <span>Related Articles</span>
                     </div>
                     <div class="related-articles">
-                        <!-- You can dynamically populate this -->
-                        <div class="related-article">
-                            <img src="https://via.placeholder.com/60" alt="Related">
-                            <div>
-                                <h4>How to Write Engaging Content</h4>
-                                <small>5 min read</small>
+                        {% for post in site.related_posts limit:3 %}
+                        <a href="{{ post.url | relative_url }}" class="related-article">
+                            {% if post.image %}
+                            <img src="{{ post.image | relative_url }}" alt="{{ post.title }}">
+                            {% else %}
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-secondary) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                                {{ post.emoji | default: '📝' }}
                             </div>
-                        </div>
-                        <div class="related-article">
-                            <img src="https://via.placeholder.com/60" alt="Related">
+                            {% endif %}
                             <div>
-                                <h4>Advanced Techniques for Bloggers</h4>
-                                <small>8 min read</small>
+                                <h4>{{ post.title }}</h4>
+                                <small>
+                                    {% assign words = post.content | number_of_words %}
+                                    {% if words < 360 %}
+                                        1 min read
+                                    {% else %}
+                                        {{ words | divided_by:180 }} min read
+                                    {% endif %}
+                                </small>
                             </div>
-                        </div>
-                        <div class="related-article">
-                            <img src="https://via.placeholder.com/60" alt="Related">
-                            <div>
-                                <h4>Building Your Personal Brand</h4>
-                                <small>6 min read</small>
-                            </div>
-                        </div>
+                        </a>
+                        {% endfor %}
                     </div>
                 </div>
                 
@@ -1054,7 +1073,7 @@
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                         {% for tag in page.tags %}
-                        <span style="background: rgba(10, 25, 47, 0.08); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">{{ tag }}</span>
+                        <a href="{{ '/blog/tags' | relative_url }}#{{ tag | slugify }}" style="background: rgba(10, 25, 47, 0.08); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">{{ tag }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -1134,46 +1153,55 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-col">
-                    <h3>Your Brand</h3>
-                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 20px;">Creating valuable content and fostering meaningful discussions.</p>
+                    <h3>{{ site.title }}</h3>
+                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 20px;">{{ site.description }}</p>
+                    {% if site.social_links %}
                     <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        {% if site.social_links.twitter %}
+                        <a href="{{ site.social_links.twitter }}" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
+                        {% endif %}
+                        {% if site.social_links.linkedin %}
+                        <a href="{{ site.social_links.linkedin }}" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        {% endif %}
+                        {% if site.social_links.github %}
+                        <a href="{{ site.social_links.github }}" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+                        {% endif %}
+                        {% if site.social_links.youtube %}
+                        <a href="{{ site.social_links.youtube }}" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
+                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <div class="footer-links">
                         <a href="{{ '/' | relative_url }}">Home</a>
-                        <a href="{{ '/AboutMe.html' | relative_url }}">About Me</a>
-                        <a href="{{ '/Articles.html' | relative_url }}">All Articles</a>
-                        <a href="{{ '/MessageMe.html' | relative_url }}">Contact</a>
+                        <a href="{{ '/about' | relative_url }}">About Me</a>
+                        <a href="{{ '/blog' | relative_url }}">All Articles</a>
+                        <a href="{{ '/contact' | relative_url }}">Contact</a>
                     </div>
                 </div>
                 <div class="footer-col">
                     <h3>Categories</h3>
                     <div class="footer-links">
-                        <a href="#">Technology</a>
-                        <a href="#">Business</a>
-                        <a href="#">Personal Development</a>
-                        <a href="#">Creative Writing</a>
+                        {% for category in site.categories limit:4 %}
+                        <a href="{{ '/blog/categories' | relative_url }}#{{ category[0] | slugify }}">{{ category[0] }}</a>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="footer-col">
                     <h3>Stay Updated</h3>
                     <p style="opacity: 0.8; margin-bottom: 20px;">Subscribe to get notified about new articles and updates.</p>
-                    <div style="display: flex;">
-                        <input type="email" placeholder="Your email" style="flex: 1; padding: 12px; border: none; border-radius: 8px 0 0 8px;">
-                        <button class="btn btn-primary" style="border-radius: 0 8px 8px 0;">Subscribe</button>
-                    </div>
+                    <form id="newsletter-form" style="display: flex;">
+                        <input type="email" placeholder="Your email" required style="flex: 1; padding: 12px; border: none; border-radius: 8px 0 0 8px;">
+                        <button type="submit" class="btn btn-primary" style="border-radius: 0 8px 8px 0;">Subscribe</button>
+                    </form>
                 </div>
             </div>
             <div class="copyright">
-                &copy; {{ site.time | date: '%Y' }} Your Brand. All rights reserved. | 
-                <a href="{{ '/Terms.html' | relative_url }}" style="color: inherit; opacity: 0.8;">Terms & Conditions</a> | 
-                <a href="#" style="color: inherit; opacity: 0.8;">Privacy Policy</a>
+                &copy; {{ site.time | date: '%Y' }} {{ site.title }}. All rights reserved. | 
+                <a href="{{ '/terms' | relative_url }}" style="color: inherit; opacity: 0.8;">Terms & Conditions</a> | 
+                <a href="{{ '/privacy' | relative_url }}" style="color: inherit; opacity: 0.8;">Privacy Policy</a>
             </div>
         </div>
     </footer>
@@ -1187,7 +1215,7 @@
     <script>
         // Enhanced Comments System
         document.addEventListener('DOMContentLoaded', function() {
-            const articleId = '{{ page.url | slugify }}';
+            const articleId = '{{ page.id | default: page.url | slugify }}';
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notification-text');
             
@@ -1222,6 +1250,9 @@
                 
                 noComments.style.display = 'none';
                 
+                // Sort comments by date (newest first)
+                comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
                 container.innerHTML = comments.map((comment, index) => `
                     <div class="comment" data-id="${index}">
                         <div class="comment-header">
@@ -1249,7 +1280,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="comment-content">${comment.message}</div>
+                        <div class="comment-content">${comment.message.replace(/\n/g, '<br>')}</div>
                         ${comment.replies && comment.replies.length > 0 ? `
                             <div class="replies" style="margin-top: 20px; padding-left: 20px; border-left: 2px solid rgba(0,0,0,0.1);">
                                 ${comment.replies.map(reply => `
@@ -1263,7 +1294,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="comment-content">${reply.message}</div>
+                                        <div class="comment-content">${reply.message.replace(/\n/g, '<br>')}</div>
                                     </div>
                                 `).join('')}
                             </div>
@@ -1316,6 +1347,16 @@
                 });
             });
             
+            // Newsletter form
+            document.getElementById('newsletter-form')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                if (email) {
+                    showNotification('Thank you for subscribing!', 'info');
+                    this.reset();
+                }
+            });
+            
             // Like comment function
             window.likeComment = function(index) {
                 const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
@@ -1355,7 +1396,7 @@
                 console.log('To edit/delete:');
                 console.log('1. Copy the comments array above');
                 console.log('2. Edit as needed');
-                console.log('3. Run in console: localStorage.setItem("comments_{{ page.url | slugify }}", JSON.stringify(editedArray))');
+                console.log('3. Run in console: localStorage.setItem("comments_' + articleId + '", JSON.stringify(editedArray))');
                 
                 showNotification('Check browser console (F12) to view all comments', 'info');
             };
@@ -1395,7 +1436,7 @@
             
             // Mark author comments
             function markAuthorComments() {
-                const authorEmails = ['you@example.com']; // Add your email(s)
+                const authorEmails = ['{{ site.email }}']; // Add your email from config
                 const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
                 
                 let updated = false;
@@ -1415,43 +1456,6 @@
             // Initialize
             loadComments();
             markAuthorComments();
-            
-            // Add some sample comments on first visit if none exist
-            const comments = JSON.parse(localStorage.getItem(`comments_${articleId}`)) || [];
-            if (comments.length === 0) {
-                // Uncomment to add sample comments for demo purposes
-                /*
-                const sampleComments = [
-                    {
-                        name: 'Alex Johnson',
-                        email: '',
-                        message: 'This article really resonated with me. The section about personal branding was particularly insightful. Looking forward to more content like this!',
-                        date: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-                        isAuthor: false,
-                        likes: 5,
-                        replies: []
-                    },
-                    {
-                        name: 'Sarah Miller',
-                        email: '',
-                        message: 'I\'ve been following your articles for a while now and this might be your best one yet. Could you expand more on the technical aspects in a future post?',
-                        date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-                        isAuthor: false,
-                        likes: 3,
-                        replies: [
-                            {
-                                name: 'You',
-                                message: 'Thanks Sarah! I\'m planning a more technical deep-dive for next month. Stay tuned!',
-                                date: new Date(Date.now() - 86400000).toISOString()
-                            }
-                        ]
-                    }
-                ];
-                
-                localStorage.setItem(`comments_${articleId}`, JSON.stringify(sampleComments));
-                loadComments();
-                */
-            }
         });
     </script>
 </body>
