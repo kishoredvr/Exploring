@@ -1,4 +1,4 @@
-name: Deploy Site to Pages
+name: Deploy Combined Site
 
 on:
   push:
@@ -26,13 +26,24 @@ jobs:
         with:
           ruby-version: '3.1'
           bundler-cache: true
-          # working-directory removed (defaults to root)
+          working-directory: ./blog # Use the Gemfile inside the blog folder
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+      # 1. Create a temporary folder named '_site'
+      # 2. Copy your ROOT HTML files (AboutMe, index, images) into it
+      - name: Prepare Root Files
+        run: |
+          mkdir _site
+          cp *.html *.jpg *.png _site/ 2>/dev/null || :
+          cp CNAME _site/ 2>/dev/null || :
+
+      # 3. Build the Blog and put it inside '_site/blog'
+      - name: Build Blog with Jekyll
+        run: |
+          cd blog
+          bundle exec jekyll build --destination ../_site/blog
         env:
           JEKYLL_ENV: production
 
