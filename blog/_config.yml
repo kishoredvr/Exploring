@@ -1,6 +1,9 @@
 # Author information
 author: "Your Name"
 email: "your.email@example.com"
+description: "Your blog description"
+baseurl: "/blog"
+url: "https://parishodana.xyz"
 author_image: "/assets/images/Profilepic.jpg"
 logo: "/assets/images/logo.png"
 
@@ -25,3 +28,6 @@ defaults:
     values:
       layout: "post"
       comments: true
+
+# Author information
+author: "Your Name"
