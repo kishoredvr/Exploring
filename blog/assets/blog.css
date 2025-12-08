@@ -21,6 +21,7 @@ a:hover { text-decoration: underline; }
     padding: 0 20px;
 }
 
+
 /* Responsive: Stack columns on mobile */
 @media (max-width: 768px) {
     .main-container { flex-direction: column; }
