@@ -1,6 +1,6 @@
 title: "My Astrological Journey"
 description: "Exploring the cosmos"
-url: "https://yourusername.github.io" # Replace with your actual GitHub URL
+url: "https://parishodana.xyz" # Replace with your actual GitHub URL
 baseurl: "" 
 
 markdown: kramdown
@@ -12,4 +12,5 @@ theme: null
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+include: [_posts, blog] # This ensures it looks for posts
 
