@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "0 */10 * * *"  # every 10 hours
+    - cron: "0 */10 * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,44 +10,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send full form payload (mimics actual MessageMe.html submission)
+      - name: Send minimal Astrology-form payload to trigger email function
         run: |
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
           -H "Content-Type: application/json" \
           -d '{
-            "name": "Automated KeepAlive",
+            "purpose": "Astrology",
+
+            "name": "System KeepAlive",
             "email": "keepalive@system.bot",
             "mobileNumber": "0000000000",
 
-            "purpose": "Other",
-            "astroServiceSelect": "Not applicable",
-            "astro_service_tier": "not applicable",
+            "astroServiceSelect": "1000",
+            "astro_service_tier": "1000",
 
-            "birthDetailsAvailable": "Not applicable",
-            "dob": "Not applicable",
-            "hour": "Not applicable",
-            "minute": "Not applicable",
-            "second": "Not applicable",
+            "birthDetailsAvailable": "Yes",
+            "dob": "1990-01-01",
+            "hour": "0",
+            "minute": "0",
+            "second": "0",
             "explanation": "Not applicable",
 
-            "city": "Not applicable",
-            "state": "Not applicable",
-            "country": "Not applicable",
-            "pincode": "Not applicable",
+            "city": "System",
+            "state": "System",
+            "country": "System",
+            "pincode": "000000",
 
-            "gender": "Not applicable",
+            "gender": "Male",
             "genderOtherInput": "Not applicable",
 
-            "accuracy": "Not applicable",
+            "accuracy": "Yes",
 
-            "contactCountry": "System",
+            "contactCountry": "Not applicable",
 
-            "expectations": "Automated keep-alive submission to prevent Supabase cold start.",
+            "expectations": "Automated keep-alive astrology submission to keep Supabase warm.",
 
+            "payment_status": "not applicable",
+            "payment_amount": "0",
             "phonepe_txn_id": "",
             "phonepe_order_id": "",
-            "payment_amount": "0",
-            "payment_status": "not applicable",
 
             "submittedAt": "'"$(date -Iseconds)"'"
           }'
