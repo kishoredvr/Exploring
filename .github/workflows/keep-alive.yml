@@ -12,35 +12,35 @@ jobs:
       - name: Send Other Purpose submission (FULL REAL PAYLOAD)
         run: |
           TIMESTAMP=$(date -Iseconds)
-
-          JSON="{\
-\"name\":\"KeepAlive Bot\",\
-\"email\":\"keepalive@system.bot\",\
-\"mobileNumber\":\"9999999999\",\
-\"purpose\":\"Other\",\
-\"astroServiceSelect\":\"Not applicable\",\
-\"astro_service_tier\":\"Not applicable\",\
-\"birthDetailsAvailable\":\"Not applicable\",\
-\"dob\":\"Not applicable\",\
-\"hour\":\"Not applicable\",\
-\"minute\":\"Not applicable\",\
-\"second\":\"Not applicable\",\
-\"explanation\":\"Not applicable\",\
-\"city\":\"Not applicable\",\
-\"state\":\"Not applicable\",\
-\"country\":\"Not applicable\",\
-\"pincode\":\"Not applicable\",\
-\"gender\":\"Not applicable\",\
-\"genderOtherInput\":\"Not applicable\",\
-\"accuracy\":\"Not applicable\",\
-\"contactCountry\":\"India\",\
-\"expectations\":\"Automated keep-alive request.\",\
-\"phonepe_txn_id\":\"Not applicable\",\
-\"phonepe_order_id\":\"Not applicable\",\
-\"payment_amount\":\"0\",\
-\"payment_status\":\"not applicable\",\
-\"submittedAt\":\"$TIMESTAMP\"\
-}"
+          
+          JSON='{
+            "name":"KeepAlive Bot",
+            "email":"keepalive@system.bot",
+            "mobileNumber":"9999999999",
+            "purpose":"Other",
+            "astroServiceSelect":"Not applicable",
+            "astro_service_tier":"Not applicable",
+            "birthDetailsAvailable":"Not applicable",
+            "dob":"Not applicable",
+            "hour":"Not applicable",
+            "minute":"Not applicable",
+            "second":"Not applicable",
+            "explanation":"Not applicable",
+            "city":"Not applicable",
+            "state":"Not applicable",
+            "country":"Not applicable",
+            "pincode":"Not applicable",
+            "gender":"Not applicable",
+            "genderOtherInput":"Not applicable",
+            "accuracy":"Not applicable",
+            "contactCountry":"India",
+            "expectations":"Automated keep-alive request.",
+            "phonepe_txn_id":"Not applicable",
+            "phonepe_order_id":"Not applicable",
+            "payment_amount":"0",
+            "payment_status":"not applicable",
+            "submittedAt":"'"$TIMESTAMP"'"
+          }'
 
           echo "$JSON"
 
