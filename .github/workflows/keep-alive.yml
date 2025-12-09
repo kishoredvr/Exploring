@@ -2,49 +2,63 @@ name: Keep Supabase Alive
 
 on:
   schedule:
+    # Runs at minute 0 past hour 0, 10, and 20 (UTC) every day.
     - cron: "0 */10 * * *"
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to manually click "Run workflow" for testing
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Other Purpose submission (Full Real Payload)
+      - name: Send Keep-Alive Payload
         run: |
-          TIMESTAMP=$(date -Iseconds)
+          # 1. Generate ISO 8601 Timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          JSON="{\
-                  \"name\":\"KeepAlive Bot\",\
-                  \"email\":\"keepalive@system.bot\",\
-                  \"mobileNumber\":\"9999999999\",\
-                  \"purpose\":\"Other\",\
-                  \"astroServiceSelect\":\"Not applicable\",\
-                  \"astro_service_tier\":\"Not applicable\",\
-                  \"birthDetailsAvailable\":\"Not applicable\",\
-                  \"dob\":\"Not applicable\",\
-                  \"hour\":\"Not applicable\",\
-                  \"minute\":\"Not applicable\",\
-                  \"second\":\"Not applicable\",\
-                  \"explanation\":\"Not applicable\",\
-                  \"city\":\"Not applicable\",\
-                  \"state\":\"Not applicable\",\
-                  \"country\":\"Not applicable\",\
-                  \"pincode\":\"Not applicable\",\
-                  \"gender\":\"Not applicable\",\
-                  \"genderOtherInput\":\"Not applicable\",\
-                  \"accuracy\":\"Not applicable\",\
-                  \"contactCountry\":\"India\",\
-                  \"expectations\":\"Automated keep-alive request.\",\
-                  \"phonepe_txn_id\":\"Not applicable\",\
-                  \"phonepe_order_id\":\"Not applicable\",\
-                  \"payment_amount\":\"0\",\
-                  \"payment_status\":\"not applicable\",\
-                  \"submittedAt\":\"$TIMESTAMP\"\
-                  }"
+          # 2. Construct JSON Payload using EOF to avoid quote escaping issues
+          # We set purpose to "Other" to trigger the email logic in submitform.ts
+          JSON_PAYLOAD=$(cat <<EOF
+          {
+            "name": "KeepAlive Bot",
+            "email": "keepalive@system.bot",
+            "mobileNumber": "9999999999",
+            "purpose": "Other",
+            "astroServiceSelect": "Not applicable",
+            "astro_service_tier": "Not applicable",
+            "birthDetailsAvailable": "Not applicable",
+            "dob": "Not applicable",
+            "hour": "Not applicable",
+            "minute": "Not applicable",
+            "second": "Not applicable",
+            "explanation": "Not applicable",
+            "city": "Not applicable",
+            "state": "Not applicable",
+            "country": "Not applicable",
+            "pincode": "Not applicable",
+            "gender": "Not applicable",
+            "genderOtherInput": "Not applicable",
+            "accuracy": "Not applicable",
+            "contactCountry": "India",
+            "expectations": "Automated keep-alive request.",
+            "phonepe_txn_id": "Not applicable",
+            "phonepe_order_id": "Not applicable",
+            "payment_amount": "0",
+            "payment_status": "not applicable",
+            "submittedAt": "$TIMESTAMP"
+          }
+          EOF
+          )
 
-          echo "Sending payload:"
-          echo "$JSON"
+          echo "----------------------------------------"
+          echo "Sending payload to Supabase Function..."
+          echo "----------------------------------------"
 
-          curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
+          # 3. Send Request
+          # --fail: Causes the workflow to fail if HTTP status is > 400
+          # --silent: Hides progress bar
+          # --show-error: Shows error details if it fails
+          curl --fail --silent --show-error -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
                -H "Content-Type: application/json" \
-               -d "$JSON"
+               -d "$JSON_PAYLOAD"
+          
+          echo -e "\n\nSuccess! Keep-alive signal sent."
