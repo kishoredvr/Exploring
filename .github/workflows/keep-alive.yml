@@ -1,18 +1,30 @@
-name: Daily Keep-Alive
+name: Keep Supabase Alive
+
 on:
   schedule:
-    - cron: '0 2 * * *'  # 2 AM UTC daily
+    - cron: "0 */10 * * *"   # Every 10 hours
   workflow_dispatch:
 
 jobs:
-  ping:
+  ping-supabase:
     runs-on: ubuntu-latest
+
     steps:
-      - run: |
+      - name: Send automated "Other Purpose" submission
+        run: |
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
-            -H "Content-Type: application/json" \
-            -d '{"purpose":"Other","name":"Keep Alive","email":"keep-alive-'$(date +%s)'@example.com","mobileNumber":"9876543210","contactCountry":"Test","expectations":"Daily ping","submittedAt":"'$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")'"}' \
-            --max-time 30 \
-            --silent || true
-          
-          echo "✅ Daily keep-alive executed at $(date)"
+          -H "Content-Type: application/json" \
+          -d '{
+            "purpose": "Other",
+            "name": "Automated Keep-Alive",
+            "email": "keepalive@system.local",
+            "mobileNumber": "0000000000",
+            "contactCountry": "System",
+            "expectations": "Keep-alive ping to prevent Supabase cold start.",
+            "payment_status": "not applicable",
+            "payment_amount": "0",
+            "astro_service_tier": "not applicable",
+            "phonepe_txn_id": "",
+            "phonepe_order_id": "",
+            "submittedAt": "'"$(date -Iseconds)"'"
+          }'
