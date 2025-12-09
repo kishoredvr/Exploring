@@ -1,26 +1,18 @@
-name: Keep Form Alive
+name: Daily Keep-Alive
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * *'  # 2 AM UTC daily
   workflow_dispatch:
 
 jobs:
-  keep-alive:
+  ping:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Send Ping Request
-        run: |
-          # Generate unique data
-          TIMESTAMP=$(date +%s)
-          
-          # Send the request
+      - run: |
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
             -H "Content-Type: application/json" \
-            -d "{\"purpose\":\"Other\",\"name\":\"Keep Alive\",\"email\":\"keep-alive-$TIMESTAMP@example.com\",\"mobileNumber\":\"9876543210\",\"astro_service_tier\":\"not applicable\",\"payment_amount\":\"0\",\"payment_status\":\"not applicable\",\"contactCountry\":\"Test\",\"expectations\":\"Daily keep-alive request $TIMESTAMP\",\"submittedAt\":\"$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')\"}" \
+            -d '{"purpose":"Other","name":"Keep Alive","email":"keep-alive-'$(date +%s)'@example.com","mobileNumber":"9876543210","contactCountry":"Test","expectations":"Daily ping","submittedAt":"'$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")'"}' \
             --max-time 30 \
-            --silent \
-            --output /dev/null \
-            --write-out "Status: %{http_code}, Time: %{time_total}s" || echo "Request completed"
+            --silent || true
           
-          echo "Keep-alive request sent at $(date)"
+          echo "✅ Daily keep-alive executed at $(date)"
