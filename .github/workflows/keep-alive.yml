@@ -8,31 +8,25 @@ on:
 jobs:
   keepalive:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Send Other Purpose submission (matches manual)
+      - name: Send Other Purpose submission
         run: |
-          TIMESTAMP="$(date -Iseconds)"
+          TIMESTAMP=$(date -Iseconds)
 
-          PAYLOAD=$(cat <<EOF
-{
-  "purpose": "Other",
-  "name": "Automated KeepAlive Bot",
-  "email": "keepalive@system.bot",
-  "mobileNumber": "9999999999",
-  "contactCountry": "India",
-  "expectations": "Automated keepalive request to keep Supabase awake.",
-  "astro_service_tier": "not applicable",
-  "payment_amount": "0",
-  "payment_status": "not applicable",
-  "submittedAt": "$TIMESTAMP"
-}
-EOF
-)
+          JSON="{\"purpose\":\"Other\",\
+\"name\":\"Automated KeepAlive Bot\",\
+\"email\":\"keepalive@system.bot\",\
+\"mobileNumber\":\"9999999999\",\
+\"contactCountry\":\"India\",\
+\"expectations\":\"Automated keepalive request to keep Supabase alive.\",\
+\"astro_service_tier\":\"not applicable\",\
+\"payment_amount\":\"0\",\
+\"payment_status\":\"not applicable\",\
+\"submittedAt\":\"$TIMESTAMP\"}"
 
           echo "Sending payload:"
-          echo "$PAYLOAD"
+          echo "$JSON"
 
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
                -H "Content-Type: application/json" \
-               -d "$PAYLOAD"
+               -d "$JSON"
