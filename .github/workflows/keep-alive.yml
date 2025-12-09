@@ -1,74 +1,36 @@
-name: Keep Supabase Alive (debuggable)
+name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "0 */10 * * *"
+    - cron: "0 */10 * * *"   # every 10 hours
   workflow_dispatch:
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Send realistic Other Purpose submission and show response
+      - name: Send Other Purpose submission (matches real manual submission)
         run: |
-          set -euo pipefail
-
           TIMESTAMP="$(date -Iseconds)"
-          # Build JSON payload exactly like frontend would (empty strings where inputs are empty)
+
           read -r -d '' PAYLOAD <<EOF
 {
+  "purpose": "Other",
   "name": "Automated KeepAlive Bot",
   "email": "keepalive@system.bot",
   "mobileNumber": "9999999999",
-  "purpose": "Other",
-  "astroServiceSelect": "",
-  "astro_service_tier": "",
-  "birthDetailsAvailable": "",
-  "dob": "",
-  "hour": "",
-  "minute": "",
-  "second": "",
-  "explanation": "",
-  "city": "",
-  "state": "",
-  "country": "",
-  "pincode": "",
-  "gender": "Not applicable",
-  "genderOtherInput": "",
-  "accuracy": "",
   "contactCountry": "India",
-  "expectations": "Automated keep-alive request to keep Supabase alive.",
-  "phonepe_txn_id": "",
-  "phonepe_order_id": "",
+  "expectations": "Automated keepalive request to keep Supabase awake.",
+  "astro_service_tier": "not applicable",
   "payment_amount": "0",
   "payment_status": "not applicable",
   "submittedAt": "$TIMESTAMP"
 }
 EOF
 
-          echo "===== Payload being sent ====="
+          echo "Sending payload:"
           echo "$PAYLOAD"
-          echo "=============================="
 
-          # Send request and capture response + http code
-          SUPABASE_URL="https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form"
-          RESPONSE="$(curl -s -w "\nHTTPSTATUS:%{http_code}" \
-            -X POST "$SUPABASE_URL" \
+          curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
             -H "Content-Type: application/json" \
-            -d "$PAYLOAD")" || true
-
-          # Split body and status
-          HTTP_STATUS="$(echo "$RESPONSE" | tail -n1 | sed -e 's/HTTPSTATUS://')"
-          BODY="$(echo "$RESPONSE" | sed '$d')"
-
-          echo "HTTP STATUS: $HTTP_STATUS"
-          echo "Response body:"
-          echo "$BODY"
-
-          # Fail the job if non-2xx to surface action failure
-          if [[ "$HTTP_STATUS" =~ ^2 ]]; then
-            echo "Request succeeded (2xx)."
-          else
-            echo "Request failed (non-2xx). Exiting with failure to show logs."
-            exit 1
-          fi
+            -d "$PAYLOAD"
