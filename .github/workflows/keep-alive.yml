@@ -12,21 +12,12 @@ jobs:
       - name: Send Other Purpose submission
         run: |
           TIMESTAMP=$(date -Iseconds)
-
-          JSON="{\"purpose\":\"Other\",\
-\"name\":\"Automated KeepAlive Bot\",\
-\"email\":\"keepalive@system.bot\",\
-\"mobileNumber\":\"9999999999\",\
-\"contactCountry\":\"India\",\
-\"expectations\":\"Automated keepalive request to keep Supabase alive.\",\
-\"astro_service_tier\":\"not applicable\",\
-\"payment_amount\":\"0\",\
-\"payment_status\":\"not applicable\",\
-\"submittedAt\":\"$TIMESTAMP\"}"
-
+          
+          JSON="{\"purpose\":\"Other\",\"name\":\"Automated KeepAlive Bot\",\"email\":\"keepalive@system.bot\",\"mobileNumber\":\"9999999999\",\"contactCountry\":\"India\",\"expectations\":\"Automated keepalive request to keep Supabase alive.\",\"astro_service_tier\":\"not applicable\",\"payment_amount\":\"0\",\"payment_status\":\"not applicable\",\"submittedAt\":\"$TIMESTAMP\"}"
+          
           echo "Sending payload:"
           echo "$JSON"
-
+          
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
                -H "Content-Type: application/json" \
                -d "$JSON"
