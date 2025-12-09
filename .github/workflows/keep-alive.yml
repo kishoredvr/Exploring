@@ -1,34 +1,30 @@
-name: Supabase Keep-Warm
+name: Send Reminder Email
 
 on:
-  # Ping every 4 hours to prevent cold starts completely
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 9 */3 * *'  # Every 3 days at 9 AM
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  keep-warm:
+  send-email:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping all endpoints
-        run: |
-          BASE="https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co"
+    - name: Send Email
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: "📅 3-Day Reminder - Supabase Check"
+        to: your-email@gmail.com
+        from: GitHub Reminder <${{ secrets.EMAIL_USERNAME }}>
+        body: |
+          This is your 3-day reminder to check Supabase functions.
           
-          # Create a test payload
-          PAYLOAD='{"test":true,"keep_alive":true,"run_id":"'"${{ github.run_id }}"'"}'
+          Time: $(date)
+          Run ID: ${{ github.run_id }}
           
-          # Array of endpoints
-          ENDPOINTS=("/submit-form" "/initiate-payment" "/payment-status")
+          Make sure your Supabase functions are running properly.
           
-          for ENDPOINT in "${ENDPOINTS[@]}"; do
-            echo "Pinging $ENDPOINT..."
-            curl -s -X POST "$BASE$ENDPOINT" \
-              -H "Content-Type: application/json" \
-              -d "$PAYLOAD" \
-              -w " -> HTTP %{http_code}\n" \
-              --max-time 20 || echo "Failed to reach $ENDPOINT"
-            sleep 1
-          done
+          Next reminder in 3 days.
