@@ -9,15 +9,41 @@ jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Other Purpose submission
+      - name: Send Other Purpose submission (FULL REAL PAYLOAD)
         run: |
           TIMESTAMP=$(date -Iseconds)
-          
-          JSON="{\"purpose\":\"Other\",\"name\":\"Automated KeepAlive Bot\",\"email\":\"keepalive@system.bot\",\"mobileNumber\":\"9999999999\",\"contactCountry\":\"India\",\"expectations\":\"Automated keepalive request to keep Supabase alive.\",\"astro_service_tier\":\"not applicable\",\"payment_amount\":\"0\",\"payment_status\":\"not applicable\",\"submittedAt\":\"$TIMESTAMP\"}"
-          
-          echo "Sending payload:"
+
+          JSON="{\
+\"name\":\"KeepAlive Bot\",\
+\"email\":\"keepalive@system.bot\",\
+\"mobileNumber\":\"9999999999\",\
+\"purpose\":\"Other\",\
+\"astroServiceSelect\":\"Not applicable\",\
+\"astro_service_tier\":\"Not applicable\",\
+\"birthDetailsAvailable\":\"Not applicable\",\
+\"dob\":\"Not applicable\",\
+\"hour\":\"Not applicable\",\
+\"minute\":\"Not applicable\",\
+\"second\":\"Not applicable\",\
+\"explanation\":\"Not applicable\",\
+\"city\":\"Not applicable\",\
+\"state\":\"Not applicable\",\
+\"country\":\"Not applicable\",\
+\"pincode\":\"Not applicable\",\
+\"gender\":\"Not applicable\",\
+\"genderOtherInput\":\"Not applicable\",\
+\"accuracy\":\"Not applicable\",\
+\"contactCountry\":\"India\",\
+\"expectations\":\"Automated keep-alive request.\",\
+\"phonepe_txn_id\":\"Not applicable\",\
+\"phonepe_order_id\":\"Not applicable\",\
+\"payment_amount\":\"0\",\
+\"payment_status\":\"not applicable\",\
+\"submittedAt\":\"$TIMESTAMP\"\
+}"
+
           echo "$JSON"
-          
+
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
                -H "Content-Type: application/json" \
                -d "$JSON"
