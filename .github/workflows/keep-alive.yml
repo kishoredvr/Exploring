@@ -12,15 +12,20 @@ jobs:
     steps:
       - name: Send Keep-Alive Payload
         env:
-          # We need the Anon Key to pass the Supabase Gateway security check.
-          # If this is missing, the request triggers an "EarlyDrop" or 401 Unauthorized.
+          # REQUIRED: Add this in GitHub Repo Settings -> Secrets
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          # 1. Generate Dynamic Variables
+          # 1. Generate Dynamic Variables to prevent DB collisions
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           UNIQUE_ID="KEEPALIVE-$(date +%s)"
 
-          # 2. Construct JSON Payload securely
+          echo "----------------------------------------"
+          echo "Generated Run ID: $UNIQUE_ID"
+          echo "Timestamp: $TIMESTAMP"
+          echo "----------------------------------------"
+
+          # 2. Construct JSON Payload securely (Heredoc)
+          # We set purpose="Other" to trigger the email logic in your TS file.
           JSON_PAYLOAD=$(cat <<EOF
           {
             "name": "KeepAlive Bot",
@@ -43,7 +48,7 @@ jobs:
             "genderOtherInput": "Not applicable",
             "accuracy": "Not applicable",
             "contactCountry": "India",
-            "expectations": "Automated keep-alive request for $TIMESTAMP",
+            "expectations": "Automated keep-alive request $UNIQUE_ID",
             "phonepe_txn_id": "KA-TXN-0000",
             "phonepe_order_id": "$UNIQUE_ID",
             "payment_amount": "0",
@@ -53,28 +58,34 @@ jobs:
           EOF
           )
 
-          echo "----------------------------------------"
-          echo "Sending payload with ID: $UNIQUE_ID"
-          echo "----------------------------------------"
-
-          # 3. Send Request and Capture Response
-          # Added --max-time 60 to prevent client disconnects during Cold Starts.
-          # Added Authorization header to prevent Gateway Rejection (EarlyDrop).
+          # 3. Send Request and Capture Full Response
+          # We use curl with headers to mimic a legitimate request.
+          # The -w flag captures the HTTP status code at the end.
           response=$(curl -s -w "\n%{http_code}" -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "User-Agent: GitHub-Actions-KeepAlive/1.0" \
+            -H "Accept: application/json" \
             --max-time 60 \
             -d "$JSON_PAYLOAD")
 
-          # Split response into Body and HTTP Status Code
+          # 4. Process Response
           http_body=$(echo "$response" | sed '$d')
           http_code=$(echo "$response" | tail -n1)
 
-          echo "Server Response Body: $http_body"
-          echo "HTTP Status Code: $http_code"
+          echo "----------------------------------------"
+          echo "SERVER RESPONSE BODY:"
+          echo "$http_body"
+          echo "----------------------------------------"
+          echo "HTTP STATUS CODE: $http_code"
 
-          # 4. Validate Success
+          # 5. Fail the workflow if not 200 OK
           if [ "$http_code" -ne 200 ]; then
-            echo "::error::Request failed with HTTP status $http_code"
+            echo "::error::Request failed! Server returned status $http_code"
             exit 1
+          fi
+
+          # 6. Check if body implies success (Optional additional check)
+          if [[ "$http_body" != *"success"* ]]; then
+             echo "::warning::Server returned 200 but body does not contain 'success'. Check logs."
           fi
