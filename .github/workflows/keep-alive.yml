@@ -18,11 +18,28 @@ jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      # --- ADDED: Checkout code (Required for the keepalive action) ---
+      # --- ADDED: Checkout code ---
       - uses: actions/checkout@v4
 
-      # --- ADDED: The Keepalive Hack (Commits to repo to prevent 60-day stop) ---
-      - uses: gautamkrishnar/keepalive-workflow@v1
+      # --- ADDED: Manual Keepalive Script (No external action) ---
+      - name: Git Auto-Commit (Keepalive)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Get timestamp of the last commit
+          last_commit=$(git log -1 --format=%ct)
+          now=$(date +%s)
+          seconds_since_last_commit=$((now - last_commit))
+          
+          # Threshold: 50 days (4320000 seconds)
+          if [ $seconds_since_last_commit -gt 4320000 ]; then
+            echo "Last commit was > 50 days ago. Pushing empty commit to reset GitHub timer."
+            git commit --allow-empty -m "Automated keep-alive [skip ci]"
+            git push
+          else
+            echo "Last commit was recent ($seconds_since_last_commit seconds ago). No action needed."
+          fi
 
       - name: Send Keep-Alive Payload
         env:
