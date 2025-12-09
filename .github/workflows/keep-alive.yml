@@ -32,9 +32,9 @@ jobs:
           now=$(date +%s)
           seconds_since_last_commit=$((now - last_commit))
           
-          # Threshold: 50 days (4320000 seconds)
-          if [ $seconds_since_last_commit -gt 4320000 ]; then
-            echo "Last commit was > 50 days ago. Pushing empty commit to reset GitHub timer."
+          # Threshold: 28 days (2419200 seconds)
+          if [ $seconds_since_last_commit -gt 2419200 ]; then
+            echo "Last commit was > 28 days ago. Pushing empty commit to reset GitHub timer."
             git commit --allow-empty -m "Automated keep-alive [skip ci]"
             git push
           else
