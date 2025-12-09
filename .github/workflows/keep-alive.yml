@@ -1,71 +1,26 @@
-name: Keep Alive - Daily Form Submission
+name: Keep Form Alive
 on:
   schedule:
-    # Runs every 24 hours at 2 AM UTC
     - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
   keep-alive:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      
-      - name: Setup environment
-        run: sudo apt-get update && sudo apt-get install -y curl
-      
-      - name: Generate test data
+      - name: Send Ping Request
         run: |
+          # Generate unique data
           TIMESTAMP=$(date +%s)
-          RANDOM_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c 8)
-          DATE_ISO=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
           
-          # Simple test data that matches your form
-          cat > payload.json << EOF
-          {
-            "purpose": "Other",
-            "name": "Test User",
-            "email": "test-${TIMESTAMP}@example.com",
-            "mobileNumber": "9876543210",
-            "astro_service_tier": "not applicable",
-            "payment_amount": "0",
-            "payment_status": "not applicable",
-            "contactCountry": "Test Country",
-            "expectations": "Keep-alive test submission ${TIMESTAMP}",
-            "submittedAt": "${DATE_ISO}"
-          }
-          EOF
-          
-          echo "Payload:"
-          cat payload.json
-      
-      - name: Send submission
-        env:
-          BACKEND_URL: 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form'
-        run: |
-          echo "Sending request to $BACKEND_URL"
-          
-          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$BACKEND_URL" \
+          # Send the request
+          curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
             -H "Content-Type: application/json" \
-            -H "Accept: application/json" \
-            -d @payload.json \
-            --max-time 30 || echo "Curl failed")
+            -d "{\"purpose\":\"Other\",\"name\":\"Keep Alive\",\"email\":\"keep-alive-$TIMESTAMP@example.com\",\"mobileNumber\":\"9876543210\",\"astro_service_tier\":\"not applicable\",\"payment_amount\":\"0\",\"payment_status\":\"not applicable\",\"contactCountry\":\"Test\",\"expectations\":\"Daily keep-alive request $TIMESTAMP\",\"submittedAt\":\"$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')\"}" \
+            --max-time 30 \
+            --silent \
+            --output /dev/null \
+            --write-out "Status: %{http_code}, Time: %{time_total}s" || echo "Request completed"
           
-          # Extract HTTP status and response body
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-          RESPONSE_BODY=$(echo "$RESPONSE" | sed '$d')
-          
-          echo "HTTP Status: $HTTP_CODE"
-          echo "Response: $RESPONSE_BODY"
-          
-          if [[ "$HTTP_CODE" =~ ^2[0-9][0-9]$ ]]; then
-            echo "✅ Success! Server responded with HTTP $HTTP_CODE"
-            exit 0
-          else
-            echo "⚠️ Non-2xx response (HTTP $HTTP_CODE)"
-            echo "This is OK - the main goal is to trigger the function."
-            exit 0
-          fi
+          echo "Keep-alive request sent at $(date)"
