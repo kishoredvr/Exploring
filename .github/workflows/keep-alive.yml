@@ -3,6 +3,7 @@ on:
   schedule:
     # Runs every 24 hours at 00:00 UTC
     - cron: '0 0 * * *'
+  # Also run on workflow_dispatch for manual triggering
   workflow_dispatch:
 
 jobs:
@@ -18,101 +19,54 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Create and run keep-alive script
+      - name: Send Minimal Keep-Alive Submission
         env:
           BACKEND_BASE: 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co'
         run: |
-          cat > keep-alive.js << 'EOF'
-          const https = require('https');
-          const BACKEND_BASE = process.env.BACKEND_BASE;
+          echo "Sending minimal keep-alive submission..."
           
-          if (!BACKEND_BASE) {
-            console.error('❌ BACKEND_BASE environment variable is not set');
-            process.exit(1);
+          # Generate a unique timestamp for this submission
+          TIMESTAMP=$(date +%s)
+          DATE_ISO=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+          
+          # Create minimal payload matching exactly what your server accepts
+          cat > dummy_data.json << EOF
+          {
+            "purpose": "Other",
+            "name": "Keep Alive Bot",
+            "email": "keep-alive-$TIMESTAMP@example.com",
+            "mobileNumber": "9876543210",
+            "astro_service_tier": "not applicable",
+            "payment_amount": "0",
+            "payment_status": "not applicable",
+            "contactCountry": "Test Country",
+            "expectations": "Automated daily keep-alive submission. Timestamp: $TIMESTAMP",
+            "submittedAt": "$DATE_ISO"
           }
-          
-          // Generate unique timestamp
-          const timestamp = Date.now();
-          const dateISO = new Date().toISOString();
-          
-          // Minimal payload matching exactly what your server processes
-          const formData = {
-            purpose: "Other",
-            name: "Keep Alive Bot",
-            email: `keep-alive-${timestamp}@example.com`,
-            mobileNumber: "9876543210",
-            astro_service_tier: "not applicable",
-            payment_amount: "0",
-            payment_status: "not applicable",
-            contactCountry: "Test Country",
-            expectations: `Automated daily keep-alive submission. Timestamp: ${timestamp}`,
-            submittedAt: dateISO,
-            isKeepAlive: true
-          };
-          
-          const data = JSON.stringify(formData);
-          
-          console.log('Sending keep-alive submission to:', `${BACKEND_BASE}/submit-form`);
-          console.log('Payload:', JSON.stringify(formData, null, 2));
-          
-          // Parse the URL
-          const url = new URL(`${BACKEND_BASE}/submit-form`);
-          
-          const options = {
-            hostname: url.hostname,
-            port: 443,
-            path: url.pathname,
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'User-Agent': 'GitHub-Actions-Keep-Alive/1.0',
-              'Content-Length': data.length,
-              'Accept': 'application/json'
-            },
-            timeout: 10000 // 10 second timeout
-          };
-          
-          const req = https.request(options, (res) => {
-            let responseBody = '';
-            
-            res.on('data', (chunk) => {
-              responseBody += chunk;
-            });
-            
-            res.on('end', () => {
-              console.log(`Status Code: ${res.statusCode}`);
-              
-              try {
-                const parsed = JSON.parse(responseBody);
-                console.log('Response:', JSON.stringify(parsed, null, 2));
-              } catch {
-                console.log('Response (raw):', responseBody);
-              }
-              
-              if (res.statusCode >= 200 && res.statusCode < 300) {
-                console.log('✅ Keep-alive submission successful!');
-                process.exit(0);
-              } else {
-                console.error('❌ Keep-alive submission failed');
-                process.exit(1);
-              }
-            });
-          });
-          
-          req.on('error', (error) => {
-            console.error('Request error:', error.message);
-            process.exit(1);
-          });
-          
-          req.on('timeout', () => {
-            console.error('Request timeout');
-            req.destroy();
-            process.exit(1);
-          });
-          
-          req.write(data);
-          req.end();
           EOF
           
-          # Run the script
-          node keep-alive.js
+          echo "Sending POST request to $BACKEND_BASE/submit-form"
+          echo "Payload:"
+          cat dummy_data.json
+          
+          # Send the POST request
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "$BACKEND_BASE/submit-form" \
+            -H "Content-Type: application/json" \
+            -d @dummy_data.json)
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          RESPONSE_BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "Response HTTP Code: $HTTP_CODE"
+          echo "Response Body: $RESPONSE_BODY"
+          
+          # Check if the request was successful
+          if [[ $HTTP_CODE -ge 200 && $HTTP_CODE -lt 300 ]]; then
+            echo "✅ Keep-alive submission successful!"
+            exit 0
+          else
+            echo "❌ Keep-alive submission failed with HTTP $HTTP_CODE"
+            echo "Response: $RESPONSE_BODY"
+            exit 1
+          fi
