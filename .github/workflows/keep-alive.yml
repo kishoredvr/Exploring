@@ -1,296 +1,77 @@
 name: Keep Alive - Daily Form Submission
 on:
   schedule:
-    # Runs every 24 hours at 2 AM UTC (to avoid midnight traffic)
     - cron: '0 2 * * *'
-  # Allow manual triggering for testing
   workflow_dispatch:
 
 jobs:
   keep-alive:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Setup Node.js for scripting
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          
-      - name: Setup Python for fallback
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      
       - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y curl jq openssl
+        
+      - name: Generate test data
         run: |
-          # Install curl and jq for better JSON handling
-          sudo apt-get update && sudo apt-get install -y curl jq wget
-          
-      - name: Generate realistic test data
-        id: generate-data
-        run: |
-          echo "=== Generating Realistic Test Data ==="
-          
-          # Generate unique identifiers
           TIMESTAMP=$(date +%s)
           RANDOM_ID=$(openssl rand -hex 4)
           DATE_ISO=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
           
-          # Arrays of realistic data
-          NAMES=("Alex Johnson" "Sam Williams" "Taylor Smith" "Jordan Davis" "Casey Brown" "Riley Miller" "Morgan Taylor" "Drew Anderson" "Jamie Wilson" "Cameron Thomas")
-          COUNTRIES=("United States" "Canada" "United Kingdom" "Australia" "India" "Germany" "France" "Japan" "Singapore" "Netherlands")
-          DOMAINS=("gmail.com" "yahoo.com" "outlook.com" "icloud.com" "protonmail.com")
-          
-          # Select random entries
-          RAND_NAME=${NAMES[$RANDOM % ${#NAMES[@]}]}
-          RAND_COUNTRY=${COUNTRIES[$RANDOM % ${#COUNTRIES[@]}]}
-          RAND_DOMAIN=${DOMAINS[$RANDOM % ${#DOMAINS[@]}]}
-          
-          # Generate email without automation markers
-          USER_NAME=$(echo "$RAND_NAME" | tr ' ' '.' | tr '[:upper:]' '[:lower:]')
-          EMAIL="${USER_NAME}.${RANDOM_ID}@${RAND_DOMAIN}"
-          
-          # Generate mobile number
-          MOBILE_PREFIX="98765"
-          MOBILE_SUFFIX=$(printf "%04d" $((RANDOM % 10000)))
-          MOBILE="${MOBILE_PREFIX}${MOBILE_SUFFIX}"
-          
-          # Create payload that mimics real user submission
+          # Create payload
           cat > payload.json << EOF
           {
             "purpose": "Other",
-            "name": "$RAND_NAME",
-            "email": "$EMAIL",
-            "mobileNumber": "$MOBILE",
+            "name": "Test User $RANDOM_ID",
+            "email": "test.$RANDOM_ID@example.com",
+            "mobileNumber": "98765${RANDOM_ID:0:4}",
             "astro_service_tier": "not applicable",
             "payment_amount": "0",
             "payment_status": "not applicable",
-            "contactCountry": "$RAND_COUNTRY",
-            "expectations": "I came across your website and wanted to learn more about your services. Could you please share some information about what you offer? I'm interested in exploring possibilities. Thank you!",
+            "contactCountry": "Test Country",
+            "expectations": "Daily keep-alive test submission. Timestamp: $TIMESTAMP",
             "submittedAt": "$DATE_ISO"
           }
           EOF
           
-          echo "Generated payload for: $RAND_NAME"
-          echo "Email: $EMAIL"
-          echo "Country: $RAND_COUNTRY"
+          echo "Generated payload"
+          cat payload.json
           
-          # Save values for later steps
-          echo "payload_file=payload.json" >> $GITHUB_OUTPUT
-          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
-          echo "email=$EMAIL" >> $GITHUB_OUTPUT
-          
-      - name: Send submission using Python (Primary Method)
-        id: submit-python
+      - name: Send submission using curl
         env:
           BACKEND_URL: 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form'
         run: |
-          echo "=== Sending Submission via Python ==="
+          echo "Sending submission to Supabase function..."
           
-          python3 << 'EOF'
-          import json
-          import requests
-          import sys
-          import os
-          from datetime import datetime
-          
-          # Load payload
-          with open('payload.json', 'r') as f:
-              payload = json.load(f)
-          
-          backend_url = os.environ.get('BACKEND_URL')
-          
-          print(f"Sending to: {backend_url}")
-          print("Payload:", json.dumps(payload, indent=2))
-          
-          try:
-              # Send with realistic headers
-              headers = {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                  'Referer': 'https://kishoredvr.github.io/Exploring/MessageMe.html',
-                  'Origin': 'https://kishoredvr.github.io'
-              }
-              
-              response = requests.post(
-                  backend_url,
-                  json=payload,
-                  headers=headers,
-                  timeout=30,
-                  allow_redirects=True
-              )
-              
-              print(f"Status Code: {response.status_code}")
-              print(f"Response Headers: {dict(response.headers)}")
-              
-              try:
-                  response_json = response.json()
-                  print("Response JSON:", json.dumps(response_json, indent=2))
-                  
-                  # Set output variables
-                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                      f.write(f"python_status={response.status_code}\n")
-                      f.write(f"python_success={response.status_code in [200, 201]}\n")
-                      
-                  if response.status_code in [200, 201]:
-                      print("✅ Python submission successful")
-                      sys.exit(0)
-                  else:
-                      print(f"❌ Python submission failed with status {response.status_code}")
-                      sys.exit(0)  # Don't fail the workflow
-                      
-              except ValueError:
-                  print("Response (raw):", response.text[:500])
-                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                      f.write(f"python_status={response.status_code}\n")
-                      f.write(f"python_success={response.status_code in [200, 201]}\n")
-                  
-                  if response.status_code in [200, 201]:
-                      print("✅ Python submission successful (non-JSON response)")
-                  else:
-                      print(f"⚠️ Unexpected response format with status {response.status_code}")
-          
-          except requests.exceptions.Timeout:
-              print("❌ Request timeout")
-              sys.exit(0)  # Don't fail the workflow
-          except requests.exceptions.RequestException as e:
-              print(f"❌ Request error: {e}")
-              sys.exit(0)  # Don't fail the workflow
-          EOF
-          
-      - name: Alternative submission using curl (Fallback)
-        if: steps.submit-python.outputs.python_success != 'true'
-        env:
-          BACKEND_URL: 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form'
-        run: |
-          echo "=== Trying Alternative Submission via curl ==="
-          
-          # Add some delay between attempts
-          sleep 2
-          
-          # Send with curl as fallback
-          HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" \
+          RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" \
             -X POST "$BACKEND_URL" \
             -H "Content-Type: application/json" \
             -H "Accept: application/json" \
-            -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" \
-            -H "Origin: https://kishoredvr.github.io" \
             -d @payload.json \
-            --max-time 30 \
-            --retry 2 \
-            --retry-delay 3)
+            --max-time 30)
+            
+          # Extract HTTP code
+          HTTP_CODE=$(echo "$RESPONSE" | grep -o 'HTTP_CODE:[0-9]*' | cut -d: -f2)
+          RESPONSE_BODY=$(echo "$RESPONSE" | sed '/HTTP_CODE:/d')
           
-          echo "HTTP Status Code: $HTTP_CODE"
-          
-          if [ -f response.txt ]; then
-            echo "Response:"
-            cat response.txt
-            echo ""
-          fi
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response: $RESPONSE_BODY"
           
           if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-            echo "✅ Curl submission successful"
-            echo "curl_success=true" >> $GITHUB_OUTPUT
+            echo "✅ Success"
+            exit 0
           else
-            echo "⚠️ Curl submission did not return 2xx status"
-            echo "curl_success=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Non-success response"
+            exit 0  # Don't fail workflow
           fi
           
-      - name: Health check on main function
+      - name: Health check
         if: always()
         run: |
-          echo "=== Performing Health Checks ==="
-          
-          BASE_URL="https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co"
-          
-          # Check main endpoint with HEAD request
-          echo -n "HEAD request to main URL: "
-          curl -I -X HEAD "$BASE_URL" \
-            --max-time 10 \
-            --silent \
-            --fail \
-            --output /dev/null \
-            && echo "✅ OK" || echo "❌ Failed"
-          
-          # Try a simple GET request
-          echo -n "GET request to main URL: "
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X GET "$BASE_URL" \
-            --max-time 10 \
-            --retry 1)
-          echo "HTTP $HTTP_CODE"
-          
-          # Check if submit-form endpoint exists with OPTIONS
-          echo -n "OPTIONS request to submit-form: "
-          curl -X OPTIONS "$BASE_URL/submit-form" \
-            -H "Origin: https://kishoredvr.github.io" \
-            --max-time 10 \
-            --silent \
-            --fail \
-            --output /dev/null \
-            && echo "✅ Endpoint accessible" || echo "⚠️ Endpoint may not support OPTIONS"
-          
-      - name: Verify with GET request to blog
-        if: always()
-        run: |
-          echo "=== Verifying related endpoints ==="
-          
-          # Check if your main site is accessible
-          SITE_URLS=(
-            "https://kishoredvr.github.io/Exploring/"
-            "https://kishoredvr.github.io/Exploring/MessageMe.html"
-            "https://parishodana.xyz/"
-          )
-          
-          for url in "${SITE_URLS[@]}"; do
-            echo -n "Checking $url: "
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-              -L "$url" \
-              --max-time 15 \
-              --retry 1 || echo "000")
-            
-            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
-              echo "✅ HTTP $HTTP_CODE"
-            else
-              echo "⚠️ HTTP $HTTP_CODE"
-            fi
-          done
-          
-      - name: Log results
-        if: always()
-        run: |
-          echo "=== Workflow Results Summary ==="
-          echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "Workflow Run: ${{ github.run_id }}"
-          echo "Repository: ${{ github.repository }}"
-          
-          # Check which submission methods worked
-          if [ "${{ steps.submit-python.outputs.python_success }}" = "true" ]; then
-            echo "Python submission: ✅ Success"
-          else
-            echo "Python submission: ⚠️ Did not return success"
-          fi
-          
-          if [ "${{ steps.generate-data.outputs.email }}" ]; then
-            echo "Test email used: ${{ steps.generate-data.outputs.email }}"
-          fi
-          
-          echo ""
-          echo "=== Purpose of this workflow ==="
-          echo "This workflow sends a daily test submission to keep the Supabase function warm."
-          echo "It uses realistic data to mimic actual user behavior."
-          echo "Note: Emails may not be sent for automated submissions by design."
-          echo "The main goal is to prevent the function from going cold due to inactivity."
-          
-      - name: Send success notification (Optional)
-        if: always() && github.event_name == 'workflow_dispatch'
-        run: |
-          # This step only runs on manual triggers for debugging
-          echo "=== Manual Run Complete ==="
-          echo "You can check your Supabase function logs for submission details."
-          echo "Test email used: ${{ steps.generate-data.outputs.email }}"
+          echo "Health check..."
+          curl -s -o /dev/null -w "Main URL: %{http_code}\n" \
+            "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co" \
+            --max-time 10 || echo "Health check failed"
