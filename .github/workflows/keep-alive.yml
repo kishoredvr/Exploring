@@ -1,34 +1,18 @@
-name: Keep Supabase Alive
+name: Supabase Heartbeat
 
 on:
   schedule:
-    - cron: '0 */72 * * *'  # Every 72 hours
+    - cron: '0 9 */3 * *'
   workflow_dispatch:
 
 jobs:
-  ping-supabase:
+  heartbeat:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Wake Up Supabase Functions
-        run: |
-          URL="https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co"
-          
-          echo "Waking up Supabase at $(date)"
-          
-          # Ping submit-form endpoint
-          curl -X POST "$URL/submit-form" \
+      - run: |
+          echo "❤️  Sending heartbeat to Supabase..."
+          curl -s -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
             -H "Content-Type: application/json" \
-            -d '{"test":true,"ping":1,"timestamp":"'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'"}' \
-            --silent --max-time 30 || true
-          
-          echo "submit-form pinged"
-          
-          # Ping initiate-payment endpoint  
-          curl -X POST "$URL/initiate-payment" \
-            -H "Content-Type: application/json" \
-            -d '{"amount":100,"userId":"test@example.com","mobileNumber":"9876543210"}' \
-            --silent --max-time 30 || true
-          
-          echo "initiate-payment pinged"
-          
-          echo "✅ Supabase functions should stay warm!"
+            -d '{"heartbeat":true,"timestamp":"'"$(date)"'"}' > /dev/null
+          echo "✅ Heartbeat sent at $(date)"
