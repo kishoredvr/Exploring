@@ -2,29 +2,52 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "0 */10 * * *"   # Every 10 hours
+    - cron: "0 */10 * * *"  # every 10 hours
   workflow_dispatch:
 
 jobs:
-  ping-supabase:
+  keep-alive:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send automated "Other Purpose" submission
+      - name: Send full form payload (mimics actual MessageMe.html submission)
         run: |
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
           -H "Content-Type: application/json" \
           -d '{
-            "purpose": "Other",
-            "name": "Automated Keep-Alive",
-            "email": "keepalive@system.local",
+            "name": "Automated KeepAlive",
+            "email": "keepalive@system.bot",
             "mobileNumber": "0000000000",
-            "contactCountry": "System",
-            "expectations": "Keep-alive ping to prevent Supabase cold start.",
-            "payment_status": "not applicable",
-            "payment_amount": "0",
+
+            "purpose": "Other",
+            "astroServiceSelect": "Not applicable",
             "astro_service_tier": "not applicable",
+
+            "birthDetailsAvailable": "Not applicable",
+            "dob": "Not applicable",
+            "hour": "Not applicable",
+            "minute": "Not applicable",
+            "second": "Not applicable",
+            "explanation": "Not applicable",
+
+            "city": "Not applicable",
+            "state": "Not applicable",
+            "country": "Not applicable",
+            "pincode": "Not applicable",
+
+            "gender": "Not applicable",
+            "genderOtherInput": "Not applicable",
+
+            "accuracy": "Not applicable",
+
+            "contactCountry": "System",
+
+            "expectations": "Automated keep-alive submission to prevent Supabase cold start.",
+
             "phonepe_txn_id": "",
             "phonepe_order_id": "",
+            "payment_amount": "0",
+            "payment_status": "not applicable",
+
             "submittedAt": "'"$(date -Iseconds)"'"
           }'
