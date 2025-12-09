@@ -1,4 +1,4 @@
-name: Keep Supabase Alive
+name: Keep Supabase Alive (debuggable)
 
 on:
   schedule:
@@ -8,48 +8,67 @@ on:
 jobs:
   keepalive:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Send realistic Other Purpose submission (exactly like frontend)
+      - name: Send realistic Other Purpose submission and show response
         run: |
-          curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "name": "System KeepAlive Bot",
-            "email": "keepalive@system.bot",
-            "mobileNumber": "9999999999",
+          set -euo pipefail
 
-            "purpose": "Other",
+          TIMESTAMP="$(date -Iseconds)"
+          # Build JSON payload exactly like frontend would (empty strings where inputs are empty)
+          read -r -d '' PAYLOAD <<EOF
+{
+  "name": "Automated KeepAlive Bot",
+  "email": "keepalive@system.bot",
+  "mobileNumber": "9999999999",
+  "purpose": "Other",
+  "astroServiceSelect": "",
+  "astro_service_tier": "",
+  "birthDetailsAvailable": "",
+  "dob": "",
+  "hour": "",
+  "minute": "",
+  "second": "",
+  "explanation": "",
+  "city": "",
+  "state": "",
+  "country": "",
+  "pincode": "",
+  "gender": "Not applicable",
+  "genderOtherInput": "",
+  "accuracy": "",
+  "contactCountry": "India",
+  "expectations": "Automated keep-alive request to keep Supabase alive.",
+  "phonepe_txn_id": "",
+  "phonepe_order_id": "",
+  "payment_amount": "0",
+  "payment_status": "not applicable",
+  "submittedAt": "$TIMESTAMP"
+}
+EOF
 
-            "astroServiceSelect": "Not applicable",
-            "astro_service_tier": "not applicable",
+          echo "===== Payload being sent ====="
+          echo "$PAYLOAD"
+          echo "=============================="
 
-            "birthDetailsAvailable": "Not applicable",
+          # Send request and capture response + http code
+          SUPABASE_URL="https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form"
+          RESPONSE="$(curl -s -w "\nHTTPSTATUS:%{http_code}" \
+            -X POST "$SUPABASE_URL" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD")" || true
 
-            "dob": "",
-            "hour": "",
-            "minute": "",
-            "second": "",
-            "explanation": "",
+          # Split body and status
+          HTTP_STATUS="$(echo "$RESPONSE" | tail -n1 | sed -e 's/HTTPSTATUS://')"
+          BODY="$(echo "$RESPONSE" | sed '$d')"
 
-            "city": "",
-            "state": "",
-            "country": "",
-            "pincode": "",
+          echo "HTTP STATUS: $HTTP_STATUS"
+          echo "Response body:"
+          echo "$BODY"
 
-            "gender": "Not applicable",
-            "genderOtherInput": "",
-
-            "accuracy": "Not applicable",
-
-            "contactCountry": "System",
-
-            "expectations": "Automated keep-alive request to keep Supabase alive.",
-
-            "phonepe_txn_id": "",
-            "phonepe_order_id": "",
-            "payment_amount": "0",
-            "payment_status": "not applicable",
-
-            "submittedAt": "'"$(date -Iseconds)"'"
-          }'
+          # Fail the job if non-2xx to surface action failure
+          if [[ "$HTTP_STATUS" =~ ^2 ]]; then
+            echo "Request succeeded (2xx)."
+          else
+            echo "Request failed (non-2xx). Exiting with failure to show logs."
+            exit 1
+          fi
