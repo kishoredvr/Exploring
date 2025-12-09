@@ -2,18 +2,19 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "0 */10 * * *"   # every 10 hours
+    - cron: "0 */10 * * *"
   workflow_dispatch:
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Send Other Purpose submission (matches real manual submission)
+      - name: Send Other Purpose submission (matches manual)
         run: |
           TIMESTAMP="$(date -Iseconds)"
 
-          read -r -d '' PAYLOAD <<EOF
+          PAYLOAD=$(cat <<EOF
 {
   "purpose": "Other",
   "name": "Automated KeepAlive Bot",
@@ -27,10 +28,11 @@ jobs:
   "submittedAt": "$TIMESTAMP"
 }
 EOF
+)
 
           echo "Sending payload:"
           echo "$PAYLOAD"
 
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
-            -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
+               -H "Content-Type: application/json" \
+               -d "$PAYLOAD"
