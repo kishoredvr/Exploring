@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "0 */10 * * *"   # every 10 hours
+    - cron: "0 */10 * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,40 +10,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send full-form keepalive submission (Other Purpose)
+      - name: Send realistic Other Purpose submission (exactly like frontend)
         run: |
           curl -X POST "https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co/submit-form" \
           -H "Content-Type: application/json" \
           -d '{
-            "name": "Automated KeepAlive Bot",
+            "name": "System KeepAlive Bot",
             "email": "keepalive@system.bot",
-            "mobileNumber": "0000000000",
+            "mobileNumber": "9999999999",
 
             "purpose": "Other",
 
             "astroServiceSelect": "Not applicable",
-            "astro_service_tier": "Not applicable",
+            "astro_service_tier": "not applicable",
 
             "birthDetailsAvailable": "Not applicable",
-            "dob": "Not applicable",
-            "hour": "Not applicable",
-            "minute": "Not applicable",
-            "second": "Not applicable",
-            "explanation": "Not applicable",
 
-            "city": "Not applicable",
-            "state": "Not applicable",
-            "country": "Not applicable",
-            "pincode": "Not applicable",
+            "dob": "",
+            "hour": "",
+            "minute": "",
+            "second": "",
+            "explanation": "",
+
+            "city": "",
+            "state": "",
+            "country": "",
+            "pincode": "",
 
             "gender": "Not applicable",
-            "genderOtherInput": "Not applicable",
+            "genderOtherInput": "",
 
             "accuracy": "Not applicable",
 
             "contactCountry": "System",
 
-            "expectations": "Automated keepalive ping to keep Supabase warm.",
+            "expectations": "Automated keep-alive request to keep Supabase alive.",
 
             "phonepe_txn_id": "",
             "phonepe_order_id": "",
