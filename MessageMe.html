@@ -247,9 +247,9 @@
         <div id="astroServiceWrapper" class="form-group centered-section" style="max-width:380px; margin: 12px auto 0; display:none;">
           <label for="astroServiceSelect">Choose Astrology Service</label>
           <select id="astroServiceSelect" name="astroServiceSelect">
-            <option value="1000">Basic — ₹1000</option>
-            <option value="2000">Detailed — ₹2000</option>
-            <option value="5000">Premium — ₹5000</option>
+            
+            <option value="2000">Consultation — ₹2000</option>
+            
             <!-- <option value="10">TestRun — ₹10</option>  -->
           </select>
         </div>
@@ -490,16 +490,12 @@
 
     // Sample report URLs
     const sampleReportUrls = {
-      '1000': 'https://drive.google.com/file/d/1jtcfBBXh1LmH6l6qWNw00c22H65EUiNM/view?usp=sharing', // Basic
-      '2000': 'https://drive.google.com/file/d/1dxJDr1eIaGapTzJBMoebfIi1yWw77A5D/view?usp=sharing', // Detailed
-      '5000': 'https://drive.google.com/file/d/10KgT13w9mr5eNy23FHjbmUCFb_QRJW05/view?usp=sharing'  // Premium
+      '2000': 'https://drive.google.com/file/d/1jtcfBBXh1LmH6l6qWNw00c22H65EUiNM/view?usp=sharing', // Consultation
     };
 
     // Service tier names
     const serviceTierNames = {
-      '1000': 'Basic',
-      '2000': 'Detailed', 
-      '5000': 'Premium'
+      '2000': 'Consultation', 
     };
 
     // Function to show validation error
@@ -1298,6 +1294,7 @@
   </script>
 </body>
 </html>
+
 
 
 
