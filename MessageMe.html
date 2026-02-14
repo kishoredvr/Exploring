@@ -1,10 +1,13 @@
 <!DOCTYPE html>  
 <html lang="en">
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2140422184257609"
-     crossorigin="anonymous"></script>
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2140422184257609" crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Let's Connect</title>
+
+  <!-- Razorpay Script - ADDED -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <!-- Fonts & Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" />
@@ -279,7 +282,7 @@
           </div>
         </div>
         
-        <!-- Added mobile number field for PhonePe payment -->
+        <!-- Added mobile number field for Razorpay payment -->
         <div class="form-group">
           <label for="mobileNumber" class="required">Mobile Number (for Payment)</label>
           <input type="tel" id="mobileNumber" name="mobileNumber" required>
@@ -420,7 +423,7 @@
         <button id="submitBtn" type="submit">Submit Consultation Request</button>
       </div>
 
-      <!-- Hidden fields for PhonePe payment result (server will verify) -->
+      <!-- Hidden fields for Razorpay payment result (server will verify) -->
       <input type="hidden" name="phonepe_txn_id" id="phonepe_txn_id" />
       <input type="hidden" name="phonepe_order_id" id="phonepe_order_id" />
       <input type="hidden" name="payment_amount" id="payment_amount" />
@@ -433,7 +436,7 @@
   <div class="payment-modal" id="paymentModal">
     <div class="payment-modal-content">
       <h3>Processing Payment</h3>
-      <p>Please wait while we redirect you to PhonePe for secure payment processing.</p>
+      <p>Please wait while we redirect you to Razorpay for secure payment processing.</p>
       <div class="payment-processing">
         <div class="spinner"></div>
       </div>
@@ -445,6 +448,9 @@
     // Set this to your Supabase Functions base URL (or other server that exposes these endpoints).
     // Example: const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
     const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co'; // <-- replace with your functions domain
+
+    // Razorpay Key ID - REPLACE WITH YOUR ACTUAL KEY
+    const RAZORPAY_KEY_ID = 'rzp_live_xxxxxxxxxxxx'; // Get this from Razorpay Dashboard
 
     // All client code uses BACKEND_BASE now
     const form = document.getElementById('astrology-consultation-form');
@@ -886,7 +892,7 @@
       return final;
     }
 
-    // ---------------- Backend helpers (now using BACKEND_BASE) ----------------
+    // ---------------- RAZORPAY PAYMENT FUNCTIONS ----------------
 
     // NEW FUNCTION: Save form data immediately before payment
     async function saveFormDataImmediately() {
@@ -906,39 +912,88 @@
         }
     }
 
-    async function createPhonePePayment(amountINR) {
+    async function createRazorpayPayment(amountINR) {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
+      
       const amountPaise = Number(amountINR) * 100;
       const body = {
         amount: amountPaise,
-        userId: document.getElementById('email').value,
+        currency: 'INR',
         mobileNumber: document.getElementById('mobileNumber').value,
-        redirectUrl: BACKEND_BASE + '/return-handler'
+        receipt: 'consult_' + Date.now(),
+        notes: {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value
+        }
       };
-      const url = BACKEND_BASE + '/initiate-payment';
+      
+      const url = BACKEND_BASE + '/initiate-razorpay-payment';
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
+      
       if (!res.ok) {
         const text = await res.text();
         throw new Error('Payment initiation failed: ' + text);
       }
+      
       const json = await res.json();
       if (!json || !json.success) {
         throw new Error('Payment initiation failed: ' + (json && (json.error || json.message) ? (json.error || json.message) : JSON.stringify(json)));
       }
+      
       return json;
+    }
+
+    function openRazorpayCheckout(orderDetails) {
+      if (!orderDetails.razorpayOrderId) throw new Error('Invalid Razorpay order ID');
+      
+      paymentModal.style.display = 'flex';
+      
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: orderDetails.amount,
+        currency: orderDetails.currency,
+        name: 'Parishodana',
+        description: 'Astrology Consultation',
+        order_id: orderDetails.razorpayOrderId,
+        handler: function(response) {
+          // Success handler - redirect to return handler
+          const returnUrl = `${BACKEND_BASE}/razorpay-return-handler?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}`;
+          window.location.href = returnUrl;
+        },
+        modal: {
+          ondismiss: function() {
+            paymentModal.style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').textContent = 'Submit Consultation Request';
+            alert('Payment cancelled. Your form data has been saved. You can submit again to retry payment.');
+          }
+        },
+        prefill: {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          contact: document.getElementById('mobileNumber').value
+        },
+        theme: {
+          color: '#0987b5'
+        }
+      };
+      
+      const rzp = new Razorpay(options);
+      rzp.open();
     }
 
     const checkPaymentStatus = async (transactionId) => {
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         throw new Error('Please configure BACKEND_BASE with your backend URL.');
       }
-      const statusUrl = `${BACKEND_BASE}/payment-status?txn=${encodeURIComponent(transactionId)}`;
+      // Try both internal ID and Razorpay order ID
+      const statusUrl = `${BACKEND_BASE}/razorpay-payment-status?txn=${encodeURIComponent(transactionId)}`;
       const resp = await fetch(statusUrl, { method: 'GET' });
       if (!resp.ok) {
         const text = await resp.text();
@@ -951,7 +1006,7 @@
       if (!BACKEND_BASE || BACKEND_BASE.includes('your-backend-url')) {
         return { ok: false, error: 'BACKEND_BASE not configured' };
       }
-      const statusUrl = `${BACKEND_BASE}/payment-status?txn=${encodeURIComponent(transactionId)}`;
+      const statusUrl = `${BACKEND_BASE}/razorpay-payment-status?txn=${encodeURIComponent(transactionId)}`;
       try {
         const resp = await fetch(statusUrl, { method: 'GET' });
         const txt = await resp.text().catch(() => "");
@@ -961,33 +1016,6 @@
       } catch (err) {
         return { ok: false, error: String(err) };
       }
-    }
-
-    // ---------- NEW: robust redirect extractor ----------
-    function extractCheckoutUrl(orderResp) {
-      const r = orderResp?.data && typeof orderResp.data === 'object' ? orderResp.data : orderResp;
-      return (
-        r?.data?.instrumentResponse?.redirectInfo?.url ||
-        r?.data?.redirectInfo?.url ||
-        r?.data?.checkoutUrl ||
-        r?.redirectInfo?.url ||
-        r?.redirectUrl ||
-        r?.data?.checkout?.redirectUrl ||
-        null
-      );
-    }
-
-    // ---------- NEW: robust transactionId extractor ----------
-    function extractTxnId(r) {
-      const d = r?.data || r;
-      return (
-        d?.transactionId ||
-        d?.merchantTransactionId ||
-        d?.phonepeResponse?.data?.transactionId ||
-        d?.phonepeResponse?.data?.merchantTransactionId ||
-        d?.data?.transactionId ||
-        null
-      );
     }
 
     // ---------------- collect & submit ----------------
@@ -1074,56 +1102,53 @@
       return res.json();
     }
 
-    function openPhonePeCheckout(url, inNewTab = true) {
-      if (!url) throw new Error('Invalid PhonePe checkout URL');
-      paymentModal.style.display = 'flex';
-      
-      if (inNewTab) {
-        window.open(url, '_blank');
-      } else {
-        window.location.href = url;
-      }
-      
-      setTimeout(() => {
-        paymentModal.style.display = 'none';
-      }, 5000);
-    }
-
-    // ---------- NEW: Resume flow when user returns to this page ----------
+    // ---------- Resume flow when user returns to this page ----------
     document.addEventListener('DOMContentLoaded', async () => {
-      const txn = sessionStorage.getItem('pp_txn_id');
-      const amt = sessionStorage.getItem('pp_amt');
+      const txnId = sessionStorage.getItem('razorpay_txn_id');
+      const orderId = sessionStorage.getItem('razorpay_order_id');
+      const amt = sessionStorage.getItem('razorpay_amt');
 
-      if (!txn) return;
+      if (!txnId && !orderId) return;
 
       try { paymentModal.style.display = 'flex'; } catch (_) {}
 
+      // Check if we just returned from Razorpay (URL parameters)
+      const urlParams = new URLSearchParams(window.location.search);
+      const razorpayOrderId = urlParams.get('razorpay_order_id');
+      const razorpayPaymentId = urlParams.get('razorpay_payment_id');
+      const razorpaySignature = urlParams.get('razorpay_signature');
+
+      if (razorpayOrderId && razorpayPaymentId && razorpaySignature) {
+        // We're returning from Razorpay - clear session and redirect to return handler
+        sessionStorage.removeItem('razorpay_txn_id');
+        sessionStorage.removeItem('razorpay_order_id');
+        sessionStorage.removeItem('razorpay_amt');
+        
+        const returnUrl = `${BACKEND_BASE}/razorpay-return-handler?razorpay_order_id=${razorpayOrderId}&razorpay_payment_id=${razorpayPaymentId}&razorpay_signature=${razorpaySignature}`;
+        window.location.href = returnUrl;
+        return;
+      }
+
+      // Otherwise poll for status (fallback)
       let attempts = 0, finalStatus = null;
       const maxAttempts = 8, pollIntervalMs = 2000;
+      const idToCheck = txnId || orderId;
 
       while (attempts < maxAttempts) {
         attempts++;
         try {
-          const stResp = await checkPaymentStatusDetailed(txn);
-          if (stResp.ok && stResp.body) {
-            const payload = stResp.body.data || stResp.body || {};
-            const state =
-              payload?.status ||
-              payload?.state ||
-              payload?.data?.transaction?.state ||
-              payload?.data?.state ||
-              payload?.data?.transaction?.status ||
-              payload?.transaction?.state ||
-              null;
-            const s = (state || '').toString().toLowerCase();
-
-            if (['success','paid','completed','captured'].some(x => s.includes(x)) ||
-                stResp.body.success === true || stResp.body.paid === true) {
-              finalStatus = { outcome: 'success', payload: stResp.body };
+          const stResp = await checkPaymentStatus(idToCheck);
+          if (stResp.success && stResp.data) {
+            const orderData = stResp.data.order || stResp.data;
+            const payments = stResp.data.payments || [];
+            const status = orderData.status;
+            
+            if (status === 'paid' || (payments.length > 0 && payments[0].status === 'captured')) {
+              finalStatus = { outcome: 'success', payload: stResp.data };
               break;
             }
-            if (['failed','error','declined'].some(x => s.includes(x))) {
-              finalStatus = { outcome: 'failed', payload: stResp.body };
+            if (status === 'failed' || status === 'cancelled') {
+              finalStatus = { outcome: 'failed', payload: stResp.data };
               break;
             }
           }
@@ -1131,21 +1156,13 @@
         await new Promise(r => setTimeout(r, pollIntervalMs));
       }
 
-      sessionStorage.removeItem('pp_txn_id');
-      sessionStorage.removeItem('pp_amt');
+      sessionStorage.removeItem('razorpay_txn_id');
+      sessionStorage.removeItem('razorpay_order_id');
+      sessionStorage.removeItem('razorpay_amt');
 
       try { paymentModal.style.display = 'none'; } catch (_) {}
 
       if (finalStatus?.outcome === 'success') {
-        try {
-          const extractedTxn =
-            finalStatus.payload?.data?.phonepeResponse?.data?.transactionId ||
-            finalStatus.payload?.data?.transactionId ||
-            finalStatus.payload?.transactionId || txn;
-
-          document.getElementById('phonepe_txn_id').value = extractedTxn || '';
-        } catch (_) {}
-        document.getElementById('phonepe_order_id').value = txn;
         document.getElementById('payment_amount').value = amt || '';
         document.getElementById('payment_status').value = 'paid';
 
@@ -1218,7 +1235,7 @@
         const purpose = getCurrentPurpose();
 
         if (purpose === 'Astrology') {
-          // ASTROLOGY CONSULTATION FLOW - WITH PAYMENT
+          // ASTROLOGY CONSULTATION FLOW - WITH RAZORPAY PAYMENT
           
           // Save form data immediately (pending)
           const saved = await saveFormDataImmediately();
@@ -1229,27 +1246,17 @@
           const amountINR = getSelectedAstroAmount();
           if (!amountINR || amountINR <= 0) throw new Error('Invalid selected amount for Astrology.');
 
-          const orderResp = await createPhonePePayment(amountINR);
-          console.log("createPhonePePayment returned:", orderResp);
+          const orderResp = await createRazorpayPayment(amountINR);
+          console.log("createRazorpayPayment returned:", orderResp);
 
-          // NEW: robust transaction id extraction
-          const transactionId = extractTxnId(orderResp);
+          // Store transaction ID for resume flow
+          sessionStorage.setItem('razorpay_txn_id', orderResp.transactionId);
+          sessionStorage.setItem('razorpay_order_id', orderResp.razorpayOrderId);
+          sessionStorage.setItem('razorpay_amt', String(amountINR));
 
-          // Extract checkout URL
-          const checkoutUrl = extractCheckoutUrl(orderResp) || null;
-
-          console.log("transactionId:", transactionId, "checkoutUrl:", checkoutUrl);
-
-          if (!checkoutUrl) {
-            console.warn('Full PhonePe response:', orderResp);
-            throw new Error('No checkout URL returned by server. Inspect server response in console.');
-          }
-
-          // ---------- OPEN GATEWAY IN SAME TAB & RETURN ----------
-          sessionStorage.setItem('pp_txn_id', transactionId || '');
-          sessionStorage.setItem('pp_amt', String(amountINR));
-          openPhonePeCheckout(checkoutUrl, /* inNewTab = */ false);
-          return; // Stop further code; will resume after redirect back
+          // Open Razorpay checkout
+          openRazorpayCheckout(orderResp);
+          return; // Stop further code; will resume after payment
 
         } else {
           // OTHER PURPOSE FLOW - DIRECT SUBMISSION WITHOUT PAYMENT
@@ -1294,7 +1301,3 @@
   </script>
 </body>
 </html>
-
-
-
-
