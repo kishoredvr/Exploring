@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You – Parishodana</title>
+  <!-- Fonts & Icons (same style as your form) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Lora', serif;
+      background: linear-gradient(to bottom, rgba(220, 220, 220, 0.95), rgba(245, 245, 245, 0.95));
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .print-container {
+      max-width: 1000px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+    h1 {
+      color: #076a91;
+      font-size: 32px;
+      margin-bottom: 8px;
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+    }
+    .subhead {
+      color: #5a9ec9;
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 32px;
+      border-bottom: 2px solid #0987b5;
+      padding-bottom: 16px;
+    }
+    .thankyou-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .section {
+      margin-bottom: 24px;
+      page-break-inside: avoid;
+    }
+    .section h2 {
+      color: #076a91;
+      font-size: 22px;
+      margin-bottom: 16px;
+      font-family: 'Open Sans', sans-serif;
+      border-left: 4px solid #0987b5;
+      padding-left: 12px;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 24px;
+    }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-label {
+      font-weight: 600;
+      color: #2c3e50;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .detail-value {
+      font-size: 16px;
+      color: #1a2b3c;
+      background: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #e9ecef;
+    }
+    .expectations-box {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid #0987b5;
+      margin-top: 8px;
+      white-space: pre-wrap;
+    }
+    hr {
+      margin: 32px 0 16px;
+      border: none;
+      border-top: 2px dashed #ccc;
+    }
+    .footer-note {
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 14px;
+      margin-top: 24px;
+    }
+    /* Print styles */
+    @media print {
+      body { background: white; padding: 0; }
+      .print-container { box-shadow: none; padding: 15mm; margin: 0; max-width: 100%; border-radius: 0; }
+      .detail-value { background: none; border: 1px solid #999; }
+      .expectations-box { background: none; border: 1px solid #999; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-container">
+    <h1>🌿 Ganesh Solutions</h1>
+    <div class="subhead">Astrology & Other Technical Guidance</div>
+
+    <div class="thankyou-message">
+      <i class="fas fa-check-circle"></i> Thank you! Your payment has been successfully verified.
+    </div>
+
+    <div id="orderDetails">
+      <!-- Data will be inserted here by JavaScript -->
+      <p style="text-align:center; color:#666;">Loading your details...</p>
+    </div>
+
+    <hr>
+    <div class="footer-note no-print">
+      <p>You can print this page for your records.</p>
+    </div>
+  </div>
+
+  <script>
+    // Function to decode JWT and extract data
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
+          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        console.error('Invalid token', e);
+        return null;
+      }
+    }
+
+    // Helper to safely display a value
+    function show(value, fallback = 'Not provided') {
+      return (value && value !== 'Not applicable' && value !== '') ? value : fallback;
+    }
+
+    // Main render function
+    function renderOrder(data) {
+      // Data might be nested under 'data' field from the JWT
+      const d = data?.data || data;
+      const purpose = d.purpose || 'Astrology';
+      const isAstrology = (purpose === 'Astrology');
+
+      let html = `
+        <div class="section">
+          <h2>🧑 Contact Information</h2>
+          <div class="details-grid">
+            <div class="detail-item"><span class="detail-label">Full Name</span><span class="detail-value">${show(d.name)}</span></div>
+            <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${show(d.email)}</span></div>
+            <div class="detail-item"><span class="detail-label">Mobile</span><span class="detail-value">${show(d.mobileNumber)}</span></div>
+            <div class="detail-item"><span class="detail-label">Country</span><span class="detail-value">${show(d.contactCountry)}</span></div>
+          </div>
+        </div>
+      `;
+
+      if (isAstrology) {
+        html += `
+          <div class="section">
+            <h2>⭐ Astrology Consultation</h2>
+            <div class="details-grid">
+              <div class="detail-item"><span class="detail-label">Service Tier</span><span class="detail-value">${show(d.astro_service_tier) || show(d.astroServiceSelect)}</span></div>
+              <div class="detail-item"><span class="detail-label">Amount Paid</span><span class="detail-value">₹${show(d.payment_amount, '0')}</span></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>📅 Birth Details</h2>
+            <div class="details-grid">
+              <div class="detail-item"><span class="detail-label">Details Available</span><span class="detail-value">${show(d.birthDetailsAvailable)}</span></div>
+              <div class="detail-item"><span class="detail-label">Date of Birth</span><span class="detail-value">${show(d.dob)}</span></div>
+              <div class="detail-item"><span class="detail-label">Time of Birth</span><span class="detail-value">${show(d.hour)}:${show(d.minute)}:${show(d.second)}</span></div>
+              <div class="detail-item"><span class="detail-label">Birth Place</span><span class="detail-value">${show(d.city)}, ${show(d.state)}, ${show(d.country)}</span></div>
+              <div class="detail-item"><span class="detail-label">Pincode</span><span class="detail-value">${show(d.pincode)}</span></div>
+              <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">${show(d.gender)} ${d.genderOtherInput ? `- ${d.genderOtherInput}` : ''}</span></div>
+              <div class="detail-item"><span class="detail-label">Accuracy</span><span class="detail-value">${show(d.accuracy)}</span></div>
+            </div>
+            ${d.explanation ? `
+              <div style="margin-top:16px;">
+                <span class="detail-label">Explanation about accuracy</span>
+                <div class="expectations-box">${d.explanation}</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="section">
+            <h2>📋 Other Purpose Request</h2>
+            <div class="detail-item"><span class="detail-label">Purpose</span><span class="detail-value">${show(d.purpose)}</span></div>
+          </div>
+        `;
+      }
+
+      // Expectations (common to both)
+      html += `
+        <div class="section">
+          <h2>💭 Expectations / Intentions</h2>
+          <div class="expectations-box">${show(d.expectations, 'No details provided.')}</div>
+        </div>
+
+        <div class="section">
+          <h2>🔖 Order Information</h2>
+          <div class="details-grid">
+            <div class="detail-item"><span class="detail-label">Order ID</span><span class="detail-value">${show(d.merchantOrderId) || show(d.merchantorderid)}</span></div>
+            <div class="detail-item"><span class="detail-label">Payment ID</span><span class="detail-value">${show(d.razorpay_payment_id) || show(d.phonepe_txn_id)}</span></div>
+            <div class="detail-item"><span class="detail-label">Payment Status</span><span class="detail-value">${show(d.payment_status)}</span></div>
+            <div class="detail-item"><span class="detail-label">Submitted At</span><span class="detail-value">${show(d.submittedAt)}</span></div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('orderDetails').innerHTML = html;
+    }
+
+    // Get token from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('tok');
+
+    if (token) {
+      const payload = parseJwt(token);
+      if (payload) {
+        renderOrder(payload);
+      } else {
+        document.getElementById('orderDetails').innerHTML = '<p class="error">Error: Could not read order details. Please contact support.</p>';
+      }
+    } else {
+      document.getElementById('orderDetails').innerHTML = '<p class="error">No order information provided.</p>';
+    }
+  </script>
+</body>
+</html>
