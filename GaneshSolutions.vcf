@@ -1,18 +1,12 @@
 BEGIN:VCARD
 VERSION:3.0
-N:;Ganesh Solutions;;;
+N:Ganesh Solutions;;;;
 FN:Ganesh Solutions
 ORG:Ganesh Solutions
 TITLE:Professional Astrology | Digital & Economic Services
-
 TEL;TYPE=CELL:+918074192876
-EMAIL;TYPE=INTERNET:consult@parishodana.xyz
+EMAIL:consult@parishodana.xyz
 URL:https://parishodana.xyz
-
-ADR;TYPE=WORK:;;Flat No 304, Chalapathi Paradise, 2nd Line Venkataramana Colony;Guntur;Andhra Pradesh;522xxx;India
-
-NOTE:UDYAM Registration: UDYAM-AP-04-0110794. Services: Astrology, Digital Solutions & Economic Research.
-
-PHOTO;VALUE=URI:https://parishodana.xyz/logo.jpg
-
+ADR:;;Flat No 304, Chalapathi Paradise, 2nd Line Venkataramana Colony;Guntur;Andhra Pradesh;522xxx;India
+NOTE:UDYAM Registration: UDYAM-AP-04-0110794. Astrology, Digital Solutions & Economic Research.
 END:VCARD
