@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>OSINT•MAX — detailed tool directory | utility & descriptions</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f8fe;
+            color: #0b1e2e;
+            padding: 1.8rem 2rem 3rem;
+            line-height: 1.5;
+        }
+
+        .wrapper {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.2rem;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1.2rem 2rem;
+            border-radius: 60px;
+            box-shadow: 0 12px 28px -8px rgba(0,20,50,0.08);
+            border: 1px solid #e1e9f2;
+        }
+
+        .title-section h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            color: #0a1c2f;
+        }
+        .title-section h1 i {
+            color: #2563eb;
+            margin-right: 10px;
+        }
+        .badge {
+            background: #1e3a5f;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 40px;
+            margin-left: 14px;
+            vertical-align: middle;
+            letter-spacing: 0.3px;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 0.2rem 0.2rem 0.2rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid #d2e0ee;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+        .search-wrapper i {
+            color: #54708f;
+        }
+        #searchInput {
+            border: none;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            min-width: 280px;
+            background: transparent;
+            outline: none;
+        }
+        .search-wrapper button {
+            background: #0f2a44;
+            border: none;
+            color: white;
+            padding: 0.7rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 0.95rem;
+        }
+        .search-wrapper button:hover {
+            background: #2563eb;
+        }
+
+        /* stats */
+        .stats-row {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .stat-chip {
+            background: white;
+            padding: 0.4rem 1.3rem;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border: 1px solid #dee9f2;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1f3a57;
+        }
+
+        /* categories grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .cat-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 1.6rem 1.4rem 1.5rem;
+            box-shadow: 0 12px 24px -10px rgba(0, 30, 60, 0.06);
+            border: 1px solid #e6eef9;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .cat-card:hover {
+            box-shadow: 0 22px 36px -14px rgba(18, 52, 106, 0.1);
+            border-color: #cbddec;
+        }
+
+        .cat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #eef3fb;
+            padding-bottom: 0.8rem;
+        }
+        .cat-header i {
+            font-size: 1.8rem;
+            width: 2.5rem;
+            color: #2563eb;
+        }
+        .cat-header h2 {
+            font-size: 1.4rem;
+            font-weight: 650;
+            letter-spacing: -0.3px;
+            color: #0a233a;
+        }
+
+        .tool-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .tool-item {
+            border-bottom: 1px dashed #dde5f0;
+            padding-bottom: 0.7rem;
+        }
+        .tool-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .tool-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .tool-main i {
+            font-size: 0.9rem;
+            color: #3b82f6;
+            margin-top: 0.2rem;
+            width: 1.2rem;
+            flex-shrink: 0;
+        }
+        .tool-link {
+            font-weight: 650;
+            font-size: 1rem;
+            color: #0b2b4a;
+            text-decoration: none;
+            transition: color 0.1s;
+            word-break: break-word;
+        }
+        .tool-link:hover {
+            color: #2563eb;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .domain-hint {
+            font-size: 0.7rem;
+            background: #eef3fa;
+            padding: 2px 8px;
+            border-radius: 30px;
+            margin-left: 8px;
+            color: #2c577c;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tool-desc {
+            margin-top: 6px;
+            margin-left: 28px;
+            font-size: 0.85rem;
+            color: #2f4b6e;
+            line-height: 1.4;
+            background: #fafdff;
+            padding: 5px 0 2px 0;
+            border-left: 2px solid #bdd3ec;
+            padding-left: 12px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 40px;
+            color: #3a5e7e;
+            font-size: 1.2rem;
+            border: 1px dashed #b9cee8;
+        }
+
+        .footer-note {
+            margin-top: 3.2rem;
+            text-align: center;
+            color: #365573;
+            font-size: 0.9rem;
+            border-top: 1px solid #ccddec;
+            padding-top: 2.2rem;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .top-bar { flex-direction: column; align-items: stretch; gap: 16px; border-radius: 30px; }
+            .search-wrapper { width: 100%; }
+            #searchInput { min-width: unset; width: 100%; }
+            .categories-grid { grid-template-columns: 1fr; }
+            .title-section h1 { font-size: 1.7rem; }
+        }
+        .highlight-bg { background: #fef9c3; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="top-bar">
+        <div class="title-section">
+            <h1><i class="fas fa-crosshairs"></i> OSINT•MAX <span class="badge">250+ tools with OSINT context</span></h1>
+            <div style="font-size: 0.9rem; color: #3d5f82; margin-top: 6px; margin-left: 8px;">
+                <i class="fas fa-info-circle"></i> each tool includes specific investigative utility
+            </div>
+        </div>
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search name, description, hint..." autocomplete="off">
+            <button id="clearSearchBtn"><i class="fas fa-eraser"></i> Clear</button>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <span class="stat-chip"><i class="fas fa-link"></i> <span id="totalToolsCount">0</span> tools indexed</span>
+        <span class="stat-chip"><i class="fas fa-layer-group"></i> <span id="categoryCount">23</span> categories</span>
+        <span class="stat-chip"><i class="fas fa-eye"></i> <span id="visibleCount">—</span> visible</span>
+    </div>
+
+    <div id="categoriesContainer" class="categories-grid"></div>
+
+    <div class="footer-note">
+        <i class="fas fa-shield"></i> Curated for OSINT professionals · every description explains specific investigative value · use ethically.<br>
+        <span style="opacity:0.75">last updated: 2026 · includes search, people, email, phone, social, image, domain, crypto, dark web & more</span>
+    </div>
+</div>
+
+<script>
+    (function(){
+        "use strict";
+
+        // ---------- ENRICHED DATASET with DETAILED OSINT DESCRIPTIONS ----------
+        const categoriesData = [
+            {
+                icon: "fa-solid fa-magnifying-glass",
+                name: "🔍 General & Meta Search",
+                tools: [
+                    { name: "Google", url: "https://google.com", hint: "dorking", desc: "Advanced search operators (filetype, site, intitle) for discovering exposed documents and indexed data." },
+                    { name: "Bing", url: "https://bing.com", hint: "visual search", desc: "Often returns different results; excellent image/video search plus IP-based local results." },
+                    { name: "Yandex", url: "https://yandex.com", hint: "reverse image", desc: "Superior facial and image recognition; indexes Russian/CIS web deeply, great for Eastern Europe OSINT." },
+                    { name: "DuckDuckGo", url: "https://duckduckgo.com", hint: "!bangs", desc: "Privacy-focused; use !bangs to directly search niche sites; sometimes uncovers Google-filtered results." },
+                    { name: "Baidu", url: "https://baidu.com", hint: "China", desc: "Essential for Chinese-language OSINT, social media, and forums not indexed by Western engines." },
+                    { name: "Startpage", url: "https://startpage.com", hint: "private", desc: "Google results without tracking; useful for unbiased searching from different geolocations." },
+                    { name: "Qwant", url: "https://qwant.com", hint: "EU", desc: "European index with strong privacy; good for EU-based news and social content." },
+                    { name: "Swisscows", url: "https://swisscows.com", hint: "semantic", desc: "Semantic search & family-friendly; can reveal related concepts and entities." },
+                    { name: "Mojeek", url: "https://mojeek.com", hint: "independent", desc: "Independent crawler; shows results you might not see on Google/Bing, good for deep web surface." },
+                    { name: "Carrot2", url: "https://search.carrot2.org", hint: "clustering", desc: "Clusters search results into topics; helps discover thematic connections in OSINT investigations." },
+                    { name: "SearXNG", url: "https://searx.space", hint: "meta", desc: "Metasearch engine aggregator; can be self-hosted, good for anonymity and cross-engine queries." },
+                    { name: "Million Short", url: "https://millionshort.com", hint: "deep web", desc: "Removes top million sites to surface obscure, non-mainstream pages – great for niche OSINT." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-user",
+                name: "👤 People & Identity",
+                tools: [
+                    { name: "IntelTechniques Tools", url: "https://inteltechniques.com/tools/", hint: "suite", desc: "Michael Bazzell's legendary OSINT portal; includes search tools for usernames, emails, phone, and more." },
+                    { name: "That'sThem", url: "https://thatsthem.com", hint: "reverse", desc: "Reverse name, address, phone, email, IP, VIN. Aggregates public records quickly." },
+                    { name: "TruePeopleSearch", url: "https://truepeoplesearch.com", hint: "US", desc: "Free US people search with address history, relatives, and phone associations." },
+                    { name: "FastPeopleSearch", url: "https://fastpeoplesearch.com", hint: "fast", desc: "Rapid name/phone/address lookup; often includes age and known aliases." },
+                    { name: "PeekYou", url: "https://peekyou.com", hint: "username", desc: "Aggregates social profiles, web mentions, and public records by username or real name." },
+                    { name: "Spokeo", url: "https://spokeo.com", hint: "premium", desc: "Deep people search; free preview may reveal location and relatives. Paid offers full reports." },
+                    { name: "ZabaSearch", url: "https://zabasearch.com", hint: "public records", desc: "Classic free people finder; pulls from public databases, often includes age and previous cities." },
+                    { name: "FamilyTreeNow", url: "https://familytreenow.com", hint: "genealogy", desc: "Genealogy site with powerful people search; shows possible relatives and address timelines." },
+                    { name: "WebMii", url: "https://webmii.com", hint: "visibility", desc: "Scores a person's web visibility and aggregates links, images, and related keywords." },
+                    { name: "411.info", url: "https://411.info", hint: "directory", desc: "Reverse phone and address lookup; includes neighbor listings and property info." },
+                    { name: "SocialCatfish", url: "https://socialcatfish.com", hint: "image+name", desc: "Specialized in reverse image and identity verification; can spot catfish profiles." },
+                    { name: "IDCrawl", url: "https://idcrawl.com", hint: "username/email", desc: "Searches username across social networks, dating sites, forums, and public records." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-envelope",
+                name: "📧 Email OSINT",
+                tools: [
+                    { name: "Hunter.io", url: "https://hunter.io", hint: "domain", desc: "Finds email patterns and addresses associated with a domain; useful for corporate mapping." },
+                    { name: "EmailRep", url: "https://emailrep.io", hint: "reputation", desc: "Returns risk score, social profiles, and breach associations for an email address." },
+                    { name: "Have I Been Pwned", url: "https://haveibeenpwned.com", hint: "breach", desc: "Checks if an email appears in known data breaches; essential for compromise assessment." },
+                    { name: "DeHashed", url: "https://dehashed.com", hint: "leak search", desc: "Searchable database of breached credentials; free tier shows partial info, paid shows passwords." },
+                    { name: "Epieos", url: "https://epieos.com", hint: "Google ID", desc: "Retrieves Google account metadata, calendar, and linked services via email." },
+                    { name: "Holehe (online)", url: "https://github.com/megadose/holehe", hint: "account check", desc: "Checks if email is registered on 100+ platforms; useful for footprinting." },
+                    { name: "EmailHippo", url: "https://tools.emailhippo.com", hint: "verify", desc: "Email verification and scoring; detects disposable and role-based addresses." },
+                    { name: "VerifyEmail", url: "https://verify-email.org", hint: "syntax", desc: "Validates email format and checks domain MX records." },
+                    { name: "Gravatar check", url: "https://en.gravatar.com/site/check", hint: "avatar", desc: "Reveals if an email has an associated Gravatar image and profile." },
+                    { name: "WhatsMyName", url: "https://whatsmyname.app", hint: "username", desc: "Enumerates 600+ sites for username presence; email can lead to username discovery." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-phone",
+                name: "📞 Phone Numbers",
+                tools: [
+                    { name: "TrueCaller", url: "https://truecaller.com", hint: "global", desc: "Crowdsourced caller ID and spam database; often shows name and carrier." },
+                    { name: "NumLookup", url: "https://numlookup.com", hint: "free", desc: "Free reverse phone lookup with carrier and line type (mobile/landline)." },
+                    { name: "SpyDialer", url: "https://spydialer.com", hint: "voicemail", desc: "Reverse phone, name, address; includes direct voicemail access (legal)." },
+                    { name: "Zlookup", url: "https://zlookup.com", hint: "international", desc: "Supports international numbers; returns name and location when available." },
+                    { name: "PhoneValidator", url: "https://phonevalidator.com", hint: "carrier", desc: "Identifies carrier, line type, and location for US/Canada numbers." },
+                    { name: "FreeCarrierLookup", url: "https://freecarrierlookup.com", hint: "porting", desc: "Shows current carrier and whether number has been ported." },
+                    { name: "Whitepages Reverse Phone", url: "https://whitepages.com/reverse-phone", hint: "US premium", desc: "Extensive US phone data; free tier may reveal spam risk and general location." },
+                    { name: "EmobileTracker", url: "https://emobiletracker.com", hint: "geolocation", desc: "Approximate location based on area code and prefix." }
+                ]
+            },
+            {
+                icon: "fa-brands fa-twitter",
+                name: "🐦 Social Media & Profiles",
+                tools: [
+                    { name: "WhatsMyName", url: "https://whatsmyname.app", hint: "username", desc: "The definitive username enumeration tool; checks 600+ platforms simultaneously." },
+                    { name: "Namechk", url: "https://namechk.com", hint: "availability", desc: "Checks username and domain availability across 100+ networks." },
+                    { name: "NameCheckup", url: "https://namecheckup.com", hint: "brand", desc: "Similar to Namechk; also checks trademark databases." },
+                    { name: "Social Searcher", url: "https://social-searcher.com", hint: "monitor", desc: "Real-time social media search and analytics; tracks mentions across platforms." },
+                    { name: "TweetDeck", url: "https://tweetdeck.twitter.com", hint: "X advanced", desc: "Manage multiple Twitter/X feeds, lists, and searches; essential for live monitoring." },
+                    { name: "Twitonomy", url: "https://twitonomy.com", hint: "analytics", desc: "Detailed Twitter analytics: follower analysis, tweet history, and engagement." },
+                    { name: "Foller.me", url: "https://foller.me", hint: "Twitter stats", desc: "Aggregates Twitter profile metrics, topics, mentions, and hashtags." },
+                    { name: "InstaDP", url: "https://instadp.com", hint: "IG viewer", desc: "View full-size Instagram profile pictures, stories, and highlights." },
+                    { name: "Picuki", url: "https://picuki.com", hint: "IG anonymous", desc: "Browse Instagram profiles, stories, posts, and tags without logging in." },
+                    { name: "Snapchat Maps", url: "https://map.snapchat.com", hint: "public stories", desc: "View public Snapchat stories by location – valuable for event and protest monitoring." },
+                    { name: "TikTok viewer", url: "https://urlebird.com", hint: "anonymous", desc: "Watch TikTok videos and profiles without an account." },
+                    { name: "SocialBlade", url: "https://socialblade.com", hint: "stats", desc: "Track follower growth and estimated earnings for YouTube, Twitch, Instagram, Twitter." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-image",
+                name: "🖼️ Image & Reverse",
+                tools: [
+                    { name: "Google Images", url: "https://images.google.com", hint: "camera", desc: "Reverse image search by upload or URL; finds visually similar images and web context." },
+                    { name: "Yandex Images", url: "https://yandex.com/images", hint: "best faces", desc: "Superior facial recognition; often finds matches missed by Google." },
+                    { name: "TinEye", url: "https://tineye.com", hint: "exact", desc: "Specializes in finding exact matches and modified versions; shows first seen date." },
+                    { name: "Bing Visual Search", url: "https://bing.com/visualsearch", hint: "shopping", desc: "Identifies objects, products, and landmarks within images." },
+                    { name: "PimEyes", url: "https://pimeyes.com", hint: "face search", desc: "AI-powered face search across the web; paid but offers free limited results." },
+                    { name: "FaceCheck.id", url: "https://facecheck.id", hint: "face matching", desc: "Upload a face to find social media profiles, mugshots, and news appearances." },
+                    { name: "ImgOps", url: "https://imgops.com", hint: "meta+rev", desc: "All-in-one: reverse search, metadata, forensics, and editing analysis." },
+                    { name: "FotoForensics", url: "https://fotoforensics.com", hint: "ELA", desc: "Error Level Analysis to detect photo manipulation and splicing." },
+                    { name: "Forensically", url: "https://29a.ch/photo-forensics", hint: "clone", desc: "Suite of tools including clone detection, noise analysis, and magnifier." },
+                    { name: "ExifTool online", url: "https://exif.tools", hint: "metadata", desc: "Extracts EXIF, GPS, and thumbnail data from images." },
+                    { name: "Jeffrey's Exif Viewer", url: "http://exif.regex.info", desc: "Classic web-based EXIF viewer; works with URLs and uploads." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-video",
+                name: "🎥 Video & Media",
+                tools: [
+                    { name: "YouTube DataViewer", url: "https://citizenevidence.amnestyusa.org", hint: "extract", desc: "Extract upload time and thumbnail frames from YouTube videos for verification." },
+                    { name: "InVID Verification", url: "https://inv.tech/verify", hint: "plugin", desc: "Browser extension for video forensics: keyframes, reverse image, magnify, metadata." },
+                    { name: "YouTube GeoFind", url: "https://mattw.io/youtube-geofind", hint: "location", desc: "Search YouTube videos by geolocation and keyword." },
+                    { name: "YT Comment Finder", url: "https://ytcomment.kmcat.uk", hint: "comments", desc: "Search comments across a YouTube channel or specific video." },
+                    { name: "KeepVid", url: "https://keepvid.ch", hint: "download", desc: "Download videos from various platforms for offline analysis." },
+                    { name: "Metadata2go", url: "https://www.metadata2go.com", hint: "video meta", desc: "View metadata of video and audio files online." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-globe",
+                name: "🌐 Domain, IP & DNS",
+                tools: [
+                    { name: "ViewDNS.info", url: "https://viewdns.info", hint: "all-in-one", desc: "Massive collection of DNS tools: whois, IP history, reverse IP, port scan, ASN, etc." },
+                    { name: "DNSlytics", url: "https://dnslytics.com", hint: "ip/domain", desc: "Domain/IP investigation including historical IP, subdomains, and registrar data." },
+                    { name: "SecurityTrails", url: "https://securitytrails.com", hint: "history", desc: "Historical DNS data, associated domains, and IP intelligence." },
+                    { name: "Censys", url: "https://search.censys.io", hint: "certs", desc: "Search SSL/TLS certificates and internet-wide scan data; find subdomains and assets." },
+                    { name: "Shodan", url: "https://shodan.io", hint: "iot", desc: "Search engine for internet-connected devices: webcams, routers, industrial systems." },
+                    { name: "ZoomEye", url: "https://zoomeye.org", hint: "cyberspace", desc: "Chinese alternative to Shodan; good for APAC region infrastructure." },
+                    { name: "WhoisXML API", url: "https://whois.whoisxmlapi.com", hint: "whois", desc: "Accurate and detailed whois records with historical ownership data." },
+                    { name: "ICANN Lookup", url: "https://lookup.icann.org", hint: "registrar", desc: "Official domain registration data lookup." },
+                    { name: "Robtex", url: "https://robtex.com", hint: "dns/route", desc: "Visual DNS and BGP routing analysis." },
+                    { name: "Spyse", url: "https://spyse.com", hint: "attack surface", desc: "Cybersecurity search engine for domains, IPs, SSL certs, and technologies." },
+                    { name: "Subdomain Finder", url: "https://subdomainfinder.c99.nl", hint: "subdomains", desc: "Fast subdomain enumeration using multiple sources." },
+                    { name: "crt.sh", url: "https://crt.sh", hint: "cert logs", desc: "Search Certificate Transparency logs for subdomains and hostnames." },
+                    { name: "VirusTotal", url: "https://virustotal.com", hint: "domain/file", desc: "Analyze suspicious files, URLs, domains, and IPs with 70+ antivirus engines." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-building",
+                name: "🏢 Business & Finance",
+                tools: [
+                    { name: "OpenCorporates", url: "https://opencorporates.com", hint: "global", desc: "Largest open database of companies worldwide; officers, addresses, filings." },
+                    { name: "Crunchbase", url: "https://crunchbase.com", hint: "startups", desc: "Funding rounds, investors, acquisitions, and key people in tech/startups." },
+                    { name: "Companies House", url: "https://find-and-update.company-information.service.gov.uk", hint: "UK", desc: "Official UK company registry; free access to directors, accounts, and filings." },
+                    { name: "SEC EDGAR", url: "https://sec.gov/edgar", hint: "US", desc: "US public company filings (10-K, 8-K, etc.) – invaluable for corporate intelligence." },
+                    { name: "Glassdoor", url: "https://glassdoor.com", hint: "reviews", desc: "Employee reviews, salary data, and interview insights about companies." },
+                    { name: "LinkedIn", url: "https://linkedin.com", hint: "profiles", desc: "Professional network for mapping corporate hierarchies and employee movement." },
+                    { name: "RocketReach", url: "https://rocketreach.co", hint: "emails", desc: "Find corporate email addresses and phone numbers." },
+                    { name: "North Data", url: "https://northdata.com", hint: "EU", desc: "European business intelligence: financials, connections, and compliance." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-landmark",
+                name: "📜 Public Records & Gov",
+                tools: [
+                    { name: "PACER", url: "https://pacer.uscourts.gov", hint: "US courts", desc: "US federal court dockets and case files (fee-based but powerful)." },
+                    { name: "FOIA.gov", url: "https://foia.gov", hint: "requests", desc: "US Freedom of Information Act portal; find previously released records." },
+                    { name: "National Archives", url: "https://archives.gov", hint: "historical", desc: "US historical documents, military records, and immigration data." },
+                    { name: "USPTO Trademarks", url: "https://tmsearch.uspto.gov", hint: "brands", desc: "Search US trademark applications and registrations." },
+                    { name: "Canada Gov Search", url: "https://rechercher.ouvert.canada.ca", hint: "open data", desc: "Search Canadian government datasets and publications." },
+                    { name: "EU Whoiswho", url: "https://op.europa.eu/en/web/who-is-who", hint: "officials", desc: "Official directory of EU institutions, bodies, and staff." },
+                    { name: "WorldLII", url: "https://worldlii.org", hint: "legal", desc: "Free access to worldwide legal databases and court decisions." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-map-location-dot",
+                name: "🗺️ Maps & Geolocation",
+                tools: [
+                    { name: "Google Maps", url: "https://maps.google.com", hint: "streetview", desc: "Street View, satellite, and 3D; timeline and location history if logged in." },
+                    { name: "Google Earth", url: "https://earth.google.com", hint: "timelapse", desc: "Historical imagery and timelapse to see changes over decades." },
+                    { name: "Bing Maps", url: "https://bing.com/maps", hint: "OS", desc: "Often has different aerial imagery and Bird's Eye view." },
+                    { name: "Yandex Maps", url: "https://yandex.com/maps", hint: "traffic", desc: "Detailed maps of Russia, CIS, and traffic conditions." },
+                    { name: "OpenStreetMap", url: "https://openstreetmap.org", hint: "data", desc: "Crowdsourced map; useful for unofficial trails, POIs, and edits history." },
+                    { name: "Mapillary", url: "https://mapillary.com", hint: "street-level", desc: "Street-level imagery contributed by users; often more recent than Google." },
+                    { name: "GeoGuessr", url: "https://geoguessr.com", hint: "practice", desc: "Game that trains geolocation skills; free limited play." },
+                    { name: "SunCalc", url: "https://suncalc.org", hint: "shadows", desc: "Determine sun position and shadow direction for photo/video geolocation." },
+                    { name: "PeakFinder", url: "https://peakfinder.org", hint: "mountains", desc: "Identify mountain peaks from a panorama; aids in location verification." },
+                    { name: "Liveuamap", url: "https://liveuamap.com", hint: "conflict", desc: "Real-time conflict and crisis mapping with geotagged reports." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-ship",
+                name: "✈️ Vehicles, Vessels, Aircraft",
+                tools: [
+                    { name: "FlightRadar24", url: "https://flightradar24.com", hint: "live", desc: "Track commercial flights worldwide in real time; historical playback." },
+                    { name: "FlightAware", url: "https://flightaware.com", hint: "history", desc: "Flight tracking with detailed history, tail numbers, and airport activity." },
+                    { name: "MarineTraffic", url: "https://marinetraffic.com", hint: "ships", desc: "Live vessel positions, port calls, and ship details via AIS." },
+                    { name: "VesselFinder", url: "https://vesselfinder.com", hint: "maritime", desc: "Alternative ship tracker with satellite and terrestrial AIS." },
+                    { name: "ADS-B Exchange", url: "https://globe.adsbexchange.com", hint: "unfiltered", desc: "Unfiltered flight data including military and private aircraft (no censorship)." },
+                    { name: "OpenSky Network", url: "https://opensky-network.org", hint: "research", desc: "Open flight data for academic and non-commercial use." },
+                    { name: "FAA Registry", url: "https://registry.faa.gov", hint: "N-number", desc: "Search US aircraft registration by N-number, owner, or serial." },
+                    { name: "VinCheck.info", url: "https://vincheck.info", hint: "vehicle", desc: "Free VIN lookup for vehicle history, theft, and recalls." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-dragon",
+                name: "🌑 Dark Web & Onion",
+                tools: [
+                    { name: "Tor Project", url: "https://torproject.org", hint: "browser", desc: "Essential for accessing .onion sites anonymously." },
+                    { name: "Ahmia", url: "https://ahmia.fi", hint: "search .onion", desc: "Search engine for Tor hidden services; filters abuse content." },
+                    { name: "OnionLand", url: "https://onionlandsearchengine.com", hint: "directory", desc: "Onion link directory and search." },
+                    { name: "Dark.fail", url: "https://dark.fail", hint: "links", desc: "Verified onion links for marketplaces, forums, and news." },
+                    { name: "ExoneraTor", url: "https://exonerator.torproject.org", hint: "relay check", desc: "Check if an IP address was a Tor relay at a given time." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-file-lines",
+                name: "📄 Documents & Metadata",
+                tools: [
+                    { name: "FOCA", url: "https://github.com/ElevenPaths/FOCA", hint: "metadata", desc: "Analyzes metadata from public documents (Office, PDF, images) to map an organization." },
+                    { name: "Metagoofil", url: "https://github.com/laramies/metagoofil", hint: "extract", desc: "Extracts metadata from public documents found via Google." },
+                    { name: "PDF Examiner", url: "https://pdfexaminer.com", hint: "analysis", desc: "Online PDF structure and metadata inspection." },
+                    { name: "Exifdata", url: "https://exifdata.com", hint: "exif", desc: "Online EXIF viewer for images, also supports video and audio." }
+                ]
+            },
+            {
+                icon: "fa-brands fa-bitcoin",
+                name: "₿ Crypto & Blockchain",
+                tools: [
+                    { name: "Blockchain.com Explorer", url: "https://blockchain.com/explorer", hint: "BTC/ETH", desc: "Search Bitcoin and Ethereum transactions, addresses, and blocks." },
+                    { name: "Etherscan", url: "https://etherscan.io", hint: "Ethereum", desc: "Detailed Ethereum blockchain explorer with token analytics and smart contracts." },
+                    { name: "WalletExplorer", url: "https://walletexplorer.com", hint: "BTC clustering", desc: "Groups Bitcoin addresses to identify wallets and transaction patterns." },
+                    { name: "BitcoinAbuse", url: "https://bitcoinabuse.com", hint: "reports", desc: "Public database of reported scam Bitcoin addresses." },
+                    { name: "Chainalysis free tools", url: "https://www.chainalysis.com/free-cryptocurrency-investigation-tools/", hint: "investigation", desc: "Sanction screening and transaction monitoring (free tier)." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-newspaper",
+                name: "📰 News & Monitoring",
+                tools: [
+                    { name: "Google News Archive", url: "https://news.google.com/newspapers", hint: "historical", desc: "Digitized newspapers from around the world; search by date and keyword." },
+                    { name: "NewsBank", url: "https://newsbank.com", hint: "access", desc: "Access to local and national newspapers (some free via libraries)." },
+                    { name: "Wayback Machine", url: "https://archive.org/web", hint: "history", desc: "Archive of web pages; see what a site looked like in the past." },
+                    { name: "Meltwater", url: "https://meltwater.com", hint: "media monitoring", desc: "Media intelligence platform (free trial)." },
+                    { name: "TalkWalker Alerts", url: "https://talkwalker.com/alerts", hint: "alerts", desc: "Monitor the web for keywords (alternative to Google Alerts)." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-language",
+                name: "🌍 Translation & OCR",
+                tools: [
+                    { name: "Google Translate", url: "https://translate.google.com", hint: "text/image", desc: "Translate text, documents, and images via camera OCR." },
+                    { name: "DeepL", url: "https://deepl.com", hint: "quality", desc: "Often more nuanced translations, especially for European languages." },
+                    { name: "Yandex Translate", url: "https://translate.yandex.com", hint: "Cyrillic", desc: "Good for Russian and Slavic languages." },
+                    { name: "OCR Space", url: "https://ocr.space", hint: "free ocr", desc: "Free OCR API and web tool for extracting text from images/PDFs." },
+                    { name: "NewOCR", url: "https://newocr.com", hint: "batch", desc: "Free online OCR with multiple language support." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-code",
+                name: "🛠️ Dev & Technical Intel",
+                tools: [
+                    { name: "GitHub Search", url: "https://github.com/search", hint: "code", desc: "Search commits, issues, and code for exposed secrets, emails, and paths." },
+                    { name: "Searchcode", url: "https://searchcode.com", hint: "source", desc: "Search engine for source code across repositories." },
+                    { name: "PublicWWW", url: "https://publicwww.com", hint: "source code", desc: "Search for any HTML, JavaScript, or CSS snippet on the web." },
+                    { name: "Wappalyzer", url: "https://wappalyzer.com", hint: "tech stack", desc: "Identify technologies used on websites (CMS, frameworks, analytics)." },
+                    { name: "BuiltWith", url: "https://builtwith.com", hint: "profiling", desc: "Detailed technology profile and history of a website." },
+                    { name: "Scylla.so", url: "https://scylla.so", hint: "leakdb", desc: "Database of leaked credentials and combo lists (ethical use)." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-toolbox",
+                name: "🧰 OSINT Frameworks & Suites",
+                tools: [
+                    { name: "OSINT Framework", url: "https://osintframework.com", hint: "mindmap", desc: "Interactive mind map of OSINT resources categorized by data type." },
+                    { name: "IntelX", url: "https://intelx.io", hint: "darknet", desc: "Search engine for darknet, leaks, and historical data; free tier available." },
+                    { name: "Bellingcat Toolkit", url: "https://bellingcat.gitbook.io/toolkit", hint: "guide", desc: "Comprehensive online investigation guide with tool list." },
+                    { name: "Start.me OSINT", url: "https://start.me/p/DPYPMz/the-ultimate-osint-collection", hint: "bookmarks", desc: "Huge curated collection of OSINT links." },
+                    { name: "Aware Online Tools", url: "https://aware-online.com/en/osint-tools/", hint: "categorized", desc: "Well-organized OSINT tools by category." },
+                    { name: "OSINT.link", url: "https://osint.link", hint: "directory", desc: "Another extensive directory of open source intelligence links." }
+                ]
+            },
+            {
+                icon: "fa-solid fa-dice-d6",
+                name: "🎲 Misc & Utilities",
+                tools: [
+                    { name: "CachedView", url: "https://cachedview.com", hint: "google cache", desc: "View cached version of a webpage from Google or CoralCDN." },
+                    { name: "CheckUsernames", url: "https://checkusernames.com", hint: "social", desc: "Check username across 160+ social networks." },
+                    { name: "HashToolkit", url: "https://hashtoolkit.com", hint: "decrypt", desc: "Decrypt MD5, SHA1, and other hashes via database lookup." },
+                    { name: "URLScan.io", url: "https://urlscan.io", hint: "screenshot", desc: "Scan and analyze a website; see screenshot, DOM, and connections." },
+                    { name: "Browserling", url: "https://browserling.com", hint: "live browser", desc: "Test websites in different browsers/OS online." }
+                ]
+            }
+        ];
+
+        // ---------- RENDER ----------
+        const container = document.getElementById('categoriesContainer');
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const totalToolsSpan = document.getElementById('totalToolsCount');
+        const visibleCountSpan = document.getElementById('visibleCount');
+
+        let allToolItems = [];
+
+        function renderCategories() {
+            container.innerHTML = '';
+            allToolItems = [];
+            let total = 0;
+
+            categoriesData.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'cat-card';
+                card.dataset.category = cat.name;
+
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'cat-header';
+                headerDiv.innerHTML = `<i class="${cat.icon}"></i><h2>${cat.name}</h2>`;
+                card.appendChild(headerDiv);
+
+                const ul = document.createElement('ul');
+                ul.className = 'tool-list';
+
+                cat.tools.forEach(tool => {
+                    total++;
+                    const li = document.createElement('li');
+                    li.className = 'tool-item';
+
+                    const mainDiv = document.createElement('div');
+                    mainDiv.className = 'tool-main';
+                    mainDiv.innerHTML = `
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="tool-link">${tool.name}</a>
+                        ${tool.hint ? `<span class="domain-hint">${tool.hint}</span>` : ''}
+                    `;
+
+                    const descDiv = document.createElement('div');
+                    descDiv.className = 'tool-desc';
+                    descDiv.textContent = tool.desc;
+
+                    li.appendChild(mainDiv);
+                    li.appendChild(descDiv);
+                    ul.appendChild(li);
+
+                    allToolItems.push({
+                        element: li,
+                        categoryCard: card,
+                        toolName: tool.name.toLowerCase(),
+                        toolUrl: tool.url.toLowerCase(),
+                        hint: tool.hint ? tool.hint.toLowerCase() : '',
+                        desc: tool.desc.toLowerCase(),
+                        visible: true
+                    });
+                });
+
+                card.appendChild(ul);
+                container.appendChild(card);
+            });
+
+            totalToolsSpan.textContent = total;
+            document.getElementById('categoryCount').textContent = categoriesData.length;
+            updateVisibleCount();
+        }
+
+        function filterTools(term) {
+            const searchTerm = term.trim().toLowerCase();
+            let visible = 0;
+
+            allToolItems.forEach(item => {
+                const matches = searchTerm === '' || 
+                    item.toolName.includes(searchTerm) || 
+                    item.toolUrl.includes(searchTerm) || 
+                    item.hint.includes(searchTerm) || 
+                    item.desc.includes(searchTerm);
+
+                if (matches) {
+                    item.element.style.display = '';
+                    item.visible = true;
+                    visible++;
+                } else {
+                    item.element.style.display = 'none';
+                    item.visible = false;
+                }
+            });
+
+            document.querySelectorAll('.cat-card').forEach(card => {
+                const visibleItems = Array.from(card.querySelectorAll('.tool-item')).filter(li => li.style.display !== 'none');
+                card.style.display = visibleItems.length === 0 ? 'none' : 'flex';
+            });
+
+            updateVisibleCount();
+
+            let noMsg = document.querySelector('.no-results');
+            if (visible === 0 && searchTerm !== '') {
+                if (!noMsg) {
+                    noMsg = document.createElement('div');
+                    noMsg.className = 'no-results';
+                    container.appendChild(noMsg);
+                }
+                noMsg.style.display = 'block';
+                noMsg.innerHTML = `<i class="fa-regular fa-face-frown"></i> No tools match "<strong>${searchTerm}</strong>" — try a different keyword.`;
+            } else {
+                if (noMsg) noMsg.style.display = 'none';
+            }
+        }
+
+        function updateVisibleCount() {
+            const vis = allToolItems.filter(i => i.visible).length;
+            visibleCountSpan.textContent = vis;
+        }
+
+        searchInput.addEventListener('input', e => filterTools(e.target.value));
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            filterTools('');
+            searchInput.focus();
+        });
+
+        renderCategories();
+        filterTools('');
+    })();
+</script>
+</body>
+</html>
