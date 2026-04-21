@@ -1,3 +1,6 @@
+Here is the updated code. To utilize the space better, I changed the layout of the links *inside* each category box so they now display as a grid with two links per row (side-by-side). I also added a quick mobile responsiveness rule so they will stack neatly if someone views the site on a very narrow phone screen.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -331,14 +334,17 @@
         .resources-simple {
             background: white;
             border-radius: 16px;
-            padding: 25px 25px 15px;
+            padding: 25px 30px;
             margin: 10px 0 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
             border: 1px solid var(--medium-gray);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
         }
         
         .resource-category {
-            margin-bottom: 30px;
+            margin-bottom: 0;
         }
         
         .resource-category h3 {
@@ -350,14 +356,14 @@
             font-weight: 600;
         }
         
+        /* Changed to display 2 links per row inside the category */
         .resource-links-compact {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 24px;
-            align-items: baseline;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 10px;
+            align-items: center;
         }
         
-        /* Simple link with arrow symbol (→) instead of icons */
         .simple-link {
             display: inline-flex;
             align-items: baseline;
@@ -368,6 +374,7 @@
             transition: color 0.15s, transform 0.1s;
             border-bottom: 1px dotted transparent;
             padding: 2px 0;
+            word-break: break-word; /* Prevents long text from overflowing */
         }
         
         .simple-link::before {
@@ -504,17 +511,24 @@
             .logo-image { height: 60px; margin-right: 0; transform: scale(1.1); }
             .channels-row { flex-direction: column; gap: 20px; }
             .channel-item { width: 100%; max-width: 280px; }
-            .resource-links-compact { gap: 10px 20px; }
+            
+            .resources-simple { 
+                grid-template-columns: 1fr; 
+                gap: 30px;
+            }
         }
         
         @media (max-width: 480px) {
             .logo-image { height: 50px; transform: none; }
             .simple-link { font-size: 0.95rem; }
+            /* Stack links into a single column on very small screens to prevent text overlap */
+            .resource-links-compact {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Header -->
     <div class="mobile-header container">
         <div class="logo">
             <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
@@ -528,7 +542,6 @@
         </button>
     </div>
 
-    <!-- Desktop Header -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -598,16 +611,13 @@
         </div>
     </header>
 
-    <!-- Page Header -->
- 
-        <!-- Recommended Resources (arrow symbols, no icons) -->
+    <main class="container">
         <div class="section-title">
             <h2><i class="fas fa-star" style="color: var(--accent-gold);"></i> Recommended Resources</h2>
             <p>Free tools & references I personally use · click to visit</p>
         </div>
         
         <div class="resources-simple">
-            <!-- Digital Privacy -->
             <div class="resource-category">
                 <h3>🔒 Digital Privacy & Self-Reliance</h3>
                 <div class="resource-links-compact">
@@ -619,7 +629,6 @@
                     <a href="#" target="_blank" class="simple-link">PRISM Break</a>
                 </div>
             </div>
-            <!-- Vedic Astrology -->
             <div class="resource-category">
                 <h3>🕉️ Vedic Astrology & Spirituality</h3>
                 <div class="resource-links-compact">
@@ -630,7 +639,6 @@
                     <a href="#" target="_blank" class="simple-link">Vedic Astro</a>
                 </div>
             </div>
-            <!-- Economy & Data -->
             <div class="resource-category">
                 <h3>📊 Economy & Data</h3>
                 <div class="resource-links-compact">
@@ -648,7 +656,6 @@
         </p>
     </main>
 
-    <!-- Footer (no Udhyam) -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -693,7 +700,6 @@
         </div>
     </footer>
 
-    <!-- Mobile Navigation Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -739,3 +745,4 @@
     </script>
 </body>
 </html>
+```
