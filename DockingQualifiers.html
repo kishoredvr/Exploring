@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Engine Dorking – Complete Operator Reference | Ethical Hacking</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --text: #212529;
+      --heading: #0d6efd;
+      --border: #dee2e6;
+      --code-bg: #e9ecef;
+      --code-text: #d63384;
+      --accent: #198754;
+      --note-bg: #fff3cd;
+      --note-border: #ffc107;
+      --section-bg: #f1f8ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      padding: 40px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      color: #0a1929;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #5c6b7a;
+      margin-bottom: 15px;
+    }
+
+    .disclaimer {
+      background: #ffe3e3;
+      border-left: 5px solid #d32f2f;
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin: 20px 0 30px;
+      font-weight: 500;
+      color: #b71c1c;
+      font-size: 0.95rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      color: #0d47a1;
+      margin: 40px 0 15px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #bbdefb;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      color: #1e3a5f;
+      margin: 25px 0 12px;
+    }
+
+    .engine-section {
+      background: #f8faff;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid #d0e2ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0 25px;
+      font-size: 0.92rem;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    th {
+      background: #1e3a5f;
+      color: white;
+      padding: 12px 15px;
+      text-align: left;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      font-size: 0.95rem;
+    }
+
+    td {
+      padding: 10px 15px;
+      border-bottom: 1px solid #eef1f5;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f8fbff;
+    }
+
+    .operator {
+      font-weight: 700;
+      color: #0d47a1;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      white-space: nowrap;
+    }
+
+    .example {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      background: #f5f2f0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: #c7254e;
+      font-size: 0.88rem;
+      word-break: break-word;
+    }
+
+    .universal-badge {
+      display: inline-block;
+      background: #198754;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    .note {
+      background: var(--note-bg);
+      border-left: 4px solid var(--note-border);
+      padding: 12px 18px;
+      margin: 20px 0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #6c757d;
+      font-size: 0.85rem;
+      border-top: 1px solid #dde2e8;
+      padding-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      table, th, td {
+        font-size: 0.8rem;
+      }
+      .operator {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🕵️ Search Engine Dorking – Complete Operator Reference</h1>
+      <p class="subtitle">A comprehensive guide for security researchers, penetration testers, and ethical hackers</p>
+      <div class="disclaimer">
+        ⚠️ <strong>Ethical Use Only:</strong> This reference is intended solely for authorised security testing, bug bounty programs, CTF challenges, and educational purposes. Always obtain explicit permission before probing any system or accessing any data. Unauthorised use may violate computer fraud and abuse laws.
+      </div>
+    </header>
+
+    <!-- UNIVERSAL OPERATORS -->
+    <h2>🌐 Universal Search Operators</h2>
+    <p>These core operators work across most major search engines – Google, Bing, DuckDuckGo, and Yandex. They form the backbone of any dorking query and should be mastered first.</p>
+    <table>
+      <thead>
+        <tr><th>Operator</th><th>Description</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="operator">" "</td><td>Search for an <strong>exact phrase</strong> or sequence of words.</td><td><span class="example">"index of /admin"</span></td></tr>
+        <tr><td class="operator">-</td><td>Exclude a term from the results (minus sign).</td><td><span class="example">apache -tomcat</span></td></tr>
+        <tr><td class="operator">OR / |</td><td>Logical OR; find results containing at least one of the terms.</td><td><span class="example">php OR asp OR jsp</span></td></tr>
+        <tr><td class="operator">AND</td><td>Logical AND (often the default behaviour, but can be used explicitly).</td><td><span class="example">admin AND login</span></td></tr>
+        <tr><td class="operator">*</td><td>Wildcard; matches any character or whole word within a phrase.</td><td><span class="example">"database * password"</span></td></tr>
+        <tr><td class="operator">( )</td><td>Grouping for complex boolean logic.</td><td><span class="example">(php OR asp) login</span></td></tr>
+        <tr><td class="operator">+</td><td>Force inclusion of a stop word or common term.</td><td><span class="example">+the +who</span></td></tr>
+        <tr><td class="operator">~</td><td>Include synonyms (tilde; may not work on all engines).</td><td><span class="example">~mobile phone</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- GOOGLE -->
+    <h2>🔍 Google Search Operators</h2>
+    <div class="engine-section">
+      <p>Google offers the largest collection of advanced operators. Many are essential for passive reconnaissance and targeted dorking. All universal operators above are also supported.</p>
+      <table>
+        <thead>
+          <tr><th>Operator</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="operator">site:</td><td>Limit results to a specific domain or TLD.</td><td><span class="example">site:example.com</span></td></tr>
+          <tr><td class="operator">intitle:</td><td>Find pages with a word in the HTML title tag.</td><td><span class="example">intitle:"index of"</span></td></tr>
+          <tr><td class="operator">allintitle:</td><td>All following words must appear in the title.</td><td><span class="example">allintitle:admin panel</span></td></tr>
+          <tr><td class="operator">inurl:</td><td>Search for a word in the URL.</td><td><span class="example">inurl:admin.php</span></td></tr>
+          <tr><td class="operator">allinurl:</td><td>All words must be in the URL.</td><td><span class="example">allinurl:login admin</span></td></tr>
+          <tr><td class="operator">intext:</td><td>Search for a word in the page body.</td><td><span class="example">intext:"password"</span></td></tr>
+          <tr><td class="operator">allintext:</td><td>All words must be in the body text.</td><td><span class="example">allintext:username password</span></td></tr>
+          <tr><td class="operator">filetype: / ext:</td><td>Search for a specific file extension.</td><td><span class="example">filetype:pdf "confidential"</span></td></tr>
+          <tr><td class="operator">cache:</td><td>Show Google's cached version of a page.</td><td><span class="example">cache:example.com</span></td></tr>
+          <tr><td class="operator">related:</td><td>Find sites similar to a URL.</td><td><span class="example">related:owasp.org</span></td></tr>
+          <tr><td class="operator">link:</td><td>Pages that link to the given URL.</td><td><span class="example">link:wikipedia.org</span></td></tr>
+          <tr><td class="operator">info:</td><td>Information Google has about a URL.</td><td><span class="example">info:github.com</span></td></tr>
+          <tr><td class="operator">define:</td><td>Definition of a word or phrase.</td><td><span class="example">define:phishing</span></td></tr>
+          <tr><td class="operator">inanchor:</td><td>Pages linked with specific anchor text.</td><td><span class="example">inanchor:"click here"</span></td></tr>
+          <tr><td class="operator">allinanchor:</td><td>All words in anchor text of incoming links.</td><td><span class="example">allinanchor:best VPN</span></td></tr>
+          <tr><td class="operator">daterange:</td><td>Julian date range (e.g., 2458945 = 2020-01-01).</td><td><span class="example">daterange:2458945-2459312</span></td></tr>
+          <tr><td class="operator">before:</td><td>Results published before a specific date.</td><td><span class="example">before:2023-01-01</span></td></tr>
+          <tr><td class="operator">after:</td><td>Results published after a specific date.</td><td><span class="example">after:2024-06-01</span></td></tr>
+          <tr><td class="operator">location:</td><td>News results from a location (requires News tab).</td><td><span class="example">location:london</span></td></tr>
+          <tr><td class="operator">source:</td><td>News from a specific source.</td><td><span class="example">source:bbc</span></td></tr>
+          <tr><td class="operator">AROUND(X)</td><td>Words within X words of each other.</td><td><span class="example">breach AROUND(5) password</span></td></tr>
+          <tr><td class="operator">inposttitle:</td><td>Term appears in the blog post title.</td><td><span class="example">inposttitle:weight loss</span></td></tr>
+          <tr><td class="operator">weather:</td><td>Show weather for a location.</td><td><span class="example">weather:London</span></td></tr>
+          <tr><td class="operator">stocks:</td><td>Show stock information for a ticker.</td><td><span class="example">stocks:aapl</span></td></tr>
+          <tr><td class="operator">map:</td><td>Force map results for a location.</td><td><span class="example">map:Paris</span></td></tr>
+          <tr><td class="operator">movie:</td><td>Show information about a movie.</td><td><span class="example">movie:Interstellar</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BING -->
+    <h2>🔎 Bing Search Operators</h2>
+    <div class="engine-section">
+      <p>Bing supports most universal operators and offers several unique ones ideal for OSINT and detailed web reconnaissance.</p>
+      <table>
+        <thead>
+          <tr><th>Operator</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="operator">site:</td><td>Limit results to a specific domain or TLD.</td><td><span class="example">site:microsoft.com</span></td></tr>
+          <tr><td class="operator">domain:</td><td>Restrict to a root domain (more strict than site:).</td><td><span class="example">domain:example.org</span></td></tr>
+          <tr><td class="operator">url:</td><td>Pages with a specific word in the full URL.</td><td><span class="example">url:download</span></td></tr>
+          <tr><td class="operator">title:</td><td>Find word in the page title (Bing's intitle).</td><td><span class="example">title:security</span></td></tr>
+          <tr><td class="operator">body:</td><td>Find word in the body text (Bing's intext).</td><td><span class="example">body:"confidential"</span></td></tr>
+          <tr><td class="operator">filetype:</td><td>Filter by file extension.</td><td><span class="example">filetype:xlsx budget</span></td></tr>
+          <tr><td class="operator">language:</td><td>Results in a specific language.</td><td><span class="example">language:fr</span></td></tr>
+          <tr><td class="operator">loc: / location:</td><td>Geographic region (country/region code).</td><td><span class="example">loc:GB</span></td></tr>
+          <tr><td class="operator">feed:</td><td>Find RSS/Atom feeds related to a query.</td><td><span class="example">feed:cybersecurity</span></td></tr>
+          <tr><td class="operator">hasfeed:</td><td>Pages that have an RSS feed.</td><td><span class="example">site:example.com hasfeed:</span></td></tr>
+          <tr><td class="operator">ip:</td><td>Search for websites hosted on a specific IP address.</td><td><span class="example">ip:192.0.2.1</span></td></tr>
+          <tr><td class="operator">prefer:</td><td>Boost results matching a keyword (preference).</td><td><span class="example">prefer:tutorial</span></td></tr>
+          <tr><td class="operator">near:</td><td>Words within close proximity of each other.</td><td><span class="example">breach near:5 password</span></td></tr>
+          <tr><td class="operator">contains:</td><td>Only results that contain a specific file type link.</td><td><span class="example">contains:pdf</span></td></tr>
+          <tr><td class="operator">norelax:</td><td>Disable automatic relaxation of search constraints.</td><td><span class="example">norelax:site:example.com admin</span></td></tr>
+          <tr><td class="operator">noalter:</td><td>Prevent Bing from altering the query.</td><td><span class="example">noalter:site:example.com</span></td></tr>
+          <tr><td class="operator">literalmeta:</td><td>Force literal interpretation of meta keywords.</td><td><span class="example">literalmeta:site:example.com</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DUCKDUCKGO -->
+    <h2>🦆 DuckDuckGo Operators</h2>
+    <div class="engine-section">
+      <p>DuckDuckGo prioritizes privacy and supports a streamlined set of operators. It lacks some Google-specific ones (e.g., link:) but covers most core dorking needs.</p>
+      <table>
+        <thead>
+          <tr><th>Operator</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="operator">site:</td><td>Search within a specific site or TLD.</td><td><span class="example">site:github.com</span></td></tr>
+          <tr><td class="operator">-site:</td><td>Exclude results from a specific site.</td><td><span class="example">cats -site:example.com</span></td></tr>
+          <tr><td class="operator">intitle:</td><td>Word in the page title.</td><td><span class="example">intitle:login</span></td></tr>
+          <tr><td class="operator">inurl:</td><td>Word in the page URL.</td><td><span class="example">inurl:admin</span></td></tr>
+          <tr><td class="operator">filetype:</td><td>Filter by file extension (works like Google).</td><td><span class="example">filetype:pdf manual</span></td></tr>
+          <tr><td class="operator">ext:</td><td>Same as filetype: ; search by extension.</td><td><span class="example">ext:sql backup</span></td></tr>
+          <tr><td class="operator">~" "</td><td>Experimental: find semantically similar phrases.</td><td><span class="example">~"cats and dogs"</span></td></tr>
+          <tr><td class="operator">region:</td><td>Boost results from a specific region (e.g., us-en, uk-en).</td><td><span class="example">region:de</span></td></tr>
+          <tr><td class="operator">!</td><td>Bang: search directly on another site (e.g., !amazon).</td><td><span class="example">!w ethical hacking</span></td></tr>
+          <tr><td class="operator">\</td><td>Go directly to the first search result (I'm feeling lucky).</td><td><span class="example">\futurama</span></td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        💡 <strong>Note:</strong> DuckDuckGo also supports <code>!safeon</code> and <code>!safeoff</code> to toggle SafeSearch, and <code>timelimit:</code> parameters (d, w, m, y) when used programmatically.
+      </div>
+    </div>
+
+    <!-- YANDEX -->
+    <h2>🇷🇺 Yandex Search Operators</h2>
+    <div class="engine-section">
+      <p>Yandex provides a robust set of operators for deep searching, especially valuable for Russian and CIS web assets. Many operators mirror Google's but with additional region-specific capabilities.</p>
+      <table>
+        <thead>
+          <tr><th>Operator</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="operator">site:</td><td>Restrict search to a domain and its subdomains.</td><td><span class="example">site:*.ru</span></td></tr>
+          <tr><td class="operator">domain:</td><td>Strict domain match (usually without subdomains).</td><td><span class="example">domain:yandex.ru</span></td></tr>
+          <tr><td class="operator">host:</td><td>Similar to site:, matches hostname.</td><td><span class="example">host:mail.example.com</span></td></tr>
+          <tr><td class="operator">rhost:</td><td>Match hostname in reverse order (TLD first).</td><td><span class="example">rhost:com.seosly.www</span></td></tr>
+          <tr><td class="operator">url:</td><td>Find pages with a specific URL (use quotes for special chars).</td><td><span class="example">url:seosly.com</span></td></tr>
+          <tr><td class="operator">mime:</td><td>File type by MIME (e.g., pdf, xls, ppt).</td><td><span class="example">mime:pdf</span></td></tr>
+          <tr><td class="operator">lang:</td><td>Language of the document (ISO code). Supports ru, uk, be, en, fr, de, kk, tt, tr.</td><td><span class="example">lang:en</span></td></tr>
+          <tr><td class="operator">date:</td><td>Filter by date (YYYYMMDD or * for day/month).</td><td><span class="example">date:20240601</span></td></tr>
+          <tr><td class="operator">title:</td><td>Word in the title (like intitle).</td><td><span class="example">title:"index of"</span></td></tr>
+          <tr><td class="operator">inurl:</td><td>Word in the URL.</td><td><span class="example">inurl:admin</span></td></tr>
+          <tr><td class="operator">! &lt;word&gt;</td><td>Match the exact form of a word (case, number, tense).</td><td><span class="example">buy !apples wholesale</span></td></tr>
+          <tr><td class="operator">+ &lt;word&gt;</td><td>Match stop words (auxiliary parts of speech, pronouns).</td><td><span class="example">work +from home</span></td></tr>
+          <tr><td class="operator">[ ]</td><td>Matches the order of words (any grammatical forms / stop words inside).</td><td><span class="example">tickets [london paris]</span></td></tr>
+          <tr><td class="operator">$ anchor()</td><td>Search for pages linking with specific anchor text.</td><td><span class="example">$ anchor(seo)</span></td></tr>
+          <tr><td class="operator">( ) and |</td><td>Group words in complex queries.</td><td><span class="example">buy (coat|jacket)</span></td></tr>
+          <tr><td class="operator">region:</td><td>Geographical region ID (e.g., 213=Moscow).</td><td><span class="example">region:213</span></td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        💡 <strong>Yandex-Specific Notes:</strong> The <code>!</code>, <code>+</code>, <code>[ ]</code>, and <code>$ anchor()</code> operators are unique to Yandex and are extremely powerful for precise language-based searches. Yandex's <code>lang:</code> operator supports Russian, Ukrainian, Belarusian, English, French, German, Kazakh, Tatar, and Turkish.
+      </div>
+    </div>
+
+    <!-- SHODAN -->
+    <h2>📡 Shodan Filters</h2>
+    <div class="engine-section">
+      <p>Shodan indexes banners and metadata from internet-connected devices. Its search filters are essential for passive reconnaissance of IoT, ICS, servers, webcams, and more.</p>
+      <table>
+        <thead>
+          <tr><th>Filter</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="operator">country:</td><td>2-letter country code.</td><td><span class="example">country:IN</span></td></tr>
+          <tr><td class="operator">city:</td><td>City name.</td><td><span class="example">city:"New York"</span></td></tr>
+          <tr><td class="operator">geo:</td><td>GPS coordinates (latitude,longitude).</td><td><span class="example">geo:"56.913055,118.250862"</span></td></tr>
+          <tr><td class="operator">port:</td><td>Specific port number.</td><td><span class="example">port:22</span></td></tr>
+          <tr><td class="operator">os:</td><td>Operating system.</td><td><span class="example">os:"Windows 10"</span></td></tr>
+          <tr><td class="operator">hostname:</td><td>Part of the hostname.</td><td><span class="example">hostname:gov</span></td></tr>
+          <tr><td class="operator">product:</td><td>Software/product banner.</td><td><span class="example">product:"Apache httpd"</span></td></tr>
+          <tr><td class="operator">org:</td><td>Organization (ISP/company).</td><td><span class="example">org:"Google"</span></td></tr>
+          <tr><td class="operator">net:</td><td>IP range in CIDR notation.</td><td><span class="example">net:192.168.1.0/24</span></td></tr>
+          <tr><td class="operator">before:</td><td>Results added before a date.</td><td><span class="example">before:2024-01-01</span></td></tr>
+          <tr><td class="operator">after:</td><td>Results added after a date.</td><td><span class="example">after:2024-06-01</span></td></tr>
+          <tr><td class="operator">vuln:</td><td>Known vulnerability (CVE identifier).</td><td><span class="example">vuln:CVE-2021-44228</span></td></tr>
+          <tr><td class="operator">http.title:</td><td>Search by HTML title tag content.</td><td><span class="example">http.title:"login"</span></td></tr>
+          <tr><td class="operator">http.html:</td><td>Search raw HTML content of a web page.</td><td><span class="example">http.html:"Set-Cookie"</span></td></tr>
+          <tr><td class="operator">ssl:</td><td>Search by SSL/TLS certificate details.</td><td><span class="example">ssl:"Let's Encrypt"</span></td></tr>
+          <tr><td class="operator">ssl.cert.expired:</td><td>Find devices with expired SSL certificates.</td><td><span class="example">ssl.cert.expired:true</span></td></tr>
+          <tr><td class="operator">asn:</td><td>Autonomous System Number.</td><td><span class="example">asn:AS15169</span></td></tr>
+          <tr><td class="operator">device:</td><td>Device type (e.g., webcam, router, firewall).</td><td><span class="example">device:webcam</span></td></tr>
+          <tr><td class="operator">hash:</td><td>Search by favicon hash for identifying services.</td><td><span class="example">http.favicon.hash:81586312</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- GITHUB -->
+    <h2>🐙 GitHub Code Search Qualifiers</h2>
+    <div class="engine-section">
+      <p>GitHub's advanced code search can uncover exposed secrets, configuration files, and proprietary code. These qualifiers work in the main search bar and are distinct from non-code search (issues, users).</p>
+      <table>
+        <thead>
+          <tr><th>Qualifier</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="operator">language:</td><td>Programming language.</td><td><span class="example">language:python</span></td></tr>
+          <tr><td class="operator">path:</td><td>File path contains a string (supports glob and regex).</td><td><span class="example">path:/config/</span></td></tr>
+          <tr><td class="operator">filename:</td><td>Exact file name.</td><td><span class="example">filename:.env</span></td></tr>
+          <tr><td class="operator">extension:</td><td>File extension.</td><td><span class="example">extension:pem</span></td></tr>
+          <tr><td class="operator">org:</td><td>Repository belonging to an organization.</td><td><span class="example">org:google</span></td></tr>
+          <tr><td class="operator">repo:</td><td>Specific repository (user/repo).</td><td><span class="example">repo:torvalds/linux</span></td></tr>
+          <tr><td class="operator">user:</td><td>Code owned by a user.</td><td><span class="example">user:johndoe</span></td></tr>
+          <tr><td class="operator">enterprise:</td><td>Files within an enterprise account.</td><td><span class="example">enterprise:octocorp</span></td></tr>
+          <tr><td class="operator">size:</td><td>File size in bytes (with &gt;, &lt;, range).</td><td><span class="example">size:&gt;5000</span></td></tr>
+          <tr><td class="operator">is:</td><td>State of the item (archived, fork, vendored, generated).</td><td><span class="example">is:archived</span></td></tr>
+          <tr><td class="operator">content:</td><td>Restrict search to file content only (not paths).</td><td><span class="example">content:README.md</span></td></tr>
+          <tr><td class="operator">symbol:</td><td>Search for symbol definitions (functions, classes).</td><td><span class="example">language:go symbol:WithContext</span></td></tr>
+          <tr><td class="operator">license:</td><td>Filter by license type (e.g., MIT, Apache-2.0).</td><td><span class="example">license:MIT</span></td></tr>
+          <tr><td class="operator">NOT</td><td>Exclude keyword from code results.</td><td><span class="example">NOT test</span></td></tr>
+          <tr><td class="operator">AND / OR</td><td>Boolean logic (AND is default when terms separated by space).</td><td><span class="example">sparse OR index</span></td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        💡 <strong>Pro Tips:</strong> Combine qualifiers with exact phrases like <span class="example">"BEGIN RSA PRIVATE KEY"</span> to locate accidentally committed private keys. Use <code>path:*.txt</code> for glob patterns or <code>path:/(^|\/)README\.md$/</code> for regex. GitHub code search is case-insensitive by default; use regex <code>/(?i)pattern/</code> for case-sensitive matching.
+      </div>
+    </div>
+
+    <footer>
+      <p>📘 This comprehensive reference is provided for <strong>authorised security testing only</strong>. Always respect robots.txt, terms of service, and applicable laws.</p>
+      <p>Stay ethical. Stay curious. 🛡️</p>
+    </footer>
+  </div>
+</body>
+</html>
