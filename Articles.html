@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insights & Articles</title>
+    <title>Insights & Articles | Ganesh Solutions</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -52,6 +52,8 @@
         .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1rem; font-style: italic; color: #4b5563; margin-top: 1.5rem; margin-bottom: 1.5rem; }
         .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
         .prose li { margin-bottom: 0.5rem; }
+        .prose-loading { display: flex; justify-content: center; align-items: center; padding: 3rem; background: #f9fafb; border-radius: 1rem; }
+        .prose-error { background: #fee2e2; border-left: 4px solid #dc2626; padding: 1.5rem; border-radius: 0.75rem; color: #991b1b; }
 
         /* === Ganesh Solutions Styles === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -361,24 +363,16 @@
     <!-- Main Content Area -->
     <main class="flex-grow">
         
-        <!-- View 1: Loading State -->
-        <div id="loading-view" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center items-center h-64 hidden">
-            <div class="flex flex-col items-center">
-                <i data-lucide="loader-2" class="h-10 w-10 text-brand-500 animate-spin mb-4"></i>
-                <p class="text-gray-500 font-medium">Fetching articles...</p>
-            </div>
-        </div>
-
         <!-- View 2: Article Grid (Placards) -->
         <div id="list-view" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center mb-16">
                 <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-4">Featured Stories</h1>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Explore our latest thoughts, insights, and deep-dives into technology and design.</p>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Explore insights from our research — authentic knowledge sourced from our Google Drive archives.</p>
             </div>
             
             <!-- Grid Container -->
             <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <!-- Placards will be injected here by JS -->
+                <!-- Placards will be injected from metadata -->
             </div>
         </div>
 
@@ -399,7 +393,7 @@
                         <i data-lucide="calendar" class="h-4 w-4 mr-2"></i>
                         <span id="detail-date" class="mr-6"></span>
                         <i data-lucide="clock" class="h-4 w-4 mr-2"></i>
-                        <span>5 min read</span>
+                        <span>6 min read</span>
                     </div>
                 </div>
             </div>
@@ -407,20 +401,19 @@
             <!-- Article Body -->
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-white -mt-8 relative z-10 rounded-t-3xl shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
                 <div id="detail-content" class="prose max-w-none">
-                    <!-- HTML Content injected here -->
+                    <!-- Dynamic HTML content will be injected here after fetch from Supabase Edge Function -->
                 </div>
                 
                 <hr class="my-12 border-gray-200">
                 
-                <!-- Share / Author block -->
                 <div class="flex justify-between items-center">
                     <div class="flex items-center">
                         <div class="h-12 w-12 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-lg mr-4">
-                            Ed
+                            GS
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Written by</p>
-                            <p class="font-semibold text-gray-900">Editorial Team</p>
+                            <p class="font-semibold text-gray-900">Ganesh Solutions Team</p>
                         </div>
                     </div>
                     <div class="flex space-x-3">
@@ -480,137 +473,51 @@
     </footer>
 
     <script>
-        // Initialize Icons
+        // Initialize Lucide icons
         lucide.createIcons();
 
-        // --- SUPABASE CONFIGURATION ---
-        // Replace this URL with your actual Supabase Edge Function URL
-        // Example: 'https://abcdefghijklmno.supabase.co/functions/v1/get-articles'
-        const SUPABASE_FUNCTION_URL = ''; 
-        const SUPABASE_ANON_KEY = ''; // Add your anon key if your function requires Auth header
-
-        // Global state to hold fetched articles
-        let articlesData = [];
-
-        // Mock data to demonstrate the UI until Supabase is hooked up
-        const mockArticles = [
+        // ======================== SUPABASE EDGE FUNCTION INTEGRATION ========================
+        // 🔧 IMPORTANT: Replace with your actual Supabase Edge Function URL and Google Sheet ID
+        const SUPABASE_FUNCTION_URL = '';   // e.g., 'https://yourproject.supabase.co/functions/v1/get-articles'
+        const SHEET_ID = '';                // Your Google Sheet ID (the one used in the Edge Function)
+        const SUPABASE_ANON_KEY = '';       // Only if your edge function requires Authorization header
+        
+        // ---------- ARTICLE METADATA ----------
+        // This local metadata powers the grid (images, excerpt, dates, titles).
+        // The 'title' field MUST exactly match the Title column (Column A) in your Google Sheet.
+        // When a user clicks, the Edge Function will fetch the actual content from Google Drive using the title.
+        const articlesMetadata = [
             {
-                id: '1',
+                id: 'art1',
                 title: 'The Evolution of Frontend Architectures',
                 image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
                 excerpt: 'How we moved from simple HTML pages to complex single-page applications, and why server-side rendering is making a massive comeback.',
-                date: 'May 1, 2026',
-                content: `
-                    <p>In the beginning, the web was simple. A server sent an HTML document, the browser rendered it, and that was that. But as our ambitions grew, so did the complexity of our tools.</p>
-                    <h2>The Rise of the SPA</h2>
-                    <p>Single Page Applications (SPAs) changed everything. By loading a single HTML shell and letting JavaScript handle routing and rendering, we achieved app-like experiences in the browser. Frameworks like React, Angular, and Vue became the industry standard.</p>
-                    <blockquote>"We traded fast initial load times for highly interactive post-load experiences. It was a worthwhile trade-off for complex apps, but disastrous for simple content sites."</blockquote>
-                    <p>However, this approach had drawbacks. Search Engine Optimization (SEO) suffered, and users on slow networks stared at blank screens while megabytes of JavaScript downloaded.</p>
-                    <h2>The Pendulum Swings Back</h2>
-                    <p>Today, we're seeing a return to server-driven architectures. Technologies like Server-Side Rendering (SSR) and Static Site Generation (SSG) offer the best of both worlds: the performance of old-school HTML files with the interactive capabilities of modern JavaScript.</p>
-                    <ul>
-                        <li>Faster First Contentful Paint (FCP)</li>
-                        <li>Better SEO out of the box</li>
-                        <li>Reduced client-side processing</li>
-                    </ul>
-                    <p>The future isn't about choosing one or the other; it's about intelligent hybrid approaches that serve the right content in the right way.</p>
-                `
+                date: 'May 1, 2026'
             },
             {
-                id: '2',
+                id: 'art2',
                 title: 'Designing for the Ambient Web',
                 image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
                 excerpt: 'Interfaces are becoming invisible. How designers are adapting to voice, gesture, and predictive AI environments.',
-                date: 'April 28, 2026',
-                content: `
-                    <p>Screens have dominated human-computer interaction for decades. But the next frontier of design isn't happening on a rectangle of glass—it's happening all around us.</p>
-                    <h2>Beyond the Screen</h2>
-                    <p>Ambient computing refers to digital environments that respond to our presence and needs without requiring explicit, screen-based commands. It relies on voice assistants, sensors, and predictive algorithms to seamlessly integrate technology into our physical spaces.</p>
-                    <p>As designers, this requires a fundamental shift in how we think about user experience. We are no longer just arranging pixels; we are orchestrating interactions across multiple modalities.</p>
-                    <h2>The Challenge of Invisibility</h2>
-                    <p>When an interface is invisible, how do users know what they can do? Discoverability becomes a massive challenge. Design must shift from visual cues to auditory feedback, subtle haptics, and intelligent anticipation of user intent.</p>
-                `
+                date: 'April 28, 2026'
             },
             {
-                id: '3',
+                id: 'art3',
                 title: 'The Hidden Costs of Cloud Storage',
                 image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
                 excerpt: 'Analyzing the financial and environmental impact of storing zettabytes of data across distributed global servers.',
-                date: 'April 15, 2026',
-                content: `
-                    <p>We often think of the "cloud" as an ethereal, weightless entity. In reality, it is a massive physical infrastructure of cables, servers, and cooling systems spread across the globe.</p>
-                    <h2>Data Centers and Energy Consumption</h2>
-                    <p>The environmental cost of cloud storage is staggering. Data centers require immense amounts of electricity not just to power the servers, but to keep them cool. While many providers are shifting to renewable energy, the sheer volume of data we generate is outpacing efficiency gains.</p>
-                    <blockquote>"Every photo you backup, every email you archive, occupies physical space on a spinning disk or solid-state drive somewhere in the world."</blockquote>
-                    <p>As developers and consumers, we need to adopt better data hygiene practices. Storing data forever shouldn't be the default—we need systems that intelligently archive, compress, or delete data that is no longer useful.</p>
-                `
+                date: 'April 15, 2026'
             }
         ];
 
-        // --- Application Logic ---
-
-        // 1. Fetch data from Supabase (or use Mock Data)
-        async function fetchArticles() {
-            const loadingView = document.getElementById('loading-view');
-            const listView = document.getElementById('list-view');
-            
-            loadingView.classList.remove('hidden');
-            listView.classList.add('hidden');
-
-            try {
-                if (!SUPABASE_FUNCTION_URL) {
-                    // Simulate network delay for realistic feel
-                    await new Promise(resolve => setTimeout(resolve, 800));
-                    console.log("No Supabase URL provided. Using mock data.");
-                    articlesData = mockArticles;
-                } else {
-                    // Actual fetch call to Supabase Edge Function
-                    const headers = { 'Content-Type': 'application/json' };
-                    if (SUPABASE_ANON_KEY) {
-                        headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
-                    }
-
-                    const response = await fetch(SUPABASE_FUNCTION_URL, {
-                        method: 'GET', // or POST depending on your function
-                        headers: headers
-                    });
-
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    const data = await response.json();
-                    
-                    // Validate data structure briefly
-                    if (Array.isArray(data) && data.length > 0) {
-                        articlesData = data;
-                    } else {
-                        throw new Error('Invalid data format received');
-                    }
-                }
-                
-                renderPlacards();
-                
-            } catch (error) {
-                console.error("Error fetching articles:", error);
-                // Fallback to mock data on error so the page doesn't break
-                articlesData = mockArticles;
-                renderPlacards();
-            } finally {
-                loadingView.classList.add('hidden');
-                listView.classList.remove('hidden');
-            }
-        }
-
-        // 2. Render the article placards (cards) in the grid
+        // Render placards from metadata (no network call needed for the list)
         function renderPlacards() {
             const grid = document.getElementById('article-grid');
-            grid.innerHTML = ''; // Clear existing
+            if (!grid) return;
+            grid.innerHTML = '';
 
-            articlesData.forEach((article, index) => {
-                // Ensure we have a date
-                const dateText = article.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                
-                // Add staggered animation delay
+            articlesMetadata.forEach((article, index) => {
                 const delay = index * 100;
-
                 const cardHTML = `
                     <div class="group cursor-pointer flex flex-col h-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" style="animation: slideUp 0.5s ease-out ${delay}ms both;" onclick="openArticle('${article.id}')">
                         <div class="relative h-56 w-full overflow-hidden">
@@ -618,7 +525,7 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
-                            <div class="text-xs font-semibold text-brand-600 mb-2 uppercase tracking-wider">${dateText}</div>
+                            <div class="text-xs font-semibold text-brand-600 mb-2 uppercase tracking-wider">${article.date}</div>
                             <h2 class="font-serif text-2xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-brand-600 transition-colors">${article.title}</h2>
                             <p class="text-gray-600 line-clamp-3 mb-6 flex-grow">${article.excerpt}</p>
                             <div class="mt-auto flex items-center text-sm font-medium text-brand-600">
@@ -630,62 +537,112 @@
                 `;
                 grid.insertAdjacentHTML('beforeend', cardHTML);
             });
-            
-            // Re-initialize icons for newly injected HTML
             lucide.createIcons();
         }
 
-        // 3. Open a specific article
-        function openArticle(id) {
-            const article = articlesData.find(a => a.id === id);
-            if (!article) return;
+        // Fetch article content from Supabase Edge Function using Sheet ID + Title
+        async function fetchArticleContentFromEdge(title) {
+            if (!SUPABASE_FUNCTION_URL || !SHEET_ID) {
+                console.warn("Supabase function URL or Sheet ID missing.");
+                return `<div class="prose-error">⚠️ Configuration missing: Please set SUPABASE_FUNCTION_URL and SHEET_ID in the script.</div>`;
+            }
+            
+            const url = `${SUPABASE_FUNCTION_URL}?sheetId=${encodeURIComponent(SHEET_ID)}&title=${encodeURIComponent(title)}`;
+            const headers = { 'Content-Type': 'application/json' };
+            if (SUPABASE_ANON_KEY) headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
 
-            // Populate DOM elements
-            document.getElementById('detail-title').textContent = article.title;
-            document.getElementById('detail-image').src = article.image;
-            document.getElementById('detail-date').textContent = article.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            
-            // Render HTML content (assuming Supabase function returns HTML text in 'content' field)
-            document.getElementById('detail-content').innerHTML = article.content;
-
-            // Switch Views with smooth transition logic
-            const listView = document.getElementById('list-view');
-            const articleView = document.getElementById('article-view');
-
-            listView.classList.add('hidden');
-            
-            articleView.classList.remove('hidden');
-            articleView.classList.add('fade-enter');
-            
-            // Trigger reflow to restart animation
-            void articleView.offsetWidth; 
-            
-            articleView.classList.add('fade-enter-active');
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try {
+                const response = await fetch(url, { method: 'GET', headers });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
+                }
+                const data = await response.json();
+                if (data && typeof data.content === 'string') {
+                    return data.content;
+                } else {
+                    throw new Error('Invalid response format from Edge Function');
+                }
+            } catch (err) {
+                console.error('Edge Function fetch error:', err);
+                return `<div class="prose-error">❌ Failed to load article: ${err.message}. <br><br> Please verify:<br> - Sheet ID is correct<br> - Title "${title}" exists in Column A<br> - Google Sheet is shared publicly (Anyone with link can view)<br> - Google Drive text files are shared as "Anyone with the link"</div>`;
+            }
         }
 
-        // 4. Go back to list view
+        // Currently active article title to avoid duplicate fetches
+        let currentArticleTitle = '';
+
+        // Open article view: display hero from metadata, fetch content from edge function
+        async function openArticle(articleId) {
+            const article = articlesMetadata.find(a => a.id === articleId);
+            if (!article) return;
+
+            const listView = document.getElementById('list-view');
+            const articleView = document.getElementById('article-view');
+            const detailTitle = document.getElementById('detail-title');
+            const detailImage = document.getElementById('detail-image');
+            const detailDate = document.getElementById('detail-date');
+            const detailContentDiv = document.getElementById('detail-content');
+
+            // Populate hero section using metadata (image, title, date)
+            detailTitle.textContent = article.title;
+            detailImage.src = article.image;
+            detailDate.textContent = article.date;
+            
+            // Show loading state inside content area
+            detailContentDiv.innerHTML = `
+                <div class="prose-loading flex flex-col items-center justify-center">
+                    <i data-lucide="loader-2" class="h-8 w-8 text-brand-500 animate-spin mb-3"></i>
+                    <p class="text-gray-500">Fetching the full article from secure archives...</p>
+                </div>
+            `;
+            lucide.createIcons();  // reinitialize loading icon
+            
+            // Switch views
+            listView.classList.add('hidden');
+            articleView.classList.remove('hidden');
+            articleView.classList.add('fade-enter');
+            void articleView.offsetWidth;
+            articleView.classList.add('fade-enter-active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Fetch actual content from Supabase Edge Function using the article title
+            currentArticleTitle = article.title;
+            const htmlContent = await fetchArticleContentFromEdge(article.title);
+            
+            // Only update if still the same article (avoid race conditions)
+            if (currentArticleTitle === article.title) {
+                if (htmlContent && !htmlContent.includes('prose-error')) {
+                    detailContentDiv.innerHTML = htmlContent;
+                } else {
+                    detailContentDiv.innerHTML = htmlContent || `<div class="prose-error">⚠️ Unable to retrieve article text. Please check your Google Sheet configuration.</div>`;
+                }
+                lucide.createIcons();
+                // Re-apply any additional styling to headings inside fetched content
+                document.querySelectorAll('#detail-content h2').forEach(h2 => {
+                    h2.classList.add('font-serif', 'text-2xl', 'md:text-3xl', 'font-bold', 'mt-8', 'mb-4');
+                });
+            }
+        }
+
+        // Back to list view
         function showListView() {
             const listView = document.getElementById('list-view');
             const articleView = document.getElementById('article-view');
-
-            // Only transition if we are actually in the article view
-            if(!articleView.classList.contains('hidden')) {
+            
+            if (!articleView.classList.contains('hidden')) {
                 articleView.classList.add('hidden');
                 articleView.classList.remove('fade-enter', 'fade-enter-active');
-                
                 listView.classList.remove('hidden');
                 listView.classList.add('fade-enter');
                 void listView.offsetWidth;
                 listView.classList.add('fade-enter-active');
-                
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                currentArticleTitle = '';
             }
         }
 
-        // Keyframe animations dynamically injected for the staggered grid loading
+        // Keyframe animation for cards
         const styleSheet = document.createElement("style");
         styleSheet.innerText = `
             @keyframes slideUp {
@@ -694,16 +651,29 @@
             }
         `;
         document.head.appendChild(styleSheet);
-
-        // Initialize App
+        
+        // Initialize the page: Render the grid
+        function init() {
+            renderPlacards();
+            // Optional: Show warning if configuration missing (but don't break)
+            if (!SUPABASE_FUNCTION_URL || !SHEET_ID) {
+                console.warn("⚠️ Supabase Edge Function or Sheet ID not configured. The article list works with demo metadata, but actual content will not be fetched. Please set SUPABASE_FUNCTION_URL and SHEET_ID in the JavaScript.");
+                const gridNotice = document.createElement('div');
+                gridNotice.className = 'text-center text-amber-600 bg-amber-50 p-4 rounded-xl mb-6 text-sm';
+                gridNotice.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i> Supabase Edge Function not configured. Open developer console and set SUPABASE_FUNCTION_URL & SHEET_ID to fetch real articles from Google Drive.';
+                const gridContainer = document.getElementById('article-grid');
+                if (gridContainer && gridContainer.parentNode) gridContainer.parentNode.insertBefore(gridNotice, gridContainer);
+            }
+        }
+        
+        // Mobile menu & dropdown logic (preserved from original)
         document.addEventListener('DOMContentLoaded', () => {
-            fetchArticles();
-
-            /* --- Navigation Logic from Ganesh Solutions --- */
+            init();
+            
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const mainNav = document.getElementById('mainNav');
             const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
+            
             if (mobileMenuToggle) {
                 mobileMenuToggle.addEventListener('click', function() {
                     mainNav.classList.toggle('active');
@@ -711,7 +681,7 @@
                     document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
                 });
             }
-
+            
             dropdownToggles.forEach(toggle => {
                 toggle.addEventListener('click', function(e) {
                     if (window.innerWidth <= 992) {
@@ -723,7 +693,6 @@
                 });
             });
         });
-
     </script>
 </body>
 </html>
