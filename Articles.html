@@ -559,7 +559,7 @@
                 }
             } catch (err) {
                 console.error('Edge Function fetch error:', err);
-                return `<div class="prose-error">❌ Failed to load article: ${err.message}. <br><br> Possible reasons:<br> - Edge Function not deployed<br> - Google Sheet ID secret not set in Supabase<br> - Title "${title}" not found in Column A<br> - Sheet or Drive file not shared publicly</div>`;
+                return `<div class="prose-error">❌ Failed to load article: ${err.message}. </div>`;
             }
         }
 
