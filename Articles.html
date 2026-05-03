@@ -67,9 +67,6 @@
             --medium-gray: #e2e8f0;
             --text-dark: #2d3748;
             --text-light: #718096;
-            --vedic-purple: #7c3aed;
-            --cyber-teal: #0ea5e9;
-            --financial-green: #059669;
         }
 
         .gs-container {
@@ -363,7 +360,7 @@
     <!-- Main Content Area -->
     <main class="flex-grow">
         
-        <!-- View 2: Article Grid (Placards) -->
+        <!-- Article Grid (Placards) -->
         <div id="list-view" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center mb-16">
                 <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-4">Featured Stories</h1>
@@ -376,7 +373,7 @@
             </div>
         </div>
 
-        <!-- View 3: Single Article Full View -->
+        <!-- Single Article Full View -->
         <div id="article-view" class="hidden pb-20">
             <!-- Article Hero Banner -->
             <div class="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh] bg-gray-900 overflow-hidden">
@@ -401,7 +398,7 @@
             <!-- Article Body -->
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-white -mt-8 relative z-10 rounded-t-3xl shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
                 <div id="detail-content" class="prose max-w-none">
-                    <!-- Dynamic HTML content will be injected here after fetch from Supabase Edge Function -->
+                    <!-- Dynamic HTML content injected here -->
                 </div>
                 
                 <hr class="my-12 border-gray-200">
@@ -473,23 +470,18 @@
     </footer>
 
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // ======================== SUPABASE EDGE FUNCTION INTEGRATION ========================
-        // 🔧 IMPORTANT: Replace with your actual Supabase Edge Function URL and Google Sheet ID
-        const SUPABASE_FUNCTION_URL = '';   // e.g., 'https://yourproject.supabase.co/functions/v1/get-articles'
-        const SHEET_ID = '';                // Your Google Sheet ID (the one used in the Edge Function)
-        const SUPABASE_ANON_KEY = '';       // Only if your edge function requires Authorization header
+        // ======================== SECURE SUPABASE EDGE FUNCTION INTEGRATION ========================
+        // ✅ ONLY the Edge Function URL is public – all secrets (Google Sheet ID, Drive links) are stored as Supabase secrets.
+        // 🔧 IMPORTANT: Replace with your actual Supabase Edge Function URL:
+        const SUPABASE_FUNCTION_URL = 'https://your-project-ref.supabase.co/functions/v1/get-articles';
         
-        // ---------- ARTICLE METADATA ----------
-        // This local metadata powers the grid (images, excerpt, dates, titles).
+        // ---------- ARTICLE METADATA (for the grid cards) ----------
         // The 'title' field MUST exactly match the Title column (Column A) in your Google Sheet.
-        // When a user clicks, the Edge Function will fetch the actual content from Google Drive using the title.
+        // The Edge Function will fetch the actual content from Google Drive using this title.
         const articlesMetadata = [
             {
                 id: 'art1',
-                title: 'The Evolution of Frontend Architectures',
+                title: 'The Evolution of Frontend Architectures',   // ← matches sheet title
                 image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
                 excerpt: 'How we moved from simple HTML pages to complex single-page applications, and why server-side rendering is making a massive comeback.',
                 date: 'May 1, 2026'
@@ -510,7 +502,7 @@
             }
         ];
 
-        // Render placards from metadata (no network call needed for the list)
+        // Render placards from metadata
         function renderPlacards() {
             const grid = document.getElementById('article-grid');
             if (!grid) return;
@@ -540,23 +532,25 @@
             lucide.createIcons();
         }
 
-        // Fetch article content from Supabase Edge Function using Sheet ID + Title
-        async function fetchArticleContentFromEdge(title) {
-            if (!SUPABASE_FUNCTION_URL || !SHEET_ID) {
-                console.warn("Supabase function URL or Sheet ID missing.");
-                return `<div class="prose-error">⚠️ Configuration missing: Please set SUPABASE_FUNCTION_URL and SHEET_ID in the script.</div>`;
+        // Fetch article content from Supabase Edge Function (only needs the title)
+        async function fetchArticleContent(title) {
+            if (!SUPABASE_FUNCTION_URL || SUPABASE_FUNCTION_URL === 'https://your-project-ref.supabase.co/functions/v1/get-articles') {
+                return `<div class="prose-error">⚠️ Configuration missing: Please set your actual Supabase Edge Function URL in the script (SUPABASE_FUNCTION_URL).</div>`;
             }
             
-            const url = `${SUPABASE_FUNCTION_URL}?sheetId=${encodeURIComponent(SHEET_ID)}&title=${encodeURIComponent(title)}`;
-            const headers = { 'Content-Type': 'application/json' };
-            if (SUPABASE_ANON_KEY) headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
-
+            const url = `${SUPABASE_FUNCTION_URL}?title=${encodeURIComponent(title)}`;
+            
             try {
-                const response = await fetch(url, { method: 'GET', headers });
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
                 }
+                
                 const data = await response.json();
                 if (data && typeof data.content === 'string') {
                     return data.content;
@@ -565,14 +559,13 @@
                 }
             } catch (err) {
                 console.error('Edge Function fetch error:', err);
-                return `<div class="prose-error">❌ Failed to load article: ${err.message}. <br><br> Please verify:<br> - Sheet ID is correct<br> - Title "${title}" exists in Column A<br> - Google Sheet is shared publicly (Anyone with link can view)<br> - Google Drive text files are shared as "Anyone with the link"</div>`;
+                return `<div class="prose-error">❌ Failed to load article: ${err.message}. <br><br> Possible reasons:<br> - Edge Function not deployed<br> - Google Sheet ID secret not set in Supabase<br> - Title "${title}" not found in Column A<br> - Sheet or Drive file not shared publicly</div>`;
             }
         }
 
-        // Currently active article title to avoid duplicate fetches
         let currentArticleTitle = '';
 
-        // Open article view: display hero from metadata, fetch content from edge function
+        // Open article view
         async function openArticle(articleId) {
             const article = articlesMetadata.find(a => a.id === articleId);
             if (!article) return;
@@ -584,19 +577,19 @@
             const detailDate = document.getElementById('detail-date');
             const detailContentDiv = document.getElementById('detail-content');
 
-            // Populate hero section using metadata (image, title, date)
+            // Populate hero with metadata
             detailTitle.textContent = article.title;
             detailImage.src = article.image;
             detailDate.textContent = article.date;
             
-            // Show loading state inside content area
+            // Show loading state
             detailContentDiv.innerHTML = `
                 <div class="prose-loading flex flex-col items-center justify-center">
                     <i data-lucide="loader-2" class="h-8 w-8 text-brand-500 animate-spin mb-3"></i>
                     <p class="text-gray-500">Fetching the full article from secure archives...</p>
                 </div>
             `;
-            lucide.createIcons();  // reinitialize loading icon
+            lucide.createIcons();
             
             // Switch views
             listView.classList.add('hidden');
@@ -606,19 +599,14 @@
             articleView.classList.add('fade-enter-active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Fetch actual content from Supabase Edge Function using the article title
+            // Fetch content from Edge Function (secure, no sheet ID exposed)
             currentArticleTitle = article.title;
-            const htmlContent = await fetchArticleContentFromEdge(article.title);
+            const htmlContent = await fetchArticleContent(article.title);
             
-            // Only update if still the same article (avoid race conditions)
             if (currentArticleTitle === article.title) {
-                if (htmlContent && !htmlContent.includes('prose-error')) {
-                    detailContentDiv.innerHTML = htmlContent;
-                } else {
-                    detailContentDiv.innerHTML = htmlContent || `<div class="prose-error">⚠️ Unable to retrieve article text. Please check your Google Sheet configuration.</div>`;
-                }
+                detailContentDiv.innerHTML = htmlContent;
                 lucide.createIcons();
-                // Re-apply any additional styling to headings inside fetched content
+                // Style any headings inside the fetched content
                 document.querySelectorAll('#detail-content h2').forEach(h2 => {
                     h2.classList.add('font-serif', 'text-2xl', 'md:text-3xl', 'font-bold', 'mt-8', 'mb-4');
                 });
@@ -642,7 +630,7 @@
             }
         }
 
-        // Keyframe animation for cards
+        // Inject keyframe animation
         const styleSheet = document.createElement("style");
         styleSheet.innerText = `
             @keyframes slideUp {
@@ -652,21 +640,20 @@
         `;
         document.head.appendChild(styleSheet);
         
-        // Initialize the page: Render the grid
+        // Initialize the app
         function init() {
             renderPlacards();
-            // Optional: Show warning if configuration missing (but don't break)
-            if (!SUPABASE_FUNCTION_URL || !SHEET_ID) {
-                console.warn("⚠️ Supabase Edge Function or Sheet ID not configured. The article list works with demo metadata, but actual content will not be fetched. Please set SUPABASE_FUNCTION_URL and SHEET_ID in the JavaScript.");
-                const gridNotice = document.createElement('div');
-                gridNotice.className = 'text-center text-amber-600 bg-amber-50 p-4 rounded-xl mb-6 text-sm';
-                gridNotice.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i> Supabase Edge Function not configured. Open developer console and set SUPABASE_FUNCTION_URL & SHEET_ID to fetch real articles from Google Drive.';
+            if (!SUPABASE_FUNCTION_URL || SUPABASE_FUNCTION_URL === 'https://your-project-ref.supabase.co/functions/v1/get-articles') {
+                console.warn("⚠️ Supabase Edge Function URL not configured. Please set SUPABASE_FUNCTION_URL in the HTML.");
+                const notice = document.createElement('div');
+                notice.className = 'text-center text-amber-600 bg-amber-50 p-4 rounded-xl mb-6 text-sm';
+                notice.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i> Supabase Edge Function URL not set. Update SUPABASE_FUNCTION_URL in the script to fetch real articles.';
                 const gridContainer = document.getElementById('article-grid');
-                if (gridContainer && gridContainer.parentNode) gridContainer.parentNode.insertBefore(gridNotice, gridContainer);
+                if (gridContainer && gridContainer.parentNode) gridContainer.parentNode.insertBefore(notice, gridContainer);
             }
         }
         
-        // Mobile menu & dropdown logic (preserved from original)
+        // Mobile menu and dropdown logic (preserved from original)
         document.addEventListener('DOMContentLoaded', () => {
             init();
             
