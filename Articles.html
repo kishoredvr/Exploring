@@ -76,16 +76,7 @@
         .explorer-active i { color: white !important; }
         .explorer-indent { width: 16px; display: inline-block; position: relative; }
         
-        /* Tree Lines */
-        .tree-line {
-            position: absolute;
-            left: 7px;
-            top: 0;
-            bottom: 0;
-            border-left: 1px dotted #94a3b8;
-        }
-
-        /* Improved Sidebar Positioning for all monitor sizes */
+        /* Improved Sidebar Positioning */
         @media (min-width: 1024px) {
             #article-explorer {
                 width: 260px;
@@ -97,17 +88,15 @@
                 display: block !important;
             }
             
-            /* Using a side-by-side flex layout on laptops and smaller monitors */
             main.gs-container {
                 display: flex !important;
                 gap: 2rem;
                 align-items: flex-start;
-                max-width: 100% !important; /* Allow it to span more naturally on mid-size screens */
+                max-width: 100% !important;
                 padding-left: 40px;
                 padding-right: 40px;
             }
 
-            /* Floating effect for ultra-wide screens to keep content centered but explorer accessible */
             @media (min-width: 1536px) {
                 main.gs-container {
                     max-width: 1300px !important;
@@ -119,6 +108,31 @@
                     left: -280px;
                     width: 260px;
                 }
+            }
+        }
+
+        /* Mobile Explorer Toggle Style */
+        @media (max-width: 1023px) {
+            #article-explorer {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 2000;
+                display: none; /* Controlled by JS toggle */
+                padding: 20px;
+            }
+            #article-explorer.active {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #article-explorer > div {
+                width: 100%;
+                max-width: 320px;
+                max-height: 80vh;
             }
         }
 
@@ -264,17 +278,28 @@
         </div>
     </header>
 
+    <!-- Mobile Explorer Browse Bar (Sticky on mobile only) -->
+    <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex justify-between items-center sticky top-[70px] z-40 shadow-sm">
+        <button onclick="toggleExplorer()" class="text-sm font-bold text-brand-600 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-50 border border-brand-100 transition-colors">
+            <i class="fas fa-folder-tree"></i> Browse Categories
+        </button>
+        <span id="mobileResultCount" class="text-[10px] text-gray-400 font-mono"></span>
+    </div>
+
     <!-- Main Content Area -->
     <main class="flex-grow gs-container py-12 relative">
         
-        <!-- ARTICLE EXPLORER (SIDEBAR) -->
-        <aside id="article-explorer" class="hidden lg:block">
+        <!-- ARTICLE EXPLORER (SIDEBAR / MODAL) -->
+        <aside id="article-explorer" class="hidden lg:block" onclick="if(event.target === this) toggleExplorer()">
             <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col max-h-full">
                 <div class="bg-gray-100 border-b border-gray-200 px-3 py-2 flex items-center justify-between">
                     <h3 class="text-[11px] font-bold text-gray-600 uppercase tracking-tight flex items-center gap-1.5">
                         <i class="fas fa-desktop text-gray-500"></i> Explorer
                     </h3>
-                    <button onclick="resetExplorer()" class="text-[10px] text-blue-600 hover:underline">Reset</button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="resetExplorer()" class="text-[10px] text-blue-600 hover:underline">Reset</button>
+                        <button onclick="toggleExplorer()" class="lg:hidden text-gray-400 p-1"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
                 <div id="explorer-pane" class="p-1 overflow-y-auto bg-white" style="max-height: 60vh;">
                     <!-- Tree structure will be injected here -->
@@ -381,7 +406,7 @@
     <script>
         const SUPABASE_FUNCTION_URL = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co/functions/v1/articles';
         
-        // Metadata updated with correct titles to match database
+        // Metadata
         const articlesMetadata = [
             {
                 id: 'art1',
@@ -420,6 +445,13 @@
         let activeSubgroupFilter = null;
         let expandedNodes = new Set(['root', 'Astrology', 'Bhrigu']);
         let currentArticleTitle = '';
+
+        function toggleExplorer() {
+            const exp = document.getElementById('article-explorer');
+            if (window.innerWidth < 1024) {
+                exp.classList.toggle('active');
+            }
+        }
 
         function renderExplorer() {
             const pane = document.getElementById('explorer-pane');
@@ -521,7 +553,7 @@
 
         function buildArticleUI(art, depth) {
             return `
-                <div class="explorer-node py-0.5 px-2 flex items-center gap-1 hover:bg-blue-50" onclick="openArticle('${art.id}')">
+                <div class="explorer-node py-0.5 px-2 flex items-center gap-1 hover:bg-blue-50" onclick="openArticle('${art.id}'); if(window.innerWidth < 1024) toggleExplorer();">
                     <span class="explorer-indent" style="width: ${depth * 14}px"></span>
                     <i class="fas fa-minus invisible text-[9px] w-3"></i>
                     <i class="far fa-file-alt text-gray-400 text-[13px]"></i>
@@ -590,7 +622,9 @@
                 }
             });
 
-            document.getElementById('searchResultCount').textContent = query || activeTopicFilter || activeSubgroupFilter ? `${visibleCount} articles found.` : '';
+            const msg = query || activeTopicFilter || activeSubgroupFilter ? `${visibleCount} articles found.` : '';
+            document.getElementById('searchResultCount').textContent = msg;
+            document.getElementById('mobileResultCount').textContent = msg;
         }
 
         function renderPlacards() {
@@ -647,10 +681,8 @@
                 });
                 
                 if (!response.ok) throw new Error('Failed to fetch');
-                
                 const data = await response.json();
                 
-                // Only update if we're still looking at the same article
                 if (currentArticleTitle === art.title) {
                     detailContentDiv.innerHTML = data.content || '<div class="prose-error">Article content not found.</div>';
                 }
@@ -667,14 +699,9 @@
             currentArticleTitle = '';
         }
 
-        // --- Google Translate Initialization ---
         function googleTranslateElementInit() {
-            const allLanguages = 
-                "af,am,ar,as,az,be,bg,bn,bs,ca,cs,da,de,el,en,eo,es,et,eu,fa,fi,fr,ga,gd,gl,gu,ha,he,hi,hr,ht,hu,hy,id,ig,is,it,ja,jv,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mk,ml,mn,mr,ms,mt,my,ne,nl,no,ny,or,pa,pl,ps,pt,ro,ru,rw,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tk,tl,tr,tt,ug,uk,ur,uz,vi,wo,xh,yi,yor,zh-CN,zh-TW,zu";
-            
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: allLanguages,
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false,
                 multilanguagePage: true
