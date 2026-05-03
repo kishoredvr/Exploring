@@ -1,631 +1,729 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2140422184257609"
-     crossorigin="anonymous"></script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog & Articles | Kishore DVR</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>Insights & Articles</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    <style>
-        /* --- RESET & BASICS --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
         }
+    </script>
+    <style>
+        /* Smooth transitions for view swapping */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 400ms ease-out, transform 400ms ease-out;
+        }
+        
+        /* Typography styles for the generated article content */
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: #374151; font-size: 1.125rem; }
+        .prose h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; }
+        .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1rem; font-style: italic; color: #4b5563; margin-top: 1.5rem; margin-bottom: 1.5rem; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
+        .prose li { margin-bottom: 0.5rem; }
+
+        /* === Ganesh Solutions Styles === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; }
 
         :root {
-            --primary-color: #1a237e; /* Deep Navy Blue */
-            --accent-color: #d84315;  /* Deep Orange/Saffron */
-            --text-dark: #2c3e50;
-            --text-light: #546e7a;
-            --bg-light: #f4f6f8;
-            --white: #ffffff;
-            --font-heading: 'Merriweather', serif;
-            --font-body: 'Open Sans', sans-serif;
+            --primary-blue: #1a365d;
+            --accent-gold: #d4af37;
+            --dark-navy: #0f1a3c;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --vedic-purple: #7c3aed;
+            --cyber-teal: #0ea5e9;
+            --financial-green: #059669;
         }
 
-        body {
-            font-family: var(--font-body);
-            line-height: 1.7;
-            color: var(--text-dark);
-            background-color: var(--bg-light);
-            font-size: 16px;
+        .gs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: 0.3s ease;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        /* --- HEADER --- */
-        header {
-            background: var(--white);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        /* Mobile header */
+        .mobile-header {
+            display: none;
+            padding: 15px 0;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-top: 4px solid var(--accent-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
+        .mobile-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        header.gs-header {
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .logo img {
-            height: 40px;
-            width: 40px;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-image {
+            height: 70px;
+            width: auto; 
+            margin-top: 10px;
+            margin-right: 30px;
+            transform: scale(1.2);
+            max-width: 100%;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--accent-color);
-        }
-
-        /* --- PAGE LAYOUT --- */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 3fr 1fr; /* Main Content vs Sidebar */
-            gap: 40px;
-        }
-
-        /* --- HERO / PAGE TITLE --- */
-        .page-header {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .page-header h1 {
-            font-family: var(--font-heading);
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            font-family: var(--font-heading);
-            font-style: italic;
-            color: var(--text-light);
-            font-size: 1.2rem;
-        }
-
-        /* --- ARTICLE GRID --- */
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .article-card {
-            background: var(--white);
-            border: 1px solid #eee;
-            border-radius: 4px; /* Slight radius, sharper look */
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+        .logo-text-container {
             display: flex;
             flex-direction: column;
-            position: relative;
+            white-space: nowrap;
         }
 
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            border-color: var(--accent-color);
-        }
+        .logo-text { font-size: 24px; font-weight: 600; color: white; }
+        .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
 
-        .article-image {
-            height: 200px;
-            background-color: #ddd;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Placeholder for images to ensure they fill nicely */
-        .article-image img, .article-image div {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        nav#mainNav ul { display: flex; list-style: none; align-items: center; }
+        nav#mainNav ul li { margin-left: 30px; position: relative; }
+        nav#mainNav ul li a {
             color: white;
-        }
-
-        .article-content {
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .article-meta {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 15px;
+            white-space: nowrap;
         }
 
-        .article-date {
-            background: rgba(216, 67, 21, 0.1);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+        nav#mainNav ul li a:hover, nav#mainNav ul li a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-gold);
         }
 
-        .article-content h3 {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            line-height: 1.3;
-        }
-
-        .article-content p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .read-more-btn {
-            margin-top: auto;
-            display: inline-block;
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 0.9rem;
-            border-bottom: 2px solid transparent;
-            width: fit-content;
-            padding-bottom: 3px;
-        }
-
-        .article-card:hover .read-more-btn {
-            border-bottom: 2px solid var(--accent-color);
-        }
-
-        /* Article link overlay for better UX */
-        .article-link-overlay {
+        .dropdown-menu {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
 
-        /* --- SIDEBAR (Classic Blog Feature) --- */
-        .sidebar {
+        nav#mainNav ul li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            color: var(--text-dark) !important;
+            padding: 12px 20px;
             display: flex;
-            flex-direction: column;
-            gap: 30px;
+            align-items: center;
+            border-bottom: 1px solid var(--medium-gray);
+            white-space: nowrap;
         }
 
-        .sidebar-widget {
-            background: var(--white);
-            padding: 25px;
-            border: 1px solid #eee;
-            border-top: 3px solid var(--primary-color);
+        .dropdown-menu a:hover {
+            background: var(--light-gray);
+            color: var(--primary-blue) !important;
         }
 
-        .sidebar-widget h4 {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--text-dark);
-        }
+        .dropdown-menu a i { margin-right: 10px; width: 20px; }
 
-        .category-list li {
-            border-bottom: 1px solid #f0f0f0;
-            padding: 8px 0;
-        }
-        
-        .category-list li:last-child { border: none; }
-
-        .category-list a:hover {
-            color: var(--accent-color);
-            padding-left: 5px;
-        }
-
-        /* --- FOOTER --- */
+        /* Footer Styles */
         footer {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 60px 0;
-            margin-top: 60px;
-            text-align: center;
+            background: var(--dark-navy);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 40px;
         }
-
-        .footer-content h2 {
-            font-family: var(--font-heading);
-            margin-bottom: 20px;
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
         }
+        .footer-column h3 { font-size: 18px; margin-bottom: 18px; color: var(--accent-gold); }
+        .footer-column ul { list-style: none; }
+        .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.95rem; }
+        .footer-column a:hover { color: var(--accent-gold); }
+        .copyright { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); font-size: 14px; }
 
-        .footer-links {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        
-        .footer-links a { opacity: 0.8; }
-        .footer-links a:hover { opacity: 1; color: var(--accent-color); }
-
-        .copyright {
-            font-size: 0.85rem;
-            opacity: 0.6;
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
-            display: inline-block;
-            width: 80%;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr; /* Stack sidebar below content */
+        /* Responsive */
+        @media (max-width: 992px) {
+            .mobile-header { display: flex; }
+            .header-content > :not(nav) { display: none; }
+            nav#mainNav {
+                display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                height: calc(100% - 70px);
+                background: var(--dark-navy);
+                z-index: 2000;
+                padding: 20px;
+                overflow-y: auto;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
             }
-            .sidebar {
-                order: 3;
-                margin-top: 40px;
+            nav#mainNav.active { display: block; transform: translateX(0); }
+            nav#mainNav ul { flex-direction: column; align-items: flex-start; margin-top: 60px; width: 100%; }
+            nav#mainNav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+            .dropdown-menu {
+                display: none;
+                position: static;
+                box-shadow: none;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                background: rgba(255, 255, 255, 0.05);
+                width: 100%;
+                margin-top: 10px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s;
             }
+            nav#mainNav ul li.active .dropdown-menu { display: block; max-height: 500px; }
+            .logo-text { font-size: 18px; }
         }
 
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .page-header h1 {
-                font-size: 2rem;
-            }
-            .articles-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Article page styling */
-        .article-page {
-            grid-column: 1 / -1;
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 50px;
-            border-radius: 4px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .article-page .article-image {
-            height: 300px;
-            margin-bottom: 30px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .article-page h1 {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .article-content-full {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-dark);
-        }
-
-        .article-content-full h2 {
-            font-family: var(--font-heading);
-            color: var(--primary-color);
-            margin: 40px 0 20px 0;
-            font-size: 1.8rem;
-        }
-
-        .article-content-full p {
-            margin-bottom: 25px;
-        }
-
-        .back-to-articles {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: var(--accent-color);
-            font-weight: 600;
-            padding: 8px 16px;
-            border: 2px solid var(--accent-color);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .back-to-articles:hover {
-            background: var(--accent-color);
-            color: white;
+            .logo-image { height: 60px; margin-right: 0; transform: scale(1.1); }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
 
-    <header>
-        <div class="navbar">
-            <div class="logo">
-                <img src="Profilepic.jpg" alt="Logo">
-                <span>Kishore DVR</span>
+    <!-- Mobile Header -->
+    <div class="mobile-header gs-container">
+        <div class="logo cursor-pointer" onclick="showListView()">
+            <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
+            <div class="logo-text-container">
+                <div class="logo-text">Ganesh Solutions</div>
+                <div class="tagline">Traditional And Technical Solutions</div>
             </div>
-            <nav class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="AboutMe.html">About</a>
-                <a href="Articles.html" class="active">Articles</a>
-                <a href="MessageMe.html">Contact</a>
-            </nav>
+        </div>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Desktop Header -->
+    <header class="gs-header">
+        <div class="gs-container">
+            <div class="header-content">
+                <div class="logo cursor-pointer" onclick="showListView()">
+                    <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
+                    <div class="logo-text-container">
+                        <div class="logo-text">Ganesh Solutions</div>
+                        <div class="tagline">Traditional And Technical Solutions</div>
+                    </div>
+                </div>
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="#" onclick="showListView()">Home</a></li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+                                <a href="https://www.instagram.com/astrotechnicstelugu?igsh=MWNrcWRiODJicjVzeA==" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">Digital Reliability<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+                                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">National Economies<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+                                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA==" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">Resources<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="#" onclick="showListView()"><i class="fas fa-newspaper"></i> My Articles</a>
+                                <a href="https://github.com/digitalreliability/Sharing" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                                <a href="https://kishoredvr.github.io/Antharyami-DataBank/" target="_blank"><i class="fas fa-database"></i> Astrology Data Bank</a>
+                                <a href="https://astro.parishodana.xyz" target="_blank"><i class="fas fa-calendar-alt"></i> Muhurta</a>
+                                <a href="https://astro.parishodana.xyz/SearchVideos.html" target="_blank"><i class="fas fa-search"></i> Search Videos</a>
+                                <a href="https://astro.parishodana.xyz/Resources.html" target="_blank"><i class="fas fa-search"></i> More</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">Contact<i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+                            <div class="dropdown-menu" style="width:280px;">
+                                <div style="text-align:center; padding:20px; color:#1a365d;">
+                                    <img src="https://parishodana.xyz/GS-Logo.jpg" style="width:60px; border-radius: 50%;">
+                                    <h2 style="margin:10px 0 5px; font-size: 1.2rem;">Ganesh Solutions</h2>
+                                    <p style="margin-bottom: 5px;"><strong>Mobile/WhatsApp:</strong><br> +91 8074 192 876</p>
+                                    <p style="margin-bottom: 10px;"><strong>Email:</strong><br> consult@parishodana.xyz</p>
+                                    <a href="https://parishodana.xyz/GaneshSolutions.vcf" download style="margin-top:10px; padding:10px 20px; background:#000; color:#fff; text-decoration:none; border-radius:5px; display:inline-block;">Save in Contacts</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 
-    <div class="container">
+    <!-- Main Content Area -->
+    <main class="flex-grow">
         
-        <div class="page-header">
-            <h1>Knowledge Base</h1>
-            <p>Insights on Astrology, Spirituality, and Life.</p>
+        <!-- View 1: Loading State -->
+        <div id="loading-view" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center items-center h-64 hidden">
+            <div class="flex flex-col items-center">
+                <i data-lucide="loader-2" class="h-10 w-10 text-brand-500 animate-spin mb-4"></i>
+                <p class="text-gray-500 font-medium">Fetching articles...</p>
+            </div>
         </div>
 
-        <main>
-            <div class="articles-grid">
+        <!-- View 2: Article Grid (Placards) -->
+        <div id="list-view" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center mb-16">
+                <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-4">Featured Stories</h1>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Explore our latest thoughts, insights, and deep-dives into technology and design.</p>
+            </div>
+            
+            <!-- Grid Container -->
+            <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Placards will be injected here by JS -->
+            </div>
+        </div>
+
+        <!-- View 3: Single Article Full View -->
+        <div id="article-view" class="hidden pb-20">
+            <!-- Article Hero Banner -->
+            <div class="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh] bg-gray-900 overflow-hidden">
+                <img id="detail-image" src="" alt="Article Cover" class="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-1000 scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
                 
-                <!-- Article 1 -->
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>🌙</div> 
+                <div class="absolute bottom-0 left-0 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-32">
+                    <button onclick="showListView()" class="group mb-8 inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                        <i data-lucide="arrow-left" class="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-1"></i>
+                        Back to articles
+                    </button>
+                    <h1 id="detail-title" class="font-serif text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 drop-shadow-lg"></h1>
+                    <div class="flex items-center text-white/80 text-sm font-medium">
+                        <i data-lucide="calendar" class="h-4 w-4 mr-2"></i>
+                        <span id="detail-date" class="mr-6"></span>
+                        <i data-lucide="clock" class="h-4 w-4 mr-2"></i>
+                        <span>5 min read</span>
                     </div>
-                    <div class="article-content">
-                        <div class="article-meta">
-                            <span class="article-category">Vedic Astrology</span>
-                            <span class="article-date">Jan 20, 2024</span>
-                        </div>
-                        <h3>Moon Phases and Meditation</h3>
-                        <p>Discover how the waxing and waning of the moon impacts your mental state and meditation practices according to ancient texts.</p>
-                        <a href="blog/2024/01/20/moon-phases-meditation.html" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                    <!-- Overlay for whole card click -->
-                    <a href="blog/2024/01/20/moon-phases-meditation.html" class="article-link-overlay" aria-label="Read article: Moon Phases and Meditation"></a>
-                </article>
-
-                <!-- Article 2 -->
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>🪐</div>
-                    </div>
-                    <div class="article-content">
-                        <div class="article-meta">
-                            <span class="article-category">Planetary Transits</span>
-                            <span class="article-date">Jan 15, 2024</span>
-                        </div>
-                        <h3>General Remedies</h3>
-                        <p>This article summarizes general remedies intended to address potential indications of negative planetary influences according to the provided information.</p>
-                        <a href="blog/2024/01/15/General Remedies.html" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                    <!-- Overlay for whole card click -->
-                    <a href="blog/2024/01/15/General-Remedies.html" class="article-link-overlay" aria-label="Read article: The Impact of Saturn Transit"></a>
-                </article>
-
-                <!-- Article 3 -->
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>🔮</div>
-                    </div>
-                    <div class="article-content">
-                        <div class="article-meta">
-                            <span class="article-category">Spirituality</span>
-                            <span class="article-date">Dec 10, 2023</span>
-                        </div>
-                        <h3>Understanding Karma</h3>
-                        <p>A deep dive into the philosophy of cause and effect. How our past actions shape our present reality.</p>
-                        <a href="blog/2023/12/10/understanding-karma.html" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                    <!-- Overlay for whole card click -->
-                    <a href="blog/2023/12/10/understanding-karma.html" class="article-link-overlay" aria-label="Read article: Understanding Karma"></a>
-                </article>
-
-                <!-- Article 4 -->
-                <article class="article-card">
-                    <div class="article-image">
-                        <div>✨</div>
-                    </div>
-                    <div class="article-content">
-                        <div class="article-meta">
-                            <span class="article-category">Remedies</span>
-                            <span class="article-date">Nov 22, 2023</span>
-                        </div>
-                        <h3>Simple Remedies for Peace</h3>
-                        <p>Practical astrological remedies you can perform at home to bring peace and stability to your environment.</p>
-                        <a href="blog/2023/11/22/simple-remedies-for-peace.html" class="read-more-btn">Read Full Article →</a>
-                    </div>
-                    <!-- Overlay for whole card click -->
-                    <a href="blog/2023/11/22/simple-remedies-for-peace.html" class="article-link-overlay" aria-label="Read article: Simple Remedies for Peace"></a>
-                </article>
-
-            </div>
-        </main>
-
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h4>Categories</h4>
-                <ul class="category-list">
-                    <li><a href="#" onclick="filterArticles('vedic-astrology')">Vedic Astrology (12)</a></li>
-                    <li><a href="#" onclick="filterArticles('meditation')">Meditation (8)</a></li>
-                    <li><a href="#" onclick="filterArticles('case-studies')">Case Studies (5)</a></li>
-                    <li><a href="#" onclick="filterArticles('spirituality')">Spirituality (15)</a></li>
-                </ul>
+                </div>
             </div>
 
-            <div class="sidebar-widget">
-                <h4>Featured Course</h4>
-                <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px;">Learn the basics of reading a chart in our upcoming workshop.</p>
-                <a href="#" style="background: var(--primary-color); color: white; padding: 10px 20px; display: block; text-align: center; border-radius: 4px; font-weight: 600;">View Details</a>
+            <!-- Article Body -->
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-white -mt-8 relative z-10 rounded-t-3xl shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+                <div id="detail-content" class="prose max-w-none">
+                    <!-- HTML Content injected here -->
+                </div>
+                
+                <hr class="my-12 border-gray-200">
+                
+                <!-- Share / Author block -->
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <div class="h-12 w-12 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-lg mr-4">
+                            Ed
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Written by</p>
+                            <p class="font-semibold text-gray-900">Editorial Team</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="h-10 w-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:text-brand-600 hover:border-brand-600 transition-colors">
+                            <i data-lucide="twitter" class="h-4 w-4"></i>
+                        </button>
+                        <button class="h-10 w-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:text-brand-600 hover:border-brand-600 transition-colors">
+                            <i data-lucide="share-2" class="h-4 w-4"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
+    </main>
 
-            <div class="sidebar-widget">
-                <h4>Quick Links</h4>
-                <ul class="category-list">
-                    <li><a href="blog/index.html">Full Blog Index</a></li>
-                    <li><a href="AboutMe.html">About the Author</a></li>
-                    <li><a href="MessageMe.html">Book a Consultation</a></li>
-                </ul>
-            </div>
-        </aside>
-
-    </div>
-
+    <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <h2>Ganesh Solutions</h2>
-            <div class="footer-links">
-                <a href="Terms.html">Terms & Conditions</a>
-                <a href="#">Privacy Policy</a>
-                <a href="MessageMe.html">Contact</a>
+        <div class="gs-container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Astrology Consultations</a></li>
+                        <li><a href="#">Digital Reliability</a></li>
+                        <li><a href="#">App Development</a></li>
+                        <li><a href="#">Economic Research</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://kishoredvr.github.io/Antharyami-DataBank/">Astrology Data Bank</a></li>
+                        <li><a href="https://github.com/digitalreliability/Sharing">GitHub Repository</a></li>
+                        <li><a href="#" onclick="showListView()">Research Articles</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="#">YouTube Channels</a></li>
+                        <li><a href="#">Social Media</a></li>
+                        <li><a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Contact Form</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="https://parishodana.xyz/AboutMe.html">Philosophy</a></li>
+                        <li><a href="https://parishodana.xyz/Terms.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
             </div>
-            <span class="copyright"> Ganesh Solutions. All rights reserved.</span>
+            <div class="copyright">
+                <p>© Ganesh Solutions. All Rights Reserved.</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Enhanced click handling for article cards
-        document.addEventListener('DOMContentLoaded', function() {
-            // Make entire article card clickable
-            document.querySelectorAll('.article-card').forEach(card => {
-                card.style.cursor = 'pointer';
-                
-                card.addEventListener('click', function(e) {
-                    // Don't trigger if clicking on the "Read More" link or overlay
-                    if (!e.target.classList.contains('read-more-btn') && 
-                        !e.target.classList.contains('article-link-overlay')) {
-                        
-                        // Find the main article link
-                        const link = this.querySelector('.read-more-btn');
-                        if (link && link.href) {
-                            window.location.href = link.href;
-                        }
-                    }
-                });
+        // Initialize Icons
+        lucide.createIcons();
 
-                // Add keyboard navigation
-                card.setAttribute('tabindex', '0');
-                card.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const link = this.querySelector('.read-more-btn');
-                        if (link && link.href) {
-                            window.location.href = link.href;
-                        }
-                    }
-                });
-            });
+        // --- SUPABASE CONFIGURATION ---
+        // Replace this URL with your actual Supabase Edge Function URL
+        // Example: 'https://abcdefghijklmno.supabase.co/functions/v1/get-articles'
+        const SUPABASE_FUNCTION_URL = ''; 
+        const SUPABASE_ANON_KEY = ''; // Add your anon key if your function requires Auth header
 
-            // Check if we're on GitHub Pages and adjust links if needed
-            const isGitHubPages = window.location.hostname.includes('github.io');
-            if (isGitHubPages) {
-                // Update article links for GitHub Pages structure
-                const repoName = window.location.pathname.split('/')[1] || 'Exploring';
-                
-                document.querySelectorAll('.read-more-btn').forEach(link => {
-                    if (link.href.includes('blog/')) {
-                        const currentHref = link.getAttribute('href');
-                        // Only prepend if it's a relative path
-                        if (currentHref.startsWith('blog/')) {
-                            link.setAttribute('href', `/${repoName}/${currentHref}`);
-                        }
-                    }
-                });
+        // Global state to hold fetched articles
+        let articlesData = [];
+
+        // Mock data to demonstrate the UI until Supabase is hooked up
+        const mockArticles = [
+            {
+                id: '1',
+                title: 'The Evolution of Frontend Architectures',
+                image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                excerpt: 'How we moved from simple HTML pages to complex single-page applications, and why server-side rendering is making a massive comeback.',
+                date: 'May 1, 2026',
+                content: `
+                    <p>In the beginning, the web was simple. A server sent an HTML document, the browser rendered it, and that was that. But as our ambitions grew, so did the complexity of our tools.</p>
+                    <h2>The Rise of the SPA</h2>
+                    <p>Single Page Applications (SPAs) changed everything. By loading a single HTML shell and letting JavaScript handle routing and rendering, we achieved app-like experiences in the browser. Frameworks like React, Angular, and Vue became the industry standard.</p>
+                    <blockquote>"We traded fast initial load times for highly interactive post-load experiences. It was a worthwhile trade-off for complex apps, but disastrous for simple content sites."</blockquote>
+                    <p>However, this approach had drawbacks. Search Engine Optimization (SEO) suffered, and users on slow networks stared at blank screens while megabytes of JavaScript downloaded.</p>
+                    <h2>The Pendulum Swings Back</h2>
+                    <p>Today, we're seeing a return to server-driven architectures. Technologies like Server-Side Rendering (SSR) and Static Site Generation (SSG) offer the best of both worlds: the performance of old-school HTML files with the interactive capabilities of modern JavaScript.</p>
+                    <ul>
+                        <li>Faster First Contentful Paint (FCP)</li>
+                        <li>Better SEO out of the box</li>
+                        <li>Reduced client-side processing</li>
+                    </ul>
+                    <p>The future isn't about choosing one or the other; it's about intelligent hybrid approaches that serve the right content in the right way.</p>
+                `
+            },
+            {
+                id: '2',
+                title: 'Designing for the Ambient Web',
+                image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                excerpt: 'Interfaces are becoming invisible. How designers are adapting to voice, gesture, and predictive AI environments.',
+                date: 'April 28, 2026',
+                content: `
+                    <p>Screens have dominated human-computer interaction for decades. But the next frontier of design isn't happening on a rectangle of glass—it's happening all around us.</p>
+                    <h2>Beyond the Screen</h2>
+                    <p>Ambient computing refers to digital environments that respond to our presence and needs without requiring explicit, screen-based commands. It relies on voice assistants, sensors, and predictive algorithms to seamlessly integrate technology into our physical spaces.</p>
+                    <p>As designers, this requires a fundamental shift in how we think about user experience. We are no longer just arranging pixels; we are orchestrating interactions across multiple modalities.</p>
+                    <h2>The Challenge of Invisibility</h2>
+                    <p>When an interface is invisible, how do users know what they can do? Discoverability becomes a massive challenge. Design must shift from visual cues to auditory feedback, subtle haptics, and intelligent anticipation of user intent.</p>
+                `
+            },
+            {
+                id: '3',
+                title: 'The Hidden Costs of Cloud Storage',
+                image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                excerpt: 'Analyzing the financial and environmental impact of storing zettabytes of data across distributed global servers.',
+                date: 'April 15, 2026',
+                content: `
+                    <p>We often think of the "cloud" as an ethereal, weightless entity. In reality, it is a massive physical infrastructure of cables, servers, and cooling systems spread across the globe.</p>
+                    <h2>Data Centers and Energy Consumption</h2>
+                    <p>The environmental cost of cloud storage is staggering. Data centers require immense amounts of electricity not just to power the servers, but to keep them cool. While many providers are shifting to renewable energy, the sheer volume of data we generate is outpacing efficiency gains.</p>
+                    <blockquote>"Every photo you backup, every email you archive, occupies physical space on a spinning disk or solid-state drive somewhere in the world."</blockquote>
+                    <p>As developers and consumers, we need to adopt better data hygiene practices. Storing data forever shouldn't be the default—we need systems that intelligently archive, compress, or delete data that is no longer useful.</p>
+                `
             }
+        ];
 
-            // Category filter function (if you want to implement filtering)
-            window.filterArticles = function(category) {
-                alert(`Filtering by ${category} - This feature can be implemented with JavaScript filtering. For now, all articles are shown.`);
-                return false;
-            };
-        });
+        // --- Application Logic ---
 
-        // Simple URL parameter handler for blog post loading
-        function loadArticleFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const article = urlParams.get('article');
+        // 1. Fetch data from Supabase (or use Mock Data)
+        async function fetchArticles() {
+            const loadingView = document.getElementById('loading-view');
+            const listView = document.getElementById('list-view');
             
-            if (article) {
-                // This would load article content dynamically
-                console.log(`Loading article: ${article}`);
-                // In a real implementation, you would fetch and display the article here
+            loadingView.classList.remove('hidden');
+            listView.classList.add('hidden');
+
+            try {
+                if (!SUPABASE_FUNCTION_URL) {
+                    // Simulate network delay for realistic feel
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    console.log("No Supabase URL provided. Using mock data.");
+                    articlesData = mockArticles;
+                } else {
+                    // Actual fetch call to Supabase Edge Function
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (SUPABASE_ANON_KEY) {
+                        headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
+                    }
+
+                    const response = await fetch(SUPABASE_FUNCTION_URL, {
+                        method: 'GET', // or POST depending on your function
+                        headers: headers
+                    });
+
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const data = await response.json();
+                    
+                    // Validate data structure briefly
+                    if (Array.isArray(data) && data.length > 0) {
+                        articlesData = data;
+                    } else {
+                        throw new Error('Invalid data format received');
+                    }
+                }
+                
+                renderPlacards();
+                
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+                // Fallback to mock data on error so the page doesn't break
+                articlesData = mockArticles;
+                renderPlacards();
+            } finally {
+                loadingView.classList.add('hidden');
+                listView.classList.remove('hidden');
             }
         }
 
-        // Initialize
-        loadArticleFromURL();
-    </script>
+        // 2. Render the article placards (cards) in the grid
+        function renderPlacards() {
+            const grid = document.getElementById('article-grid');
+            grid.innerHTML = ''; // Clear existing
 
-    <!-- Fallback for browsers without JavaScript -->
-    <noscript>
-        <style>
-            .article-link-overlay {
-                display: none;
+            articlesData.forEach((article, index) => {
+                // Ensure we have a date
+                const dateText = article.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                // Add staggered animation delay
+                const delay = index * 100;
+
+                const cardHTML = `
+                    <div class="group cursor-pointer flex flex-col h-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1" style="animation: slideUp 0.5s ease-out ${delay}ms both;" onclick="openArticle('${article.id}')">
+                        <div class="relative h-56 w-full overflow-hidden">
+                            <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="text-xs font-semibold text-brand-600 mb-2 uppercase tracking-wider">${dateText}</div>
+                            <h2 class="font-serif text-2xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-brand-600 transition-colors">${article.title}</h2>
+                            <p class="text-gray-600 line-clamp-3 mb-6 flex-grow">${article.excerpt}</p>
+                            <div class="mt-auto flex items-center text-sm font-medium text-brand-600">
+                                Read Article 
+                                <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', cardHTML);
+            });
+            
+            // Re-initialize icons for newly injected HTML
+            lucide.createIcons();
+        }
+
+        // 3. Open a specific article
+        function openArticle(id) {
+            const article = articlesData.find(a => a.id === id);
+            if (!article) return;
+
+            // Populate DOM elements
+            document.getElementById('detail-title').textContent = article.title;
+            document.getElementById('detail-image').src = article.image;
+            document.getElementById('detail-date').textContent = article.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            // Render HTML content (assuming Supabase function returns HTML text in 'content' field)
+            document.getElementById('detail-content').innerHTML = article.content;
+
+            // Switch Views with smooth transition logic
+            const listView = document.getElementById('list-view');
+            const articleView = document.getElementById('article-view');
+
+            listView.classList.add('hidden');
+            
+            articleView.classList.remove('hidden');
+            articleView.classList.add('fade-enter');
+            
+            // Trigger reflow to restart animation
+            void articleView.offsetWidth; 
+            
+            articleView.classList.add('fade-enter-active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 4. Go back to list view
+        function showListView() {
+            const listView = document.getElementById('list-view');
+            const articleView = document.getElementById('article-view');
+
+            // Only transition if we are actually in the article view
+            if(!articleView.classList.contains('hidden')) {
+                articleView.classList.add('hidden');
+                articleView.classList.remove('fade-enter', 'fade-enter-active');
+                
+                listView.classList.remove('hidden');
+                listView.classList.add('fade-enter');
+                void listView.offsetWidth;
+                listView.classList.add('fade-enter-active');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-            .article-card {
-                cursor: default;
+        }
+
+        // Keyframe animations dynamically injected for the staggered grid loading
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes slideUp {
+                0% { opacity: 0; transform: translateY(20px); }
+                100% { opacity: 1; transform: translateY(0); }
             }
-        </style>
-    </noscript>
+        `;
+        document.head.appendChild(styleSheet);
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchArticles();
+
+            /* --- Navigation Logic from Ganesh Solutions --- */
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    mobileMenuToggle.innerHTML = mainNav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+                });
+            }
+
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 992) {
+                        e.preventDefault();
+                        const parentLi = this.parentElement;
+                        document.querySelectorAll('nav#mainNav li').forEach(li => { if (li !== parentLi) li.classList.remove('active'); });
+                        parentLi.classList.toggle('active');
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 </html>
-
-
-
-
