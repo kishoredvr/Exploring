@@ -85,23 +85,40 @@
             border-left: 1px dotted #94a3b8;
         }
 
-        /* Fixed Explorer Position in Desktop Margins */
+        /* Improved Sidebar Positioning for all monitor sizes */
         @media (min-width: 1024px) {
             #article-explorer {
-                position: absolute;
-                left: -320px; /* Positioned outside the 1200px container */
-                top: 140px;
-                width: 280px;
-                z-index: 50;
+                width: 260px;
+                flex-shrink: 0;
+                position: sticky;
+                top: 100px;
+                height: fit-content;
+                max-height: calc(100vh - 140px);
                 display: block !important;
             }
-            /* Overriding flex behavior to allow articles to occupy full space */
+            
+            /* Using a side-by-side flex layout on laptops and smaller monitors */
             main.gs-container {
-                display: block !important;
-                position: relative;
+                display: flex !important;
+                gap: 2rem;
+                align-items: flex-start;
+                max-width: 100% !important; /* Allow it to span more naturally on mid-size screens */
+                padding-left: 40px;
+                padding-right: 40px;
             }
-            .flex-grow {
-                width: 100%;
+
+            /* Floating effect for ultra-wide screens to keep content centered but explorer accessible */
+            @media (min-width: 1536px) {
+                main.gs-container {
+                    max-width: 1300px !important;
+                    margin: 0 auto;
+                    position: relative;
+                }
+                #article-explorer {
+                    position: absolute;
+                    left: -280px;
+                    width: 260px;
+                }
             }
         }
 
@@ -119,8 +136,8 @@
         .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
 
         nav#mainNav ul { display: flex; list-style: none; align-items: center; }
-        nav#mainNav ul li { margin-left: -10px; position: relative; }
-        nav#mainNav ul li a { color: white; text-decoration: none; font-weight: 500; padding: 8px 15px; border-radius: 4px; transition: all 0.3s; display: flex; align-items: center; white-space: nowrap; }
+        nav#mainNav ul li { margin-left: -5px; position: relative; }
+        nav#mainNav ul li a { color: white; text-decoration: none; font-weight: 500; padding: 8px 12px; border-radius: 4px; transition: all 0.3s; display: flex; align-items: center; white-space: nowrap; font-size: 15px; }
         nav#mainNav ul li a:hover, nav#mainNav ul li a.active { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
         .dropdown-menu { position: absolute; top: 100%; right: 0; background: white; min-width: 220px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 4px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 1000; }
         nav#mainNav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
@@ -128,9 +145,9 @@
         .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
         .dropdown-menu a i { margin-right: 10px; width: 20px; }
 
-        #google_translate_element { margin-left: 15px; display: flex; align-items: center; min-width: 160px; }
-        .goog-te-gadget-simple { background-color: rgba(255, 255, 255, 0.15) !important; border: 1px solid var(--accent-gold) !important; padding: 6px 10px !important; border-radius: 6px !important; font-family: 'Inter', sans-serif !important; display: flex !important; align-items: center !important; }
-        .goog-te-gadget-simple a, .goog-te-menu-value span { color: white !important; text-decoration: none !important; font-size: 13px !important; font-weight: 500 !important; }
+        #google_translate_element { margin-left: 10px; display: flex; align-items: center; min-width: 140px; }
+        .goog-te-gadget-simple { background-color: rgba(255, 255, 255, 0.15) !important; border: 1px solid var(--accent-gold) !important; padding: 4px 8px !important; border-radius: 6px !important; font-family: 'Inter', sans-serif !important; display: flex !important; align-items: center !important; }
+        .goog-te-gadget-simple a, .goog-te-menu-value span { color: white !important; text-decoration: none !important; font-size: 12px !important; font-weight: 500 !important; }
         .goog-logo-link, .goog-te-gadget-icon, .goog-te-banner-frame { display: none !important; }
         .goog-te-gadget { color: transparent !important; }
         body { top: 0 !important; }
@@ -192,7 +209,7 @@
                 </div>
                 <nav id="mainNav">
                     <ul>
-                        <li><a href="#" onclick="showListView()">Home</a></li>
+                        <li><a href="https://parishodana.xyz" onclick="showListView()">Home</a></li>
                         <li>
                             <a href="#" class="dropdown-toggle">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
@@ -248,18 +265,18 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow gs-container py-12 flex flex-col lg:flex-row relative">
+    <main class="flex-grow gs-container py-12 relative">
         
         <!-- ARTICLE EXPLORER (SIDEBAR) -->
-        <aside id="article-explorer" class="hidden lg:block flex-shrink-0">
-            <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col max-h-[85vh]">
+        <aside id="article-explorer" class="hidden lg:block">
+            <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col max-h-full">
                 <div class="bg-gray-100 border-b border-gray-200 px-3 py-2 flex items-center justify-between">
                     <h3 class="text-[11px] font-bold text-gray-600 uppercase tracking-tight flex items-center gap-1.5">
                         <i class="fas fa-desktop text-gray-500"></i> Explorer
                     </h3>
                     <button onclick="resetExplorer()" class="text-[10px] text-blue-600 hover:underline">Reset</button>
                 </div>
-                <div id="explorer-pane" class="p-1 overflow-y-auto bg-white">
+                <div id="explorer-pane" class="p-1 overflow-y-auto bg-white" style="max-height: 60vh;">
                     <!-- Tree structure will be injected here -->
                 </div>
                 <div class="bg-gray-50 border-t border-gray-200 px-3 py-1 text-[10px] text-gray-400 font-mono">
@@ -269,7 +286,7 @@
         </aside>
 
         <!-- MAIN VIEW (GRID & SEARCH) -->
-        <div class="flex-grow">
+        <div class="flex-grow w-full">
             <!-- Article Grid (Placards) -->
             <div id="list-view" class="w-full">
                 
@@ -289,21 +306,21 @@
                 </div>
 
                 <!-- Grid Container -->
-                <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     <!-- Placards injected here -->
                 </div>
             </div>
 
             <!-- Single Article Full View -->
             <div id="article-view" class="hidden pb-20 w-full">
-                <div class="relative w-full h-[40vh] md:h-[50vh] bg-gray-900 rounded-3xl overflow-hidden mb-8">
+                <div class="relative w-full h-[35vh] md:h-[45vh] bg-gray-900 rounded-3xl overflow-hidden mb-8">
                     <img id="detail-image" src="" alt="Article Cover" class="absolute inset-0 w-full h-full object-cover opacity-60">
                     <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-12">
+                    <div class="absolute bottom-0 left-0 w-full p-6 md:p-10">
                         <button onclick="showListView()" class="mb-6 inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
                             <i class="fas fa-arrow-left mr-2"></i> Back to list
                         </button>
-                        <h1 id="detail-title" class="font-serif text-3xl md:text-5xl font-bold text-white leading-tight mb-4"></h1>
+                        <h1 id="detail-title" class="font-serif text-2xl md:text-4xl font-bold text-white leading-tight mb-4"></h1>
                         <div class="flex items-center text-white/80 text-sm">
                             <i class="far fa-calendar-alt mr-2"></i>
                             <span id="detail-date"></span>
@@ -311,7 +328,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-gray-100">
                     <div id="detail-content" class="prose max-w-none"></div>
                 </div>
             </div>
@@ -587,15 +604,15 @@
                          data-group="${article.group}" 
                          data-subgroup="${article.subgroup}"
                          onclick="openArticle('${article.id}')">
-                        <div class="h-48 overflow-hidden">
+                        <div class="h-44 overflow-hidden">
                             <img src="${article.image}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
                         </div>
-                        <div class="p-6">
+                        <div class="p-5">
                             <div class="text-[10px] font-bold text-brand-600 mb-2 uppercase tracking-widest">
                                 ${article.topic} ${article.group ? ' / ' + article.group : ''} ${article.subgroup ? ' / ' + article.subgroup : ''}
                             </div>
-                            <h2 class="font-serif text-xl font-bold text-gray-900 mb-2 leading-tight">${article.title}</h2>
-                            <p class="text-gray-600 text-sm line-clamp-2">${article.excerpt}</p>
+                            <h2 class="font-serif text-lg font-bold text-gray-900 mb-2 leading-tight">${article.title}</h2>
+                            <p class="text-gray-600 text-xs line-clamp-2">${article.excerpt}</p>
                         </div>
                     </div>
                 `);
@@ -650,6 +667,20 @@
             currentArticleTitle = '';
         }
 
+        // --- Google Translate Initialization ---
+        function googleTranslateElementInit() {
+            const allLanguages = 
+                "af,am,ar,as,az,be,bg,bn,bs,ca,cs,da,de,el,en,eo,es,et,eu,fa,fi,fr,ga,gd,gl,gu,ha,he,hi,hr,ht,hu,hy,id,ig,is,it,ja,jv,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mk,ml,mn,mr,ms,mt,my,ne,nl,no,ny,or,pa,pl,ps,pt,ro,ru,rw,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tk,tl,tr,tt,ug,uk,ur,uz,vi,wo,xh,yi,yor,zh-CN,zh-TW,zu";
+            
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: allLanguages,
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+                multilanguagePage: true
+            }, 'google_translate_element');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             renderPlacards();
             renderExplorer();
@@ -671,5 +702,6 @@
             });
         });
     </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
