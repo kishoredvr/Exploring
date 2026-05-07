@@ -4,6 +4,108 @@
 -->
 
 <div id="site-header-source">
+    <!-- Dynamic Island (Floating CTA - Positioned Middle Right) -->
+    <style>
+        .dynamic-island-wrapper {
+            position: fixed;
+            top: 50%; /* Middle of page vertically */
+            right: 20px; /* End of right side */
+            transform: translateY(-50%);
+            z-index: 1500;
+            pointer-events: none;
+        }
+        .dynamic-island {
+            pointer-events: auto;
+            background: rgba(15, 26, 60, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            padding: 12px 18px;
+            border-radius: 50px;
+            display: flex;
+            flex-direction: column; /* Stacked vertically for side placement */
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: white;
+            
+            /* Initial entry animation */
+            opacity: 0;
+            animation: island-slide-in 0.8s forwards 1s, island-blink 2.5s infinite ease-in-out;
+        }
+        
+        .dynamic-island:hover {
+            background: #1a365d;
+            border-color: #d4af37;
+            transform: scale(1.1);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+
+        .dynamic-island-icon {
+            width: 32px;
+            height: 32px;
+            background: #d4af37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f1a3c;
+            font-size: 14px;
+        }
+
+        .dynamic-island-text {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Entry Animation */
+        @keyframes island-slide-in {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Blinking/Pulsing Animation */
+        @keyframes island-blink {
+            0%, 100% { 
+                border-color: rgba(212, 175, 55, 0.6); 
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            }
+            50% { 
+                border-color: rgba(212, 175, 55, 1); 
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+                transform: scale(1.03);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .dynamic-island-wrapper {
+                top: auto;
+                bottom: 30px;
+                right: 20px;
+                transform: none;
+            }
+            .dynamic-island {
+                flex-direction: row; /* Horizontal on mobile for better reach */
+                padding: 8px 20px;
+            }
+        }
+    </style>
+
+    <div class="dynamic-island-wrapper">
+        <a href="MessageMe.html" class="dynamic-island">
+            <div class="dynamic-island-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <span class="dynamic-island-text">BOOK<br>CONSULTATION</span>
+        </a>
+    </div>
+
     <!-- Mobile Header -->
     <div class="mobile-header container">
         <div class="logo">
@@ -35,35 +137,33 @@
                         <li>
                             <a href="#" class="dropdown-toggle">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/astrotechnicstelugu"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/astrotechnicstelugu" target="_blank"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><i class="fab fa-facebook" style="color:#1877F2;"></i> Facebook</a>
                             </div>
                         </li>
                         <li>
                             <a href="#" class="dropdown-toggle">Digital Reliability<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/digital.reliability.dvrk/"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</a>
                             </div>
                         </li>
                         <li>
                             <a href="#" class="dropdown-toggle">National Economies<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://www.youtube.com/@NationalEconomies"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA=="><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/16KYrHXEJb/"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+                                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/studyoneconomy" target="_blank"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</a>
                             </div>
                         </li>
                         <li>
                             <a href="#" class="dropdown-toggle">Resources<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://parishodana.xyz/Articles"><i class="fas fa-newspaper" style="color: #1a365d;"></i> My Articles</a>
-                                <a href="https://github.com/digitalreliability/Sharing"><i class="fab fa-github" style="color: #333;"></i> GitHub</a>
-                                <a href="https://kishoredvr.github.io/Antharyami-DataBank/"><i class="fas fa-database" style="color: #7c3aed;"></i> Astrology Data Bank</a>
-                                <a href="https://astro.parishodana.xyz"><i class="fas fa-calendar-alt" style="color: #d4af37;"></i> Muhurta</a>
-                                <a href="https://astro.parishodana.xyz/SearchVideos"><i class="fas fa-search" style="color: #0ea5e9;"></i> Search Videos</a>
+                                <a href="https://parishodana.xyz/Articles"><i class="fas fa-newspaper"></i> My Articles</a>
+                                <a href="https://github.com/digitalreliability/Sharing" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                                <a href="https://kishoredvr.github.io/Antharyami-DataBank/" target="_blank"><i class="fas fa-database"></i> Astrology Data Bank</a>
+                                <a href="https://astro.parishodana.xyz" target="_blank"><i class="fas fa-calendar-alt"></i> Muhurta</a>
+                                <a href="https://astro.parishodana.xyz/SearchVideos" target="_blank"><i class="fas fa-search"></i> Search Videos</a>
                                 <a href="https://parishodana.xyz/Resources"> More</a>
                             </div>
                         </li>
@@ -71,11 +171,11 @@
                             <a href="#" class="dropdown-toggle">Contact<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu" style="width:250px;">
                                 <div style="text-align:center; padding:20px; color:#1a365d;">
-                                    <img src="https://parishodana.xyz/GS-Logo.jpg" style="width:60px; aling-items:center; border-radius: 50%;">
+                                    <img src="https://parishodana.xyz/GS-Logo.jpg" style="width:60px; border-radius: 50%; margin: 0 auto;">
                                     <h2 style="margin:10px 0 5px; font-size: 18px;">Ganesh Solutions</h2>
                                     <p style="font-size: 13px; margin-bottom: 5px;"><strong>WhatsApp:</strong> +91 8074 192 876</p>
                                     <p style="font-size: 13px;"><strong>Email:</strong> consult@parishodana.xyz</p>
-                                    <a href="https://parishodana.xyz/GaneshSolutions.vcf" download style="margin-top:15px; padding:10px 20px; background:#FFD300; color:#fff; text-decoration:none; border-radius:5px; display:inline-block; font-size: 14px;">Save Contact</a>
+                                    <a href="https://parishodana.xyz/GaneshSolutions.vcf" download style="margin-top:15px; padding:10px 20px; background:#d4af37; color:#0f1a3c; text-decoration:none; border-radius:5px; display:inline-block; font-size: 14px; font-weight: bold;">Save Contact</a>
                                 </div>
                             </div>
                         </li>
@@ -114,7 +214,7 @@
                         <li><a href="#">YouTube Channels</a></li>
                         <li><a href="#">Social Media</a></li>
                         <li><a href="#">E-Newsletter</a></li>
-                        <li><a href="https://parishodana.xyz/MessageMe">Contact Form</a></li>
+                        <li><a href="MessageMe.html">Contact Form</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
