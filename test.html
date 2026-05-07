@@ -98,29 +98,30 @@
                 position: sticky;
                 top: 100px;
                 height: fit-content;
-                max-height: calc(100vh - 140px);
+                max-height: calc(100vh - 160px); /* Safe height for various browser UI layouts */
                 display: block !important;
+                z-index: 10;
             }
             
             main.gs-container {
                 display: flex !important;
-                gap: 2rem;
+                gap: 2.5rem;
                 align-items: flex-start;
-                max-width: 100% !important;
-                padding-left: 40px;
-                padding-right: 40px;
+                max-width: 1200px;
+                margin: 0 auto;
             }
 
+            /* Corrected Ultra-wide behavior to prevent clipping in Brave/Chromium */
             @media (min-width: 1536px) {
                 main.gs-container {
-                    max-width: 1300px !important;
-                    margin: 0 auto;
-                    position: relative;
+                    max-width: 1560px !important; /* Expand container to include explorer in flex flow */
+                    padding-left: 60px;
+                    padding-right: 60px;
                 }
                 #article-explorer {
-                    position: absolute;
-                    left: -280px;
-                    width: 260px;
+                    position: sticky; /* Revert to sticky within the flex flow */
+                    left: 0;
+                    margin-left: 0;
                 }
             }
         }
@@ -442,7 +443,9 @@
         }
 
         function resetExplorer() {
-            activeTopicFilter = null; activeGroupFilter = null; activeSubgroupFilter = null;
+            activeTopicFilter = null;
+            activeGroupFilter = null;
+            activeSubgroupFilter = null;
             expandedNodes = new Set(['root', 'Astrology', 'Bhrigu']);
             document.getElementById('articleSearchInput').value = '';
             renderExplorer();
