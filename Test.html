@@ -7,7 +7,14 @@
     <title>YouTube & Resources | Ganesh Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === Global Variables & Base Styles === */
+        /* === Base Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
         :root {
             --primary-blue: #1a365d;
             --accent-gold: #d4af37;
@@ -17,570 +24,254 @@
             --text-dark: #2d3748;
             --text-light: #718096;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-        }
-
+        
         body {
             background-color: var(--light-gray);
             color: var(--text-dark);
             line-height: 1.5;
             min-height: 100vh;
         }
-
+        
         .container {
-            max-width: 1200px;
+            max-width: 95%;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 15px;
             width: 100%;
         }
 
-        /* === Header Styles === */
-        header {
-            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-image {
-            height: 60px;
-            width: auto;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .logo-text-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .tagline {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            align-items: center;
-        }
-
-        nav ul li {
-            margin-left: 20px;
-            position: relative;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 12px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        nav ul li a:hover {
-            color: var(--accent-gold);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            min-width: 220px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        nav ul li:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-menu a {
-            color: var(--text-dark) !important;
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--medium-gray);
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        .dropdown-menu a:hover {
-            background: var(--light-gray);
-            color: var(--primary-blue) !important;
-        }
-
-        .dropdown-menu i {
-            width: 20px;
-            margin-right: 8px;
-        }
-
-        /* Mobile Styles */
-        .mobile-header {
-            display: none;
-            background: var(--dark-navy);
-            padding: 10px 20px;
-            color: white;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1100;
-        }
-
-        .mobile-menu-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        /* === Resource Grid === */
-        main {
-            padding: 50px 0;
-        }
-
+        /* === Resource Grid Design (Unique to this page) === */
+        main { padding: 40px 0; min-height: 60vh; }
+        
         .section-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin: 10px 0 35px;
         }
-
+        
         .section-title h2 {
-            font-size: 32px;
+            font-size: 30px;
             color: var(--primary-blue);
-            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
         }
-
+        
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--accent-gold);
+        }
+        
         .resources-simple {
             background: white;
             border-radius: 16px;
-            padding: 40px;
+            padding: 25px;
+            margin: 10px 0 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
             border: 1px solid var(--medium-gray);
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+            gap: 20px;
         }
-
+        
         .resource-category {
-            border-right: 1px solid var(--medium-gray);
-            padding-right: 20px;
+            border-right: 5px solid #e2e8f0;
+            padding-right: 15px;
         }
-
+        
         .resource-category:last-child {
             border-right: none;
+            padding-right: 0;
         }
-
+        
         .resource-category h3 {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: var(--primary-blue);
             border-left: 4px solid var(--accent-gold);
             padding-left: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
-
+        
         .resource-links-compact {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 10px;
+            align-items: center;
         }
-
+        
         .simple-link {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
             text-decoration: none;
             color: var(--text-dark);
-            transition: all 0.2s;
             font-size: 1rem;
+            transition: all 0.2s;
+            word-break: break-word;
         }
-
+        
         .simple-link::before {
             content: "→";
             color: var(--accent-gold);
-            font-weight: bold;
+            font-size: 1.1em;
+            margin-right: 2px;
         }
-
+        
         .simple-link:hover {
             color: var(--primary-blue);
-            transform: translateX(5px);
+            transform: translateX(3px);
         }
 
-        /* === Footer Styles === */
-        footer {
-            background: var(--dark-navy);
-            color: white;
-            padding: 60px 0 20px;
-            margin-top: 60px;
-        }
+        /* === Placeholder Styles (to prevent layout shift) === */
+        #header-placeholder { min-height: 100px; }
+        #footer-placeholder { min-height: 300px; }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-column h3 {
-            color: var(--accent-gold);
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-column a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.2s;
-            font-size: 15px;
-        }
-
-        .footer-column a:hover {
-            color: white;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-        }
-
-        /* === Responsive === */
+        /* Responsive Breakpoints */
         @media (max-width: 992px) {
-            header { display: none; }
-            .mobile-header { display: flex; }
-            
-            nav {
-                display: none;
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: var(--dark-navy);
-                padding: 20px;
-                overflow-y: auto;
-            }
-
-            nav.active {
-                display: block;
-            }
-
-            nav ul {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            nav ul li {
-                margin: 0;
-                width: 100%;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-
-            nav ul li a {
-                padding: 15px 0;
-                justify-content: space-between;
-                width: 100%;
-            }
-
-            .dropdown-menu {
-                position: static;
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-                background: rgba(255,255,255,0.05);
-                display: none;
-                box-shadow: none;
-                width: 100%;
-            }
-
-            nav ul li.active .dropdown-menu {
-                display: block;
-            }
-
-            .dropdown-menu a {
-                color: rgba(255,255,255,0.8) !important;
-                padding-left: 15px;
-            }
-
-            .resources-simple {
-                grid-template-columns: 1fr;
-                padding: 25px;
-            }
-
-            .resource-category {
-                border-right: none;
-                border-bottom: 1px solid var(--medium-gray);
-                padding-bottom: 25px;
-                padding-right: 0;
-            }
-
-            .resource-category:last-child {
-                border-bottom: none;
-            }
+            .resources-simple { grid-template-columns: 1fr; gap: 30px; }
+            .resource-category { border-right: none; padding-right: 0; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0; }
+            .resource-category:last-child { border-bottom: none; }
+        }
+        
+        @media (max-width: 480px) {
+            .resource-links-compact { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Block (Standardized) -->
-    <div id="site-header-source">
-        <div class="mobile-header container">
-            <div class="logo">
-                <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
-                <div class="logo-text-container">
-                    <div class="logo-text">Ganesh Solutions</div>
-                    <div class="tagline">Traditional And Technical Solutions</div>
-                </div>
-            </div>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
+    <!-- Dynamic Placeholders -->
+    <div id="header-placeholder"></div>
 
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">
-                        <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
-                        <div class="logo-text-container">
-                            <div class="logo-text">Ganesh Solutions</div>
-                            <div class="tagline">Traditional And Technical Solutions</div>
-                        </div>
-                    </div>
-                    <nav id="mainNav">
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li>
-                                <a href="#" class="dropdown-toggle">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                                <div class="dropdown-menu">
-                                    <a href="https://youtube.com/@astrotechnicstelugu?feature=shared"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                    <a href="https://www.instagram.com/astrotechnicstelugu"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                    <a href="https://www.facebook.com/share/1BnVTb8Nvw/"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#" class="dropdown-toggle">Digital Reliability<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                                <div class="dropdown-menu">
-                                    <a href="https://youtube.com/@kishoredvr-k5k?feature=shared"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                    <a href="https://www.instagram.com/digital.reliability.dvrk/"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                    <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#" class="dropdown-toggle">National Economies<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                                <div class="dropdown-menu">
-                                    <a href="https://www.youtube.com/@NationalEconomies"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                    <a href="https://www.instagram.com/studyoneconomy?igsh=MXJ2dWduajN2bXRvdA=="><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                    <a href="https://www.facebook.com/share/16KYrHXEJb/"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#" class="dropdown-toggle">Resources<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                                <div class="dropdown-menu">
-                                    <a href="https://parishodana.xyz/Articles.html"><i class="fas fa-newspaper"></i> My Articles</a>
-                                    <a href="https://github.com/digitalreliability/Sharing"><i class="fab fa-github"></i> GitHub</a>
-                                    <a href="https://kishoredvr.github.io/Antharyami-DataBank/"><i class="fas fa-database"></i> Astrology Data Bank</a>
-                                    <a href="https://astro.parishodana.xyz"><i class="fas fa-calendar-alt"></i> Muhurta</a>
-                                    <a href="https://astro.parishodana.xyz/SearchVideos"><i class="fas fa-search"></i> Search Videos</a>
-                                    <a href="https://parishodana.xyz/Resources.html"> More</a>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#" class="dropdown-toggle">Contact<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                                <div class="dropdown-menu" style="width:250px;">
-                                    <div style="text-align:center; padding:20px; color:#1a365d;">
-                                        <img src="https://parishodana.xyz/GS-Logo.jpg" style="width:60px; border-radius: 50%;">
-                                        <h2 style="margin:10px 0 5px; font-size: 18px;">Ganesh Solutions</h2>
-                                        <p style="font-size: 13px; margin-bottom: 5px;"><strong>WhatsApp:</strong> +91 8074 192 876</p>
-                                        <p style="font-size: 13px;"><strong>Email:</strong> consult@parishodana.xyz</p>
-                                        <a href="https://parishodana.xyz/GaneshSolutions.vcf" download style="margin-top:15px; padding:10px 20px; background:#000; color:#fff; text-decoration:none; border-radius:5px; display:inline-block; font-size: 14px;">Save Contact</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </header>
-    </div>
-
-    <!-- Main Content -->
     <main class="container">
         <div class="section-title">
             <h2><i class="fas fa-star" style="color: var(--accent-gold);"></i> Recommended Resources</h2>
-            <p>Free tools & references I personally use · click to visit</p>
+            <p style="color: var(--text-light); margin-top: 8px;">Free tools & references I personally use · click to visit</p>
         </div>
 
         <div class="resources-simple">
             <div class="resource-category">
                 <h3>🔒 Digital Privacy & Self-Reliance</h3>
                 <div class="resource-links-compact">
-                    <a href="https://raw.githubusercontent.com/digitalreliability/Sharing/main/Clean.bat" target="_blank" class="simple-link">Temp files cleaner (Windows)</a>
-                    <a href="https://parishodana.xyz/pentest" target="_blank" class="simple-link">Ubuntu Pentesting & Cybersecurity</a>
+                    <a href="https://raw.githubusercontent.com/digitalreliability/Sharing/main/Clean.bat" target="_blank" class="simple-link">Temp files cleaner</a>
+                    <a href="https://parishodana.xyz/pentest" target="_blank" class="simple-link">Ubuntu Pentesting</a>
                     <a href="https://parishodana.xyz/DorkingQualifiers" target="_blank" class="simple-link">Dorking Qualifiers</a>
                     <a href="https://parishodana.xyz/OSINT-Sources" target="_blank" class="simple-link">OSINT Resources</a>
-                    <a href="#" target="_blank" class="simple-link">PRISM Break</a>
+                    <a href="https://prism-break.org/" target="_blank" class="simple-link">PRISM Break</a>
                 </div>
             </div>
 
             <div class="resource-category">
                 <h3>🕉️ Vedic Astrology & Spirituality</h3>
                 <div class="resource-links-compact">
-                    <a href="https://raw.githubusercontent.com/digitalreliability/Sharing/main/Astrology/JHT-Setup3.exe" target="_blank" class="simple-link">JH Tools (Utility for Jagannatha Hora-Updated-V3)</a>
+                    <a href="https://raw.githubusercontent.com/digitalreliability/Sharing/main/Astrology/JHT-Setup3.exe" target="_blank" class="simple-link">JH Tools (V3)</a>
                     <a href="https://kishoredvr.github.io/Antharyami-DataBank/" target="_blank" class="simple-link">Astrology DataBank</a>
                     <a href="https://astro.parishodana.xyz" target="_blank" class="simple-link">Muhurta Calculator</a>
-                    <a href="#" target="_blank" class="simple-link">Astro.com</a>
-                    <a href="#" target="_blank" class="simple-link">Jyotish Studio</a>
+                    <a href="https://www.astro.com/" target="_blank" class="simple-link">Astro.com</a>
+                    <a href="https://jyotishstudio.com/" target="_blank" class="simple-link">Jyotish Studio</a>
+                    <a href="#" target="_blank" class="simple-link">Vedic Astro</a>
                 </div>
             </div>
 
             <div class="resource-category">
                 <h3>📊 Economy & Data</h3>
                 <div class="resource-links-compact">
-                    <a href="#" target="_blank" class="simple-link">Trading Economics</a>
-                    <a href="#" target="_blank" class="simple-link">World Bank Data</a>
-                    <a href="#" target="_blank" class="simple-link">Our World in Data</a>
-                    <a href="#" target="_blank" class="simple-link">FRED</a>
-                    <a href="#" target="_blank" class="simple-link">IMF Data</a>
+                    <a href="https://tradingeconomics.com/" target="_blank" class="simple-link">Trading Economics</a>
+                    <a href="https://data.worldbank.org/" target="_blank" class="simple-link">World Bank Data</a>
+                    <a href="https://ourworldindata.org/" target="_blank" class="simple-link">Our World in Data</a>
+                    <a href="https://fred.stlouisfed.org/" target="_blank" class="simple-link">FRED</a>
+                    <a href="https://www.imf.org/en/Data" target="_blank" class="simple-link">IMF Data</a>
                 </div>
             </div>
         </div>
 
-        <p style="text-align: center; margin: 30px 0; font-style: italic; color: var(--text-light);">
+        <p style="text-align: center; margin: 15px 0 30px; font-style: italic; color: var(--text-light);">
             → More links added frequently — bookmark this page.
         </p>
     </main>
 
-    <!-- Footer Block (Standardized) -->
-    <div id="site-footer-source">
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-column">
-                        <h3>Services</h3>
-                        <ul>
-                            <li><a href="#">Astrology Consultations</a></li>
-                            <li><a href="#">Digital Reliability</a></li>
-                            <li><a href="#">App Development</a></li>
-                            <li><a href="#">Economic Research</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Resources</h3>
-                        <ul>
-                            <li><a href="https://kishoredvr.github.io/Antharyami-DataBank/">Astrology Data Bank</a></li>
-                            <li><a href="https://github.com/digitalreliability/Sharing">GitHub Repository</a></li>
-                            <li><a href="https://parishodana.xyz/Articles.html">Research Articles</a></li>
-                            <li><a href="youtube-resources.html">YouTube & Resources</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Connect</h3>
-                        <ul>
-                            <li><a href="youtube-resources.html">YouTube Channels</a></li>
-                            <li><a href="#">Social Media</a></li>
-                            <li><a href="#">E-Newsletter</a></li>
-                            <li><a href="https://kishoredvr.github.io/Exploring/MessageMe.html">Contact Form</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h3>About</h3>
-                        <ul>
-                            <li><a href="https://parishodana.xyz/AboutMe.html">Our Story & Philosophy</a></li>
-                            <li><a href="https://parishodana.xyz/Terms.html">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="copyright">
-                    <p>Ganesh Solutions. All Rights Reserved.</p>
-                </div>
-            </div>
-        </footer>
-    </div>
+    <div id="footer-placeholder"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        /**
+         * Dynamically loads components from components.html
+         */
+        async function loadComponents() {
+            try {
+                const response = await fetch('components.html');
+                if (!response.ok) throw new Error('Failed to fetch components.html');
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Extract and Inject Header
+                const headerSource = doc.getElementById('site-header-source');
+                if (headerSource) {
+                    document.getElementById('header-placeholder').innerHTML = headerSource.innerHTML;
+                }
+
+                // Extract and Inject Footer
+                const footerSource = doc.getElementById('site-footer-source');
+                if (footerSource) {
+                    document.getElementById('footer-placeholder').innerHTML = footerSource.innerHTML;
+                }
+
+                // Initialize Mobile Menu Logic AFTER the elements exist in DOM
+                initNavigation();
+
+            } catch (error) {
+                console.error('Error loading master components:', error);
+            }
+        }
+
+        /**
+         * Logic for Mobile Menu and Dropdowns
+         */
+        function initNavigation() {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const mainNav = document.getElementById('mainNav');
             const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-            if (mobileMenuToggle) {
+            
+            if (mobileMenuToggle && mainNav) {
                 mobileMenuToggle.addEventListener('click', function() {
                     const isActive = mainNav.classList.toggle('active');
                     mobileMenuToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     document.body.style.overflow = isActive ? 'hidden' : '';
                 });
             }
-
+            
             dropdownToggles.forEach(toggle => {
                 toggle.addEventListener('click', function(e) {
                     if (window.innerWidth <= 992) {
                         e.preventDefault();
                         const parentLi = this.parentElement;
-                        document.querySelectorAll('nav ul li').forEach(li => {
+                        document.querySelectorAll('nav li').forEach(li => {
                             if (li !== parentLi) li.classList.remove('active');
                         });
                         parentLi.classList.toggle('active');
                     }
                 });
             });
-
-            document.querySelectorAll('nav a:not(.dropdown-toggle)').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 992) {
-                        mainNav.classList.remove('active');
-                        mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
+                        if (mainNav) mainNav.classList.remove('active');
+                        if (mobileMenuToggle) mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
                         document.body.style.overflow = '';
                     }
                 });
             });
-        });
+        }
+
+        // Run the loader on page load
+        window.onload = loadComponents;
     </script>
 </body>
 </html>
