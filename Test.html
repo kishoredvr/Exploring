@@ -7,14 +7,7 @@
     <title>YouTube & Resources | Ganesh Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === Base Styles === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-        }
-        
+        /* === Global Variables & Host Page Base Styles === */
         :root {
             --primary-blue: #1a365d;
             --accent-gold: #d4af37;
@@ -24,14 +17,22 @@
             --text-dark: #2d3748;
             --text-light: #718096;
         }
-        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+
         body {
             background-color: var(--light-gray);
             color: var(--text-dark);
             line-height: 1.5;
             min-height: 100vh;
+            scroll-padding-top: 100px;
         }
-        
+
         .container {
             max-width: 95%;
             margin: 0 auto;
@@ -39,14 +40,127 @@
             width: 100%;
         }
 
-        /* === Resource Grid Design (Unique to this page) === */
+        /* === Styles for Injected Header (Pulled from Master) === */
+        header {
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .mobile-header {
+            display: none;
+            padding: 15px 0;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-image {
+            height: 70px;
+            width: auto;
+            margin-top: 5px;
+            border-radius: 50%;
+            object-fit: cover;
+            transform: scale(1.1);
+        }
+
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+        }
+
+        .logo-text { font-size: 24px; font-weight: 600; color: white; }
+        .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+
+        nav ul { display: flex; list-style: none; align-items: center; }
+        nav ul li { margin-left: 25px; position: relative; }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        nav ul li a:hover { color: var(--accent-gold); background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .dropdown-menu a {
+            color: var(--text-dark) !important;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
+        .dropdown-menu i { margin-right: 10px; width: 20px; }
+
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === Resource Page Content Styles === */
         main { padding: 40px 0; min-height: 60vh; }
-        
+
         .section-title {
             text-align: center;
             margin: 10px 0 35px;
         }
-        
+
         .section-title h2 {
             font-size: 30px;
             color: var(--primary-blue);
@@ -54,7 +168,7 @@
             display: inline-block;
             padding-bottom: 10px;
         }
-        
+
         .section-title h2::after {
             content: "";
             position: absolute;
@@ -65,7 +179,7 @@
             height: 3px;
             background: var(--accent-gold);
         }
-        
+
         .resources-simple {
             background: white;
             border-radius: 16px;
@@ -77,17 +191,14 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
-        
+
         .resource-category {
             border-right: 5px solid #e2e8f0;
             padding-right: 15px;
         }
-        
-        .resource-category:last-child {
-            border-right: none;
-            padding-right: 0;
-        }
-        
+
+        .resource-category:last-child { border-right: none; }
+
         .resource-category h3 {
             font-size: 1.3rem;
             color: var(--primary-blue);
@@ -96,14 +207,14 @@
             margin-bottom: 15px;
             font-weight: 600;
         }
-        
+
         .resource-links-compact {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px 10px;
             align-items: center;
         }
-        
+
         .simple-link {
             display: inline-flex;
             align-items: baseline;
@@ -114,30 +225,92 @@
             transition: all 0.2s;
             word-break: break-word;
         }
-        
+
         .simple-link::before {
             content: "→";
             color: var(--accent-gold);
             font-size: 1.1em;
             margin-right: 2px;
         }
-        
+
         .simple-link:hover {
             color: var(--primary-blue);
             transform: translateX(3px);
         }
 
-        /* === Placeholder Styles (to prevent layout shift) === */
+        /* === Footer CSS === */
+        footer {
+            background: var(--dark-navy);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 { font-size: 18px; margin-bottom: 18px; color: var(--accent-gold); }
+        .footer-column ul { list-style: none; }
+        .footer-column ul li { margin-bottom: 8px; }
+        .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.95rem; }
+        .footer-column a:hover { color: var(--accent-gold); }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
         #header-placeholder { min-height: 100px; }
-        #footer-placeholder { min-height: 300px; }
 
         /* Responsive Breakpoints */
         @media (max-width: 992px) {
+            header { display: none; }
+            .mobile-header { display: flex; }
+            
+            nav {
+                display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                height: calc(100% - 70px);
+                background: var(--dark-navy);
+                z-index: 2000;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+            nav.active { display: block; }
+            nav ul { flex-direction: column; align-items: flex-start; margin-top: 30px; width: 100%; }
+            nav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            nav ul li a { padding: 15px 0; width: 100%; }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                background: rgba(255,255,255,0.05);
+                display: none;
+                box-shadow: none;
+                width: 100%;
+                max-height: 0;
+                overflow: hidden;
+            }
+
+            nav ul li.active .dropdown-menu { display: block; max-height: 1000px; }
             .resources-simple { grid-template-columns: 1fr; gap: 30px; }
-            .resource-category { border-right: none; padding-right: 0; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0; }
+            .resource-category { border-right: none; padding-right: 0; padding-bottom: 15px; border-bottom: 1px solid var(--medium-gray); }
             .resource-category:last-child { border-bottom: none; }
         }
-        
+
         @media (max-width: 480px) {
             .resource-links-compact { grid-template-columns: 1fr; }
         }
@@ -145,7 +318,7 @@
 </head>
 <body>
 
-    <!-- Dynamic Placeholders -->
+    <!-- Placeholder for master header -->
     <div id="header-placeholder"></div>
 
     <main class="container">
@@ -155,6 +328,7 @@
         </div>
 
         <div class="resources-simple">
+            <!-- Digital Privacy -->
             <div class="resource-category">
                 <h3>🔒 Digital Privacy & Self-Reliance</h3>
                 <div class="resource-links-compact">
@@ -166,6 +340,7 @@
                 </div>
             </div>
 
+            <!-- Astrology -->
             <div class="resource-category">
                 <h3>🕉️ Vedic Astrology & Spirituality</h3>
                 <div class="resource-links-compact">
@@ -174,10 +349,10 @@
                     <a href="https://astro.parishodana.xyz" target="_blank" class="simple-link">Muhurta Calculator</a>
                     <a href="https://www.astro.com/" target="_blank" class="simple-link">Astro.com</a>
                     <a href="https://jyotishstudio.com/" target="_blank" class="simple-link">Jyotish Studio</a>
-                    <a href="#" target="_blank" class="simple-link">Vedic Astro</a>
                 </div>
             </div>
 
+            <!-- Economy -->
             <div class="resource-category">
                 <h3>📊 Economy & Data</h3>
                 <div class="resource-links-compact">
@@ -190,88 +365,80 @@
             </div>
         </div>
 
-        <p style="text-align: center; margin: 15px 0 30px; font-style: italic; color: var(--text-light);">
+        <p style="text-align: center; margin: 30px 0; font-style: italic; color: var(--text-light);">
             → More links added frequently — bookmark this page.
         </p>
     </main>
 
+    <!-- Placeholder for master footer -->
     <div id="footer-placeholder"></div>
 
     <script>
         /**
-         * Dynamically loads Components from Components.html
+         * Fetch master components and inject them
          */
-        async function loadComponents() {
+        async function loadMasterCopy() {
             try {
+                // Ensure 'Components.html' is capitalized if your file is Components.html
                 const response = await fetch('Components.html');
-                if (!response.ok) throw new Error('Failed to fetch Components.html');
+                if (!response.ok) throw new Error('Components.html not found');
                 
-                const html = await response.text();
+                const text = await response.text();
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+                const masterDoc = parser.parseFromString(text, 'text/html');
 
-                // Extract and Inject Header
-                const headerSource = doc.getElementById('site-header-source');
-                if (headerSource) {
-                    document.getElementById('header-placeholder').innerHTML = headerSource.innerHTML;
+                // 1. Inject Header
+                const headerContent = masterDoc.getElementById('site-header-source');
+                if (headerContent) {
+                    document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
                 }
 
-                // Extract and Inject Footer
-                const footerSource = doc.getElementById('site-footer-source');
-                if (footerSource) {
-                    document.getElementById('footer-placeholder').innerHTML = footerSource.innerHTML;
+                // 2. Inject Footer
+                const footerContent = masterDoc.getElementById('site-footer-source');
+                if (footerContent) {
+                    document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
                 }
 
-                // Initialize Mobile Menu Logic AFTER the elements exist in DOM
-                initNavigation();
+                // Initialize events after injection
+                initMenuLogic();
 
-            } catch (error) {
-                console.error('Error loading master Components:', error);
+            } catch (err) {
+                console.error("Fetch Error:", err);
             }
         }
 
         /**
-         * Logic for Mobile Menu and Dropdowns
+         * Logic for mobile menu and dropdown toggles
          */
-        function initNavigation() {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        function initMenuLogic() {
+            const mobileBtn = document.getElementById('mobileMenuToggle');
             const mainNav = document.getElementById('mainNav');
-            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-            
-            if (mobileMenuToggle && mainNav) {
-                mobileMenuToggle.addEventListener('click', function() {
+            const dropdowns = document.querySelectorAll('.dropdown-toggle');
+
+            if (mobileBtn && mainNav) {
+                mobileBtn.addEventListener('click', () => {
                     const isActive = mainNav.classList.toggle('active');
-                    mobileMenuToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    mobileBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     document.body.style.overflow = isActive ? 'hidden' : '';
                 });
             }
-            
-            dropdownToggles.forEach(toggle => {
-                toggle.addEventListener('click', function(e) {
+
+            dropdowns.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
                     if (window.innerWidth <= 992) {
                         e.preventDefault();
-                        const parentLi = this.parentElement;
-                        document.querySelectorAll('nav li').forEach(li => {
-                            if (li !== parentLi) li.classList.remove('active');
+                        const li = toggle.parentElement;
+                        document.querySelectorAll('nav li').forEach(item => {
+                            if (item !== li) item.classList.remove('active');
                         });
-                        parentLi.classList.toggle('active');
-                    }
-                });
-            });
-            
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
-                        if (mainNav) mainNav.classList.remove('active');
-                        if (mobileMenuToggle) mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                        document.body.style.overflow = '';
+                        li.classList.toggle('active');
                     }
                 });
             });
         }
 
-        // Run the loader on page load
-        window.onload = loadComponents;
+        // Run fetch on load
+        window.onload = loadMasterCopy;
     </script>
 </body>
 </html>
