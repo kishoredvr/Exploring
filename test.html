@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5432639450228352"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganesh Solutions | Astrology Services & Digital Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === Global Variables & Host Page Base Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        :root {
+            --primary-blue: #1a365d;
+            --accent-gold: #d4af37;
+            --dark-navy: #0f1a3c;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --vedic-purple: #7c3aed;
+            --cyber-teal: #0ea5e9;
+            --financial-green: #059669;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            scroll-padding-top: 100px;
+        }
+        
+        /* Master Container Alignment */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Essential Placeholder Heights for Master Components */
+        #header-placeholder { min-height: 100px; }
+        #footer-placeholder { min-height: 300px; }
+
+        /* === Styles for Injected Header (Matching cont.html implementation) === */
+        header {
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .mobile-header {
+            display: none;
+            padding: 15px 0;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-image {
+            height: 70px;
+            width: auto; 
+            margin-top: 5px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+        }
+
+        .logo-text { font-size: 24px; font-weight: 600; color: white; }
+        .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+
+        nav ul { display: flex; list-style: none; align-items: center; }
+        nav ul li { margin-left: 30px; position: relative; }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        nav ul li a:hover, nav ul li a.active { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .dropdown-menu a {
+            color: var(--text-dark) !important;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--medium-gray);
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
+        .dropdown-menu i { margin-right: 10px; width: 20px; text-align: center; }
+
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === HERO === */
+        .hero {
+            padding: 50px 0;
+            background: linear-gradient(rgba(26, 54, 93, 0.9), rgba(26, 54, 93, 0.9)), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+        
+        .hero-profile-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .profile-container {
+            position: relative;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .profile-image {
+            width: clamp(110px, 18vw, 200px);
+            height: clamp(110px, 18vw, 200px);
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: auto;
+            min-width: 180px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(26px, 4.5vw, 42px);
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        
+        .hero p {
+            font-size: clamp(14px, 2.2vw, 20px);
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .quote {
+            font-style: italic;
+            padding: 18px;
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 4px;
+            margin: 30px 0;
+            font-size: clamp(14px, 1.6vw, 18px);
+            text-align: center;
+        }
+        
+        .cta-button {
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .cta-primary {
+            background: var(--accent-gold);
+            color: var(--dark-navy);
+        }
+        
+        .cta-primary:hover {
+            background: #e6b325;
+            transform: translateY(-3px);
+        }
+        
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--accent-gold);
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        /* === Services Section === */
+        .services {
+            padding: 40px 0;
+            background: white;
+            scroll-margin-top: 100px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent-gold);
+        }
+        
+        .section-title p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--medium-gray);
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            color: white;
+        }
+        
+        .astrology .service-icon { background: var(--vedic-purple); }
+        .digital .service-icon { background: var(--cyber-teal); }
+        .economy .service-icon { background: var(--financial-green); }
+        
+        .service-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+        
+        .service-card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .service-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+        
+        .service-features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .service-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+        
+        .service-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .service-link:hover {
+            background: var(--dark-navy);
+            transform: translateY(-2px);
+        }
+        
+        /* === Business Info Section === */
+        .business-info {
+            padding: 20px 0;
+            background: var(--light-gray);
+        }
+        
+        /* === Footer (Standardized Injected Layout) === */
+        footer {
+            background: var(--dark-navy);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 { font-size: 20px; margin-bottom: 20px; color: var(--accent-gold); }
+        .footer-column ul { list-style: none; }
+        .footer-column ul li { margin-bottom: 10px; }
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+            word-wrap: break-word;
+        }
+        .footer-column a:hover { color: var(--accent-gold); }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        /* === Responsive === */
+        @media (max-width: 992px) {
+            header { display: none; }
+            .mobile-header { display: flex; }
+            
+            nav#mainNav {
+                display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                height: calc(100% - 70px);
+                background: var(--dark-navy);
+                z-index: 2000;
+                padding: 20px;
+                overflow-y: auto;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            nav#mainNav.active { display: block; transform: translateX(0); }
+            nav ul { flex-direction: column; align-items: flex-start; margin-top: 30px; width: 100%; }
+            nav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+            nav ul li a { padding: 15px 0; width: 100%; }
+            
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                background: rgba(255, 255, 255, 0.05);
+                display: none;
+                width: 100%;
+                margin-top: 10px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            
+            nav ul li.active .dropdown-menu { display: block; max-height: 1000px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-profile-row { flex-direction: column; gap: 16px; }
+            .hero-buttons { flex-direction: row; justify-content: center; width: 100%; }
+            body { scroll-padding-top: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Placeholders for Master Components -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-profile-row">
+                    <!-- Left Button -->
+                    <div class="hero-buttons">
+                        <a href="#services" class="cta-button cta-secondary">Learn About Our Services</a>
+                    </div>
+                    
+                    <!-- Profile Picture -->
+                    <div class="profile-container">
+                        <img src="https://raw.githubusercontent.com/caravikishore/Exploring/main/KishoreDVR.jpg" alt="Kishore DVR" class="profile-image" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                    
+                    <!-- Right Button -->
+                    <div class="hero-buttons">
+                        <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="cta-button cta-primary">Book Astrology Consultation</a>
+                    </div>
+                </div>
+                
+                <h1>Ganesh Solutions</h1>
+                <p>Professional Astrology Services with Digital & Economic Research</p>
+                <div class="quote">
+                    "Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant"
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Professional services tailored to meet your spiritual, digital, and analytical needs</p>
+            </div>
+            <div class="services-grid">
+                <!-- Astrology Services -->
+                <div class="service-card astrology">
+                    <div class="service-icon">
+                        <i class="fas fa-om"></i>
+                    </div>
+                    <h3>Astrology Services</h3>
+                    <p>Professional Vedic astrology consultations and spiritual guidance</p>
+                    <ul class="service-features">
+                        <li>Personalized horoscope analysis</li>
+                        <li>Compatibility and relationship guidance</li>
+                        <li>Career and financial prospects</li>
+                        <li>Remedial solutions and spiritual guidance</li>
+                    </ul>
+                    <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="service-link">Book Consultation</a>
+                </div>
+                
+                <!-- Digital Solutions -->
+                <div class="service-card digital">
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Digital Solutions</h3>
+                    <p>Comprehensive digital security and software development services</p>
+                    <ul class="service-features">
+                        <li>Website and application development</li>
+                        <li>Digital security and penetration testing</li>
+                        <li>Software programming and customization</li>
+                        <li>IT consultancy and solutions</li>
+                    </ul>
+                    <a href="#" class="service-link">Coming soon..</a>
+                </div>
+                
+                <!-- Economic Research -->
+                <div class="service-card economy">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Economic Research</h3>
+                    <p>In-depth analysis of national and global economic trends</p>
+                    <ul class="service-features">
+                        <li>National economy performance analysis</li>
+                        <li>Global economic trend monitoring</li>
+                        <li>Investment and market insights</li>
+                        <li>Policy impact assessment</li>
+                    </ul>
+                    <a href="#" class="service-link">View Research</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Info Section -->
+    <section class="business-info">
+        <div class="container">
+            <div class="section-title">                
+                <p>Registered micro-enterprise under the Ministry of MSME, Government of India</p>
+            </div>           
+        </div>
+    </section>
+
+    <!-- Dynamic Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        /**
+         * Fetch master components and inject them (Matches cont.html logic)
+         */
+        async function loadMasterCopy() {
+            try {
+                // Ensure 'Components.html' case matches exactly
+                const response = await fetch('Components.html');
+                if (!response.ok) throw new Error('Components.html not found');
+                
+                const text = await response.text();
+                const parser = new DOMParser();
+                const masterDoc = parser.parseFromString(text, 'text/html');
+
+                // 1. Inject Header
+                const headerContent = masterDoc.getElementById('site-header-source');
+                if (headerContent) {
+                    document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
+                }
+
+                // 2. Inject Footer
+                const footerContent = masterDoc.getElementById('site-footer-source');
+                if (footerContent) {
+                    document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
+                }
+
+                // Initialize events after injection
+                initMenuLogic();
+
+            } catch (err) {
+                console.error("Fetch Error:", err);
+            }
+        }
+
+        /**
+         * Logic for mobile menu and dropdown toggles
+         */
+        function initMenuLogic() {
+            const mobileBtn = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const dropdowns = document.querySelectorAll('.dropdown-toggle');
+
+            if (mobileBtn && mainNav) {
+                mobileBtn.onclick = function() {
+                    const isActive = mainNav.classList.toggle('active');
+                    this.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = isActive ? 'hidden' : '';
+                };
+            }
+
+            dropdowns.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 992) {
+                        e.preventDefault();
+                        const li = toggle.parentElement;
+                        // Close other open dropdowns
+                        document.querySelectorAll('nav li').forEach(item => {
+                            if (item !== li) item.classList.remove('active');
+                        });
+                        li.classList.toggle('active');
+                    }
+                });
+            });
+
+            // Close mobile menu when a normal link is clicked
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
+                        if (mainNav) mainNav.classList.remove('active');
+                        if (mobileBtn) mobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+        }
+
+        // Initialize fetching on page load
+        window.onload = loadMasterCopy;
+    </script>
+</body>
+</html>
