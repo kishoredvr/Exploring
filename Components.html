@@ -16,10 +16,12 @@
         }
         .dynamic-island {
             pointer-events: auto;
-            background: rgba(15, 26, 60, 0.95);
+            /* Blue replaced by Yellow */
+            background: rgba(255, 215, 0, 0.95); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(212, 175, 55, 0.6);
+            /* Yellow replaced by Red */
+            border: 2px solid rgba(255, 0, 0, 0.6);
             padding: 15px 12px;
             border-radius: 50px;
             display: flex;
@@ -29,14 +31,17 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
-            color: white;
+            /* Text changed to black for visibility on yellow background */
+            color: #000;
             opacity: 0;
             animation: island-slide-in 0.8s forwards 1s, island-pulse-blink 2s infinite ease-in-out;
         }
         
         .dynamic-island:hover {
-            background: #1a365d;
-            border-color: #d4af37;
+            /* Blue replaced by Yellow */
+            background: #ffd700;
+            /* Yellow replaced by Red */
+            border-color: #ff0000;
             transform: scale(1.1);
             animation-play-state: paused; /* Stop pulsing on hover */
         }
@@ -44,12 +49,14 @@
         .dynamic-island-icon {
             width: 35px;
             height: 35px;
-            background: #f30d08;
+            /* Red replaced by Blue */
+            background: #0000ff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #d4af37;
+            /* Yellow replaced by Red */
+            color: #ff0000;
             font-size: 16px;
         }
 
@@ -69,15 +76,15 @@
             to { opacity: 1; transform: translateX(0) translateY(-50%); }
         }
 
-        /* Pulsing "Blink" Effect */
+        /* Pulsing "Blink" Effect - Updated to RED */
         @keyframes island-pulse-blink {
             0%, 100% { 
-                border-color: rgba(212, 175, 55, 0.6); 
+                border-color: rgba(255, 0, 0, 0.6); 
                 box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             }
             50% { 
-                border-color: rgba(212, 175, 55, 1); 
-                box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
+                border-color: rgba(255, 0, 0, 1); 
+                box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
                 transform: scale(1.05) translateY(-50%);
             }
         }
@@ -98,8 +105,9 @@
                 to { opacity: 1; transform: translateY(0); }
             }
             @keyframes island-pulse-blink-mobile {
-                0%, 100% { border-color: rgba(212, 175, 55, 0.6); transform: scale(1); }
-                50% { border-color: rgba(212, 175, 55, 1); transform: scale(1.05); }
+                /* Yellow replaced by Red */
+                0%, 100% { border-color: rgba(255, 0, 0, 0.6); transform: scale(1); }
+                50% { border-color: rgba(255, 0, 0, 1); transform: scale(1.05); }
             }
         }
     </style>
