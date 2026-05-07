@@ -8,78 +8,77 @@
     <style>
         .dynamic-island-wrapper {
             position: fixed;
-            top: 50%; /* Middle of page vertically */
-            right: 20px; /* End of right side */
+            top: 50%;
+            right: 20px;
             transform: translateY(-50%);
             z-index: 1500;
             pointer-events: none;
         }
         .dynamic-island {
             pointer-events: auto;
-            background: rgba(15, 26, 60, 0.9);
+            background: rgba(15, 26, 60, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 2px solid rgba(212, 175, 55, 0.6);
-            padding: 12px 18px;
+            padding: 15px 12px;
             border-radius: 50px;
             display: flex;
-            flex-direction: column; /* Stacked vertically for side placement */
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            gap: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
             color: white;
-            
-            /* Initial entry animation */
             opacity: 0;
-            animation: island-slide-in 0.8s forwards 1s, island-blink 2.5s infinite ease-in-out;
+            animation: island-slide-in 0.8s forwards 1s, island-pulse-blink 2s infinite ease-in-out;
         }
         
         .dynamic-island:hover {
             background: #1a365d;
             border-color: #d4af37;
             transform: scale(1.1);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            animation-play-state: paused; /* Stop pulsing on hover */
         }
 
         .dynamic-island-icon {
-            width: 32px;
-            height: 32px;
+            width: 35px;
+            height: 35px;
             background: #d4af37;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #0f1a3c;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .dynamic-island-text {
             font-size: 10px;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             white-space: nowrap;
             text-align: center;
-            line-height: 1.2;
+            line-height: 1.3;
+            text-transform: uppercase;
         }
 
-        /* Entry Animation */
+        /* Slide in from right */
         @keyframes island-slide-in {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateX(50px) translateY(-50%); }
+            to { opacity: 1; transform: translateX(0) translateY(-50%); }
         }
 
-        /* Blinking/Pulsing Animation */
-        @keyframes island-blink {
+        /* Pulsing "Blink" Effect */
+        @keyframes island-pulse-blink {
             0%, 100% { 
                 border-color: rgba(212, 175, 55, 0.6); 
-                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             }
             50% { 
                 border-color: rgba(212, 175, 55, 1); 
-                box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
-                transform: scale(1.03);
+                box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
+                transform: scale(1.05) translateY(-50%);
             }
         }
 
@@ -87,12 +86,20 @@
             .dynamic-island-wrapper {
                 top: auto;
                 bottom: 30px;
-                right: 20px;
+                right: 15px;
                 transform: none;
             }
             .dynamic-island {
-                flex-direction: row; /* Horizontal on mobile for better reach */
-                padding: 8px 20px;
+                flex-direction: row;
+                padding: 10px 20px;
+                animation: island-up 0.8s forwards 1s, island-pulse-blink-mobile 2s infinite ease-in-out;
+            }
+            @keyframes island-up {
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes island-pulse-blink-mobile {
+                0%, 100% { border-color: rgba(212, 175, 55, 0.6); transform: scale(1); }
+                50% { border-color: rgba(212, 175, 55, 1); transform: scale(1.05); }
             }
         }
     </style>
@@ -100,9 +107,9 @@
     <div class="dynamic-island-wrapper">
         <a href="MessageMe.html" class="dynamic-island">
             <div class="dynamic-island-icon">
-                <i class="fas fa-calendar-alt"></i>
+                <i class="fas fa-calendar-check"></i>
             </div>
-            <span class="dynamic-island-text">BOOK<br>CONSULTATION</span>
+            <span class="dynamic-island-text">BOOK<br>CONSULT</span>
         </a>
     </div>
 
@@ -137,33 +144,35 @@
                         <li>
                             <a href="#" class="dropdown-toggle">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/astrotechnicstelugu" target="_blank"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><i class="fab fa-facebook" style="color:#1877F2;"></i> Facebook</a>
+                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/astrotechnicstelugu" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
                             </div>
                         </li>
                         <li>
                             <a href="#" class="dropdown-toggle">Digital Reliability<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</a>
+                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
                             </div>
                         </li>
                         <li>
                             <a href="#" class="dropdown-toggle">National Economies<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/studyoneconomy" target="_blank"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</a>
+                                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                                <a href="https://www.instagram.com/studyoneconomy" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
                             </div>
                         </li>
                         <li>
                             <a href="#" class="dropdown-toggle">Resources<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
                             <div class="dropdown-menu">
-                                <a href="https://parishodana.xyz/Articles"><i class="fas fa-newspaper"></i> My Articles</a>
-                                <a href="https://github.com/digitalreliability/Sharing" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                                <a href="https://kishoredvr.github.io/Antharyami-DataBank/" target="_blank"><i class="fas fa-database"></i> Astrology Data Bank</a>
-                                <a href="https://astro.parishodana.xyz" target="_blank"><i class="fas fa-calendar-alt"></i> Muhurta</a>
-                                <a href="https://astro.parishodana.xyz/SearchVideos" target="_blank"><i class="fas fa-search"></i> Search Videos</a>
+                                <a href="https://parishodana.xyz/Articles"><i class="fas fa-newspaper" style="color: #1a365d;"></i> My Articles</a>
+                                <a href="https://github.com/digitalreliability/Sharing" target="_blank"><i class="fab fa-github" style="color: #333;"></i> GitHub</a>
+                                <a href="https://kishoredvr.github.io/Antharyami-DataBank/" target="_blank"><i class="fas fa-database" style="color: #7c3aed;"></i> Astrology Data Bank</a>
+                                <a href="https://astro.parishodana.xyz" target="_blank"><i class="fas fa-calendar-alt" style="color: #d4af37;"></i> Muhurta</a>
+                                <a href="https://astro.parishodana.xyz/SearchVideos" target="_blank"><i class="fas fa-search" style="color: #0ea5e9;"></i> Search Videos</a>
                                 <a href="https://parishodana.xyz/Resources"> More</a>
                             </div>
                         </li>
