@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights & Articles | Ganesh Solutions</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth transitions for view swapping */
+        .fade-enter { opacity: 0; transform: translateY(10px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 400ms ease-out, transform 400ms ease-out; }
+        
+        /* Typography styles for the generated article content */
+        .prose p { margin-bottom: 1.25rem; line-height: 1.8; color: #374151; font-size: 1.125rem; }
+        .prose h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; }
+        .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1rem; font-style: italic; color: #4b5563; margin-top: 1.5rem; margin-bottom: 1.5rem; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
+        .prose li { margin-bottom: 0.5rem; }
+        .prose-loading { display: flex; justify-content: center; align-items: center; padding: 3rem; background: #f9fafb; border-radius: 1rem; }
+        .prose-error { background: #fee2e2; border-left: 4px solid #dc2626; padding: 1.5rem; border-radius: 0.75rem; color: #991b1b; }
+
+        /* === Ganesh Solutions Global Vars === */
+        :root {
+            --primary-blue: #1a365d;
+            --accent-gold: #d4af37;
+            --dark-navy: #0f1a3c;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+
+        .gs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Registry Explorer Styling - Simple Windows Style */
+        .explorer-node { cursor: pointer; user-select: none; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 13px; }
+        .explorer-node:hover { background-color: #f1f5f9; }
+        .explorer-active { background-color: #0078d7 !important; color: white !important; }
+        .explorer-active i { color: white !important; }
+        .explorer-indent { width: 16px; display: inline-block; position: relative; }
+        
+        /* Tree Lines */
+        .tree-line {
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            border-left: 1px dotted #94a3b8;
+        }
+
+        /* Improved Sidebar Positioning */
+        @media (min-width: 1024px) {
+            #article-explorer {
+                width: 260px;
+                flex-shrink: 0;
+                position: sticky;
+                top: 100px;
+                height: fit-content;
+                max-height: calc(100vh - 140px);
+                display: block !important;
+            }
+            
+            main.gs-container {
+                display: flex !important;
+                gap: 2rem;
+                align-items: flex-start;
+                max-width: 100% !important;
+                padding-left: 40px;
+                padding-right: 40px;
+            }
+
+            @media (min-width: 1536px) {
+                main.gs-container {
+                    max-width: 1300px !important;
+                    margin: 0 auto;
+                    position: relative;
+                }
+                #article-explorer {
+                    position: absolute;
+                    left: -280px;
+                    width: 260px;
+                }
+            }
+        }
+
+        /* Injected Header Styles (From Components.html) */
+        header { background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); color: white; padding: 15px 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
+        .mobile-header { display: none; padding: 15px 0; background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); color: white; align-items: center; justify-content: space-between; width: 100%; position: sticky; top: 0; z-index: 1000; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .logo-image { height: 70px; width: auto; margin-top: 10px; border-radius: 50%; object-fit: cover; }
+        .logo-text-container { display: flex; flex-direction: column; white-space: nowrap; }
+        .logo-text { font-size: 24px; font-weight: 600; color: white; }
+        .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+
+        nav ul { display: flex; list-style: none; align-items: center; }
+        nav ul li { margin-left: 15px; position: relative; }
+        nav ul li a { color: white; text-decoration: none; font-weight: 500; padding: 8px 12px; border-radius: 4px; transition: all 0.3s; display: flex; align-items: center; white-space: nowrap; font-size: 15px; }
+        nav ul li a:hover { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
+        .dropdown-menu { position: absolute; top: 100%; right: 0; background: white; min-width: 220px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 4px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 1000; }
+        nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-menu a { color: var(--text-dark) !important; padding: 12px 20px; display: flex; align-items: center; border-bottom: 1px solid var(--medium-gray); white-space: nowrap; }
+        .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
+
+        /* Google Translate Container styling to match header */
+        #google_translate_element { margin-left: 10px; display: flex; align-items: center; min-width: 140px; }
+        .goog-te-gadget-simple { background-color: rgba(255, 255, 255, 0.15) !important; border: 1px solid var(--accent-gold) !important; padding: 4px 8px !important; border-radius: 6px !important; display: flex !important; align-items: center !important; }
+        .goog-te-gadget-simple a, .goog-te-menu-value span { color: white !important; text-decoration: none !important; font-size: 12px !important; }
+        .goog-logo-link, .goog-te-gadget-icon, .goog-te-banner-frame { display: none !important; }
+        body { top: 0 !important; }
+
+        @media (max-width: 992px) {
+            .mobile-header { display: flex; }
+            nav#mainNav { display: none; position: fixed; top: 70px; left: 0; width: 100%; height: calc(100% - 70px); background: var(--dark-navy); z-index: 2000; padding: 20px; overflow-y: auto; transform: translateX(-100%); transition: transform 0.3s ease; }
+            nav#mainNav.active { display: block; transform: translateX(0); }
+            nav ul { flex-direction: column; align-items: flex-start; margin-top: 20px; width: 100%; }
+            nav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+            .dropdown-menu { position: static; opacity: 1; visibility: visible; transform: none; background: rgba(255, 255, 255, 0.05); width: 100%; display: none; }
+            nav ul li.active .dropdown-menu { display: block; }
+        }
+        
+        .article-card { transition: opacity 0.2s ease, transform 0.2s ease; }
+        .article-card.filtered-out { opacity: 0; transform: scale(0.96); display: none; }
+        #explorer-pane::-webkit-scrollbar { width: 4px; }
+        #explorer-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        #header-placeholder { min-height: 100px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Placeholder for master header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow gs-container py-12 relative">
+        
+        <!-- ARTICLE EXPLORER (SIDEBAR) -->
+        <aside id="article-explorer" class="hidden lg:block">
+            <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col max-h-full">
+                <div class="bg-gray-100 border-b border-gray-200 px-3 py-2 flex items-center justify-between">
+                    <h3 class="text-[11px] font-bold text-gray-600 uppercase tracking-tight flex items-center gap-1.5">
+                        <i class="fas fa-desktop text-gray-500"></i> Explorer
+                    </h3>
+                    <button onclick="resetExplorer()" class="text-[10px] text-blue-600 hover:underline">Reset</button>
+                </div>
+                <div id="explorer-pane" class="p-1 overflow-y-auto bg-white" style="max-height: 60vh;">
+                    <!-- Tree structure injected here -->
+                </div>
+                <div class="bg-gray-50 border-t border-gray-200 px-3 py-1 text-[10px] text-gray-400 font-mono">
+                    C:\Articles\...
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEW (GRID & SEARCH) -->
+        <div class="flex-grow w-full">
+            <!-- Article Grid (Placards) -->
+            <div id="list-view" class="w-full">
+                
+                <!-- SEARCH BAR -->
+                <div class="mb-8 w-full">
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <i class="fas fa-search text-gray-400 group-focus-within:text-brand-500 transition-colors"></i>
+                        </div>
+                        <input type="text" id="articleSearchInput" placeholder="Search articles by title or topic..." 
+                               class="w-full pl-11 pr-12 py-3.5 rounded-xl border border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200 text-gray-800 placeholder-gray-400 font-medium">
+                        <button id="clearSearchBtn" class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors hidden">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                    <div id="searchResultCount" class="text-sm text-gray-500 mt-2 ml-1"></div>
+                </div>
+
+                <!-- Grid Container -->
+                <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- Placards injected here -->
+                </div>
+            </div>
+
+            <!-- Single Article Full View -->
+            <div id="article-view" class="hidden pb-20 w-full">
+                <div class="relative w-full h-[35vh] md:h-[45vh] bg-gray-900 rounded-3xl overflow-hidden mb-8">
+                    <img id="detail-image" src="" alt="Article Cover" class="absolute inset-0 w-full h-full object-cover opacity-60">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 md:p-10">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button onclick="showListView()" class="inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                                <i class="fas fa-arrow-left mr-2"></i> Back to list
+                            </button>
+                            <button id="shareArticleBtn" class="inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                                <i class="fas fa-share-alt mr-2"></i> Share
+                            </button>
+                        </div>
+                        <h1 id="detail-title" class="font-serif text-2xl md:text-4xl font-bold text-white leading-tight mb-4 mt-4"></h1>
+                        <div class="flex items-center text-white/80 text-sm">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span id="detail-date"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-gray-100">
+                    <div id="detail-content" class="prose max-w-none"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Placeholder for master footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const SUPABASE_FUNCTION_URL = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co/functions/v1/articles';
+        
+        const articlesMetadata = [
+            {
+                id: 'art1',
+                title: 'A Comprehensive Guide to the 12-Year House Activation Cycle in Vedic Astrology',
+                topic: 'Astrology',
+                group: 'Bhrigu',
+                subgroup: 'BCP',
+                image: 'https://drive.google.com/thumbnail?id=1hixmZezUCP8z2gIrnMy0ZT36H4Pk3mxn&w=800&sz=w800',
+                excerpt: 'Understanding the temporal activation of bhavas based on Bhrigu principles.',
+                date: 'May 1, 2026'
+            },
+            {
+                id: 'art2',
+                title: 'Designing for the Ambient Web',
+                topic: 'Digital Reliability',
+                group: '',
+                subgroup: '',
+                image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+                excerpt: 'How interfaces are becoming invisible in the age of predictive AI.',
+                date: 'April 28, 2026'
+            },
+            {
+                id: 'art3',
+                title: 'The Hidden Costs of Cloud Storage',
+                topic: 'Digital Reliability',
+                group: '',
+                subgroup: '',
+                image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+                excerpt: 'Analyzing the financial and environmental impact of zettabytes of data.',
+                date: 'April 15, 2026'
+            }
+        ];
+
+        let activeTopicFilter = null;
+        let activeGroupFilter = null;
+        let activeSubgroupFilter = null;
+        let expandedNodes = new Set(['root', 'Astrology', 'Bhrigu']);
+        let currentArticleTitle = '';
+
+        /**
+         * Fetch master components and inject them
+         */
+        async function loadMasterCopy() {
+            try {
+                const response = await fetch('Components.html');
+                if (!response.ok) throw new Error('Components.html not found');
+                
+                const text = await response.text();
+                const parser = new DOMParser();
+                const masterDoc = parser.parseFromString(text, 'text/html');
+
+                // 1. Inject Header
+                const headerContent = masterDoc.getElementById('site-header-source');
+                if (headerContent) {
+                    document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
+                }
+
+                // 2. Inject Footer
+                const footerContent = masterDoc.getElementById('site-footer-source');
+                if (footerContent) {
+                    document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
+                }
+
+                // Initialize events after injection
+                initMenuLogic();
+                // Add Google Translate element after header is loaded
+                initGoogleTranslate();
+
+            } catch (err) {
+                console.error("Fetch Error:", err);
+            }
+        }
+
+        /**
+         * Logic for mobile menu and dropdown toggles
+         */
+        function initMenuLogic() {
+            const mobileBtn = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const dropdowns = document.querySelectorAll('.dropdown-toggle');
+            const logos = document.querySelectorAll('.logo');
+
+            if (mobileBtn && mainNav) {
+                mobileBtn.addEventListener('click', () => {
+                    const isActive = mainNav.classList.toggle('active');
+                    mobileBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = isActive ? 'hidden' : '';
+                });
+            }
+
+            dropdowns.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 992) {
+                        e.preventDefault();
+                        const li = toggle.parentElement;
+                        document.querySelectorAll('nav li').forEach(item => {
+                            if (item !== li) item.classList.remove('active');
+                        });
+                        li.classList.toggle('active');
+                    }
+                });
+            });
+
+            // Re-attach logo reset logic to injected logos
+            logos.forEach(logo => {
+                logo.addEventListener('click', () => {
+                    if (logo.getAttribute('onclick')) return; // Avoid double trigger if it has hardcoded onclick
+                    showListView();
+                });
+            });
+        }
+
+        function initGoogleTranslate() {
+            const translateContainer = document.getElementById('google_translate_element');
+            if (translateContainer && !translateContainer.innerHTML) {
+                // The element is usually provided by the master header. 
+                // We don't need to do anything here if the element is already injected.
+            }
+        }
+
+        function renderExplorer() {
+            const pane = document.getElementById('explorer-pane');
+            if (!pane) return;
+            const topics = ['Astrology', 'Digital Reliability', 'Economic'];
+            let html = `<div class="py-1 px-2 text-gray-500 font-bold flex items-center gap-1.5 border-b border-gray-100 mb-1"><i class="fas fa-folder text-yellow-400"></i> Classification</div>`;
+            topics.forEach(topicName => { html += buildTopicUI(topicName, 0); });
+            pane.innerHTML = html;
+        }
+
+        function buildTopicUI(topicName, depth) {
+            const isExpanded = expandedNodes.has(topicName);
+            const isActive = activeTopicFilter === topicName;
+            let childrenHtml = '';
+            if (isExpanded) {
+                if (topicName === 'Astrology') { childrenHtml = buildGroupUI('Bhrigu', depth + 1); }
+                else {
+                    const arts = articlesMetadata.filter(a => a.topic === topicName && !a.group);
+                    arts.forEach(art => { childrenHtml += buildArticleUI(art, depth + 1); });
+                }
+            }
+            return `<div><div class="explorer-node py-0.5 px-2 flex items-center gap-1 ${isActive ? 'explorer-active' : ''}" onclick="handleNodeClick('${topicName}', 'topic')"><span class="explorer-indent" style="width: ${depth * 14}px"></span><i class="fas ${isExpanded ? 'fa-minus-square' : 'fa-plus-square'} text-[9px] text-gray-400 w-3"></i><i class="fas ${isExpanded ? 'fa-folder-open' : 'fa-folder'} text-yellow-500 text-[13px]"></i><span class="truncate">${topicName}</span></div>${isExpanded ? childrenHtml : ''}</div>`;
+        }
+
+        function buildGroupUI(groupName, depth) {
+            const isExpanded = expandedNodes.has(groupName);
+            const isActive = activeGroupFilter === groupName;
+            let childrenHtml = '';
+            if (isExpanded && groupName === 'Bhrigu') { childrenHtml = buildSubgroupUI('BCP', depth + 1); }
+            return `<div><div class="explorer-node py-0.5 px-2 flex items-center gap-1 ${isActive ? 'explorer-active' : ''}" onclick="handleNodeClick('${groupName}', 'group')"><span class="explorer-indent" style="width: ${depth * 14}px"></span><i class="fas ${isExpanded ? 'fa-minus-square' : 'fa-plus-square'} text-[9px] text-gray-400 w-3"></i><i class="fas ${isExpanded ? 'fa-folder-open' : 'fa-folder'} text-yellow-500 text-[13px]"></i><span class="truncate">${groupName}</span></div>${isExpanded ? childrenHtml : ''}</div>`;
+        }
+
+        function buildSubgroupUI(subgroupName, depth) {
+            const isExpanded = expandedNodes.has(subgroupName);
+            const isActive = activeSubgroupFilter === subgroupName;
+            let childrenHtml = '';
+            if (isExpanded) {
+                const arts = articlesMetadata.filter(a => a.subgroup === subgroupName);
+                arts.forEach(art => { childrenHtml += buildArticleUI(art, depth + 1); });
+            }
+            return `<div><div class="explorer-node py-0.5 px-2 flex items-center gap-1 ${isActive ? 'explorer-active' : ''}" onclick="handleNodeClick('${subgroupName}', 'subgroup')"><span class="explorer-indent" style="width: ${depth * 14}px"></span><i class="fas ${isExpanded ? 'fa-minus-square' : 'fa-plus-square'} text-[9px] text-gray-400 w-3"></i><i class="fas ${isExpanded ? 'fa-folder-open' : 'fa-folder'} text-yellow-500 text-[13px]"></i><span class="truncate">${subgroupName}</span></div>${isExpanded ? childrenHtml : ''}</div>`;
+        }
+
+        function buildArticleUI(art, depth) {
+            return `<div class="explorer-node py-0.5 px-2 flex items-center gap-1 hover:bg-blue-50" onclick="openArticle('${art.id}')"><span class="explorer-indent" style="width: ${depth * 14}px"></span><i class="fas fa-minus invisible text-[9px] w-3"></i><i class="far fa-file-alt text-gray-400 text-[13px]"></i><span class="truncate italic text-[11px] text-gray-600">${art.title}</span></div>`;
+        }
+
+        function handleNodeClick(name, type) {
+            if (expandedNodes.has(name)) expandedNodes.delete(name); else expandedNodes.add(name);
+            if (type === 'topic') { activeTopicFilter = (activeTopicFilter === name) ? null : name; activeGroupFilter = null; activeSubgroupFilter = null; }
+            else if (type === 'group') { activeGroupFilter = (activeGroupFilter === name) ? null : name; activeTopicFilter = null; activeSubgroupFilter = null; }
+            else if (type === 'subgroup') { activeSubgroupFilter = (activeSubgroupFilter === name) ? null : name; activeTopicFilter = null; activeGroupFilter = null; }
+            renderExplorer();
+            filterArticlesByExplorer();
+        }
+
+        function resetExplorer() {
+            activeTopicFilter = null; activeGroupFilter = null; activeSubgroupFilter = null;
+            expandedNodes = new Set(['root', 'Astrology', 'Bhrigu']);
+            document.getElementById('articleSearchInput').value = '';
+            renderExplorer();
+            filterArticlesByExplorer();
+        }
+
+        function filterArticlesByExplorer() {
+            const query = document.getElementById('articleSearchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.article-card');
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                const topic = card.getAttribute('data-topic');
+                const group = card.getAttribute('data-group');
+                const subgroup = card.getAttribute('data-subgroup');
+                let matches = true;
+                if (activeTopicFilter && topic !== activeTopicFilter) matches = false;
+                if (activeGroupFilter && group !== activeGroupFilter) matches = false;
+                if (activeSubgroupFilter && subgroup !== activeSubgroupFilter) matches = false;
+                if (query && !title.includes(query)) matches = false;
+                if (matches) { card.classList.remove('filtered-out'); visibleCount++; } else { card.classList.add('filtered-out'); }
+            });
+            document.getElementById('searchResultCount').textContent = query || activeTopicFilter || activeSubgroupFilter ? `${visibleCount} articles found.` : '';
+        }
+
+        function renderPlacards() {
+            const grid = document.getElementById('article-grid');
+            grid.innerHTML = '';
+            articlesMetadata.forEach((article) => {
+                grid.insertAdjacentHTML('beforeend', `
+                    <div class="article-card group cursor-pointer bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all" 
+                         data-title="${article.title.toLowerCase()}" 
+                         data-topic="${article.topic}"
+                         data-group="${article.group}" 
+                         data-subgroup="${article.subgroup}"
+                         onclick="openArticle('${article.id}')">
+                        <div class="h-44 overflow-hidden">
+                            <img src="${article.image}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+                        </div>
+                        <div class="p-5">
+                            <div class="text-[10px] font-bold text-brand-600 mb-2 uppercase tracking-widest">
+                                ${article.topic} ${article.group ? ' / ' + article.group : ''} ${article.subgroup ? ' / ' + article.subgroup : ''}
+                            </div>
+                            <h2 class="font-serif text-lg font-bold text-gray-900 mb-2 leading-tight">${article.title}</h2>
+                            <p class="text-gray-600 text-xs line-clamp-2">${article.excerpt}</p>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        async function openArticle(id) {
+            const art = articlesMetadata.find(a => a.id === id);
+            if (!art) return;
+            window.location.hash = `article-${id}`;
+            document.getElementById('list-view').classList.add('hidden');
+            document.getElementById('article-view').classList.remove('hidden');
+            document.getElementById('detail-title').textContent = art.title;
+            document.getElementById('detail-image').src = art.image;
+            document.getElementById('detail-date').textContent = art.date;
+            const detailContentDiv = document.getElementById('detail-content');
+            detailContentDiv.innerHTML = `<div class="prose-loading flex flex-col items-center justify-center py-12"><i class="fas fa-spinner fa-spin text-3xl text-brand-500 mb-4"></i><p class="text-gray-500">Retrieving article content...</p></div>`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            currentArticleTitle = art.title;
+            try {
+                const response = await fetch(`${SUPABASE_FUNCTION_URL}?title=${encodeURIComponent(art.title)}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!response.ok) throw new Error('Failed to fetch');
+                const data = await response.json();
+                if (currentArticleTitle === art.title) {
+                    detailContentDiv.innerHTML = data.content || '<div class="prose-error">Article content not found.</div>';
+                }
+            } catch (err) {
+                if (currentArticleTitle === art.title) {
+                    detailContentDiv.innerHTML = '<div class="prose-error">❌ Failed to load article. Please check your connection or try again later.</div>';
+                }
+            }
+        }
+
+        function showListView() {
+            document.getElementById('article-view').classList.add('hidden');
+            document.getElementById('list-view').classList.remove('hidden');
+            currentArticleTitle = '';
+            if (window.location.hash) window.location.hash = '';
+        }
+
+        function loadArticleFromHash() {
+            const hash = window.location.hash.slice(1);
+            if (hash.startsWith('article-')) {
+                const articleId = hash.replace('article-', '');
+                if (articlesMetadata.some(a => a.id === articleId)) { openArticle(articleId); } else { showListView(); }
+            } else if (!document.getElementById('article-view').classList.contains('hidden')) {
+                showListView();
+            }
+        }
+
+        function googleTranslateElementInit() {
+            const allLanguages = "af,am,ar,as,az,be,bg,bn,bs,ca,cs,da,de,el,en,eo,es,et,eu,fa,fi,fr,ga,gd,gl,gu,ha,he,hi,hr,ht,hu,hy,id,ig,is,it,ja,jv,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mk,ml,mn,mr,ms,mt,my,ne,nl,no,ny,or,pa,pl,ps,pt,ro,ru,rw,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tk,tl,tr,tt,ug,uk,ur,uz,vi,wo,xh,yi,yor,zh-CN,zh-TW,zu";
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: allLanguages,
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+                multilanguagePage: true
+            }, 'google_translate_element');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPlacards();
+            renderExplorer();
+            
+            document.getElementById('articleSearchInput').addEventListener('input', () => {
+                const val = document.getElementById('articleSearchInput').value;
+                document.getElementById('clearSearchBtn').classList.toggle('hidden', !val);
+                filterArticlesByExplorer();
+            });
+
+            document.getElementById('clearSearchBtn').addEventListener('click', () => {
+                document.getElementById('articleSearchInput').value = '';
+                document.getElementById('clearSearchBtn').classList.add('hidden');
+                filterArticlesByExplorer();
+            });
+
+            const shareBtn = document.getElementById('shareArticleBtn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(window.location.href).then(() => {
+                        alert('Sharable link copied to clipboard!');
+                    }).catch(() => {
+                        alert('Could not copy link. Please copy the URL manually.');
+                    });
+                });
+            }
+
+            loadArticleFromHash();
+            window.addEventListener('hashchange', loadArticleFromHash);
+            
+            // Trigger master copy fetch
+            loadMasterCopy();
+        });
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
