@@ -199,12 +199,12 @@
 
     <script>
         /**
-         * Dynamically loads components from components.html
+         * Dynamically loads Components from Components.html
          */
         async function loadComponents() {
             try {
-                const response = await fetch('components.html');
-                if (!response.ok) throw new Error('Failed to fetch components.html');
+                const response = await fetch('Components.html');
+                if (!response.ok) throw new Error('Failed to fetch Components.html');
                 
                 const html = await response.text();
                 const parser = new DOMParser();
@@ -226,7 +226,7 @@
                 initNavigation();
 
             } catch (error) {
-                console.error('Error loading master components:', error);
+                console.error('Error loading master Components:', error);
             }
         }
 
