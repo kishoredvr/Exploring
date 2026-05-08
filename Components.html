@@ -7,22 +7,34 @@
     <!-- Mobile Menu Right-Slide Global Fix -->
     <style>
         @media (max-width: 992px) {
-            body {
-                overflow-x: hidden; /* Prevents horizontal scroll bugs when menu is parked on the right */
+            /* Lock the body to prevent horizontal scrolling when menu is off-screen */
+            html, body {
+                overflow-x: hidden !important;
             }
+            
+            /* Master Mobile Menu Override */
             nav#mainNav {
-                display: block !important; 
+                display: block !important; /* Override host's display: none */
                 position: fixed !important;
-                left: auto !important;
-                right: 0 !important;
-                transform: translateX(100%) !important; /* Starts safely off-screen to the right */
-                transition: transform 0.3s ease-in-out, visibility 0s 0.3s !important; 
-                visibility: hidden; /* Hides it visually and makes it unclickable when off-screen */
+                top: 70px !important;
+                width: 100vw !important; /* Exact viewport width */
+                height: calc(100vh - 70px) !important;
+                
+                /* THE FIX: Park it exactly one full screen-width to the right */
+                left: 100vw !important; 
+                right: auto !important;
+                transform: none !important; /* Remove the old transform entirely */
+                
+                /* Smooth slide transition on the 'left' property */
+                transition: left 0.35s ease-in-out, visibility 0s 0.35s !important; 
+                visibility: hidden; /* Prevent accidental clicks when off-screen */
             }
+            
+            /* Active state when menu is opened */
             nav#mainNav.active {
-                transform: translateX(0) !important; /* Slides perfectly into the viewport */
-                transition: transform 0.3s ease-in-out, visibility 0s 0s !important;
-                visibility: visible;
+                left: 0 !important; /* Slide all the way in to fit the screen */
+                visibility: visible !important;
+                transition: left 0.35s ease-in-out, visibility 0s 0s !important;
             }
         }
     </style>
