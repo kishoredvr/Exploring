@@ -4,92 +4,6 @@
 -->
 
 <div id="site-header-source">
-    <!-- Mobile Menu Global Fix: Restoring Left-Slide Navigation -->
-    <style>
-        @media (max-width: 992px) {
-            /* The host page contains styles that force the menu to the right.
-               We use !important and specific property resets to force it back to the left
-               and ensure it is visible when active.
-            */
-            nav#mainNav {
-                display: block !important; 
-                position: fixed !important;
-                top: 70px !important; 
-                left: 0 !important; /* Forces anchor to the left side */
-                right: auto !important; /* Explicitly overrides any 'right: 0' from host pages */
-                width: 100% !important;
-                height: calc(100vh - 70px) !important;
-                background: #0f1a3c !important; 
-                z-index: 9999 !important; 
-                padding: 20px !important;
-                overflow-y: auto !important;
-                box-sizing: border-box !important;
-                
-                /* Start hidden off-screen to the LEFT */
-                transform: translateY(100%) !important; 
-                visibility: hidden; /* Using visibility instead of display:none to allow transitions */
-                transition: transform 0.3s ease-in-out, visibility 0s 0.3s !important;
-            }
-            
-            /* Active state: slide into view from the left to the center */
-            nav#mainNav.active {
-                transform: translateX(0) !important;
-                visibility: visible !important;
-                transition: transform 0.3s ease-in-out, visibility 0s 0s !important;
-            }
-
-            /* Resetting nested list styles for mobile visibility and alignment */
-            nav#mainNav ul {
-                width: 100% !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                padding-top: 20px !important;
-                margin: 0 !important;
-                list-style: none !important;
-            }
-
-            nav#mainNav ul li {
-                width: 100% !important;
-                margin: 0 0 15px 0 !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-                margin-left: 0 !important; /* Override desktop margins */
-            }
-
-            nav#mainNav ul li a {
-                padding: 12px 0 !important;
-                font-size: 18px !important;
-                display: block !important;
-                color: white !important;
-                background: transparent !important;
-                width: 100% !important;
-                text-decoration: none !important;
-            }
-
-            /* Ensure dropdowns inside the mobile menu also look correct */
-            .dropdown-menu {
-                position: static !important;
-                background: rgba(255, 255, 255, 0.05) !important;
-                display: none !important;
-                width: 100% !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                transform: none !important;
-                box-shadow: none !important;
-                margin-top: 5px !important;
-            }
-
-            nav#mainNav ul li.active .dropdown-menu {
-                display: block !important;
-            }
-
-            .dropdown-menu a {
-                padding: 10px 15px !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-            }
-        }
-    </style>
-
     <!-- Dynamic Island (Floating CTA - Positioned Middle Right) -->
     <style>
         .dynamic-island-wrapper {
@@ -197,6 +111,66 @@
             }
         }
     </style>
+
+    <!-- ── Dropdown overflow fix ───────────────────────────────────────────
+         By default every dropdown opens flush with the LEFT edge of its
+         parent <li>.  When that <li> is near the right side of the screen
+         the menu overflows off-canvas.  The JS below measures each dropdown
+         the moment it becomes visible and flips it to right-align when it
+         would otherwise overflow.  The CSS rule is the fallback for the
+         last two nav items so the page looks correct even before JS runs.
+    ──────────────────────────────────────────────────────────────────────-->
+    <style>
+        /* Safety fallback: right-align dropdowns for the last two nav items */
+        nav ul li:nth-last-child(-n+2) .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
+        /* Class toggled by JS when a dropdown would overflow */
+        .dropdown-menu.align-right {
+            left: auto !important;
+            right: 0 !important;
+        }
+    </style>
+
+    <script>
+        (function () {
+            function repositionDropdowns() {
+                document.querySelectorAll('nav ul li').forEach(function (li) {
+                    var menu = li.querySelector('.dropdown-menu');
+                    if (!menu) return;
+
+                    /* Temporarily make it visible (off-screen) to measure it */
+                    var prevVisibility = menu.style.visibility;
+                    var prevDisplay    = menu.style.display;
+                    menu.style.visibility = 'hidden';
+                    menu.style.display    = 'block';
+
+                    var rect      = menu.getBoundingClientRect();
+                    var overflows = rect.right > (window.innerWidth || document.documentElement.clientWidth);
+
+                    /* Restore original state */
+                    menu.style.visibility = prevVisibility;
+                    menu.style.display    = prevDisplay;
+
+                    if (overflows) {
+                        menu.classList.add('align-right');
+                    } else {
+                        menu.classList.remove('align-right');
+                    }
+                });
+            }
+
+            /* Run once on load and again whenever the window is resized */
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', repositionDropdowns);
+            } else {
+                repositionDropdowns();
+            }
+            window.addEventListener('resize', repositionDropdowns);
+        })();
+    </script>
 
     <div class="dynamic-island-wrapper">
         <a href="MessageMe.html" class="dynamic-island">
