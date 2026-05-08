@@ -354,7 +354,24 @@
         
         /* === Responsive === */
         @media (max-width: 992px) {
-            header { display: none; }
+            /*
+             * ROOT CAUSE FIX — do NOT use display:none on <header>.
+             *
+             * display:none removes every descendant from the render tree,
+             * including position:fixed children. nav#mainNav lives inside
+             * <header>, so the menu was never painted on mobile.
+             *
+             * height:0 + overflow:hidden hides the visible logo bar while
+             * keeping <header> in the render tree. position:fixed children
+             * are positioned relative to the viewport so they escape
+             * overflow:hidden and render correctly when .active is toggled.
+             */
+            header {
+                height: 0 !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                overflow: hidden;
+            }
             .mobile-header { display: flex; }
             
             nav#mainNav {
