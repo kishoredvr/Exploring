@@ -8,14 +8,15 @@
     <style>
         @media (max-width: 992px) {
             /* The host page contains styles that force the menu to the right.
-               We use !important and specific property resets to force it back to the left.
+               We use !important and specific property resets to force it back to the left
+               and ensure it is visible when active.
             */
             nav#mainNav {
-                display: block !important; /* Overrides host display: none to allow transition */
+                display: block !important; 
                 position: fixed !important;
                 top: 70px !important; 
-                left: 0 !important; /* Anchors to left */
-                right: auto !important; /* Kills host right: 0 */
+                left: 0 !important; /* Forces anchor to the left side */
+                right: auto !important; /* Explicitly overrides any 'right: 0' from host pages */
                 width: 100% !important;
                 height: calc(100vh - 70px) !important;
                 background: #0f1a3c !important; 
@@ -24,20 +25,20 @@
                 overflow-y: auto !important;
                 box-sizing: border-box !important;
                 
-                /* THE FIX: Start hidden off-screen to the LEFT */
+                /* Start hidden off-screen to the LEFT */
                 transform: translateX(-100%) !important; 
-                visibility: hidden;
+                visibility: hidden; /* Using visibility instead of display:none to allow transitions */
                 transition: transform 0.3s ease-in-out, visibility 0s 0.3s !important;
             }
             
-            /* Active state: slide into view from the left */
+            /* Active state: slide into view from the left to the center */
             nav#mainNav.active {
                 transform: translateX(0) !important;
                 visibility: visible !important;
                 transition: transform 0.3s ease-in-out, visibility 0s 0s !important;
             }
 
-            /* Resetting nested list styles for mobile visibility */
+            /* Resetting nested list styles for mobile visibility and alignment */
             nav#mainNav ul {
                 width: 100% !important;
                 display: flex !important;
@@ -45,12 +46,14 @@
                 align-items: flex-start !important;
                 padding-top: 20px !important;
                 margin: 0 !important;
+                list-style: none !important;
             }
 
             nav#mainNav ul li {
                 width: 100% !important;
                 margin: 0 0 15px 0 !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+                margin-left: 0 !important; /* Override desktop margins */
             }
 
             nav#mainNav ul li a {
@@ -59,6 +62,30 @@
                 display: block !important;
                 color: white !important;
                 background: transparent !important;
+                width: 100% !important;
+                text-decoration: none !important;
+            }
+
+            /* Ensure dropdowns inside the mobile menu also look correct */
+            .dropdown-menu {
+                position: static !important;
+                background: rgba(255, 255, 255, 0.05) !important;
+                display: none !important;
+                width: 100% !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                box-shadow: none !important;
+                margin-top: 5px !important;
+            }
+
+            nav#mainNav ul li.active .dropdown-menu {
+                display: block !important;
+            }
+
+            .dropdown-menu a {
+                padding: 10px 15px !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
             }
         }
     </style>
