@@ -4,37 +4,37 @@
 -->
 
 <div id="site-header-source">
-    <!-- Mobile Menu Right-Slide Global Fix -->
+    <!-- Mobile Menu Left-Slide Restoration -->
     <style>
         @media (max-width: 992px) {
-            /* Lock the body to prevent horizontal scrolling when menu is off-screen */
-            html, body {
-                overflow-x: hidden !important;
-            }
-            
-            /* Master Mobile Menu Override */
+            /* Restored & Improved Left-Slide Menu */
             nav#mainNav {
-                display: block !important; /* Override host's display: none */
+                display: block !important; /* Forced block ensures the slide animation actually plays */
                 position: fixed !important;
                 top: 70px !important;
-                width: 100vw !important; /* Exact viewport width */
+                left: 0 !important; /* Anchored to the Left */
+                right: auto !important;
+                width: 100% !important;
                 height: calc(100vh - 70px) !important;
+                background: #0f1a3c !important; /* Enforces dark navy background */
+                z-index: 2000 !important;
+                padding: 20px !important;
+                overflow-y: auto !important;
+                box-sizing: border-box !important;
                 
-                /* THE FIX: Park it exactly one full screen-width to the right */
-                right: 100vw !important; 
-                left: auto !important;
-                transform: none !important; /* Remove the old transform entirely */
+                /* Parked off-screen to the LEFT */
+                transform: translateX(-100%) !important; 
+                visibility: hidden !important; /* Prevents invisible clicks */
                 
-                /* Smooth slide transition on the 'left' property */
-                transition: left 0.35s ease-in-out, visibility 0s 0.35s !important; 
-                visibility: hidden; /* Prevent accidental clicks when off-screen */
+                /* Smooth slide transition */
+                transition: transform 0.3s ease-in-out, visibility 0s 0.3s !important; 
             }
             
             /* Active state when menu is opened */
             nav#mainNav.active {
-                left: 0 !important; /* Slide all the way in to fit the screen */
+                transform: translateX(0) !important; /* Slides perfectly into view */
                 visibility: visible !important;
-                transition: left 0.35s ease-in-out, visibility 0s 0s !important;
+                transition: transform 0.3s ease-in-out, visibility 0s 0s !important;
             }
         }
     </style>
