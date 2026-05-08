@@ -7,16 +7,22 @@
     <!-- Mobile Menu Right-Slide Global Fix -->
     <style>
         @media (max-width: 992px) {
+            body {
+                overflow-x: hidden; /* Prevents horizontal scroll bugs when menu is parked on the right */
+            }
             nav#mainNav {
-                display: auto !important; 
-                position: auto !important;
-                left: auto !important; /* Starts off-screen precisely on the right edge */
-                right: auto !important;
-                transform: auto !important; /* Overrides any conflicting transforms */
-                transition: left 0.3s ease-in-out !important; /* Animates the left property directly */
+                display: block !important; 
+                position: fixed !important;
+                left: auto !important;
+                right: 0 !important;
+                transform: translateX(100%) !important; /* Starts safely off-screen to the right */
+                transition: transform 0.3s ease-in-out, visibility 0s 0.3s !important; 
+                visibility: hidden; /* Hides it visually and makes it unclickable when off-screen */
             }
             nav#mainNav.active {
-                right: 0 !important; /* Slides perfectly into the viewport */
+                transform: translateX(0) !important; /* Slides perfectly into the viewport */
+                transition: transform 0.3s ease-in-out, visibility 0s 0s !important;
+                visibility: visible;
             }
         }
     </style>
