@@ -7,41 +7,44 @@
     <!-- Mobile Menu Global Fix: Restoring Left-Slide Navigation -->
     <style>
         @media (max-width: 992px) {
-            /* We override the host page's nav styles to ensure 
-               the menu is anchored to the left and slides in correctly.
+            /* The host page contains styles that force the menu to the right.
+               We use !important and specific property resets to force it back to the left.
             */
             nav#mainNav {
-                display: block !important; /* Force block to allow animation */
+                display: block !important; /* Overrides host display: none to allow transition */
                 position: fixed !important;
-                top: 70px !important; /* Adjust if your mobile header height differs */
-                left: -100% !important; /* Starts hidden off-screen to the LEFT */
-                right: auto !important;
+                top: 70px !important; 
+                left: 0 !important; /* Anchors to left */
+                right: auto !important; /* Kills host right: 0 */
                 width: 100% !important;
                 height: calc(100vh - 70px) !important;
-                background: #0f1a3c !important; /* Solid dark background */
-                z-index: 9999 !important; /* Ensure it is above all content */
+                background: #0f1a3c !important; 
+                z-index: 9999 !important; 
                 padding: 20px !important;
                 overflow-y: auto !important;
                 box-sizing: border-box !important;
-                transform: none !important; /* Clean slate for transforms */
+                
+                /* THE FIX: Start hidden off-screen to the LEFT */
+                transform: translateX(-100%) !important; 
                 visibility: hidden;
-                transition: left 0.3s ease-in-out, visibility 0s 0.3s !important;
+                transition: transform 0.3s ease-in-out, visibility 0s 0.3s !important;
             }
             
             /* Active state: slide into view from the left */
             nav#mainNav.active {
-                left: 0 !important;
+                transform: translateX(0) !important;
                 visibility: visible !important;
-                transition: left 0.3s ease-in-out, visibility 0s 0s !important;
+                transition: transform 0.3s ease-in-out, visibility 0s 0s !important;
             }
 
-            /* Ensure the list fills the width for better hit areas on mobile */
+            /* Resetting nested list styles for mobile visibility */
             nav#mainNav ul {
                 width: 100% !important;
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: flex-start !important;
                 padding-top: 20px !important;
+                margin: 0 !important;
             }
 
             nav#mainNav ul li {
@@ -55,6 +58,7 @@
                 font-size: 18px !important;
                 display: block !important;
                 color: white !important;
+                background: transparent !important;
             }
         }
     </style>
