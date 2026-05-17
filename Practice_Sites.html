@@ -34,7 +34,7 @@
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Your existing header placeholder -->
+    <!-- HEADER PLACEHOLDER -->
     <div id="header-placeholder"></div>
 
     <!-- Main Content Area -->
@@ -263,8 +263,42 @@
 
     </main>
 
-    <!-- Your existing footer placeholder -->
+    <!-- FOOTER PLACEHOLDER -->
     <div id="footer-placeholder"></div>
 
+    <!-- SCRIPT TO LOAD HEADER AND FOOTER FROM Components.html -->
+    <script>
+        async function loadMasterCopy() {
+            try {
+                // Ensure the casing here perfectly matches your file name (Components.html vs components.html)
+                const response = await fetch('Components.html');
+                if (!response.ok) throw new Error('Components.html not found');
+
+                const text = await response.text();
+                const parser = new DOMParser();
+                const masterDoc = parser.parseFromString(text, 'text/html');
+
+                // Inject Header
+                const headerContent = masterDoc.getElementById('site-header-source');
+                if (headerContent) {
+                    document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
+                }
+
+                // Inject Footer
+                const footerContent = masterDoc.getElementById('site-footer-source');
+                if (footerContent) {
+                    document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
+                }
+
+            } catch (err) {
+                console.error("Fetch Error:", err);
+            }
+        }
+
+        // Initialize the fetch when the DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMasterCopy();
+        });
+    </script>
 </body>
 </html>
