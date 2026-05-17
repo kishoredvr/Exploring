@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybersecurity Practice Environments</title>
+    <title>Comprehensive Cybersecurity Practice Environments</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -24,7 +24,7 @@
                             100: '#e0f2fe',
                             500: '#0ea5e9',
                             600: '#0284c7',
-                            900: '#0f1a3c', /* Updated to match dark-navy */
+                            900: '#0f1a3c', /* Matched to Ganesh Solutions dark-navy */
                         }
                     }
                 }
@@ -42,11 +42,6 @@
             --medium-gray: #e2e8f0;
             --text-dark: #2d3748;
             --text-light: #718096;
-        }
-
-        /* Container styling for injected components */
-        .container-fluid {
-            width: 100%;
         }
 
         /* --- INJECTED HEADER STYLES --- */
@@ -171,29 +166,30 @@
     <main class="flex-grow container mx-auto px-4 py-12 max-w-5xl w-full">
         
         <!-- Page Title & Intro -->
-        <div class="mb-10 text-center">            
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-brand-900 mb-3 tracking-tight">The Ultimate Legal Hacking Directory</h1>
             <p class="text-lg text-gray-600 font-medium">An Exhaustive Master List of Cybersecurity Practice Environments</p>
         </div>
 
         <!-- Warning Banner -->
-        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-10 rounded-r-lg shadow-sm">
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-10 rounded-r-lg shadow-sm">
             <div class="flex items-start">
                 <div class="flex-shrink-0 mt-0.5">
-                    <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                    <i class="fas fa-info-circle text-blue-500 text-lg"></i>
                 </div>
                 <div class="ml-3">
-                    <h3 class="text-sm font-bold text-red-800">Strict Rules of Engagement</h3>
-                    <p class="text-sm text-red-700 mt-1 leading-relaxed">
-                        Every platform listed here is legally authorized for educational or testing use. However, restrictions vary. Some are live websites meant for web scanners, some require connecting to a closed VPN, and others must be hosted locally. <strong>Always check individual platform scopes before launching aggressive automated tools.</strong>
+                    <h3 class="text-sm font-bold text-blue-800">Virtual Machine Readiness</h3>
+                    <p class="text-sm text-blue-700 mt-1 leading-relaxed">
+                        Many of the targets below (especially in the AD, IoT, and Self-Hosted sections) are explicitly designed to be downloaded and spun up in <strong>VirtualBox, VMware, or Docker</strong>. Always ensure you configure your hypervisor network settings (e.g., Host-Only or Internal Network) to prevent vulnerable targets from being exposed to the open internet.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- 1. General Cyber Ranges -->
+        <!-- 1. OSINT & Social Engineering -->
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-brand-500 pb-2 mb-6 flex items-center gap-3">
-                <i class="fas fa-network-wired text-brand-500"></i> General Cyber Ranges & CTFs
+                <i class="fas fa-search text-brand-500"></i> 1. OSINT & Reconnaissance
             </h2>
             <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200 text-sm">
@@ -206,69 +202,64 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">TryHackMe</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">OSINT Dojo</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://www.osintdojo.com/" target="_blank">osintdojo.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Free, guided challenges ranging from basic image geolocation to tracing corporate infrastructure.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Sofia Santos' Exercises</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://gralhix.com/list-of-osint-exercises/" target="_blank">gralhix.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Massive repository of real-world OSINT challenges designed to train analysts in modern tooling.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">TryHackMe (OSINT Path)</td>
                             <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://tryhackme.com/" target="_blank">tryhackme.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Guided learning paths, bite-sized rooms, and virtual networks. Highly recommended for beginners.</td>
-                        </tr>
-                        <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">Hack The Box (HTB)</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://www.hackthebox.com/" target="_blank">hackthebox.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Live, unguided penetration testing labs, standalone boxes, and Active Directory pro-labs.</td>
-                        </tr>
-                        <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">PicoCTF</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://picoctf.org/" target="_blank">picoctf.org <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Permanent CTF track created by Carnegie Mellon University. Exceptional for foundational concepts.</td>
-                        </tr>
-                        <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">Root-Me</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://www.root-me.org/" target="_blank">root-me.org <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Over 400+ challenges spanning web, network, forensics, automation, and system exploits.</td>
+                            <td class="px-6 py-4 text-gray-600">Dedicated guided rooms for learning Google Dorking, Shodan, and social media scraping.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 2. Live Web App Testing -->
+        <!-- 2. Active Directory -->
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-brand-500 pb-2 mb-6 flex items-center gap-3">
-                <i class="fas fa-globe text-brand-500"></i> Web App & API Security (Live Targets)
+                <i class="fas fa-sitemap text-brand-500"></i> 2. Active Directory & Enterprise Networks
             </h2>
             <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200 text-sm">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">Platform</th>
-                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">URL</th>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">Format</th>
                             <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider">Description</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">PortSwigger Academy</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://portswigger.net/web-security" target="_blank">portswigger.net <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">The definitive web app training resource. Deep interactive labs focusing on server and client-side flaws.</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">GOAD (Game of AD)</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/Orange-Cyberdefense/GOAD" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Fully dockerized, vulnerable AD lab. Perfect for practicing AS-REP Roasting, DCSync, and lateral movement.</td>
                         </tr>
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">Acunetix VulnWeb</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="http://vulnweb.com/" target="_blank">vulnweb.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Includes testphp, testasp, and testaspnet. Built explicitly for testing automated web vulnerability scanners.</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">DetectionLab</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/clong/DetectionLab" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Vagrant/Packer environment that builds an AD network complete with Splunk, Zeek, and Suricata for Purple Teaming.</td>
                         </tr>
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">Google Gruyere</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://google-gruyere.appspot.com/" target="_blank">google-gruyere <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">A sandboxed web testing application mimicking a microblogging tool filled with core flaws.</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">WazeHell's Vuln AD</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/WazeHell/vulnerable-AD" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">A script-based AD setup designed to be deployed on a local Windows Server VM for practicing privilege escalation.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 3. Self-Hosted Web Apps -->
+        <!-- 3. Web App Testing (Self Hosted) -->
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-brand-500 pb-2 mb-6 flex items-center gap-3">
-                <i class="fas fa-server text-brand-500"></i> Web Apps (Self-Hosted/Docker)
+                <i class="fas fa-server text-brand-500"></i> 3. Web Apps & APIs (VM/Docker Targets)
             </h2>
             <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200 text-sm">
@@ -283,12 +274,12 @@
                         <tr class="hover:bg-blue-50 transition-colors">
                             <td class="px-6 py-4 font-semibold text-gray-900">OWASP Juice Shop</td>
                             <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/juice-shop/juice-shop" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Arguably the most robust modern Javascript web target. Contains a massive variety of hidden flags.</td>
+                            <td class="px-6 py-4 text-gray-600">Arguably the most robust modern Javascript web target. Can be run instantly via Docker.</td>
                         </tr>
                         <tr class="hover:bg-blue-50 transition-colors">
                             <td class="px-6 py-4 font-semibold text-gray-900">DVWA</td>
                             <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/digininja/DVWA" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Damn Vulnerable Web Application. Classic PHP/MySQL platform with togglable difficulty levels.</td>
+                            <td class="px-6 py-4 text-gray-600">Damn Vulnerable Web Application. Classic PHP/MySQL platform. Requires LAMP stack on local VM.</td>
                         </tr>
                         <tr class="hover:bg-blue-50 transition-colors">
                             <td class="px-6 py-4 font-semibold text-gray-900">OWASP WebGoat</td>
@@ -300,10 +291,10 @@
             </div>
         </div>
 
-        <!-- 4. Defensive Security -->
+        <!-- 4. Cloud Infrastructure -->
         <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-brand-500 pb-2 mb-6 flex items-center gap-3">
-                <i class="fas fa-shield-alt text-brand-500"></i> Defensive Security & Blue Teaming
+                <i class="fas fa-cloud text-brand-500"></i> 4. Cloud Infrastructure Security
             </h2>
             <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200 text-sm">
@@ -316,19 +307,89 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">CyberDefenders</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://cyberdefenders.org/" target="_blank">cyberdefenders.org <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Blue-team training range. Download PCAP logs, disk images, and memory dumps to triage threats.</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">flAWS & flAWS 2</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="http://flaws.cloud/" target="_blank">flaws.cloud <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Interactive levels teaching common mistakes in AWS, focusing heavily on S3 buckets and IAM privileges.</td>
                         </tr>
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">LetsDefend</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://letsdefend.io/" target="_blank">letsdefend.io <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">A full web-based interactive SOC interface. Triage realistic SIEM alerts and analyze log files.</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">SadCloud</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/nccgroup/sadcloud" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Intentionally provisions insecure AWS infrastructure using Terraform to practice with tools like Prowler.</td>
                         </tr>
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 font-semibold text-gray-900">Blue Team Labs</td>
-                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://blueteamlabs.online/" target="_blank">blueteamlabs.online <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
-                            <td class="px-6 py-4 text-gray-600">Gamified incident response, threat hunting, and forensics scenarios using enterprise toolsets.</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">AzureGoat</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/OWASP/AzureGoat" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Intentionally vulnerable Azure environment designed to practice Azure AD attacks and serverless exploitation.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. IoT & Firmware -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-brand-500 pb-2 mb-6 flex items-center gap-3">
+                <i class="fas fa-microchip text-brand-500"></i> 5. IoT, Hardware & Firmware
+            </h2>
+            <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">Platform</th>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">URL</th>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Damn Vulnerable IoT</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/Vulcainreo/DVIoT" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Framework simulating vulnerable IoT devices to test MQTT protocol attacks and default credential abuse.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">IoTGoat</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/OWASP/IoTGoat" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Vulnerable firmware based on OpenWrt. Download the image and use binwalk/QEMU on your VM to extract and emulate.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">AttifyOS</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://github.com/adi0x90/attifyos" target="_blank">GitHub Repo <i class="fab fa-github ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">A custom OS pre-configured with IoT targets and tools for practicing SDR, UART, and JTAG attacks.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. Web3 & Blockchain -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-brand-500 pb-2 mb-6 flex items-center gap-3">
+                <i class="fab fa-ethereum text-brand-500"></i> 6. Web3, Blockchain & Smart Contracts
+            </h2>
+            <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">Platform</th>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider w-1/4">URL</th>
+                            <th class="px-6 py-4 text-left font-bold text-gray-600 uppercase tracking-wider">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Ethernaut</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://ethernaut.openzeppelin.com/" target="_blank">ethernaut.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">A Web3/Solidity-based wargame covering reentrancy attacks, integer overflows, and smart contract logic flaws.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Damn Vulnerable DeFi</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://www.damnvulnerabledefi.xyz/" target="_blank">damnvulnerabledefi.xyz <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">Specialized lab for learning offensive security of decentralized finance, covering flash loans and price oracle manipulation.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900">Capture the Ether</td>
+                            <td class="px-6 py-4 text-blue-600 hover:text-blue-800 font-medium"><a href="https://capturetheether.com/" target="_blank">capturetheether.com <i class="fas fa-external-link-alt text-[10px] ml-1"></i></a></td>
+                            <td class="px-6 py-4 text-gray-600">A game in which you hack Ethereum smart contracts to learn about their security architecture.</td>
                         </tr>
                     </tbody>
                 </table>
