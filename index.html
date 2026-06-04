@@ -17,23 +17,19 @@
         
         :root {
             --primary-blue: #1a365d;
-            --accent-gold: #ffffff;          /* was #d4af37 (gold) → now white */
+            --accent-gold: #d4af37;
             --dark-navy: #0f1a3c;
-            --light-gray: #fff8e7;           /* was #f5f7fa (white-ish) → saffron-light */
-            --medium-gray: #fde9b0;          /* was #e2e8f0 (light gray) → saffron-mid */
+            --light-gray: #f5f7fa;
+            --medium-gray: #e2e8f0;
             --text-dark: #2d3748;
             --text-light: #718096;
             --vedic-purple: #7c3aed;
             --cyber-teal: #0ea5e9;
             --financial-green: #059669;
-            --saffron: #f59e0b;              /* new: saffron accent */
-            --saffron-light: #fff8e7;        /* new: saffron page bg */
-            --saffron-mid: #fde9b0;          /* new: saffron border/divider */
-            --saffron-deep: #d97706;         /* new: deeper saffron for hover */
         }
         
         body {
-            background-color: var(--saffron-light);
+            background-color: var(--light-gray);
             color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
@@ -119,17 +115,13 @@
             white-space: nowrap;
         }
 
-        /* was: hover → gold text. Now → saffron text */
-        nav ul li a:hover, nav ul li a.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--saffron);
-        }
+        nav ul li a:hover, nav ul li a.active { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
 
         .dropdown-menu {
             position: absolute;
             top: 100%;
-            left: 0;
-            background: var(--saffron-light);   /* was white → saffron-light */
+            left: 0;           /* ← default: open rightward from li's left edge */
+            background: white;
             min-width: 220px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             border-radius: 4px;
@@ -142,6 +134,7 @@
 
         nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
 
+        /* JS adds this class when a dropdown would overflow the right edge */
         .dropdown-menu.flip-left {
             left: auto;
             right: 0;
@@ -152,14 +145,11 @@
             padding: 12px 20px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid var(--saffron-mid);   /* was medium-gray → saffron-mid */
+            border-bottom: 1px solid var(--medium-gray);
             white-space: nowrap;
         }
 
-        .dropdown-menu a:hover {
-            background: var(--saffron-mid);                /* was light-gray → saffron-mid */
-            color: var(--primary-blue) !important;
-        }
+        .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
         .dropdown-menu i { margin-right: 10px; width: 20px; text-align: center; }
 
         .mobile-menu-toggle {
@@ -214,7 +204,7 @@
             height: clamp(110px, 18vw, 200px);
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--saffron);        /* was accent-gold → saffron */
+            border: 4px solid var(--accent-gold);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
@@ -232,21 +222,19 @@
             font-size: clamp(26px, 4.5vw, 42px);
             margin: 10px 0;
             font-weight: 600;
-            color: #F5CF27;
         }
         
-        /* The tagline paragraph now gets explicit color #F5CF27 */
         .hero p {
             font-size: clamp(14px, 2.2vw, 20px);
             margin-bottom: 30px;
-            color: #F5CF27;
+            color: rgba(255, 255, 255, 0.9);
         }
         
         .quote {
             font-style: italic;
             padding: 18px;
-            border-left: 3px solid var(--saffron);
-            background: rgba(245, 158, 11, 0.15);
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
             border-radius: 4px;
             margin: 30px 0;
             font-size: clamp(14px, 1.6vw, 18px);
@@ -264,16 +252,13 @@
             text-align: center;
         }
         
-        /* was: gold bg + dark text → now white bg + dark text */
-        .cta-primary { background: white; color: var(--dark-navy); }
-        .cta-primary:hover { background: var(--saffron-mid); transform: translateY(-3px); }
-
-        /* was: transparent + gold border → now transparent + white border */
-        .cta-secondary { background: transparent; color: white; border: 2px solid white; }
-        .cta-secondary:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-3px); }
+        .cta-primary { background: var(--accent-gold); color: var(--dark-navy); }
+        .cta-primary:hover { background: #e6b325; transform: translateY(-3px); }
+        .cta-secondary { background: transparent; color: white; border: 2px solid var(--accent-gold); }
+        .cta-secondary:hover { background: rgba(212, 175, 55, 0.1); transform: translateY(-3px); }
         
         /* === Services Section === */
-        .services { padding: 40px 0; background: var(--saffron-light); scroll-margin-top: 100px; }
+        .services { padding: 40px 0; background: white; scroll-margin-top: 100px; }
         
         .section-title { text-align: center; margin-bottom: 30px; }
         
@@ -286,7 +271,6 @@
             padding-bottom: 10px;
         }
         
-        /* underline was gold → now saffron */
         .section-title h2::after {
             content: "";
             position: absolute;
@@ -295,7 +279,7 @@
             transform: translateX(-50%);
             width: 80px;
             height: 3px;
-            background: solid var(--saffron);
+            background: var(--accent-gold);
         }
         
         .section-title p { color: var(--text-light); max-width: 700px; margin: 0 auto; }
@@ -303,12 +287,12 @@
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
         
         .service-card {
-            background: var(--saffron-mid);             /* darker than section bg so cards stand out */
+            background: white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid var(--saffron-mid);       /* was medium-gray → saffron-mid */
+            border: 1px solid var(--medium-gray);
             text-align: center;
             padding: 10px;
         }
@@ -336,15 +320,7 @@
         
         .service-features { list-style: none; text-align: left; margin-bottom: 25px; padding: 0 15px; }
         .service-features li { margin-bottom: 10px; padding-left: 25px; position: relative; }
-
-        /* checkmark was gold → now saffron */
-        .service-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--saffron);
-            font-weight: bold;
-        }
+        .service-features li:before { content: "✓"; position: absolute; left: 0; color: var(--accent-gold); font-weight: bold; }
         
         .service-link {
             display: inline-block;
@@ -357,19 +333,16 @@
         }
         .service-link:hover { background: var(--dark-navy); transform: translateY(-2px); }
         
-        /* business-info band: was light-gray → saffron-mid */
-        .business-info { padding: 4px 0; background: var(--saffron-mid); }
+        .business-info { padding: 20px 0; background: var(--light-gray); }
         
         footer { background: var(--dark-navy); color: white; padding: 50px 0 20px; }
         
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px; }
-        /* footer headings were gold → now saffron */
-        .footer-column h3 { font-size: 20px; margin-bottom: 20px; color: var(--saffron); }
+        .footer-column h3 { font-size: 20px; margin-bottom: 20px; color: var(--accent-gold); }
         .footer-column ul { list-style: none; }
         .footer-column ul li { margin-bottom: 10px; }
         .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; word-wrap: break-word; }
-        /* footer link hover was gold → now saffron */
-        .footer-column a:hover { color: var(--saffron); }
+        .footer-column a:hover { color: var(--accent-gold); }
         
         .copyright {
             text-align: center;
@@ -381,6 +354,18 @@
         
         /* === Responsive === */
         @media (max-width: 992px) {
+            /*
+             * ROOT CAUSE FIX — do NOT use display:none on <header>.
+             *
+             * display:none removes every descendant from the render tree,
+             * including position:fixed children. nav#mainNav lives inside
+             * <header>, so the menu was never painted on mobile.
+             *
+             * height:0 + overflow:hidden hides the visible logo bar while
+             * keeping <header> in the render tree. position:fixed children
+             * are positioned relative to the viewport so they escape
+             * overflow:hidden and render correctly when .active is toggled.
+             */
             header {
                 height: 0 !important;
                 min-height: 0 !important;
@@ -421,6 +406,7 @@
                 max-height: 0;
                 overflow: hidden;
                 transition: max-height 0.3s ease;
+                /* Reset any JS-applied flip so mobile menus are always full-width */
                 left: 0 !important;
                 right: auto !important;
             }
@@ -455,9 +441,8 @@
                     </div>
                 </div>
                 <h1>Ganesh Solutions</h1>
-                <!-- The tagline now uses #F5CF27 as required -->
                 <p>Professional Astrology Services with Digital & Economic Research</p>
-                <div class="quote" style="color: #F5CF27;">
+                <div class="quote">
                     "Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant"
                 </div>
             </div>
@@ -542,6 +527,7 @@
                     document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
                 }
 
+                // ── Run menu logic AFTER injection is complete ──
                 initMenuLogic();
 
             } catch (err) {
@@ -554,6 +540,7 @@
             const mainNav   = document.getElementById('mainNav');
             const dropdowns = document.querySelectorAll('.dropdown-toggle');
 
+            // ── Mobile menu open/close ──────────────────────────────────────
             if (mobileBtn && mainNav) {
                 mobileBtn.onclick = function () {
                     const isActive = mainNav.classList.toggle('active');
@@ -564,6 +551,7 @@
                 };
             }
 
+            // ── Mobile: tap to toggle dropdown ─────────────────────────────
             dropdowns.forEach(function (toggle) {
                 toggle.addEventListener('click', function (e) {
                     if (window.innerWidth <= 992) {
@@ -577,6 +565,7 @@
                 });
             });
 
+            // ── Close mobile menu when a plain link is clicked ──────────────
             document.querySelectorAll('nav a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
@@ -587,17 +576,35 @@
                 });
             });
 
+            // ── FIX: Reposition dropdowns that overflow the viewport edge ───
+            //
+            // WHY THIS MUST LIVE HERE:
+            //   Scripts inside Components.html are injected via innerHTML and
+            //   browsers intentionally never execute them (security policy).
+            //   Only JS that is already in the host page can fix this reliably.
+            //
+            // HOW IT WORKS:
+            //   1. Briefly make each dropdown invisible-but-rendered so we can
+            //      measure its actual pixel position.
+            //   2. If its right edge exceeds the viewport width, flip it so its
+            //      RIGHT edge aligns with the li's right edge (extends leftward).
+            //   3. If its left edge is negative, pin its LEFT edge to the li.
+            //   4. Re-run on every window resize.
+            // ────────────────────────────────────────────────────────────────
             function repositionDropdowns() {
+                // Skip on mobile — dropdowns are static there, no overflow risk
                 if (window.innerWidth <= 992) return;
 
                 document.querySelectorAll('nav ul li').forEach(function (li) {
                     var menu = li.querySelector('.dropdown-menu');
                     if (!menu) return;
 
+                    // Reset any previous JS correction
                     menu.classList.remove('flip-left');
                     menu.style.left  = '';
                     menu.style.right = '';
 
+                    // Render invisibly to get real dimensions
                     var prevVis = menu.style.visibility;
                     var prevDis = menu.style.display;
                     menu.style.visibility = 'hidden';
@@ -606,12 +613,15 @@
                     var rect = menu.getBoundingClientRect();
                     var vw   = window.innerWidth || document.documentElement.clientWidth;
 
+                    // Restore original display state
                     menu.style.visibility = prevVis;
                     menu.style.display    = prevDis;
 
                     if (rect.right > vw) {
+                        // Overflows right → flip so right edge aligns with li's right edge
                         menu.classList.add('flip-left');
                     } else if (rect.left < 0) {
+                        // Overflows left → pin left edge to li's left edge
                         menu.style.left  = '0';
                         menu.style.right = 'auto';
                     }
