@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -236,10 +235,11 @@
             color: #F5CF27;
         }
         
+        /* The tagline paragraph now gets explicit color #F5CF27 */
         .hero p {
             font-size: clamp(14px, 2.2vw, 20px);
             margin-bottom: 30px;
-            color: var(--saffron);
+            color: #F5CF27;
         }
         
         .quote {
@@ -251,7 +251,6 @@
             margin: 30px 0;
             font-size: clamp(14px, 1.6vw, 18px);
             text-align: center;
-            /* original color was var(--saffron) → now overridden by inline style */
         }
         
         .cta-button {
@@ -456,8 +455,8 @@
                     </div>
                 </div>
                 <h1>Ganesh Solutions</h1>
-                <p >Professional Astrology Services with Digital & Economic Research</p>
-                <!-- the quote text with inline color #F5CF27 as requested -->
+                <!-- The tagline now uses #F5CF27 as required -->
+                <p>Professional Astrology Services with Digital & Economic Research</p>
                 <div class="quote" style="color: #F5CF27;">
                     "Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant"
                 </div>
@@ -627,4 +626,3 @@
     </script>
 </body>
 </html>
-```
