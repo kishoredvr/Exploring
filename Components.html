@@ -1,310 +1,58 @@
-<!-- 
-  MASTER COPY: This file contains the common parts of your website.
-  Updating this file updates all pages across your entire repository.
--->
-
-<div id="site-header-source">
-    <!-- Dynamic Island (Floating CTA - Positioned Middle Right) -->
-    <style>
-        .dynamic-island-wrapper {
-            position: fixed;
-            top: 70%;
-            left: 20px;
-            transform: translateY(-50%);
-            z-index: 1500;
-            pointer-events: none;
-        }
-        .dynamic-island {
-            pointer-events: auto;
-            /* Blue replaced by Yellow */
-            background: rgba(255, 215, 0, 0.95); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            /* Yellow replaced by Red */
-            border: 2px solid rgba(255, 0, 0, 0.6);
-            padding: 15px 12px;
-            border-radius: 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            /* Text changed to black for visibility on yellow background */
-            color: #000;
-            opacity: 0;
-            animation: island-slide-in 0.8s forwards 1s, island-pulse-blink 2s infinite ease-in-out;
-        }
+<nav id="mainNav">
+    <ul>
+        <li><a href="https://parishodana.xyz">Home</a></li>
         
-        .dynamic-island:hover {
-            /* Blue replaced by Yellow */
-            background: #ffd700;
-            /* Yellow replaced by Red */
-            border-color: #ff0000;
-            transform: scale(1.1);
-            animation-play-state: paused; /* Stop pulsing on hover */
-        }
+        <li>
+            <a href="#" class="dropdown-toggle">Our Channels<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+            <div class="dropdown-menu" style="max-height: 70vh; overflow-y: auto;">
+                
+                <div style="padding: 10px 20px; font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; letter-spacing: 1px; background: #f5f7fa;">AstroTechnics</div>
+                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                <a href="https://www.instagram.com/astrotechnicstelugu" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
 
-        .dynamic-island-icon {
-            width: 30px;
-            height: 100%;
-            /* Red replaced by Blue */
-            background: #0000ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Yellow replaced by Red */
-            color: #ff0000;
-            font-size: 20px;
-        }
+                <div style="padding: 10px 20px; font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; letter-spacing: 1px; background: #f5f7fa; border-top: 1px solid #e2e8f0;">Digital Reliability</div>
+                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
 
-        .dynamic-island-text {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            white-space: nowrap;
-            text-align: center;
-            line-height: 1.3;
-            text-transform: uppercase;
-        }
-
-        /* Slide in from right */
-        @keyframes island-slide-in {
-            from { opacity: 0; transform: translateX(50px) translateY(-50%); }
-            to { opacity: 1; transform: translateX(0) translateY(-50%); }
-        }
-
-        /* Pulsing "Blink" Effect - Updated to RED */
-        @keyframes island-pulse-blink {
-            0%, 100% { 
-                border-color: rgba(255, 0, 0, 0.6); 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
-            50% { 
-                border-color: rgba(255, 0, 0, 1); 
-                box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
-                transform: scale(1.05) translateY(-50%);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .dynamic-island-wrapper {
-                top: auto;
-                bottom: 30px;
-                right: 15px;
-                transform: none;
-            }
-            .dynamic-island {
-                flex-direction: row;
-                padding: 10px 20px;
-                animation: island-up 0.8s forwards 1s, island-pulse-blink-mobile 2s infinite ease-in-out;
-            }
-            @keyframes island-up {
-                to { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes island-pulse-blink-mobile {
-                /* Yellow replaced by Red */
-                0%, 100% { border-color: rgba(255, 0, 0, 0.6); transform: scale(1); }
-                50% { border-color: rgba(255, 0, 0, 1); transform: scale(1.05); }
-            }
-        }
-    </style>
-
-    <!-- ── Dropdown overflow fix ───────────────────────────────────────────
-         By default every dropdown opens flush with the LEFT edge of its
-         parent <li>.  When that <li> is near the right side of the screen
-         the menu overflows off-canvas.  The JS below measures each dropdown
-         the moment it becomes visible and flips it to right-align when it
-         would otherwise overflow.  The CSS rule is the fallback for the
-         last two nav items so the page looks correct even before JS runs.
-    ──────────────────────────────────────────────────────────────────────-->
-    <style>
-        /* Safety fallback: right-align dropdowns for the last two nav items */
-        nav ul li:nth-last-child(-n+2) .dropdown-menu {
-            left: auto;
-            right: 0;
-        }
-
-        /* Class toggled by JS when a dropdown would overflow */
-        .dropdown-menu.align-right {
-            left: auto !important;
-            right: 0 !important;
-        }
-    </style>
-
-    <script>
-        (function () {
-            function repositionDropdowns() {
-                document.querySelectorAll('nav ul li').forEach(function (li) {
-                    var menu = li.querySelector('.dropdown-menu');
-                    if (!menu) return;
-
-                    /* Temporarily make it visible (off-screen) to measure it */
-                    var prevVisibility = menu.style.visibility;
-                    var prevDisplay    = menu.style.display;
-                    menu.style.visibility = 'hidden';
-                    menu.style.display    = 'block';
-
-                    var rect      = menu.getBoundingClientRect();
-                    var overflows = rect.right > (window.innerWidth || document.documentElement.clientWidth);
-
-                    /* Restore original state */
-                    menu.style.visibility = prevVisibility;
-                    menu.style.display    = prevDisplay;
-
-                    if (overflows) {
-                        menu.classList.add('align-right');
-                    } else {
-                        menu.classList.remove('align-right');
-                    }
-                });
-            }
-
-            /* Run once on load and again whenever the window is resized */
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', repositionDropdowns);
-            } else {
-                repositionDropdowns();
-            }
-            window.addEventListener('resize', repositionDropdowns);
-        })();
-    </script>
-
-    <div class="dynamic-island-wrapper">
-        <a href="MessageMe.html" class="dynamic-island">
-            <div class="dynamic-island-icon">
-                <i class="fas fa-calendar-check"></i>
+                <div style="padding: 10px 20px; font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; letter-spacing: 1px; background: #f5f7fa; border-top: 1px solid #e2e8f0;">National Economies</div>
+                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+                <a href="https://www.instagram.com/studyoneconomy" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
             </div>
-            <span class="dynamic-island-text">BOOK<br>CONSULTATION</span>
-        </a>
-    </div>
+        </li>
 
-    <!-- Mobile Header -->
-    <div class="mobile-header container">
-        <div class="logo">
-            <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
-            <div class="logo-text-container">
-                <div class="logo-text">Ganesh Solutions</div>
-                <div class="tagline">Traditional And Technical Solutions</div>
+        <li>
+            <a href="#" class="dropdown-toggle">Products & Services<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+            <div class="dropdown-menu">
+                <a href="#"><i class="fas fa-file-medical" style="color: #0ea5e9;"></i> Medical Billing App</a>
             </div>
-        </div>
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
+        </li>
 
-    <!-- Main Desktop Header -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <img src="https://parishodana.xyz/GS-Logo.jpg" alt="Ganesh Solutions Logo" class="logo-image">
-                    <div class="logo-text-container">
-                        <div class="logo-text">Ganesh Solutions</div>
-                        <div class="tagline">Traditional And Technical Solutions</div>
-                    </div>
-                </div>
-                <nav id="mainNav">
-                    <ul>
-                        <li><a href="https://parishodana.xyz">Home</a></li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">AstroTechnics<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                            <div class="dropdown-menu">
-                                <a href="https://youtube.com/@astrotechnicstelugu?feature=shared" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/astrotechnicstelugu" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/1BnVTb8Nvw/" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">Digital Reliability<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                            <div class="dropdown-menu">
-                                <a href="https://youtube.com/@kishoredvr-k5k?feature=shared" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/digital.reliability.dvrk/" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/1517LvArKRL/?mibextid=qi2Omg" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">National Economies<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                            <div class="dropdown-menu">
-                                <a href="https://www.youtube.com/@NationalEconomies" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-                                <a href="https://www.instagram.com/studyoneconomy" target="_blank"><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</a>
-                                <a href="https://www.facebook.com/share/16KYrHXEJb/" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">Resources<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                            <div class="dropdown-menu">
-                                <a href="https://parishodana.xyz/Articles"><i class="fas fa-newspaper" style="color: #1a365d;"></i> My Articles</a>
-                                <a href="https://github.com/digitalreliability/Sharing" target="_blank"><i class="fab fa-github" style="color: #333;"></i> GitHub</a>
-                                <a href="https://astro.parishodana.xyz/Antharyami-DataBank" target="_blank"><i class="fas fa-database" style="color: #7c3aed;"></i> Astrology Data Bank</a>
-                                <a href="https://astro.parishodana.xyz" target="_blank"><i class="fas fa-calendar-alt" style="color: #d4af37;"></i> Muhurta</a>
-                                <a href="https://astro.parishodana.xyz/SearchVideos" target="_blank"><i class="fas fa-search" style="color: #0ea5e9;"></i> Search Videos</a>
-                                <a href="https://parishodana.xyz/Resources"> More</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">Contact<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
-                            <div class="dropdown-menu" style="width:250px;">
-                                <div style="text-align:center; padding:20px; color:#1a365d;">
-                                    <img src="https://parishodana.xyz/GS-Logo.jpg" style="width:60px; border-radius: 50%; margin: 0 auto;">
-                                    <h2 style="margin:10px 0 5px; font-size: 18px;">Ganesh Solutions</h2>
-                                    <p style="font-size: 13px; margin-bottom: 5px;"><strong>WhatsApp:</strong> +91 8074 192 876</p>
-                                    <p style="font-size: 13px;"><strong>Email:</strong> consult@parishodana.xyz</p>
-                                    <a href="https://parishodana.xyz/GaneshSolutions.vcf" download style="margin-top:15px; padding:10px 20px; background:#d4af37; color:#0f1a3c; text-decoration:none; border-radius:5px; display:inline-block; font-size: 14px; font-weight: bold;">Save Contact</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
+        <li>
+            <a href="#" class="dropdown-toggle">Resources<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+            <div class="dropdown-menu">
+                <a href="https://parishodana.xyz/Articles"><i class="fas fa-newspaper" style="color: #1a365d;"></i> My Articles</a>
+                <a href="https://github.com/digitalreliability/Sharing" target="_blank"><i class="fab fa-github" style="color: #333;"></i> GitHub</a>
+                <a href="https://astro.parishodana.xyz/Antharyami-DataBank" target="_blank"><i class="fas fa-database" style="color: #7c3aed;"></i> Astrology Data Bank</a>
+                <a href="https://astro.parishodana.xyz" target="_blank"><i class="fas fa-calendar-alt" style="color: #d4af37;"></i> Muhurta</a>
+                <a href="https://astro.parishodana.xyz/SearchVideos" target="_blank"><i class="fas fa-search" style="color: #0ea5e9;"></i> Search Videos</a>
+                <a href="https://parishodana.xyz/Resources"> More</a>
             </div>
-        </div>
-    </header>
-</div>
+        </li>
 
-<div id="site-footer-source">
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="#">Astrology Consultations</a></li>
-                        <li><a href="#">Digital Reliability</a></li>
-                        <li><a href="#">App Development</a></li>
-                        <li><a href="#">Economic Research</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="https://kishoredvr.github.io/Antharyami-DataBank/">Astrology Data Bank</a></li>
-                        <li><a href="https://github.com/digitalreliability/Sharing">GitHub Repository</a></li>
-                        <li><a href="https://parishodana.xyz/Articles">Research Articles</a></li>
-                        <li><a href="https://parishodana.xyz/Resources">Resources</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Connect</h3>
-                    <ul>
-                        <li><a href="#">YouTube Channels</a></li>
-                        <li><a href="#">Social Media</a></li>
-                        <li><a href="#">E-Newsletter</a></li>
-                        <li><a href="MessageMe.html">Contact Form</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>About</h3>
-                    <ul>
-                        <li><a href="https://parishodana.xyz/AboutMe">Our Story & Philosophy</a></li>
-                        <li><a href="https://parishodana.xyz/Terms">Privacy Policy</a></li>
-                    </ul>
+        <li>
+            <a href="#" class="dropdown-toggle">Contact<i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i></a>
+            <div class="dropdown-menu" style="width:250px;">
+                <div style="text-align:center; padding:20px; color:#1a365d;">
+                    <img src="https://parishodana.xyz/GS-Logo.jpg" style="width:60px; border-radius: 50%; margin: 0 auto;" alt="Logo">
+                    <h2 style="margin:10px 0 5px; font-size: 18px;">Ganesh Solutions</h2>
+                    <p style="font-size: 13px; margin-bottom: 5px;"><strong>WhatsApp:</strong> +91 8074 192 876</p>
+                    <p style="font-size: 13px;"><strong>Email:</strong> consult@parishodana.xyz</p>
+                    <a href="https://parishodana.xyz/GaneshSolutions.vcf" download style="margin-top:15px; padding:10px 20px; background:#d4af37; color:#0f1a3c; text-decoration:none; border-radius:5px; display:inline-block; font-size: 14px; font-weight: bold;">Save Contact</a>
                 </div>
             </div>
-            <div class="copyright">
-                <p>Ganesh Solutions. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-</div>
+        </li>
+    </ul>
+</nav>
