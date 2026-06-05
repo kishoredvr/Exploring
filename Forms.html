@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gov Form Print Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- FontAwesome for Components.html Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SheetJS for Client-Side Excel Parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    
+    <!-- Google AdSense Script (Replace client ID with your actual AdSense publisher ID) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <style>
+        /* Custom scrollbar for better UI */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-slate-800 flex flex-col">
+
+    <!-- Dynamic Header Placeholder -->
+    <div id="site-header"></div>
+
+    <!-- Main Content Wrapper (Flex-grow ensures footer stays at bottom) -->
+    <div class="flex-grow">
+        <!-- Top AdSense Banner (Leaderboard) -->
+        <div class="max-w-7xl mx-auto px-4 py-4 mt-4 flex justify-center">
+            <div class="w-full max-w-4xl bg-slate-200 border border-slate-300 border-dashed rounded flex items-center justify-center h-[90px] text-slate-500 text-sm overflow-hidden relative group">
+                <span class="absolute text-slate-400 z-0">Advertisement</span>
+                <!-- AdSense Code -->
+                <ins class="adsbygoogle z-10"
+                     style="display:inline-block;width:728px;height:90px"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <!-- Main Application Container -->
+        <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Sidebar: Selection & Sticky Ad -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- Form Selection Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="folder-open" class="w-5 h-5 text-blue-600"></i> Select Application
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <select id="sheetName" class="w-full px-3 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50 text-slate-700 text-sm outline-none font-medium transition-colors">
+                            <option value="" disabled selected>-- Choose a Form --</option>
+                            <option value="Aadhaar Form 1">Aadhaar Form 1</option>
+                            <option value="PAN Form 93">PAN Form 93</option>
+                            <option value="Voter Form 6">Voter Form 6</option>
+                            <option value="EPF Composite">EPF Claim Form</option>
+                            <option value="SSC CGL">SSC CGL Exam Form</option>
+                            <!-- Add remaining options corresponding to your Excel file -->
+                        </select>
+
+                        <button onclick="loadFormSchema()" id="btnLoad" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md">
+                            <span id="loadText">Load Form Fields</span>
+                            <div id="loadSpinner" class="loader hidden !border-t-white"></div>
+                        </button>
+                        
+                        <p class="text-xs text-slate-500 text-center flex items-center justify-center gap-1 mt-2">
+                            <i data-lucide="zap" class="w-3 h-3 text-yellow-500 fill-yellow-500"></i> 
+                            Processed locally & securely in browser
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sticky Side Ad Banner -->
+                <div class="sticky top-24 bg-slate-200 border border-slate-300 border-dashed rounded-xl flex items-center justify-center min-h-[300px] text-slate-500 text-sm overflow-hidden relative group shadow-inner">
+                     <span class="absolute text-slate-400 z-0">Advertisement</span>
+                     <ins class="adsbygoogle z-10"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+
+            <!-- Main Content: Dynamic Form & Photo Upload -->
+            <div class="lg:col-span-8">
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-200 min-h-[600px] relative">
+                    
+                    <!-- Initial Empty State -->
+                    <div id="emptyState" class="h-full flex flex-col items-center justify-center text-slate-400 py-32">
+                        <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="file-signature" class="w-10 h-10 text-blue-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-700 mb-2">Ready to Print</h3>
+                        <p class="text-sm text-center max-w-xs leading-relaxed">Select a form from the sidebar. Your typed data will be injected into a perfectly formatted, print-ready Excel document.</p>
+                    </div>
+
+                    <!-- Active Form Container (Hidden initially) -->
+                    <div id="formContainer" class="hidden flex flex-col h-full">
+                        
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 pb-4 border-b border-slate-100 gap-4">
+                            <div>
+                                <h2 id="activeFormTitle" class="text-2xl font-bold text-slate-800">Form Title</h2>
+                                <p class="text-sm text-slate-500 mt-1">Fill in the details below exactly as you want them printed.</p>
+                            </div>
+                            <button onclick="clearFormInputs()" class="text-sm text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i> Clear Data
+                            </button>
+                        </div>
+
+                        <!-- Photo Upload Section -->
+                        <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 flex items-center sm:items-start flex-col sm:flex-row gap-5 hover:border-blue-300 transition-colors">
+                            <div class="w-28 h-36 bg-white border-2 border-dashed border-blue-300 rounded-lg flex flex-col items-center justify-center overflow-hidden shrink-0 relative group cursor-pointer hover:bg-blue-50">
+                                <img id="photoPreview" class="hidden absolute inset-0 w-full h-full object-cover z-10" />
+                                <i data-lucide="camera" class="w-8 h-8 text-blue-400 mb-2 z-0 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-[11px] text-blue-500 font-semibold uppercase tracking-wider z-0">Affix Photo</span>
+                                <input type="file" id="photoInput" accept="image/jpeg, image/png" onchange="handlePhotoUpload(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" title="Click to upload passport photo">
+                            </div>
+                            <div class="flex-1 pt-1 text-center sm:text-left">
+                                <h4 class="font-bold text-slate-800 text-base">Passport Size Photograph</h4>
+                                <p class="text-sm text-slate-500 mt-1 leading-relaxed">If the official form requires a photo, upload it here. It will be digitally attached to your document.</p>
+                                <div class="mt-3 flex gap-2 justify-center sm:justify-start">
+                                    <span class="px-2 py-1 bg-slate-200 text-slate-600 rounded text-xs font-medium">Max: 500 KB</span>
+                                    <span class="px-2 py-1 bg-slate-200 text-slate-600 rounded text-xs font-medium">JPG / PNG</span>
+                                </div>
+                                <p id="photoError" class="text-sm text-red-600 font-medium mt-3 hidden bg-red-50 py-2 px-3 rounded-md border border-red-100"></p>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Inputs injected here via JS -->
+                        <div id="dynamicInputs" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 mb-8">
+                            <!-- Inputs go here -->
+                        </div>
+
+                        <!-- Spacer to push the action section to the bottom if form is short -->
+                        <div class="flex-grow"></div>
+
+                        <!-- Strategic Pre-Submit AdSense Banner -->
+                        <div class="w-full bg-slate-100 border-t border-b border-slate-200 py-3 mb-6 mt-4 flex justify-center relative overflow-hidden text-slate-400 text-xs">
+                            <span class="absolute top-1 left-2">Advertisement</span>
+                            <!-- AdSense Code -->
+                            <ins class="adsbygoogle"
+                                 style="display:inline-block;width:100%;height:90px"
+                                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                                 data-ad-slot="XXXXXXXXXX"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-2 border-t border-slate-100">
+                            <button onclick="generateAndDownload()" id="btnDownload" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 shadow-md transition-all hover:shadow-lg transform hover:-translate-y-0.5 text-lg">
+                                <i data-lucide="printer" class="w-6 h-6"></i>
+                                <span id="downloadText">Generate & Download Form</span>
+                                <div id="downloadSpinner" class="loader hidden !border-t-white w-6 h-6"></div>
+                            </button>
+                            <p class="text-center text-xs text-slate-400 mt-3 flex justify-center items-center gap-1">
+                                <i data-lucide="shield-check" class="w-3 h-3 text-green-500"></i> Data is processed completely locally in your browser for privacy.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom AdSense Banner -->
+        <div class="max-w-7xl mx-auto px-4 py-8 flex justify-center">
+            <div class="w-full max-w-4xl bg-slate-200 border border-slate-300 border-dashed rounded flex items-center justify-center h-[90px] text-slate-500 text-sm overflow-hidden relative">
+                <span class="absolute text-slate-400 z-0">Advertisement</span>
+                 <ins class="adsbygoogle z-10"
+                     style="display:inline-block;width:728px;height:90px"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Footer Placeholder -->
+    <div id="site-footer"></div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // ==========================================
+        // DYNAMIC COMPONENT LOADER (Header/Footer)
+        // ==========================================
+        async function loadExternalComponents() {
+            try {
+                const response = await fetch('Components.html');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const htmlText = await response.text();
+                
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                const headerSource = doc.querySelector('#site-header-source');
+                if (headerSource) {
+                    const headerContainer = document.getElementById('site-header');
+                    headerContainer.innerHTML = headerSource.innerHTML;
+                    
+                    const scripts = headerContainer.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+
+                const footerSource = doc.querySelector('#site-footer-source');
+                if (footerSource) {
+                    document.getElementById('site-footer').innerHTML = footerSource.innerHTML;
+                }
+            } catch (error) {
+                console.error('Failed to load header/footer components:', error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadExternalComponents);
+
+
+        // ==========================================
+        // CLIENT-SIDE EXCEL CONFIGURATION (GITHUB HOSTING)
+        // ==========================================
+        const CONFIG = {
+            // Replace this with the path to your Excel file hosted on GitHub Pages. 
+            // If it's in the same folder as this HTML file, just use the filename.
+            EXCEL_FILE_URL: "Indian_Gov_Forms_Complete_29.xlsx" 
+        };
+        // ==========================================
+
+        let base64Photo = null;
+        let cachedExcelBuffer = null; // Store fetched file in browser memory to avoid re-downloading
+
+        // --- Core Helper Functions ---
+        
+        function createCleanId(label) {
+            return label
+                .replace(/^[\d\.\s]+/, '') // Remove leading numbers
+                .replace(/[^a-zA-Z0-9]/g, '_') // Replace special chars with underscores
+                .replace(/_+/g, '_') // Collapse multiple underscores
+                .toLowerCase()
+                .replace(/^_|_$/g, ''); // Trim underscores from ends
+        }
+
+        async function getExcelWorkbook() {
+            if (!cachedExcelBuffer) {
+                console.log("Fetching Excel template from:", CONFIG.EXCEL_FILE_URL);
+                const res = await fetch(CONFIG.EXCEL_FILE_URL);
+                if (!res.ok) throw new Error("Could not load the Excel template file. Check the EXCEL_FILE_URL path.");
+                const arrayBuffer = await res.arrayBuffer();
+                cachedExcelBuffer = new Uint8Array(arrayBuffer);
+            }
+            // Parse the buffer using SheetJS
+            return XLSX.read(cachedExcelBuffer, { type: "array" });
+        }
+
+
+        // --- UI Logic ---
+
+        async function loadFormSchema() {
+            const sheetName = document.getElementById('sheetName').value;
+
+            if (!sheetName) {
+                alert("Please select an application form from the dropdown first.");
+                return;
+            }
+
+            setLoading('btnLoad', 'loadText', 'loadSpinner', true, "Loading Template...");
+
+            try {
+                // Read locally in browser instead of calling Supabase
+                const workbook = await getExcelWorkbook();
+                const sheet = workbook.Sheets[sheetName];
+
+                if (!sheet) throw new Error(`Sheet "${sheetName}" not found in the document.`);
+
+                const range = XLSX.utils.decode_range(sheet["!ref"] || "A1:A1");
+                const schema = [];
+                const seenIds = new Set();
+
+                // Scan cells for fillable lines (regex matching)
+                for (let R = range.s.r; R <= range.e.r; ++R) {
+                    for (let C = range.s.c; C <= range.e.c; ++C) {
+                        const cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })];
+                        if (cell?.v && typeof cell.v === "string") {
+                            const matches = cell.v.match(/([^:\n]+):\s*_{3,}/g);
+                            if (matches) {
+                                matches.forEach(match => {
+                                    const label = match.split(":")[0].trim();
+                                    const fieldId = createCleanId(label);
+                                    
+                                    if (!seenIds.has(fieldId)) {
+                                        seenIds.add(fieldId);
+                                        schema.push({ fieldId, label });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                renderDynamicForm(sheetName, schema);
+
+            } catch (error) {
+                console.error(error);
+                alert("Error loading form: " + error.message);
+            } finally {
+                setLoading('btnLoad', 'loadText', 'loadSpinner', false, "Load Form Fields");
+            }
+        }
+
+        function renderDynamicForm(sheetName, schema) {
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('formContainer').classList.remove('hidden');
+            document.getElementById('activeFormTitle').innerText = sheetName;
+            
+            const container = document.getElementById('dynamicInputs');
+            container.innerHTML = ''; 
+
+            if(schema.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-md">
+                        <div class="flex">
+                            <div class="flex-shrink-0"><i data-lucide="alert-circle" class="h-5 w-5 text-orange-400"></i></div>
+                            <div class="ml-3"><p class="text-sm text-orange-700 font-medium">No fillable fields detected in this form.</p>
+                            <p class="text-xs text-orange-600 mt-1">Make sure the Excel template contains blank lines using underscores (e.g., "Full Name: _______").</p></div>
+                        </div>
+                    </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            schema.forEach(field => {
+                const wrapper = document.createElement('div');
+                wrapper.className = "flex flex-col group";
+                
+                if (field.label.toLowerCase().includes('address') || field.label.toLowerCase().includes('declaration') || field.label.toLowerCase().includes('details')) {
+                    wrapper.className = "flex flex-col col-span-1 sm:col-span-2 group";
+                }
+
+                wrapper.innerHTML = `
+                    <label for="${field.fieldId}" class="text-sm font-semibold text-slate-700 mb-1.5 ml-1 transition-colors group-focus-within:text-blue-600">${field.label}</label>
+                    <input type="text" id="${field.fieldId}" name="${field.fieldId}" placeholder="Enter ${field.label.replace(/^[\d\.\s]+/, '')}" class="dynamic-input px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm outline-none transition-all shadow-sm hover:border-slate-400" autocomplete="off">
+                `;
+                container.appendChild(wrapper);
+            });
+        }
+
+        async function generateAndDownload() {
+            const sheetName = document.getElementById('sheetName').value;
+            if (!sheetName) return;
+
+            // Gather User Data
+            const userData = {};
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                if (input.value.trim() !== "") {
+                    userData[input.id] = input.value.trim();
+                }
+            });
+
+            setLoading('btnDownload', 'downloadText', 'downloadSpinner', true, "Injecting Data & Generating File...");
+
+            try {
+                // 1. Get Workbook and specific sheet
+                const workbook = await getExcelWorkbook();
+                const activeSheet = workbook.Sheets[sheetName];
+                const range = XLSX.utils.decode_range(activeSheet["!ref"] || "A1:A1");
+
+                // 2. Inject Data into cells locally
+                for (let R = range.s.r; R <= range.e.r; ++R) {
+                    for (let C = range.s.c; C <= range.e.c; ++C) {
+                        const cell = activeSheet[XLSX.utils.encode_cell({ c: C, r: R })];
+                        if (cell?.v && typeof cell.v === "string") {
+                            let updatedText = cell.v;
+                            
+                            for (const [fieldId, value] of Object.entries(userData)) {
+                                if (!value) continue;
+                                const fillablePatterns = updatedText.match(/([^:\n]+):\s*_{3,}/g) || [];
+                                
+                                for (const pattern of fillablePatterns) {
+                                    const label = pattern.split(":")[0].trim();
+                                    if (createCleanId(label) === fieldId) {
+                                        // Replace underscores securely
+                                        const escapeRegex = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                        const replacementRegex = new RegExp(`(${escapeRegex(label)}:\\s*)_{3,}`);
+                                        updatedText = updatedText.replace(replacementRegex, `$1 ${value} `);
+                                    }
+                                }
+                            }
+                            cell.v = updatedText;
+                        }
+                    }
+                }
+
+                // 3. Remove all other sheets to keep file clean
+                workbook.SheetNames = [sheetName];
+                for (const name in workbook.Sheets) {
+                    if (name !== sheetName) delete workbook.Sheets[name];
+                }
+
+                // 4. Trigger download using SheetJS built-in function
+                XLSX.writeFile(workbook, `Ready_To_Print_${sheetName.replace(/\s+/g, '_')}.xlsx`);
+
+                // Note regarding photos: Pure client-side JS without a paid license 
+                // does not easily inject Base64 images directly into cell layers in XLSX format.
+                // The photo is validated in the UI, but will need to be physically pasted by the user 
+                // after printing, or you can instruct them via UI.
+                if(base64Photo) {
+                    alert("Form generated! Note: Please physically affix the uploaded passport photo to the printed document, or insert it manually in Excel before printing.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Generation failed: " + error.message);
+            } finally {
+                setLoading('btnDownload', 'downloadText', 'downloadSpinner', false, "Generate & Download Form");
+            }
+        }
+
+        // --- Utility Functions ---
+
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            const errorEl = document.getElementById('photoError');
+            const previewEl = document.getElementById('photoPreview');
+            
+            errorEl.classList.add('hidden');
+            errorEl.innerText = "";
+            base64Photo = null;
+            previewEl.classList.add('hidden');
+            previewEl.src = "";
+
+            if (!file) return;
+
+            if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+                errorEl.innerText = "Invalid format. Please upload JPG or PNG.";
+                errorEl.classList.remove('hidden');
+                event.target.value = ''; 
+                return;
+            }
+
+            if (file.size > 500 * 1024) {
+                errorEl.innerText = `File too large (${(file.size/1024).toFixed(0)} KB). Maximum allowed is 500 KB.`;
+                errorEl.classList.remove('hidden');
+                event.target.value = ''; 
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                base64Photo = e.target.result; 
+                previewEl.src = base64Photo;
+                previewEl.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearFormInputs() {
+            if(confirm('Are you sure you want to clear all the data you just typed?')) {
+                document.querySelectorAll('.dynamic-input').forEach(input => input.value = '');
+                
+                document.getElementById('photoInput').value = '';
+                document.getElementById('photoPreview').classList.add('hidden');
+                document.getElementById('photoPreview').src = '';
+                base64Photo = null;
+            }
+        }
+
+        function setLoading(btnId, textId, spinnerId, isLoading, text) {
+            const btn = document.getElementById(btnId);
+            const textEl = document.getElementById(textId);
+            const spinner = document.getElementById(spinnerId);
+
+            if (isLoading) {
+                btn.disabled = true;
+                btn.classList.add('opacity-80', 'cursor-not-allowed', 'pointer-events-none');
+                textEl.innerText = text;
+                spinner.classList.remove('hidden');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed', 'pointer-events-none');
+                textEl.innerText = text;
+                spinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
