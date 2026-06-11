@@ -582,7 +582,130 @@
         </div>
         <div class="shop-layout">
             <div class="products-col">
-                <div class="products-grid" id="productsGrid"></div>
+                
+                <!-- Explicit HTML Products Container -->
+                <div class="products-grid" id="productsGrid">
+                    
+                    <!-- PRODUCT 1 -->
+                    <!-- Add `data-title`, `data-price`, `data-icon` and `data-live` here so the JS knows what to add to cart -->
+                    <div class="product-card" id="card-astro-research" data-title="Astrology Research" data-price="0" data-icon="fa-pills" data-live="true">
+                        <!-- Banner Area (Clickable for cart) -->
+                        <div class="card-banner" onclick="toggleSelect('astro-research')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-astro-research">
+                            <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-pills"></i></div>
+                            <div class="card-banner-text">
+                                <p class="card-category">For Professionals · For Research <span class="card-badge inline-badge">Live</span></p>
+                                <h3 class="card-title">Astrology Research</h3>
+                            </div>
+                            <div class="explicit-checkbox" id="checkbox-astro-research"><i class="fas fa-check"></i></div>
+                        </div>
+                        
+                        <!-- Carousel Content -->
+                        <div class="product-carousel" id="carousel-astro-research">
+                            <div class="carousel-container">
+                                <div class="carousel-slides" id="slides-astro-research">
+                                    <div class="carousel-slide"><img src="https://picsum.photos/id/20/800/500" alt="Screenshot 1"></div>
+                                    <div class="carousel-slide"><img src="https://picsum.photos/id/24/800/500" alt="Screenshot 2"></div>
+                                    <div class="carousel-slide"><img src="https://picsum.photos/id/29/800/500" alt="Screenshot 3"></div>
+                                    <div class="carousel-slide"><img src="https://picsum.photos/id/34/800/500" alt="Screenshot 4"></div>
+                                    <div class="carousel-slide"><img src="https://picsum.photos/id/39/800/500" alt="Screenshot 5"></div>
+                                </div>
+                                <button class="carousel-btn carousel-prev" onclick="slidePrev('astro-research')" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+                                <button class="carousel-btn carousel-next" onclick="slideNext('astro-research')" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <!-- Ensure the number of dot elements matches the carousel-slides count above -->
+                            <div class="carousel-dots" id="dots-astro-research">
+                                <div class="dot active" onclick="goToSlide('astro-research', 0)"></div>
+                                <div class="dot" onclick="goToSlide('astro-research', 1)"></div>
+                                <div class="dot" onclick="goToSlide('astro-research', 2)"></div>
+                                <div class="dot" onclick="goToSlide('astro-research', 3)"></div>
+                                <div class="dot" onclick="goToSlide('astro-research', 4)"></div>
+                            </div>
+                        </div>
+
+                        <!-- Card Info -->
+                        <div class="card-body">
+                            <div class="short-desc"><i class="fas fa-check-circle" style="color:var(--accent-gold);margin-right:5px;"></i>Bhrigu Chara Paddathi Analysis · Match Making · Analyse library info</div>
+                            <div class="card-price">
+                                <span class="price-amount">₹0</span><span class="price-label">/ year · per license</span>
+                            </div>
+                        </div>
+
+                        <!-- Status Bar (Clickable for cart) -->
+                        <div class="card-status-bar" id="statusbar-astro-research" onclick="toggleSelect('astro-research')" style="cursor:pointer;" role="presentation">
+                            <i class="fas fa-circle" id="statusicon-astro-research" style="color:var(--medium-gray); font-size: 10px;"></i>
+                            <span id="statustext-astro-research">Click card to select</span>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCT 2 -->
+                    <div class="product-card" id="card-gst-suite" data-title="GST Accounting Suite" data-price="0" data-icon="fa-file-invoice-dollar" data-live="false">
+                        <div class="card-banner">
+                            <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-file-invoice-dollar"></i></div>
+                            <div class="card-banner-text">
+                                <p class="card-category">Finance · Accounting <span class="card-badge inline-badge soon">Coming Soon</span></p>
+                                <h3 class="card-title">GST Accounting Suite</h3>
+                            </div>
+                        </div>
+                        <div class="product-carousel" id="carousel-gst-suite">
+                            <div class="carousel-container">
+                                <div class="carousel-slides">
+                                    <div class="carousel-slide">
+                                        <div class="carousel-placeholder">
+                                            <i class="fas fa-chart-line"></i>
+                                            <span>Preview coming soon</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="short-desc">Automated GST filing, ledger management & TDS tracking.</div>
+                            <div class="card-price">
+                                <span class="price-amount" style="color:var(--text-light);">TBA</span>
+                            </div>
+                        </div>
+                        <div class="card-status-bar disabled">
+                            <i class="fas fa-clock" style="color:var(--text-light);"></i>
+                            <span>Not yet available</span>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCT 3 -->
+                    <div class="product-card" id="card-pos-store" data-title="General Store POS" data-price="0" data-icon="fa-store" data-live="false">
+                        <div class="card-banner">
+                            <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-store"></i></div>
+                            <div class="card-banner-text">
+                                <p class="card-category">Retail · POS <span class="card-badge inline-badge soon">Coming Soon</span></p>
+                                <h3 class="card-title">General Store POS</h3>
+                            </div>
+                        </div>
+                        <div class="product-carousel" id="carousel-pos-store">
+                            <div class="carousel-container">
+                                <div class="carousel-slides">
+                                    <div class="carousel-slide">
+                                        <div class="carousel-placeholder">
+                                            <i class="fas fa-barcode"></i>
+                                            <span>Demo images on launch</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="short-desc">Barcode billing, multi-store sync, UPI/cash split.</div>
+                            <div class="card-price">
+                                <span class="price-amount" style="color:var(--text-light);">TBA</span>
+                            </div>
+                        </div>
+                        <div class="card-status-bar disabled">
+                            <i class="fas fa-clock" style="color:var(--text-light);"></i>
+                            <span>Not yet available</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- End of Products HTML -->
+
             </div>
 
             <!-- CART SIDEBAR -->
@@ -750,51 +873,6 @@
         }
     }
 
-    // ==========================================
-    // PRODUCT DATA
-    // ==========================================
-    const productsData = [
-        {
-            id: 'astro-research',
-            isLive: true,
-            category: 'For Professionals · For Research',
-            title: 'Astrology Research',
-            icon: 'fa-pills',
-            price: 0,
-            priceLabel: '/ year · per license',
-            features: ['Bhrigu Chara Paddathi Analysis', 'Match Making', 'Analyse library info'],
-            images: [
-                "https://picsum.photos/id/20/800/500",
-                "https://picsum.photos/id/24/800/500",
-                "https://picsum.photos/id/29/800/500",
-                "https://picsum.photos/id/34/800/500",
-                "https://picsum.photos/id/39/800/500"
-            ]
-        },
-        {
-            id: 'gst-suite',
-            isLive: false,
-            category: 'Finance · Accounting',
-            title: 'GST Accounting Suite',
-            icon: 'fa-file-invoice-dollar',
-            price: null,
-            placeholderIcon: 'fa-chart-line',
-            placeholderText: 'Preview coming soon',
-            shortDesc: 'Automated GST filing, ledger management & TDS tracking.'
-        },
-        {
-            id: 'pos-store',
-            isLive: false,
-            category: 'Retail · POS',
-            title: 'General Store POS',
-            icon: 'fa-store',
-            price: null,
-            placeholderIcon: 'fa-barcode',
-            placeholderText: 'Demo images on launch',
-            shortDesc: 'Barcode billing, multi-store sync, UPI/cash split.'
-        }
-    ];
-
     let slideIndex = {};
     let slideCount = {};
     let cardObserver;
@@ -825,167 +903,49 @@
         });
     }
 
-    // ── RENDER ALL PRODUCT CARDS ──
-    function renderProducts() {
-        const grid = document.getElementById('productsGrid');
-        grid.innerHTML = '';
-
-        productsData.forEach(prod => {
-            const isLive    = prod.isLive;
-            const badgeHTML = `<span class="card-badge inline-badge ${isLive ? '' : 'soon'}">${isLive ? 'Live' : 'Coming Soon'}</span>`;
-            const priceText = isLive ? `₹${prod.price}` : 'TBA';
-            const priceLabelHTML = isLive ? `<span class="price-label">${prod.priceLabel}</span>` : '';
-            const priceStyle = isLive ? '' : ' style="color:var(--text-light);"';
-
-            // Short description / feature line
-            let shortDescHTML = isLive && prod.features
-                ? `<i class="fas fa-check-circle" style="color:var(--accent-gold);margin-right:5px;"></i>` + prod.features.join(' · ')
-                : (prod.shortDesc || '');
-
-            // Carousel or placeholder
-            let carouselHTML = '';
-            if (isLive) {
-                carouselHTML = `
-                    <div class="carousel-container">
-                        <div class="carousel-slides" id="slides-${prod.id}"></div>
-                        <button class="carousel-btn carousel-prev" onclick="slidePrev('${prod.id}')" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
-                        <button class="carousel-btn carousel-next" onclick="slideNext('${prod.id}')" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <div class="carousel-dots" id="dots-${prod.id}"></div>`;
-            } else {
-                carouselHTML = `
-                    <div class="carousel-container">
-                        <div class="carousel-slides">
-                            <div class="carousel-slide">
-                                <div class="carousel-placeholder">
-                                    <i class="fas ${prod.placeholderIcon}"></i>
-                                    <span>${prod.placeholderText}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-            }
-
-            // Static product icon container
-            let iconHTML = `
-                <div class="card-icon-btn" aria-hidden="true">
-                    <i class="fas ${prod.icon}"></i>
-                </div>`;
-
-            // Conditionals for live vs coming soon
-            let checkboxHTML = '';
-            let bannerClick = '';
-            let statusBarHTML = '';
-
-            if (isLive) {
-                checkboxHTML = `
-                    <div class="explicit-checkbox" id="checkbox-${prod.id}">
-                        <i class="fas fa-check"></i>
-                    </div>`;
-                
-                bannerClick = `onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-${prod.id}"`;
-                
-                statusBarHTML = `
-                    <div class="card-status-bar" id="statusbar-${prod.id}" onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="presentation">
-                        <i class="fas fa-circle" id="statusicon-${prod.id}" style="color:var(--medium-gray); font-size: 10px;"></i>
-                        <span id="statustext-${prod.id}">Click card to select</span>
-                    </div>`;
-            } else {
-                statusBarHTML = `
-                    <div class="card-status-bar disabled">
-                        <i class="fas fa-clock" style="color:var(--text-light);"></i>
-                        <span>Not yet available</span>
-                    </div>`;
-            }
-
-            // Inject card DOM
-            grid.insertAdjacentHTML('beforeend', `
-                <div class="product-card" id="card-${prod.id}">
-                    <div class="card-banner" ${bannerClick}>
-                        ${iconHTML}
-                        <div class="card-banner-text">
-                            <p class="card-category">
-                                ${prod.category}
-                                ${badgeHTML}
-                            </p>
-                            <h3 class="card-title">${prod.title}</h3>
-                        </div>
-                        ${checkboxHTML}
-                    </div>
-                    <div class="product-carousel" id="carousel-${prod.id}">
-                        ${carouselHTML}
-                    </div>
-                    <div class="card-body">
-                        <div class="short-desc">${shortDescHTML}</div>
-                        <div class="card-price">
-                            <span class="price-amount"${priceStyle}>${priceText}</span>
-                            ${priceLabelHTML}
-                        </div>
-                    </div>
-                    ${statusBarHTML}
-                </div>`);
-
-            if (isLive && prod.images) {
-                slideIndex[prod.id] = 0;
-                buildCarousel(prod.id, prod.images);
-            }
-        });
-
-        // Re-initialize intersection observer for new DOM elements
-        initIntersectionObserver();
-    }
-
     // ── CAROUSEL LOGIC ──
-    function buildCarousel(productId, imagesArray) {
-        const slidesContainer = document.getElementById(`slides-${productId}`);
-        const dotsContainer   = document.getElementById(`dots-${productId}`);
-        if (!slidesContainer) return;
-        slidesContainer.innerHTML = '';
-        if (dotsContainer) dotsContainer.innerHTML = '';
-        if (!imagesArray || imagesArray.length === 0) {
-            slidesContainer.innerHTML = '<div class="carousel-slide"><div class="carousel-placeholder"><i class="fas fa-image"></i><span>Screenshots coming soon</span></div></div>';
-            slideCount[productId] = 1;
-            return;
-        }
-        slideCount[productId] = imagesArray.length;
-        imagesArray.forEach((src, idx) => {
-            const slide = document.createElement('div');
-            slide.className = 'carousel-slide';
-            const img = document.createElement('img');
-            img.src = src; img.alt = `Screenshot ${idx + 1}`;
-            slide.appendChild(img);
-            slidesContainer.appendChild(slide);
-            if (dotsContainer) {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                dot.setAttribute('data-index', idx);
-                dot.addEventListener('click', () => goToSlide(productId, idx));
-                dotsContainer.appendChild(dot);
+    function initCarousels() {
+        const carouselContainers = document.querySelectorAll('.carousel-slides');
+        carouselContainers.forEach(container => {
+            const idParts = container.id.split('slides-');
+            if (idParts.length < 2) return;
+            const id = idParts[1];
+            
+            const slides = container.querySelectorAll('.carousel-slide');
+            if(slides.length > 0) {
+                slideIndex[id] = 0;
+                slideCount[id] = slides.length;
+                // Initialize transforms and dots
+                updateSlideTransform(id);
+                updateDots(id, 0);
             }
         });
-        updateDots(productId, 0);
-        updateSlideTransform(productId);
     }
+
     function updateSlideTransform(productId) {
         const container = document.getElementById(`slides-${productId}`);
         if (!container) return;
         container.style.transform = `translateX(-${(slideIndex[productId] || 0) * 100}%)`;
     }
+    
     function updateDots(productId, activeIdx) {
         const dotsContainer = document.getElementById(`dots-${productId}`);
         if (!dotsContainer) return;
         Array.from(dotsContainer.children).forEach((dot, i) => dot.classList.toggle('active', i === activeIdx));
     }
+    
     function slideNext(productId) {
         const max = slideCount[productId] || 1;
         const n = (slideIndex[productId] + 1) % max;
         slideIndex[productId] = n; updateSlideTransform(productId); updateDots(productId, n);
     }
+    
     function slidePrev(productId) {
         const max = slideCount[productId] || 1;
         const n = (slideIndex[productId] - 1 + max) % max;
         slideIndex[productId] = n; updateSlideTransform(productId); updateDots(productId, n);
     }
+    
     function goToSlide(productId, idx) {
         slideIndex[productId] = idx; updateSlideTransform(productId); updateDots(productId, idx);
     }
@@ -994,10 +954,18 @@
     var cart = {};
 
     function toggleSelect(id) {
-        const product = productsData.find(p => p.id === id);
-        if (!product || !product.isLive) return;
+        const card = document.getElementById('card-' + id);
+        if (!card) return;
+        
+        // Only allow selecting live products
+        const isLive = card.getAttribute('data-live') === 'true';
+        if (!isLive) return;
 
-        const card       = document.getElementById('card-' + id);
+        // Retrieve properties via custom data attributes inside the HTML element
+        const title = card.getAttribute('data-title') || 'Product';
+        const price = parseFloat(card.getAttribute('data-price')) || 0;
+        const icon  = card.getAttribute('data-icon') || 'fa-box';
+
         const banner     = document.getElementById('banner-' + id);
         const statusText = document.getElementById('statustext-' + id);
         const statusIcon = document.getElementById('statusicon-' + id);
@@ -1015,7 +983,7 @@
             }
         } else {
             // Select logic
-            cart[id] = { name: product.title, price: product.price, icon: product.icon };
+            cart[id] = { name: title, price: price, icon: icon };
             card.classList.add('selected');
             if (banner) banner.setAttribute('aria-checked', 'true');
             if (statusText) statusText.textContent = 'Added to cart';
@@ -1233,7 +1201,8 @@
     // ── INIT ──
     window.onload = function () {
         loadMasterCopy(); // Fetches header and footer from Components.html, then calls initMenuLogic()
-        renderProducts();
+        initIntersectionObserver();
+        initCarousels();
     };
 
     // Expose globals used inline
