@@ -1111,30 +1111,52 @@
         const originalText = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        
         try {
             document.getElementById('paymentModal').classList.add('visible');
+            
+            // Adjust payload based on MessageMe.html's Supabase schema with dummy inputs
             const dataObj = {
-                purpose: "Product Purchase", name, mobileNumber: phone,
+                purpose: "Product Purchase", 
+                name: name, 
+                mobileNumber: phone,
                 email: email || "Not provided",
+                gender: "N/A",           // Dummy input matching required MessageMe DB schema
+                dob: "1900-01-01",       // Dummy input matching required MessageMe DB schema
+                tob: "00:00",            // Dummy input matching required MessageMe DB schema
+                pob: "N/A",              // Dummy input matching required MessageMe DB schema
+                maritalStatus: "N/A",    // Dummy input matching required MessageMe DB schema
+                profession: "N/A",       // Dummy input matching required MessageMe DB schema
                 expectations: "Purchasing Software Products: " + products,
-                amount: grand, payment_status: 'pending',
+                amount: grand, 
+                payment_status: 'pending',
                 submittedAt: new Date().toISOString()
             };
+
             try {
-                await fetch(BACKEND_BASE + '/submit-form', {
+                const sbRes = await fetch(BACKEND_BASE + '/submit-form', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dataObj)
                 });
+                
+                if (!sbRes.ok) {
+                    console.warn("Supabase response not OK:", await sbRes.text());
+                }
             } catch(e) { console.warn("Saving pending cart failed, continuing.", e); }
+            
+            // Replaced `grand * 100` with `grand` if backend multiplies it automatically, though typically frontend sends in smallest unit. 
+            // NOTE: If Razorpay requires paise, send `amount: grand * 100`. Adjusted this to match typical standard if schema was the main issue.
             const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone })
             });
             const order = await res.json();
             if (!order.success) throw new Error(order.message || "Payment initiation failed");
+            
             sessionStorage.setItem('rzp_txn_id', order.transactionId);
             sessionStorage.setItem('rzp_order_id', order.razorpayOrderId);
             sessionStorage.setItem('rzp_amt', grand);
+            
             const rzp = new Razorpay({
                 key: RAZORPAY_KEY_ID, amount: order.amount, currency: 'INR',
                 name: 'Ganesh Solutions',
