@@ -973,85 +973,8 @@
         </div>
         <div class="shop-layout">
             <div class="products-col">
-                <div class="products-grid" id="productsGrid">
-                    <!-- LIVE PRODUCT: Medicines Billing App with carousel slider -->
-                    <div class="product-card" id="card-medibill">
-                        <div class="card-banner">
-                            <div class="card-icon"><i class="fas fa-pills"></i></div>
-                            <div class="card-banner-text">
-                                <p class="card-category">For Professionals · For Research</p>
-                                <h3 class="card-title">Astrology Research</h3>
-                            </div>
-                            <span class="card-badge">Live</span>
-                        </div>
-                        <div class="product-carousel" id="carousel-medibill">
-                            <div class="carousel-container">
-                                <div class="carousel-slides" id="slides-medibill" style="transform: translateX(0%);"><div class="carousel-slide"><img src="./ProductsAndServices_files/20-800x500.jpg" alt="Screenshot 1"></div><div class="carousel-slide"><img src="./ProductsAndServices_files/24-800x500.jpg" alt="Screenshot 2"></div><div class="carousel-slide"><img src="./ProductsAndServices_files/29-800x500.jpg" alt="Screenshot 3"></div><div class="carousel-slide"><img src="./ProductsAndServices_files/34-800x500.jpg" alt="Screenshot 4"></div><div class="carousel-slide"><img src="./ProductsAndServices_files/39-800x500.jpg" alt="Screenshot 5"></div></div>
-                                <button class="carousel-btn carousel-prev" onclick="slidePrev('medibill')"><i class="fas fa-chevron-left"></i></button>
-                                <button class="carousel-btn carousel-next" onclick="slideNext('medibill')"><i class="fas fa-chevron-right"></i></button>
-                            </div>
-                            <div class="carousel-dots" id="dots-medibill"><div class="dot active" data-index="0"></div><div class="dot" data-index="1"></div><div class="dot" data-index="2"></div><div class="dot" data-index="3"></div><div class="dot" data-index="4"></div></div>
-                        </div>
-                        <div class="card-body">
-                            <div class="short-desc">
-                                <i class="fas fa-check-circle" style="color:var(--accent-gold); margin-right:5px;"></i> 
-                                Bhrigu Chara Paddathi Analysis · Match Making · Anlayse library info
-                            </div>
-                            <div class="card-price">
-                                <span class="price-amount">₹0</span>
-                                <span class="price-label">/ year · per license</span>
-                            </div>
-                        </div>
-                        <div class="card-select-row" onclick="toggleSelect('medibill','Medicines Billing App',0,'fa-pills')">
-                            <div class="custom-checkbox" id="chk-medibill"><i class="fas fa-check"></i></div>
-                            <span class="checkbox-label">Select this product</span>
-                        </div>
-                    </div>
-
-                    <!-- COMING SOON 1 -->
-                    <div class="product-card coming-soon">
-                        <div class="card-banner">
-                            <div class="card-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                            <div class="card-banner-text">
-                                <p class="card-category">Finance · Accounting</p>
-                                <h3 class="card-title">GST Accounting Suite</h3>
-                            </div>
-                            <span class="card-badge soon">Coming Soon</span>
-                        </div>
-                        <div class="product-carousel">
-                            <div class="carousel-container">
-                                <div class="carousel-slides"><div class="carousel-slide"><div class="carousel-placeholder"><i class="fas fa-chart-line"></i><span>Preview coming soon</span></div></div></div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="short-desc">Automated GST filing, ledger management &amp; TDS tracking.</div>
-                            <div class="card-price"><span class="price-amount" style="color:var(--text-light);">TBA</span></div>
-                        </div>
-                        <div class="card-select-row"><div class="custom-checkbox"><i class="fas fa-check"></i></div><span class="checkbox-label">Not yet available</span></div>
-                    </div>
-
-                    <!-- COMING SOON 2 -->
-                    <div class="product-card coming-soon">
-                        <div class="card-banner">
-                            <div class="card-icon"><i class="fas fa-store"></i></div>
-                            <div class="card-banner-text">
-                                <p class="card-category">Retail · POS</p>
-                                <h3 class="card-title">General Store POS</h3>
-                            </div>
-                            <span class="card-badge soon">Coming Soon</span>
-                        </div>
-                        <div class="product-carousel">
-                            <div class="carousel-container">
-                                <div class="carousel-slides"><div class="carousel-slide"><div class="carousel-placeholder"><i class="fas fa-barcode"></i><span>Demo images on launch</span></div></div></div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="short-desc">Barcode billing, multi-store sync, UPI/cash split.</div>
-                            <div class="card-price"><span class="price-amount" style="color:var(--text-light);">TBA</span></div>
-                        </div>
-                        <div class="card-select-row"><div class="custom-checkbox"><i class="fas fa-check"></i></div><span class="checkbox-label">Not yet available</span></div>
-                    </div>
-                </div>
+                <!-- Products will be generated dynamically by JavaScript -->
+                <div class="products-grid" id="productsGrid"></div>
             </div>
 
             <!-- CART SIDEBAR -->
@@ -1212,18 +1135,149 @@
     const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
     const RAZORPAY_KEY_ID = 'rzp_live_SG5xWhtRJUaBRL';
 
-    // product image carousel data
-    const productImages = {
-        medibill: [
-            "https://picsum.photos/id/20/800/500",
-            "https://picsum.photos/id/24/800/500",
-            "https://picsum.photos/id/29/800/500",
-            "https://picsum.photos/id/34/800/500",
-            "https://picsum.photos/id/39/800/500"
-        ]
-    };
-    let slideIndex = { medibill: 0 };
-    let slideCount = { medibill: 0 };
+    // ==========================================
+    // DYNAMIC PRODUCT DATA CONFIGURATION
+    // Add or remove products easily from here
+    // ==========================================
+    const productsData = [
+        {
+            id: 'astro-research',
+            isLive: true,
+            category: 'For Professionals · For Research',
+            title: 'Astrology Research',
+            icon: 'fa-pills',
+            price: 0,
+            priceLabel: '/ year · per license',
+            features: ['Bhrigu Chara Paddathi Analysis', 'Match Making', 'Analyse library info'],
+            images: [
+                "https://picsum.photos/id/20/800/500",
+                "https://picsum.photos/id/24/800/500",
+                "https://picsum.photos/id/29/800/500",
+                "https://picsum.photos/id/34/800/500",
+                "https://picsum.photos/id/39/800/500"
+            ]
+        },
+        {
+            id: 'gst-suite',
+            isLive: false,
+            category: 'Finance · Accounting',
+            title: 'GST Accounting Suite',
+            icon: 'fa-file-invoice-dollar',
+            price: null,
+            placeholderIcon: 'fa-chart-line',
+            placeholderText: 'Preview coming soon',
+            shortDesc: 'Automated GST filing, ledger management & TDS tracking.'
+        },
+        {
+            id: 'pos-store',
+            isLive: false,
+            category: 'Retail · POS',
+            title: 'General Store POS',
+            icon: 'fa-store',
+            price: null,
+            placeholderIcon: 'fa-barcode',
+            placeholderText: 'Demo images on launch',
+            shortDesc: 'Barcode billing, multi-store sync, UPI/cash split.'
+        }
+    ];
+
+    let slideIndex = {};
+    let slideCount = {};
+
+    // ── DYNAMICALLY RENDER PRODUCTS ──
+    function renderProducts() {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = ''; // Clear existing hardcoded/old HTML
+
+        productsData.forEach(prod => {
+            const isLive = prod.isLive;
+            const badgeClass = isLive ? '' : 'soon';
+            const badgeText = isLive ? 'Live' : 'Coming Soon';
+            const priceText = isLive ? `₹${prod.price}` : 'TBA';
+            const priceLabelHTML = isLive ? `<span class="price-label">${prod.priceLabel}</span>` : '';
+            const priceColorClass = isLive ? 'price-amount' : 'price-amount" style="color:var(--text-light);';
+
+            let shortDescHTML = '';
+            if (isLive && prod.features) {
+                shortDescHTML = `<i class="fas fa-check-circle" style="color:var(--accent-gold); margin-right:5px;"></i> ` + prod.features.join(' · ');
+            } else {
+                shortDescHTML = prod.shortDesc || '';
+            }
+
+            let carouselHTML = '';
+            if (isLive) {
+                carouselHTML = `
+                    <div class="carousel-container">
+                        <div class="carousel-slides" id="slides-${prod.id}"></div>
+                        <button class="carousel-btn carousel-prev" onclick="slidePrev('${prod.id}')"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-btn carousel-next" onclick="slideNext('${prod.id}')"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="carousel-dots" id="dots-${prod.id}"></div>
+                `;
+            } else {
+                 carouselHTML = `
+                    <div class="carousel-container">
+                        <div class="carousel-slides">
+                            <div class="carousel-slide">
+                                <div class="carousel-placeholder"><i class="fas ${prod.placeholderIcon}"></i><span>${prod.placeholderText}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                 `;
+            }
+
+            let selectRowHTML = '';
+            if (isLive) {
+                selectRowHTML = `
+                    <div class="card-select-row" onclick="toggleSelect('${prod.id}')">
+                        <div class="custom-checkbox" id="chk-${prod.id}"><i class="fas fa-check"></i></div>
+                        <span class="checkbox-label">Select this product</span>
+                    </div>
+                `;
+            } else {
+                selectRowHTML = `
+                    <div class="card-select-row" style="cursor: not-allowed; opacity: 0.7;">
+                        <div class="custom-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checkbox-label">Not yet available</span>
+                    </div>
+                `;
+            }
+
+            const cardHTML = `
+                <div class="product-card ${isLive ? '' : 'coming-soon'}" id="card-${prod.id}">
+                    <div class="card-banner">
+                        <div class="card-icon"><i class="fas ${prod.icon}"></i></div>
+                        <div class="card-banner-text">
+                            <p class="card-category">${prod.category}</p>
+                            <h3 class="card-title">${prod.title}</h3>
+                        </div>
+                        <span class="card-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <div class="product-carousel" id="carousel-${prod.id}">
+                        ${carouselHTML}
+                    </div>
+                    <div class="card-body">
+                        <div class="short-desc">
+                            ${shortDescHTML}
+                        </div>
+                        <div class="card-price">
+                            <span class="${priceColorClass}">${priceText}</span>
+                            ${priceLabelHTML}
+                        </div>
+                    </div>
+                    ${selectRowHTML}
+                </div>
+            `;
+            
+            grid.insertAdjacentHTML('beforeend', cardHTML);
+
+            // Initialize carousel if live
+            if (isLive && prod.images) {
+                slideIndex[prod.id] = 0;
+                buildCarousel(prod.id, prod.images);
+            }
+        });
+    }
     
     function buildCarousel(productId, imagesArray) {
         const slidesContainer = document.getElementById(`slides-${productId}`);
@@ -1280,10 +1334,21 @@
     
     // cart logic
     var cart = {};
-    function toggleSelect(id, name, price, icon) {
+
+    // Updated toggleSelect: Now reads from productsData
+    function toggleSelect(id) {
+        const product = productsData.find(p => p.id === id);
+        if (!product || !product.isLive) return; // Ignore if not found or coming soon
+
         let card = document.getElementById('card-' + id);
-        if (cart[id]) { delete cart[id]; card.classList.remove('selected'); } 
-        else { cart[id] = { name, price, icon }; card.classList.add('selected'); }
+        if (cart[id]) { 
+            delete cart[id]; 
+            card.classList.remove('selected'); 
+        } else { 
+            // Automatically grab the right title, price, and icon from your config
+            cart[id] = { name: product.title, price: product.price, icon: product.icon }; 
+            card.classList.add('selected'); 
+        }
         renderCart();
     }
     function removeFromCart(id) { delete cart[id]; let card = document.getElementById('card-'+id); if(card) card.classList.remove('selected'); renderCart(); }
@@ -1625,7 +1690,7 @@
 
         // Initialize carousel elements & dropdown menu controls
         initMenuLogic();
-        buildCarousel('medibill', productImages.medibill);
+        renderProducts(); // <-- DYNAMICALLY INJECT PRODUCTS HERE
     }
 
     // ── INITIALIZATION ──
