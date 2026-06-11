@@ -423,6 +423,15 @@
         .secure-note { padding: 0 18px 14px; font-size: 11px; color: var(--text-light); display: none; gap: 6px; }
         .secure-note.visible { display: flex; }
 
+        /* Loader */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-blue);
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+
         /* ── CUSTOM APPS SECTION ── */
         .custom-section { padding: 55px 0 60px; background: white; }
         .custom-intro {
@@ -583,127 +592,12 @@
         <div class="shop-layout">
             <div class="products-col">
                 
-                <!-- Explicit HTML Products Container -->
+                <!-- Dynamic Products Container -->
                 <div class="products-grid" id="productsGrid">
-                    
-                    <!-- PRODUCT 1 -->
-                    <div class="product-card" id="card-astro-research" data-live="true">
-                        <!-- Banner Area (Clickable for cart) -->
-                        <div class="card-banner" onclick="toggleSelect('astro-research')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-astro-research">
-                            <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-pills"></i></div>
-                            <div class="card-banner-text">
-                                <p class="card-category">For Professionals · For Research <span class="card-badge inline-badge">Live</span></p>
-                                <h3 class="card-title">Astrology Research</h3>
-                            </div>
-                            <div class="explicit-checkbox" id="checkbox-astro-research"><i class="fas fa-check"></i></div>
-                        </div>
-                        
-                        <!-- Carousel Content -->
-                        <div class="product-carousel" id="carousel-astro-research">
-                            <div class="carousel-container">
-                                <div class="carousel-slides" id="slides-astro-research">
-                                    <div class="carousel-slide"><img src="https://picsum.photos/id/20/800/500" alt="Screenshot 1"></div>
-                                    <div class="carousel-slide"><img src="https://picsum.photos/id/24/800/500" alt="Screenshot 2"></div>
-                                    <div class="carousel-slide"><img src="https://picsum.photos/id/29/800/500" alt="Screenshot 3"></div>
-                                    <div class="carousel-slide"><img src="https://picsum.photos/id/34/800/500" alt="Screenshot 4"></div>
-                                    <div class="carousel-slide"><img src="https://picsum.photos/id/39/800/500" alt="Screenshot 5"></div>
-                                </div>
-                                <button class="carousel-btn carousel-prev" onclick="slidePrev('astro-research')" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
-                                <button class="carousel-btn carousel-next" onclick="slideNext('astro-research')" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
-                            </div>
-                            <!-- Ensure the number of dot elements matches the carousel-slides count above -->
-                            <div class="carousel-dots" id="dots-astro-research">
-                                <div class="dot active" onclick="goToSlide('astro-research', 0)"></div>
-                                <div class="dot" onclick="goToSlide('astro-research', 1)"></div>
-                                <div class="dot" onclick="goToSlide('astro-research', 2)"></div>
-                                <div class="dot" onclick="goToSlide('astro-research', 3)"></div>
-                                <div class="dot" onclick="goToSlide('astro-research', 4)"></div>
-                            </div>
-                        </div>
-
-                        <!-- Card Info -->
-                        <div class="card-body">
-                            <div class="short-desc"><i class="fas fa-check-circle" style="color:var(--accent-gold);margin-right:5px;"></i>Bhrigu Chara Paddathi Analysis · Match Making · Analyse library info</div>
-                            <div class="card-price">
-                                <span class="price-amount">₹10</span><span class="price-label">/ year · per license</span>
-                            </div>
-                        </div>
-
-                        <!-- Status Bar (Clickable for cart) -->
-                        <div class="card-status-bar" id="statusbar-astro-research" onclick="toggleSelect('astro-research')" style="cursor:pointer;" role="presentation">
-                            <i class="fas fa-circle" id="statusicon-astro-research" style="color:var(--medium-gray); font-size: 10px;"></i>
-                            <span id="statustext-astro-research">Click card to select</span>
-                        </div>
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i> Loading Products...
                     </div>
-
-                    <!-- PRODUCT 2 -->
-                    <div class="product-card" id="card-gst-suite" data-live="false">
-                        <div class="card-banner">
-                            <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-file-invoice-dollar"></i></div>
-                            <div class="card-banner-text">
-                                <p class="card-category">Finance · Accounting <span class="card-badge inline-badge soon">Coming Soon</span></p>
-                                <h3 class="card-title">GST Accounting Suite</h3>
-                            </div>
-                        </div>
-                        <div class="product-carousel" id="carousel-gst-suite">
-                            <div class="carousel-container">
-                                <div class="carousel-slides">
-                                    <div class="carousel-slide">
-                                        <div class="carousel-placeholder">
-                                            <i class="fas fa-chart-line"></i>
-                                            <span>Preview coming soon</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="short-desc">Automated GST filing, ledger management & TDS tracking.</div>
-                            <div class="card-price">
-                                <span class="price-amount" style="color:var(--text-light);">TBA</span>
-                            </div>
-                        </div>
-                        <div class="card-status-bar disabled">
-                            <i class="fas fa-clock" style="color:var(--text-light);"></i>
-                            <span>Not yet available</span>
-                        </div>
-                    </div>
-
-                    <!-- PRODUCT 3 -->
-                    <div class="product-card" id="card-pos-store" data-live="false">
-                        <div class="card-banner">
-                            <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-store"></i></div>
-                            <div class="card-banner-text">
-                                <p class="card-category">Retail · POS <span class="card-badge inline-badge soon">Coming Soon</span></p>
-                                <h3 class="card-title">General Store POS</h3>
-                            </div>
-                        </div>
-                        <div class="product-carousel" id="carousel-pos-store">
-                            <div class="carousel-container">
-                                <div class="carousel-slides">
-                                    <div class="carousel-slide">
-                                        <div class="carousel-placeholder">
-                                            <i class="fas fa-barcode"></i>
-                                            <span>Demo images on launch</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="short-desc">Barcode billing, multi-store sync, UPI/cash split.</div>
-                            <div class="card-price">
-                                <span class="price-amount" style="color:var(--text-light);">TBA</span>
-                            </div>
-                        </div>
-                        <div class="card-status-bar disabled">
-                            <i class="fas fa-clock" style="color:var(--text-light);"></i>
-                            <span>Not yet available</span>
-                        </div>
-                    </div>
-                    
                 </div>
-                <!-- End of Products HTML -->
 
             </div>
 
@@ -852,25 +746,143 @@
             const parser = new DOMParser();
             const masterDoc = parser.parseFromString(text, 'text/html');
 
-            // 1. Inject Header
             const headerContent = masterDoc.getElementById('site-header-source');
-            if (headerContent) {
-                document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
-            }
+            if (headerContent) document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
 
-            // 2. Inject Footer
             const footerContent = masterDoc.getElementById('site-footer-source');
-            if (footerContent) {
-                document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
-            }
+            if (footerContent) document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
 
-            // Initialize navigation events after injection
             initMenuLogic();
-
         } catch (err) {
             console.error("Fetch Error:", err);
         }
     }
+
+    // ── DATA FETCHING & PARSING ──
+    async function loadProductsFromCSV() {
+        try {
+            // Securely fetching the CSV from your Supabase backend function instead of a direct Google link
+            const response = await fetch(BACKEND_BASE + '/get-products-csv');
+            if (!response.ok) throw new Error('Failed to fetch product data from backend');
+            const csvText = await response.text();
+            
+            // Simple CSV parser (splits by newline, then comma, handling basic quoting)
+            const rows = csvText.split('\n').map(row => {
+                // Regex to split by comma except inside quotes
+                const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+                return row.split(regex).map(item => item.replace(/^"|"$/g, '').trim());
+            }).filter(row => row.length > 1);
+
+            const headers = rows.shift(); // First row is headers
+            const products = rows.map(row => {
+                let obj = {};
+                headers.forEach((header, i) => { obj[header] = row[i]; });
+                return obj;
+            });
+
+            renderDynamicProducts(products);
+        } catch(e) {
+            console.error(e);
+            document.getElementById('productsGrid').innerHTML = `<p style="color:red;">Error loading products.</p>`;
+        }
+    }
+
+    // ── DYNAMIC HTML RENDERING ──
+    function renderDynamicProducts(products) {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = ''; // Clear loading text
+
+        products.forEach(prod => {
+            const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
+            const price = parseFloat(prod.price) || 0;
+            const features = prod.features ? prod.features.split('|') : [];
+            const images = prod.images ? prod.images.split('|') : [];
+
+            // Conditionals
+            const badgeHTML = `<span class="card-badge inline-badge ${isLive ? '' : 'soon'}">${isLive ? 'Live' : 'Coming Soon'}</span>`;
+            const priceText = isLive ? `₹${price}` : 'TBA';
+            const priceLabelHTML = isLive && prod.priceLabel ? `<span class="price-label">${prod.priceLabel}</span>` : '';
+            const priceStyle = isLive ? '' : ' style="color:var(--text-light);"';
+
+            let shortDescHTML = isLive && features.length > 0
+                ? `<i class="fas fa-check-circle" style="color:var(--accent-gold);margin-right:5px;"></i>` + features.join(' · ')
+                : (prod.shortDesc || '');
+
+            let carouselHTML = '';
+            if (isLive) {
+                let slidesHTML = images.map((src, idx) => `<div class="carousel-slide"><img src="${src}" alt="Screenshot ${idx+1}"></div>`).join('');
+                let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${prod.id}', ${idx})"></div>`).join('');
+                
+                carouselHTML = `
+                    <div class="carousel-container">
+                        <div class="carousel-slides" id="slides-${prod.id}">${slidesHTML}</div>
+                        <button class="carousel-btn carousel-prev" onclick="slidePrev('${prod.id}')" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-btn carousel-next" onclick="slideNext('${prod.id}')" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="carousel-dots" id="dots-${prod.id}">${dotsHTML}</div>`;
+            } else {
+                carouselHTML = `
+                    <div class="carousel-container">
+                        <div class="carousel-slides">
+                            <div class="carousel-slide">
+                                <div class="carousel-placeholder">
+                                    <i class="fas ${prod.placeholderIcon || 'fa-image'}"></i>
+                                    <span>${prod.placeholderText || 'Coming Soon'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            let checkboxHTML = '';
+            let bannerClick = '';
+            let statusBarHTML = '';
+
+            if (isLive) {
+                checkboxHTML = `<div class="explicit-checkbox" id="checkbox-${prod.id}"><i class="fas fa-check"></i></div>`;
+                bannerClick = `onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-${prod.id}"`;
+                statusBarHTML = `
+                    <div class="card-status-bar" id="statusbar-${prod.id}" onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="presentation">
+                        <i class="fas fa-circle" id="statusicon-${prod.id}" style="color:var(--medium-gray); font-size: 10px;"></i>
+                        <span id="statustext-${prod.id}">Click card to select</span>
+                    </div>`;
+            } else {
+                statusBarHTML = `
+                    <div class="card-status-bar disabled">
+                        <i class="fas fa-clock" style="color:var(--text-light);"></i>
+                        <span>Not yet available</span>
+                    </div>`;
+            }
+
+            // Inject Product Card
+            grid.insertAdjacentHTML('beforeend', `
+                <div class="product-card" id="card-${prod.id}" data-live="${isLive}">
+                    <div class="card-banner" ${bannerClick}>
+                        <div class="card-icon-btn" aria-hidden="true"><i class="fas ${prod.icon}"></i></div>
+                        <div class="card-banner-text">
+                            <p class="card-category">${prod.category} ${badgeHTML}</p>
+                            <h3 class="card-title">${prod.title}</h3>
+                        </div>
+                        ${checkboxHTML}
+                    </div>
+                    <div class="product-carousel" id="carousel-${prod.id}">
+                        ${carouselHTML}
+                    </div>
+                    <div class="card-body">
+                        <div class="short-desc">${shortDescHTML}</div>
+                        <div class="card-price">
+                            <span class="price-amount"${priceStyle}>${priceText}</span>
+                            ${priceLabelHTML}
+                        </div>
+                    </div>
+                    ${statusBarHTML}
+                </div>`);
+        });
+
+        initIntersectionObserver();
+        initCarousels();
+    }
+
 
     let slideIndex = {};
     let slideCount = {};
@@ -882,7 +894,6 @@
 
         const options = {
             root: null,
-            // Triggers when the card is within the middle 50% of the screen height
             rootMargin: '-25% 0px -25% 0px', 
             threshold: 0
         };
@@ -914,7 +925,6 @@
             if(slides.length > 0) {
                 slideIndex[id] = 0;
                 slideCount[id] = slides.length;
-                // Initialize transforms and dots
                 updateSlideTransform(id);
                 updateDots(id, 0);
             }
@@ -956,17 +966,15 @@
         const card = document.getElementById('card-' + id);
         if (!card) return;
         
-        // Only allow selecting live products
         const isLive = card.getAttribute('data-live') === 'true';
         if (!isLive) return;
 
-        // Retrieve properties directly from the visual HTML elements so it's purely dynamic
+        // Retrieve properties dynamically
         const titleEl = card.querySelector('.card-title');
         const title = titleEl ? titleEl.innerText.trim() : 'Product';
         
         const priceEl = card.querySelector('.price-amount');
         const priceText = priceEl ? priceEl.innerText : '0';
-        // Extract numeric value from text (e.g., "₹10" -> 10)
         const price = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
         
         const iconEl = card.querySelector('.card-icon-btn i');
@@ -974,7 +982,6 @@
         if (iconEl) {
             const match = iconEl.className.match(/fa-[a-zA-Z0-9-]+/g);
             if (match) {
-                // Find specific icon, ignoring base FontAwesome classes
                 const specificIcon = match.find(c => !['fa-solid', 'fas', 'far', 'fal', 'fab', 'fa-regular', 'fa-brands'].includes(c));
                 if (specificIcon) icon = specificIcon;
             }
@@ -985,7 +992,6 @@
         const statusIcon = document.getElementById('statusicon-' + id);
 
         if (cart[id]) {
-            // Deselect logic
             delete cart[id];
             card.classList.remove('selected');
             if (banner) banner.setAttribute('aria-checked', 'false');
@@ -996,7 +1002,6 @@
                 statusIcon.style.fontSize = '10px'; 
             }
         } else {
-            // Select logic
             cart[id] = { name: title, price: price, icon: icon };
             card.classList.add('selected');
             if (banner) banner.setAttribute('aria-checked', 'true');
@@ -1083,18 +1088,17 @@
         try {
             document.getElementById('paymentModal').classList.add('visible');
             
-            // Adjust payload based on MessageMe.html's Supabase schema with dummy inputs
             const dataObj = {
                 purpose: "Product Purchase", 
                 name: name, 
                 mobileNumber: phone,
                 email: email || "Not provided",
-                gender: "N/A",           // Dummy input matching required MessageMe DB schema
-                dob: "1900-01-01",       // Dummy input matching required MessageMe DB schema
-                tob: "00:00",            // Dummy input matching required MessageMe DB schema
-                pob: "N/A",              // Dummy input matching required MessageMe DB schema
-                maritalStatus: "N/A",    // Dummy input matching required MessageMe DB schema
-                profession: "N/A",       // Dummy input matching required MessageMe DB schema
+                gender: "N/A",           
+                dob: "1900-01-01",       
+                tob: "00:00",            
+                pob: "N/A",              
+                maritalStatus: "N/A",    
+                profession: "N/A",       
                 expectations: "Purchasing Software Products: " + products,
                 amount: grand, 
                 payment_status: 'pending',
@@ -1112,8 +1116,6 @@
                 }
             } catch(e) { console.warn("Saving pending cart failed, continuing.", e); }
             
-            // Replaced `grand * 100` with `grand` if backend multiplies it automatically, though typically frontend sends in smallest unit. 
-            // NOTE: If Razorpay requires paise, send `amount: grand * 100`. Adjusted this to match typical standard if schema was the main issue.
             const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone })
@@ -1215,13 +1217,13 @@
     // ── INIT ──
     window.onload = function () {
         loadMasterCopy(); // Fetches header and footer from Components.html, then calls initMenuLogic()
-        initIntersectionObserver();
-        initCarousels();
+        loadProductsFromCSV(); // Fetches data and builds products dynamically
     };
 
     // Expose globals used inline
     window.slideNext         = slideNext;
     window.slidePrev         = slidePrev;
+    window.goToSlide         = goToSlide;
     window.toggleSelect      = toggleSelect;
     window.removeFromCart    = removeFromCart;
     window.clearCart         = clearCart;
