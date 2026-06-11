@@ -415,9 +415,6 @@
         .pay-form-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-light); margin-bottom: 12px; }
         .pay-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
         .pay-field input { padding: 9px 12px; border: 1.5px solid var(--medium-gray); border-radius: 5px; font-size: 13px; }
-        .pay-methods { display: flex; gap: 8px; margin-bottom: 12px; }
-        .pay-method { flex: 1; border: 1.5px solid var(--medium-gray); border-radius: 6px; padding: 8px 6px; text-align: center; cursor: pointer; background: white; }
-        .pay-method.active { border-color: var(--accent-gold); background: rgba(212,175,55,0.08); }
         .cart-actions { padding: 14px 18px; display: none; gap: 8px; flex-direction: column; }
         .cart-actions.visible { display: flex; }
         .btn-pay-now { background: var(--accent-gold); color: var(--dark-navy); border: none; border-radius: 5px; padding: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.3s; }
@@ -611,12 +608,6 @@
                         <div class="pay-field"><label>Full Name *</label><input type="text" id="pay-name" placeholder="e.g. Rajesh Kumar"></div>
                         <div class="pay-field"><label>Mobile / WhatsApp *</label><input type="tel" id="pay-phone" placeholder="+91 XXXXX XXXXX"></div>
                         <div class="pay-field"><label>Email Address</label><input type="email" id="pay-email" placeholder="you@example.com"></div>
-                        <p class="pay-form-title">Payment Method</p>
-                        <div class="pay-methods">
-                            <div class="pay-method active" onclick="selectPayMethod(this)"><i class="fas fa-university"></i><span>UPI</span></div>
-                            <div class="pay-method" onclick="selectPayMethod(this)"><i class="fas fa-credit-card"></i><span>Card</span></div>
-                            <div class="pay-method" onclick="selectPayMethod(this)"><i class="fas fa-money-bill-wave"></i><span>NetBanking</span></div>
-                        </div>
                     </div>
                     <div class="cart-actions" id="cartActions">
                         <button class="btn-pay-now" onclick="proceedToPayment()"><i class="fas fa-lock"></i> Proceed to Payment</button>
@@ -1091,11 +1082,6 @@
         document.getElementById('cartGrand').innerText    = '₹' + grand.toLocaleString('en-IN');
     }
 
-    function selectPayMethod(el) {
-        document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('active'));
-        el.classList.add('active');
-    }
-
     // ── PAYMENT ──
     async function proceedToPayment() {
         const name  = document.getElementById('pay-name').value.trim();
@@ -1256,7 +1242,6 @@
     window.toggleSelect      = toggleSelect;
     window.removeFromCart    = removeFromCart;
     window.clearCart         = clearCart;
-    window.selectPayMethod   = selectPayMethod;
     window.proceedToPayment  = proceedToPayment;
     window.submitEnquiry     = submitEnquiry;
     window.closeLightbox     = closeLightbox;
