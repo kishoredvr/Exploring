@@ -225,12 +225,6 @@
             position: relative;
         }
 
-        /*
-         * ICON-AS-CHECKBOX
-         * The card-icon is now a button that acts as the product selector.
-         * It shows the product icon normally, and switches to a checkmark when selected.
-         * The outer ring pulses gold on selection.
-         */
         .card-icon-btn {
             width: 54px;
             height: 54px;
@@ -243,73 +237,58 @@
             font-size: 22px;
             color: var(--accent-gold);
             flex-shrink: 0;
-            cursor: pointer;
-            position: relative;
-            transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.25s;
-            outline: none;
         }
-        /* Live product: hoverable */
-        .card-icon-btn.selectable:hover {
-            background: rgba(212,175,55,0.20);
-            border-color: var(--accent-gold);
-            transform: scale(1.08);
+
+        /* ── NEW EXPLICIT CHECKBOX THAT APPEARS ON HOVER / FOCUS ── */
+        .explicit-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.1);
         }
-        .card-icon-btn.selectable:focus-visible {
-            outline: 3px solid var(--accent-gold);
-            outline-offset: 3px;
+        /* Show when card is hovered, active, selected, or scrolled into view on mobile */
+        .product-card:hover .explicit-checkbox,
+        .product-card.in-view .explicit-checkbox,
+        .product-card:active .explicit-checkbox,
+        .product-card.selected .explicit-checkbox {
+            opacity: 1;
+            transform: scale(1);
+            border-color: rgba(255,255,255,0.9);
         }
-        /* Selected state */
-        .product-card.selected .card-icon-btn.selectable {
+        .product-card.selected .explicit-checkbox {
             background: var(--accent-gold);
             border-color: var(--accent-gold);
-            box-shadow: 0 0 0 4px rgba(212,175,55,0.35);
+        }
+        .explicit-checkbox i {
             color: var(--dark-navy);
-        }
-        /* Icon inside the button: product icon vs checkmark */
-        .card-icon-btn .icon-product { transition: opacity 0.2s, transform 0.2s; }
-        .card-icon-btn .icon-check   { position: absolute; opacity: 0; transform: scale(0.5); transition: opacity 0.2s, transform 0.2s; font-size: 20px; color: var(--dark-navy); }
-        .product-card.selected .card-icon-btn .icon-product { opacity: 0; transform: scale(0.5); }
-        .product-card.selected .card-icon-btn .icon-check   { opacity: 1; transform: scale(1); }
-
-        /* Tooltip on the icon button */
-        .card-icon-btn .icon-tooltip {
-            position: absolute;
-            bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15,26,60,0.92);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 600;
-            white-space: nowrap;
-            padding: 5px 10px;
-            border-radius: 5px;
-            pointer-events: none;
+            font-size: 14px;
             opacity: 0;
-            transition: opacity 0.2s;
-            letter-spacing: 0.03em;
+            transform: scale(0.5);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card-icon-btn .icon-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%; left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: rgba(15,26,60,0.92);
+        .product-card.selected .explicit-checkbox i {
+            opacity: 1;
+            transform: scale(1);
         }
-        .card-icon-btn.selectable:hover .icon-tooltip,
-        .card-icon-btn.selectable:focus-visible .icon-tooltip { opacity: 1; }
-        .product-card.selected .card-icon-btn .icon-tooltip { content: ''; }
 
         .card-banner-text { flex: 1; }
         .card-category { font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
                          text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 3px; }
         .card-title    { font-size: 18px; font-weight: 600; color: white; line-height: 1.3; }
+        
         .card-badge {
-            position: absolute; top: 12px; right: 12px;
             background: var(--accent-gold); color: var(--dark-navy);
-            font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-            text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+            font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+            text-transform: uppercase; padding: 2px 6px; border-radius: 12px;
+            display: inline-block; vertical-align: middle; margin-left: 6px; margin-top: -2px;
         }
         .card-badge.soon { background: #94a3b8; color: white; }
 
@@ -364,7 +343,7 @@
         .price-amount { font-size: 24px; font-weight: 700; color: var(--primary-blue); }
         .price-label  { font-size: 11px; color: var(--text-light); }
 
-        /* ── SELECTED STATUS BAR (replaces old checkbox row) ── */
+        /* ── SELECTED STATUS BAR ── */
         .card-status-bar {
             display: flex;
             align-items: center;
@@ -383,8 +362,7 @@
             color: var(--primary-blue);
             font-weight: 600;
         }
-        .card-status-bar i { font-size: 13px; }
-        /* coming soon bar */
+        .card-status-bar i { transition: all 0.2s; }
         .card-status-bar.disabled {
             opacity: 0.65;
             cursor: not-allowed;
@@ -722,7 +700,7 @@
             <h2>Choose Your Product</h2>
             <p style="color:var(--text-light);font-size:13px;margin-top:6px;">
                 <i class="fas fa-hand-pointer" style="color:var(--accent-gold);margin-right:5px;"></i>
-                Tap the product icon to select
+                Tap the card to select your product
             </p>
         </div>
         <div class="shop-layout">
@@ -740,7 +718,7 @@
                     </div>
                     <div class="cart-empty" id="cartEmpty">
                         <i class="fas fa-cart-plus"></i>
-                        <p>No products selected yet.<br>Tap the product icon on any card to add it here.</p>
+                        <p>No products selected yet.<br>Click a product card to add it here.</p>
                     </div>
                     <div class="cart-items" id="cartItems"></div>
                     <div class="cart-totals" id="cartTotals">
@@ -899,7 +877,7 @@
     const RAZORPAY_KEY_ID = 'rzp_live_SG5xWhtRJUaBRL';
 
     // ==========================================
-    // PRODUCT DATA — add / remove products here
+    // PRODUCT DATA
     // ==========================================
     const productsData = [
         {
@@ -945,6 +923,33 @@
 
     let slideIndex = {};
     let slideCount = {};
+    let cardObserver;
+
+    // ── INTERSECTION OBSERVER FOR MOBILE FOCUS ──
+    function initIntersectionObserver() {
+        if (cardObserver) cardObserver.disconnect();
+
+        const options = {
+            root: null,
+            // Triggers when the card is within the middle 50% of the screen height
+            rootMargin: '-25% 0px -25% 0px', 
+            threshold: 0
+        };
+
+        cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                } else {
+                    entry.target.classList.remove('in-view');
+                }
+            });
+        }, options);
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            cardObserver.observe(card);
+        });
+    }
 
     // ── RENDER ALL PRODUCT CARDS ──
     function renderProducts() {
@@ -953,7 +958,7 @@
 
         productsData.forEach(prod => {
             const isLive    = prod.isLive;
-            const badgeHTML = `<span class="card-badge ${isLive ? '' : 'soon'}">${isLive ? 'Live' : 'Coming Soon'}</span>`;
+            const badgeHTML = `<span class="card-badge inline-badge ${isLive ? '' : 'soon'}">${isLive ? 'Live' : 'Coming Soon'}</span>`;
             const priceText = isLive ? `₹${prod.price}` : 'TBA';
             const priceLabelHTML = isLive ? `<span class="price-label">${prod.priceLabel}</span>` : '';
             const priceStyle = isLive ? '' : ' style="color:var(--text-light);"';
@@ -987,45 +992,29 @@
                     </div>`;
             }
 
-            /*
-             * ICON-AS-CHECKBOX
-             * ─────────────────
-             * For live products: the card-icon is a <button> with role="checkbox".
-             *   - Shows product icon by default.
-             *   - On toggle: icon flips to a checkmark, ring turns gold, card gets .selected.
-             *   - Tooltip above the icon says "Tap to select" / "Selected ✓"
-             *
-             * For coming-soon products: rendered as a plain <div> (not interactive).
-             */
-            let iconHTML = '';
-            if (isLive) {
-                iconHTML = `
-                    <button
-                        class="card-icon-btn selectable"
-                        id="iconbtn-${prod.id}"
-                        role="checkbox"
-                        aria-checked="false"
-                        aria-label="Select ${prod.title}"
-                        onclick="toggleSelect('${prod.id}')"
-                    >
-                        <i class="fas ${prod.icon} icon-product" aria-hidden="true"></i>
-                        <i class="fas fa-check icon-check" aria-hidden="true"></i>
-                        <span class="icon-tooltip" id="tooltip-${prod.id}" aria-hidden="true">Tap to select</span>
-                    </button>`;
-            } else {
-                iconHTML = `
-                    <div class="card-icon-btn" aria-hidden="true">
-                        <i class="fas ${prod.icon} icon-product"></i>
-                    </div>`;
-            }
+            // Static product icon container
+            let iconHTML = `
+                <div class="card-icon-btn" aria-hidden="true">
+                    <i class="fas ${prod.icon}"></i>
+                </div>`;
 
-            // Status bar at bottom of card (replaces old checkbox row)
+            // Conditionals for live vs coming soon
+            let checkboxHTML = '';
+            let bannerClick = '';
             let statusBarHTML = '';
+
             if (isLive) {
+                checkboxHTML = `
+                    <div class="explicit-checkbox" id="checkbox-${prod.id}">
+                        <i class="fas fa-check"></i>
+                    </div>`;
+                
+                bannerClick = `onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-${prod.id}"`;
+                
                 statusBarHTML = `
                     <div class="card-status-bar" id="statusbar-${prod.id}" onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="presentation">
-                        <i class="fas fa-hand-pointer" id="statusicon-${prod.id}" style="color:var(--text-light);"></i>
-                        <span id="statustext-${prod.id}">Tap the icon above to select</span>
+                        <i class="fas fa-circle" id="statusicon-${prod.id}" style="color:var(--medium-gray); font-size: 10px;"></i>
+                        <span id="statustext-${prod.id}">Click card to select</span>
                     </div>`;
             } else {
                 statusBarHTML = `
@@ -1035,15 +1024,19 @@
                     </div>`;
             }
 
+            // Inject card DOM
             grid.insertAdjacentHTML('beforeend', `
                 <div class="product-card" id="card-${prod.id}">
-                    <div class="card-banner">
+                    <div class="card-banner" ${bannerClick}>
                         ${iconHTML}
                         <div class="card-banner-text">
-                            <p class="card-category">${prod.category}</p>
+                            <p class="card-category">
+                                ${prod.category}
+                                ${badgeHTML}
+                            </p>
                             <h3 class="card-title">${prod.title}</h3>
                         </div>
-                        ${badgeHTML}
+                        ${checkboxHTML}
                     </div>
                     <div class="product-carousel" id="carousel-${prod.id}">
                         ${carouselHTML}
@@ -1063,6 +1056,9 @@
                 buildCarousel(prod.id, prod.images);
             }
         });
+
+        // Re-initialize intersection observer for new DOM elements
+        initIntersectionObserver();
     }
 
     // ── CAROUSEL LOGIC ──
@@ -1128,50 +1124,51 @@
         if (!product || !product.isLive) return;
 
         const card       = document.getElementById('card-' + id);
-        const iconBtn    = document.getElementById('iconbtn-' + id);
-        const tooltip    = document.getElementById('tooltip-' + id);
+        const banner     = document.getElementById('banner-' + id);
         const statusText = document.getElementById('statustext-' + id);
         const statusIcon = document.getElementById('statusicon-' + id);
 
         if (cart[id]) {
-            // Deselect
+            // Deselect logic
             delete cart[id];
             card.classList.remove('selected');
-            if (iconBtn) {
-                iconBtn.setAttribute('aria-checked', 'false');
-                iconBtn.setAttribute('aria-label', `Select ${product.title}`);
+            if (banner) banner.setAttribute('aria-checked', 'false');
+            if (statusText) statusText.textContent = 'Click card to select';
+            if (statusIcon) { 
+                statusIcon.className = 'fas fa-circle'; 
+                statusIcon.style.color = 'var(--medium-gray)'; 
+                statusIcon.style.fontSize = '10px'; 
             }
-            if (tooltip) tooltip.textContent = 'Tap to select';
-            if (statusText) statusText.textContent = 'Tap the icon above to select';
-            if (statusIcon) { statusIcon.className = 'fas fa-hand-pointer'; statusIcon.style.color = 'var(--text-light)'; }
         } else {
-            // Select
+            // Select logic
             cart[id] = { name: product.title, price: product.price, icon: product.icon };
             card.classList.add('selected');
-            if (iconBtn) {
-                iconBtn.setAttribute('aria-checked', 'true');
-                iconBtn.setAttribute('aria-label', `${product.title} selected — tap to deselect`);
+            if (banner) banner.setAttribute('aria-checked', 'true');
+            if (statusText) statusText.textContent = 'Added to cart';
+            if (statusIcon) { 
+                statusIcon.className = 'fas fa-check-circle'; 
+                statusIcon.style.color = 'var(--accent-gold)'; 
+                statusIcon.style.fontSize = '13px'; 
             }
-            if (tooltip) tooltip.textContent = 'Selected ✓';
-            if (statusText) statusText.textContent = 'Added to cart — tap icon again to remove';
-            if (statusIcon) { statusIcon.className = 'fas fa-check-circle'; statusIcon.style.color = 'var(--accent-gold)'; }
         }
         renderCart();
     }
 
     function removeFromCart(id) {
         delete cart[id];
-        const card = document.getElementById('card-' + id);
-        if (card) card.classList.remove('selected');
-        const iconBtn    = document.getElementById('iconbtn-' + id);
-        const tooltip    = document.getElementById('tooltip-' + id);
+        const card       = document.getElementById('card-' + id);
+        const banner     = document.getElementById('banner-' + id);
         const statusText = document.getElementById('statustext-' + id);
         const statusIcon = document.getElementById('statusicon-' + id);
-        const product    = productsData.find(p => p.id === id);
-        if (iconBtn) { iconBtn.setAttribute('aria-checked','false'); iconBtn.setAttribute('aria-label', `Select ${product ? product.title : ''}`); }
-        if (tooltip)    tooltip.textContent = 'Tap to select';
-        if (statusText) statusText.textContent = 'Tap the icon above to select';
-        if (statusIcon) { statusIcon.className = 'fas fa-hand-pointer'; statusIcon.style.color = 'var(--text-light)'; }
+
+        if (card) card.classList.remove('selected');
+        if (banner) banner.setAttribute('aria-checked', 'false');
+        if (statusText) statusText.textContent = 'Click card to select';
+        if (statusIcon) { 
+            statusIcon.className = 'fas fa-circle'; 
+            statusIcon.style.color = 'var(--medium-gray)'; 
+            statusIcon.style.fontSize = '10px'; 
+        }
         renderCart();
     }
 
