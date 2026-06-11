@@ -587,8 +587,7 @@
                 <div class="products-grid" id="productsGrid">
                     
                     <!-- PRODUCT 1 -->
-                    <!-- Add `data-title`, `data-price`, `data-icon` and `data-live` here so the JS knows what to add to cart -->
-                    <div class="product-card" id="card-astro-research" data-title="Astrology Research" data-price="0" data-icon="fa-pills" data-live="true">
+                    <div class="product-card" id="card-astro-research" data-live="true">
                         <!-- Banner Area (Clickable for cart) -->
                         <div class="card-banner" onclick="toggleSelect('astro-research')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-astro-research">
                             <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-pills"></i></div>
@@ -638,7 +637,7 @@
                     </div>
 
                     <!-- PRODUCT 2 -->
-                    <div class="product-card" id="card-gst-suite" data-title="GST Accounting Suite" data-price="0" data-icon="fa-file-invoice-dollar" data-live="false">
+                    <div class="product-card" id="card-gst-suite" data-live="false">
                         <div class="card-banner">
                             <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-file-invoice-dollar"></i></div>
                             <div class="card-banner-text">
@@ -671,7 +670,7 @@
                     </div>
 
                     <!-- PRODUCT 3 -->
-                    <div class="product-card" id="card-pos-store" data-title="General Store POS" data-price="0" data-icon="fa-store" data-live="false">
+                    <div class="product-card" id="card-pos-store" data-live="false">
                         <div class="card-banner">
                             <div class="card-icon-btn" aria-hidden="true"><i class="fas fa-store"></i></div>
                             <div class="card-banner-text">
@@ -961,10 +960,25 @@
         const isLive = card.getAttribute('data-live') === 'true';
         if (!isLive) return;
 
-        // Retrieve properties via custom data attributes inside the HTML element
-        const title = card.getAttribute('data-title') || 'Product';
-        const price = parseFloat(card.getAttribute('data-price')) || 0;
-        const icon  = card.getAttribute('data-icon') || 'fa-box';
+        // Retrieve properties directly from the visual HTML elements so it's purely dynamic
+        const titleEl = card.querySelector('.card-title');
+        const title = titleEl ? titleEl.innerText.trim() : 'Product';
+        
+        const priceEl = card.querySelector('.price-amount');
+        const priceText = priceEl ? priceEl.innerText : '0';
+        // Extract numeric value from text (e.g., "₹10" -> 10)
+        const price = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
+        
+        const iconEl = card.querySelector('.card-icon-btn i');
+        let icon = 'fa-box';
+        if (iconEl) {
+            const match = iconEl.className.match(/fa-[a-zA-Z0-9-]+/g);
+            if (match) {
+                // Find specific icon, ignoring base FontAwesome classes
+                const specificIcon = match.find(c => !['fa-solid', 'fas', 'far', 'fal', 'fab', 'fa-regular', 'fa-brands'].includes(c));
+                if (specificIcon) icon = specificIcon;
+            }
+        }
 
         const banner     = document.getElementById('banner-' + id);
         const statusText = document.getElementById('statustext-' + id);
