@@ -345,7 +345,7 @@
         .detail-body { padding: 30px; }
         .detail-title { font-size: 28px; color: var(--dark-navy); line-height: 1.2; margin-bottom: 10px; }
 
-        /* Dynamic scaling for Detail View images to ensure they are large but never cropped */
+        /* BUGFIX: Dynamic scaling for Detail View images to ensure they are large but never cropped */
         .detail-carousel-slide {
             aspect-ratio: auto !important; 
             height: 60vh; /* Adjusts beautifully to laptop screens */
@@ -934,15 +934,28 @@
         
         // Multi-line splitting for Detail view
         const features = prod.features ? prod.features.split(/[|\n,]/).map(s => s.trim()).filter(Boolean) : [];
-        
         const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
+
+        // BUGFIX: UN-PROXY SCRIPT
+        // This strips the "wsrv.nl" optimization layer from the URL and guarantees 
+        // that the Detail View displays the raw, uncropped, original 100% resolution image!
+        const rawImages = images.map(src => {
+            if (src.includes('wsrv.nl')) {
+                try {
+                    const urlObj = new URL(src);
+                    const rawUrl = urlObj.searchParams.get('url');
+                    if (rawUrl) return rawUrl;
+                } catch(e) {}
+            }
+            return src;
+        });
 
         // Build unique carousel HTML for Detail view 
         let carouselHTML = '';
-        if (isLive && images.length > 0) {
-            
-            let slidesHTML = images.map((src, idx) => `<div class="carousel-slide detail-carousel-slide"><img src="${src}" alt="Detail Screenshot ${idx+1}"></div>`).join('');
-            let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
+        if (isLive && rawImages.length > 0) {
+            // BUGFIX: We apply object-fit: contain so the original image is NEVER cropped
+            let slidesHTML = rawImages.map((src, idx) => `<div class="carousel-slide detail-carousel-slide" style="background: transparent;"><img src="${src}" alt="Detail Screenshot ${idx+1}" style="object-fit: contain; width: 100%; height: 100%; background: #eef2f6;"></div>`).join('');
+            let dotsHTML = rawImages.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
 
             carouselHTML = `
                 <div class="carousel-container">
@@ -1021,9 +1034,9 @@
         detailContainer.innerHTML = detailHTML;
         detailContainer.style.display = 'block';
 
-        if (isLive && images.length > 0) {
+        if (isLive && rawImages.length > 0) {
             slideIndex[`detail-${prod.id}`] = 0;
-            slideCount[`detail-${prod.id}`] = images.length;
+            slideCount[`detail-${prod.id}`] = rawImages.length;
             updateSlideTransform(`detail-${prod.id}`);
             updateDots(`detail-${prod.id}`, 0);
         }
