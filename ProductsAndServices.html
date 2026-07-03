@@ -324,9 +324,10 @@
             cursor: not-allowed;
         }
 
-        /* ── DETAIL VIEW RESPONSIVENESS ── */
+        /* ── DETAIL VIEW RESPONSIVENESS & UNCROPPED IMAGES ── */
         .detail-view-container { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .detail-features-list li { 
             margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; 
             font-size: 15px; color: var(--text-dark); line-height: 1.5;
@@ -334,6 +335,17 @@
         
         .detail-body { padding: 30px; }
         .detail-title { font-size: 28px; color: var(--dark-navy); line-height: 1.2; margin-bottom: 10px; }
+
+        /* Ensures the detail image area is tall enough and prevents cropping */
+        .detail-carousel-slide {
+            aspect-ratio: auto !important; 
+            height: 500px; 
+            background: #f8fafc !important;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* ── CART SIDEBAR ── */
         .cart-sidebar { position: sticky; top: 110px; }
@@ -538,6 +550,8 @@
             .shop-layout { grid-template-columns: 1fr; }
             .cart-sidebar { position: static; }
             .form-row { grid-template-columns: 1fr; }
+            
+            .detail-carousel-slide { height: 300px; padding: 10px; }
             .detail-body { padding: 20px; }
             .detail-title { font-size: 24px; }
         }
@@ -771,7 +785,6 @@
 
         } catch(e) {
             console.error(e);
-            // BUGFIX: Correctly targets the productsListView id so spinner clears properly
             document.getElementById('productsListView').innerHTML = `
             <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 8px;">
                 <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
@@ -790,8 +803,7 @@
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
             const price = parseFloat(prod.price) || 0;
             
-            // BUGFIX: Splits features string by Commas (,), Pipes (|), or New Lines (\n) 
-            // ensuring they render individually no matter how they were separated in Excel.
+            // Splits features string by Commas (,), Pipes (|), or New Lines (\n) 
             const features = prod.features ? prod.features.split(/[|\n,]/).map(s => s.trim()).filter(Boolean) : [];
             const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
@@ -909,16 +921,30 @@
         const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
         const price = parseFloat(prod.price) || 0;
         
-        // BUGFIX: Robust multi-line splitting again for Detail view
+        // Multi-line splitting for Detail view
         const features = prod.features ? prod.features.split(/[|\n,]/).map(s => s.trim()).filter(Boolean) : [];
         const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
-        // Build unique carousel HTML for Detail view
+        // UN-PROXY SCRIPT: 
+        // This strips the "wsrv.nl" optimization layer from the URL and guarantees 
+        // that the Detail View displays the raw, uncropped, original 100% resolution image!
+        const rawImages = images.map(src => {
+            if (src.includes('wsrv.nl')) {
+                try {
+                    const urlObj = new URL(src);
+                    const rawUrl = urlObj.searchParams.get('url');
+                    if (rawUrl) return rawUrl;
+                } catch(e) {}
+            }
+            return src;
+        });
+
+        // Build unique carousel HTML for Detail view using RAW images
         let carouselHTML = '';
-        if (isLive && images.length > 0) {
-            // BUGFIX: We apply object-fit: contain so the original image is NEVER cropped
-            let slidesHTML = images.map((src, idx) => `<div class="carousel-slide" style="background: transparent;"><img src="${src}" alt="Detail Screenshot ${idx+1}" style="object-fit: contain; width: 100%; height: 100%; background: #eef2f6;"></div>`).join('');
-            let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
+        if (isLive && rawImages.length > 0) {
+            // Object-fit: contain guarantees the entire original image is displayed without cropped edges.
+            let slidesHTML = rawImages.map((src, idx) => `<div class="carousel-slide detail-carousel-slide"><img src="${src}" alt="Detail Screenshot ${idx+1}" style="object-fit: contain; width: 100%; height: 100%;"></div>`).join('');
+            let dotsHTML = rawImages.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
 
             carouselHTML = `
                 <div class="carousel-container">
@@ -954,7 +980,6 @@
             </button>`;
         }
 
-        // We use the responsive .detail-body and .detail-title classes defined in the CSS
         const detailHTML = `
             <div class="detail-view-container">
                 <button onclick="window.location.hash=''" style="background:none; border:none; color:var(--primary-blue); font-weight:600; cursor:pointer; font-size:15px; margin-bottom: 20px; display:flex; align-items:center; gap:8px; transition: color 0.2s;">
@@ -998,9 +1023,9 @@
         detailContainer.innerHTML = detailHTML;
         detailContainer.style.display = 'block';
 
-        if (isLive && images.length > 0) {
+        if (isLive && rawImages.length > 0) {
             slideIndex[`detail-${prod.id}`] = 0;
-            slideCount[`detail-${prod.id}`] = images.length;
+            slideCount[`detail-${prod.id}`] = rawImages.length;
             updateSlideTransform(`detail-${prod.id}`);
             updateDots(`detail-${prod.id}`, 0);
         }
