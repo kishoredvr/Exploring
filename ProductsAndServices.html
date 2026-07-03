@@ -236,46 +236,6 @@
             flex-shrink: 0;
         }
 
-        /* ── NEW EXPLICIT CHECKBOX THAT APPEARS ON HOVER / FOCUS ── */
-        .explicit-checkbox {
-            width: 28px;
-            height: 28px;
-            border: 2px solid rgba(255,255,255,0.4);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-            background: rgba(0,0,0,0.1);
-        }
-        /* Show when card is hovered, active, selected, or scrolled into view on mobile */
-        .product-card:hover .explicit-checkbox,
-        .product-card.in-view .explicit-checkbox,
-        .product-card:active .explicit-checkbox,
-        .product-card.selected .explicit-checkbox {
-            opacity: 1;
-            transform: scale(1);
-            border-color: rgba(255,255,255,0.9);
-        }
-        .product-card.selected .explicit-checkbox {
-            background: var(--accent-gold);
-            border-color: var(--accent-gold);
-        }
-        .explicit-checkbox i {
-            color: var(--dark-navy);
-            font-size: 14px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .product-card.selected .explicit-checkbox i {
-            opacity: 1;
-            transform: scale(1);
-        }
-
         .card-banner-text { flex: 1; }
         .card-category { font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
                          text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 3px; }
@@ -359,10 +319,17 @@
             color: var(--primary-blue);
             font-weight: 600;
         }
-        .card-status-bar i { transition: all 0.2s; }
         .card-status-bar.disabled {
             opacity: 0.65;
             cursor: not-allowed;
+        }
+
+        /* ── DETAIL VIEW ── */
+        .detail-view-container { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .detail-features-list li { 
+            margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; 
+            font-size: 14px; color: var(--text-dark); 
         }
 
         /* ── CART SIDEBAR ── */
@@ -583,20 +550,30 @@
             <h2>Choose Your Product</h2>
             <p style="color:var(--text-light);font-size:13px;margin-top:6px;">
                 <i class="fas fa-hand-pointer" style="color:var(--accent-gold);margin-right:5px;"></i>
-                Tap the card to select your product
+                Explore details and add to your cart
             </p>
         </div>
+        
         <div class="shop-layout">
+            
+            <!-- LEFT COLUMN: Master / Detail Views -->
             <div class="products-col">
-                <!-- Dynamic Products Container -->
-                <div class="products-grid" id="productsGrid">
+                
+                <!-- VIEW 1: Grid List -->
+                <div class="products-grid" id="productsListView">
                     <div class="loading-spinner">
                         <i class="fas fa-spinner fa-spin"></i> Loading Products...
                     </div>
                 </div>
+
+                <!-- VIEW 2: Product Detail (Hidden by default) -->
+                <div id="productDetailView" style="display: none;">
+                    <!-- Injected dynamically via JS -->
+                </div>
+
             </div>
 
-            <!-- CART SIDEBAR -->
+            <!-- RIGHT COLUMN: CART SIDEBAR (Always visible) -->
             <div class="cart-sidebar">
                 <div class="cart-panel">
                     <div class="cart-header">
@@ -606,7 +583,7 @@
                     </div>
                     <div class="cart-empty" id="cartEmpty">
                         <i class="fas fa-cart-plus"></i>
-                        <p>No products selected yet.<br>Click a product card to add it here.</p>
+                        <p>No products selected yet.<br>View a product to add it here.</p>
                     </div>
                     <div class="cart-items" id="cartItems"></div>
                     <div class="cart-totals" id="cartTotals">
@@ -729,6 +706,10 @@
     const BACKEND_BASE  = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
     const RAZORPAY_KEY_ID = 'rzp_live_SG5xWhtRJUaBRL';
 
+    // Global state for Master-Detail View
+    let allProductsData = [];
+    var cart = {};
+
     /**
      * Fetch master components and inject them
      */
@@ -736,77 +717,75 @@
         try {
             const response = await fetch('Components.html');
             if (!response.ok) throw new Error('Components.html not found');
-
             const text = await response.text();
             const parser = new DOMParser();
             const masterDoc = parser.parseFromString(text, 'text/html');
-
             const headerContent = masterDoc.getElementById('site-header-source');
             if (headerContent) document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
-
             const footerContent = masterDoc.getElementById('site-footer-source');
             if (footerContent) document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
-
             initMenuLogic();
         } catch (err) {
-            console.error("Fetch Error:", err);
+            console.warn("Components.html fetch skipped/failed:", err);
         }
     }
 
     // ── DATA FETCHING & PARSING ──
     async function loadProductsFromCSV() {
         try {
-            // Securely fetching the CSV from your Supabase backend function instead of a direct Google link
             const response = await fetch(BACKEND_BASE + '/get-products-csv');
-            
-            // BUGFIX: If Supabase fails, extract the exact error message so you can see it on screen!
             if (!response.ok) {
                 let errMsg = `Failed to fetch product data (Status: ${response.status})`;
                 try {
                     const errJson = await response.json();
                     if (errJson.error) errMsg = `Backend Error: ${errJson.error}`;
-                } catch(e) { /* ignore parse error */ }
+                } catch(e) {}
                 throw new Error(errMsg);
             }
-
             const csvText = await response.text();
-
-            // Simple CSV parser (splits by newline, then comma, handling basic quoting)
+            
             const rows = csvText.split('\n').map(row => {
-                // Regex to split by comma except inside quotes
                 const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
                 return row.split(regex).map(item => item.replace(/^"|"$/g, '').trim());
             }).filter(row => row.length > 1);
 
-            const headers = rows.shift(); // First row is headers
+            const headers = rows.shift();
             const products = rows.map(row => {
                 let obj = {};
                 headers.forEach((header, i) => { obj[header] = row[i]; });
                 return obj;
             });
 
+            // Save globally for detail view reference
+            allProductsData = products;
+            
             renderDynamicProducts(products);
+
+            // Once data is loaded, check if we need to load a detail view directly from URL
+            handleHashRouting();
+
         } catch(e) {
             console.error(e);
-            throw e; // Pass error down to be caught by the window.onload catch block
+            document.getElementById('productsGrid').innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 8px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                <h3 style="font-size: 16px; margin-bottom: 5px;">Error Loading Products</h3>
+                <p style="font-size: 13px;">${e.message}</p>
+            </div>`;
         }
     }
 
-    // ── DYNAMIC HTML RENDERING ──
+    // ── DYNAMIC HTML RENDERING (LIST VIEW) ──
     function renderDynamicProducts(products) {
         const grid = document.getElementById('productsGrid');
-        grid.innerHTML = ''; // Clear loading text
+        grid.innerHTML = ''; 
 
         products.forEach(prod => {
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
             const price = parseFloat(prod.price) || 0;
-            
-            // BUGFIX: Added .map(s => s.trim()).filter(Boolean)
-            // This removes the hidden spaces around the '|' delimiter so your image links don't break!
             const features = prod.features ? prod.features.split('|').map(s => s.trim()).filter(Boolean) : [];
             const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
-            // Conditionals
             const badgeHTML = `<span class="card-badge inline-badge ${isLive ? '' : 'soon'}">${isLive ? 'Live' : 'Coming Soon'}</span>`;
             const priceText = isLive ? `₹${price}` : 'TBA';
             const priceLabelHTML = isLive && prod.priceLabel ? `<span class="price-label">${prod.priceLabel}</span>` : '';
@@ -820,7 +799,6 @@
             if (isLive) {
                 let slidesHTML = images.map((src, idx) => `<div class="carousel-slide"><img src="${src}" alt="Screenshot ${idx+1}"></div>`).join('');
                 let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${prod.id}', ${idx})"></div>`).join('');
-
                 carouselHTML = `
                     <div class="carousel-container">
                         <div class="carousel-slides" id="slides-${prod.id}">${slidesHTML}</div>
@@ -842,17 +820,15 @@
                     </div>`;
             }
 
-            let checkboxHTML = '';
-            let bannerClick = '';
+            // The whole card components will navigate to details instead of quick adding
+            const clickAction = `onclick="window.location.hash = '#product-${prod.id}'" style="cursor:pointer;"`;
+            
             let statusBarHTML = '';
-
             if (isLive) {
-                checkboxHTML = `<div class="explicit-checkbox" id="checkbox-${prod.id}"><i class="fas fa-check"></i></div>`;
-                bannerClick = `onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="checkbox" aria-checked="false" id="banner-${prod.id}"`;
                 statusBarHTML = `
-                    <div class="card-status-bar" id="statusbar-${prod.id}" onclick="toggleSelect('${prod.id}')" style="cursor:pointer;" role="presentation">
-                        <i class="fas fa-circle" id="statusicon-${prod.id}" style="color:var(--medium-gray); font-size: 10px;"></i>
-                        <span id="statustext-${prod.id}">Click card to select</span>
+                    <div class="card-status-bar" id="statusbar-${prod.id}" ${clickAction}>
+                        <i class="fas fa-info-circle" id="statusicon-${prod.id}" style="color:var(--primary-blue); font-size: 14px;"></i>
+                        <span id="statustext-${prod.id}">View Details</span>
                     </div>`;
             } else {
                 statusBarHTML = `
@@ -862,21 +838,26 @@
                     </div>`;
             }
 
-            // Inject Product Card
+            // Ensure specific icons from fontawesome class strings are extracted safely for the cart state
+            let iconClass = 'fa-box';
+            if(prod.icon) {
+                 const match = prod.icon.match(/fa-[a-zA-Z0-9-]+/g);
+                 if(match) iconClass = match[0];
+            }
+
             grid.insertAdjacentHTML('beforeend', `
-                <div class="product-card" id="card-${prod.id}" data-live="${isLive}">
-                    <div class="card-banner" ${bannerClick}>
+                <div class="product-card" id="card-${prod.id}" data-live="${isLive}" data-icon="${iconClass}">
+                    <div class="card-banner" ${clickAction}>
                         <div class="card-icon-btn" aria-hidden="true"><i class="fas ${prod.icon}"></i></div>
                         <div class="card-banner-text">
                             <p class="card-category">${prod.category} ${badgeHTML}</p>
                             <h3 class="card-title">${prod.title}</h3>
                         </div>
-                        ${checkboxHTML}
                     </div>
                     <div class="product-carousel" id="carousel-${prod.id}">
                         ${carouselHTML}
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" ${clickAction}>
                         <div class="short-desc">${shortDescHTML}</div>
                         <div class="card-price">
                             <span class="price-amount"${priceStyle}>${priceText}</span>
@@ -889,45 +870,160 @@
 
         initIntersectionObserver();
         initCarousels();
+        
+        // Re-apply cart state visually if returning to grid view
+        updateCartUI(); 
     }
 
+    // ── HASH ROUTING (MASTER / DETAIL TOGGLE) ──
+    window.addEventListener('hashchange', handleHashRouting);
+
+    function handleHashRouting() {
+        const hash = window.location.hash;
+        if (hash.startsWith('#product-')) {
+            const id = hash.replace('#product-', '');
+            renderDetailView(id);
+        } else {
+            // Close detail view, show list
+            document.getElementById('productDetailView').style.display = 'none';
+            document.getElementById('productsListView').style.display = ''; // Fallback to CSS grid
+            document.getElementById('productDetailView').innerHTML = '';
+        }
+    }
+
+    function renderDetailView(id) {
+        if (!allProductsData.length) return; // Prevent rendering if data isn't loaded yet
+
+        const prod = allProductsData.find(p => p.id === id);
+        if (!prod) {
+            window.location.hash = ''; // Clear hash if invalid product
+            return;
+        }
+
+        const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
+        const price = parseFloat(prod.price) || 0;
+        const features = prod.features ? prod.features.split('|').map(s => s.trim()).filter(Boolean) : [];
+        const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
+
+        // Build unique carousel HTML for Detail view
+        let carouselHTML = '';
+        if (isLive && images.length > 0) {
+            let slidesHTML = images.map((src, idx) => `<div class="carousel-slide"><img src="${src}" alt="Detail Screenshot ${idx+1}"></div>`).join('');
+            let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
+
+            carouselHTML = `
+                <div class="carousel-container">
+                    <div class="carousel-slides" id="slides-detail-${prod.id}">${slidesHTML}</div>
+                    <button class="carousel-btn carousel-prev" onclick="slidePrev('detail-${prod.id}')"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn carousel-next" onclick="slideNext('detail-${prod.id}')"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="carousel-dots" id="dots-detail-${prod.id}">${dotsHTML}</div>`;
+        } else {
+             carouselHTML = `
+                <div class="carousel-container">
+                    <div class="carousel-slides">
+                        <div class="carousel-slide">
+                            <div class="carousel-placeholder" style="padding: 60px 0;">
+                                <i class="fas ${prod.placeholderIcon || 'fa-image'}" style="font-size: 64px;"></i>
+                                <span style="margin-top: 15px; font-size: 16px;">${prod.placeholderText || 'Coming Soon'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        // Cart Add/Remove Button specific to Detail View
+        const inCart = !!cart[id];
+        let actionBtn = '';
+        if (isLive) {
+            actionBtn = `<button id="detail-cart-btn-${id}" class="btn-submit" onclick="toggleCartState('${id}')" style="width:100%; margin-top:10px; font-size:16px; padding:16px; justify-content:center; background:${inCart ? 'var(--dark-navy)' : 'var(--accent-gold)'}; color:${inCart ? 'white' : 'var(--dark-navy)'};">
+                <i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}
+            </button>`;
+        } else {
+            actionBtn = `<button class="btn-submit" disabled style="width:100%; margin-top:10px; font-size:16px; padding:16px; justify-content:center; opacity:0.6; cursor:not-allowed; background:var(--medium-gray); color:var(--text-dark);">
+                Not Yet Available
+            </button>`;
+        }
+
+        const detailHTML = `
+            <div class="detail-view-container">
+                <button onclick="window.location.hash=''" style="background:none; border:none; color:var(--primary-blue); font-weight:600; cursor:pointer; font-size:15px; margin-bottom: 20px; display:flex; align-items:center; gap:8px; transition: color 0.2s;">
+                    <i class="fas fa-arrow-left"></i> Back to Products
+                </button>
+                
+                <div style="background:white; border-radius:12px; border:1px solid var(--medium-gray); overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
+                    <div class="product-carousel" style="border-bottom: 1px solid var(--medium-gray);">
+                        ${carouselHTML}
+                    </div>
+                    <div style="padding: 30px;">
+                        <span class="card-badge inline-badge" style="margin-bottom:12px;">${prod.category}</span>
+                        <h2 style="font-size:28px; color:var(--dark-navy); line-height:1.2; margin-bottom:10px;">${prod.title}</h2>
+                        
+                        <div style="font-size:32px; font-weight:700; color:var(--primary-blue); margin-bottom:24px; display:flex; align-items:baseline; gap:8px;">
+                            ${isLive ? `₹${price}` : 'TBA'}
+                            ${isLive && prod.priceLabel ? `<span style="font-size:15px; font-weight:500; color:var(--text-light);">${prod.priceLabel}</span>` : ''}
+                        </div>
+                        
+                        <div style="background:var(--light-gray); padding:22px; border-radius:8px; border:1px solid var(--medium-gray); margin-bottom:28px;">
+                            <h4 style="margin-bottom:10px; font-size:16px; color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue); margin-right:6px;"></i> Product Overview</h4>
+                            <p style="color:var(--text-dark); line-height:1.6; font-size:15px; margin:0;">${prod.shortDesc || 'Detailed description coming soon.'}</p>
+                        </div>
+                        
+                        ${features.length > 0 ? `
+                            <h4 style="margin-bottom:16px; font-size:16px; color:var(--dark-navy);">Key Features</h4>
+                            <ul class="detail-features-list" style="list-style:none; padding:0; margin-bottom:30px;">
+                                ${features.map(f => `<li><i class="fas fa-check-circle" style="color:var(--accent-gold); font-size:18px; margin-top:2px;"></i> <span>${f}</span></li>`).join('')}
+                            </ul>
+                        ` : ''}
+                        
+                        ${actionBtn}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('productsListView').style.display = 'none';
+        
+        const detailContainer = document.getElementById('productDetailView');
+        detailContainer.innerHTML = detailHTML;
+        detailContainer.style.display = 'block';
+
+        // Initialize Carousel
+        if (isLive && images.length > 0) {
+            slideIndex[`detail-${prod.id}`] = 0;
+            slideCount[`detail-${prod.id}`] = images.length;
+            updateSlideTransform(`detail-${prod.id}`);
+            updateDots(`detail-${prod.id}`, 0);
+        }
+
+        // Scroll gracefully to top of section
+        const sectionTop = document.getElementById('products').offsetTop;
+        window.scrollTo({ top: sectionTop - 60, behavior: 'smooth' });
+    }
+
+    // ── CAROUSEL STATE VARS ──
     let slideIndex = {};
     let slideCount = {};
     let cardObserver;
 
-    // ── INTERSECTION OBSERVER FOR MOBILE FOCUS ──
     function initIntersectionObserver() {
         if (cardObserver) cardObserver.disconnect();
-
-        const options = {
-            root: null,
-            rootMargin: '-25% 0px -25% 0px', 
-            threshold: 0
-        };
-
+        const options = { root: null, rootMargin: '-25% 0px -25% 0px', threshold: 0 };
         cardObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                } else {
-                    entry.target.classList.remove('in-view');
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('in-view'); } 
+                else { entry.target.classList.remove('in-view'); }
             });
         }, options);
-
-        document.querySelectorAll('.product-card').forEach(card => {
-            cardObserver.observe(card);
-        });
+        document.querySelectorAll('.product-card').forEach(card => cardObserver.observe(card));
     }
 
-    // ── CAROUSEL LOGIC ──
     function initCarousels() {
         const carouselContainers = document.querySelectorAll('.carousel-slides');
         carouselContainers.forEach(container => {
             const idParts = container.id.split('slides-');
             if (idParts.length < 2) return;
             const id = idParts[1];
-
             const slides = container.querySelectorAll('.carousel-slide');
             if(slides.length > 0) {
                 slideIndex[id] = 0;
@@ -966,96 +1062,95 @@
         slideIndex[productId] = idx; updateSlideTransform(productId); updateDots(productId, idx);
     }
 
-    // ── CART LOGIC ──
-    var cart = {};
-
-    function toggleSelect(id) {
-        const card = document.getElementById('card-' + id);
-        if (!card) return;
-
-        const isLive = card.getAttribute('data-live') === 'true';
-        if (!isLive) return;
-
-        // Retrieve properties dynamically
-        const titleEl = card.querySelector('.card-title');
-        const title = titleEl ? titleEl.innerText.trim() : 'Product';
-
-        const priceEl = card.querySelector('.price-amount');
-        const priceText = priceEl ? priceEl.innerText : '0';
-        const price = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
-
-        const iconEl = card.querySelector('.card-icon-btn i');
-        let icon = 'fa-box';
-        if (iconEl) {
-            const match = iconEl.className.match(/fa-[a-zA-Z0-9-]+/g);
-            if (match) {
-                const specificIcon = match.find(c => !['fa-solid', 'fas', 'far', 'fal', 'fab', 'fa-regular', 'fa-brands'].includes(c));
-                if (specificIcon) icon = specificIcon;
-            }
-        }
-
-        const banner     = document.getElementById('banner-' + id);
-        const statusText = document.getElementById('statustext-' + id);
-        const statusIcon = document.getElementById('statusicon-' + id);
+    // ── GLOBAL CART LOGIC ──
+    
+    // Core function to toggle item in memory and dispatch UI updates
+    function toggleCartState(id) {
+        const prod = allProductsData.find(p => p.id === id);
+        if (!prod) return;
 
         if (cart[id]) {
-            delete cart[id];
-            card.classList.remove('selected');
-            if (banner) banner.setAttribute('aria-checked', 'false');
-            if (statusText) statusText.textContent = 'Click card to select';
-            if (statusIcon) { 
-                statusIcon.className = 'fas fa-circle';
-                statusIcon.style.color = 'var(--medium-gray)';
-                statusIcon.style.fontSize = '10px';
-            }
+            delete cart[id]; // Remove
         } else {
-            cart[id] = { name: title, price: price, icon: icon };
-            card.classList.add('selected');
-            if (banner) banner.setAttribute('aria-checked', 'true');
-            if (statusText) statusText.textContent = 'Added to cart';
-            if (statusIcon) { 
-                statusIcon.className = 'fas fa-check-circle';
-                statusIcon.style.color = 'var(--accent-gold)';
-                statusIcon.style.fontSize = '13px';
+            // Add
+            const price = parseFloat(prod.price) || 0;
+            // Parse icon from card if needed, or fallback
+            let iconClass = 'fa-box';
+            if(prod.icon) {
+                 const match = prod.icon.match(/fa-[a-zA-Z0-9-]+/g);
+                 if(match) iconClass = match[0];
             }
+            cart[id] = { name: prod.title, price: price, icon: iconClass };
         }
-        renderCart();
+        
+        updateCartUI();
     }
 
     function removeFromCart(id) {
         delete cart[id];
-        const card       = document.getElementById('card-' + id);
-        const banner     = document.getElementById('banner-' + id);
-        const statusText = document.getElementById('statustext-' + id);
-        const statusIcon = document.getElementById('statusicon-' + id);
-
-        if (card) card.classList.remove('selected');
-        if (banner) banner.setAttribute('aria-checked', 'false');
-        if (statusText) statusText.textContent = 'Click card to select';
-        if (statusIcon) { 
-            statusIcon.className = 'fas fa-circle';
-            statusIcon.style.color = 'var(--medium-gray)';
-            statusIcon.style.fontSize = '10px';
-        }
-        renderCart();
+        updateCartUI();
     }
 
     function clearCart() {
-        Object.keys(cart).forEach(id => removeFromCart(id));
+        cart = {};
+        updateCartUI();
     }
 
-    function renderCart() {
+    // Syncs memory state with ALL view components (Grid, Details, Sidebar)
+    function updateCartUI() {
+        renderSidebarCart();
+
+        // 1. Update Grid Cards (If they exist in DOM)
+        allProductsData.forEach(prod => {
+            const card = document.getElementById('card-' + prod.id);
+            if (!card) return;
+            const statusIcon = document.getElementById('statusicon-' + prod.id);
+            const statusText = document.getElementById('statustext-' + prod.id);
+
+            if (cart[prod.id]) {
+                card.classList.add('selected');
+                if (statusText) statusText.textContent = 'In Cart (Click to view)';
+                if (statusIcon) {
+                    statusIcon.className = 'fas fa-check-circle';
+                    statusIcon.style.color = 'var(--accent-gold)';
+                    statusIcon.style.fontSize = '14px';
+                }
+            } else {
+                card.classList.remove('selected');
+                if (statusText) statusText.textContent = 'View Details';
+                if (statusIcon) {
+                    statusIcon.className = 'fas fa-info-circle';
+                    statusIcon.style.color = 'var(--primary-blue)';
+                    statusIcon.style.fontSize = '14px';
+                }
+            }
+
+            // 2. Update Detail View Button (If currently open)
+            const detailBtn = document.getElementById('detail-cart-btn-' + prod.id);
+            if (detailBtn) {
+                const inCart = !!cart[prod.id];
+                detailBtn.innerHTML = `<i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}`;
+                detailBtn.style.background = inCart ? 'var(--dark-navy)' : 'var(--accent-gold)';
+                detailBtn.style.color = inCart ? 'white' : 'var(--dark-navy)';
+            }
+        });
+    }
+
+    function renderSidebarCart() {
         const keys     = Object.keys(cart);
         const subtotal = keys.reduce((s, k) => s + cart[k].price, 0);
         const gst      = Math.round(subtotal * 0.18);
         const grand    = subtotal + gst;
+        
         document.getElementById('cartCountBadge').innerText = keys.length;
         const empty = keys.length === 0;
+        
         document.getElementById('cartEmpty').style.display = empty ? 'block' : 'none';
         document.getElementById('cartTotals').classList.toggle('visible', !empty);
         document.getElementById('cartPayForm').classList.toggle('visible', !empty);
         document.getElementById('cartActions').classList.toggle('visible', !empty);
         document.getElementById('secureNote').classList.toggle('visible', !empty);
+        
         const container = document.getElementById('cartItems');
         container.innerHTML = '';
         keys.forEach(id => {
@@ -1066,7 +1161,7 @@
                 <div class="cart-item-icon"><i class="fas ${it.icon}"></i></div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${it.name}</div>
-                    <div class="cart-item-price">₹${it.price.toLocaleString('en-IN')} / yr</div>
+                    <div class="cart-item-price">₹${it.price.toLocaleString('en-IN')}</div>
                 </div>
                 <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove ${it.name}"><i class="fas fa-times"></i></button>`;
             container.appendChild(row);
@@ -1117,9 +1212,7 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dataObj)
                 });
-                if (!sbRes.ok) {
-                    console.warn("Supabase response not OK:", await sbRes.text());
-                }
+                if (!sbRes.ok) console.warn("Supabase response not OK:", await sbRes.text());
             } catch(e) { console.warn("Saving pending cart failed, continuing.", e); }
 
             const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
@@ -1224,25 +1317,15 @@
 
     // ── INIT ──
     window.onload = function () {
-        loadMasterCopy(); // Fetches header and footer from Components.html, then calls initMenuLogic()
-        loadProductsFromCSV().catch(e => {
-            console.error(e);
-            // BUGFIX: Print the exact error on the screen so you aren't guessing what went wrong
-            document.getElementById('productsGrid').innerHTML = `
-            <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 8px;">
-                <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
-                <h3 style="font-size: 16px; margin-bottom: 5px;">Error Loading Products</h3>
-                <p style="font-size: 13px;">${e.message}</p>
-                <p style="font-size: 11px; margin-top: 10px; color: #718096;">Check if your Supabase bucket is named correctly and if the Edge Function is deployed.</p>
-            </div>`;
-        });
+        loadMasterCopy(); 
+        loadProductsFromCSV();
     };
 
     // Expose globals used inline
     window.slideNext         = slideNext;
     window.slidePrev         = slidePrev;
     window.goToSlide         = goToSlide;
-    window.toggleSelect      = toggleSelect;
+    window.toggleCartState   = toggleCartState;
     window.removeFromCart    = removeFromCart;
     window.clearCart         = clearCart;
     window.proceedToPayment  = proceedToPayment;
