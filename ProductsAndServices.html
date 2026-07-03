@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products | Ganesh Solutions</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
         :root {
             --primary-blue: #1a365d;
             --accent-gold:  #d4af37;
@@ -20,7 +20,6 @@
             --cyber-teal:   #0ea5e9;
             --financial-green: #059669;
         }
-
         body {
             background-color: var(--light-gray);
             color: var(--text-dark);
@@ -28,14 +27,12 @@
             min-height: 100vh;
             scroll-padding-top: 100px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
         }
-
         #header-placeholder { min-height: 100px; }
         #footer-placeholder  { min-height: 300px; }
 
@@ -283,7 +280,7 @@
         .card-category { font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
                          text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 3px; }
         .card-title    { font-size: 18px; font-weight: 600; color: white; line-height: 1.3; }
-        
+
         .card-badge {
             background: var(--accent-gold); color: var(--dark-navy);
             font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
@@ -591,14 +588,12 @@
         </div>
         <div class="shop-layout">
             <div class="products-col">
-                
                 <!-- Dynamic Products Container -->
                 <div class="products-grid" id="productsGrid">
                     <div class="loading-spinner">
                         <i class="fas fa-spinner fa-spin"></i> Loading Products...
                     </div>
                 </div>
-
             </div>
 
             <!-- CART SIDEBAR -->
@@ -741,7 +736,7 @@
         try {
             const response = await fetch('Components.html');
             if (!response.ok) throw new Error('Components.html not found');
-            
+
             const text = await response.text();
             const parser = new DOMParser();
             const masterDoc = parser.parseFromString(text, 'text/html');
@@ -763,9 +758,19 @@
         try {
             // Securely fetching the CSV from your Supabase backend function instead of a direct Google link
             const response = await fetch(BACKEND_BASE + '/get-products-csv');
-            if (!response.ok) throw new Error('Failed to fetch product data from backend');
-            const csvText = await response.text();
             
+            // BUGFIX: If Supabase fails, extract the exact error message so you can see it on screen!
+            if (!response.ok) {
+                let errMsg = `Failed to fetch product data (Status: ${response.status})`;
+                try {
+                    const errJson = await response.json();
+                    if (errJson.error) errMsg = `Backend Error: ${errJson.error}`;
+                } catch(e) { /* ignore parse error */ }
+                throw new Error(errMsg);
+            }
+
+            const csvText = await response.text();
+
             // Simple CSV parser (splits by newline, then comma, handling basic quoting)
             const rows = csvText.split('\n').map(row => {
                 // Regex to split by comma except inside quotes
@@ -783,7 +788,7 @@
             renderDynamicProducts(products);
         } catch(e) {
             console.error(e);
-            document.getElementById('productsGrid').innerHTML = `<p style="color:red;">Error loading products.</p>`;
+            throw e; // Pass error down to be caught by the window.onload catch block
         }
     }
 
@@ -795,8 +800,11 @@
         products.forEach(prod => {
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
             const price = parseFloat(prod.price) || 0;
-            const features = prod.features ? prod.features.split('|') : [];
-            const images = prod.images ? prod.images.split('|') : [];
+            
+            // BUGFIX: Added .map(s => s.trim()).filter(Boolean)
+            // This removes the hidden spaces around the '|' delimiter so your image links don't break!
+            const features = prod.features ? prod.features.split('|').map(s => s.trim()).filter(Boolean) : [];
+            const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
             // Conditionals
             const badgeHTML = `<span class="card-badge inline-badge ${isLive ? '' : 'soon'}">${isLive ? 'Live' : 'Coming Soon'}</span>`;
@@ -812,7 +820,7 @@
             if (isLive) {
                 let slidesHTML = images.map((src, idx) => `<div class="carousel-slide"><img src="${src}" alt="Screenshot ${idx+1}"></div>`).join('');
                 let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('${prod.id}', ${idx})"></div>`).join('');
-                
+
                 carouselHTML = `
                     <div class="carousel-container">
                         <div class="carousel-slides" id="slides-${prod.id}">${slidesHTML}</div>
@@ -883,7 +891,6 @@
         initCarousels();
     }
 
-
     let slideIndex = {};
     let slideCount = {};
     let cardObserver;
@@ -920,7 +927,7 @@
             const idParts = container.id.split('slides-');
             if (idParts.length < 2) return;
             const id = idParts[1];
-            
+
             const slides = container.querySelectorAll('.carousel-slide');
             if(slides.length > 0) {
                 slideIndex[id] = 0;
@@ -936,25 +943,25 @@
         if (!container) return;
         container.style.transform = `translateX(-${(slideIndex[productId] || 0) * 100}%)`;
     }
-    
+
     function updateDots(productId, activeIdx) {
         const dotsContainer = document.getElementById(`dots-${productId}`);
         if (!dotsContainer) return;
         Array.from(dotsContainer.children).forEach((dot, i) => dot.classList.toggle('active', i === activeIdx));
     }
-    
+
     function slideNext(productId) {
         const max = slideCount[productId] || 1;
         const n = (slideIndex[productId] + 1) % max;
         slideIndex[productId] = n; updateSlideTransform(productId); updateDots(productId, n);
     }
-    
+
     function slidePrev(productId) {
         const max = slideCount[productId] || 1;
         const n = (slideIndex[productId] - 1 + max) % max;
         slideIndex[productId] = n; updateSlideTransform(productId); updateDots(productId, n);
     }
-    
+
     function goToSlide(productId, idx) {
         slideIndex[productId] = idx; updateSlideTransform(productId); updateDots(productId, idx);
     }
@@ -965,18 +972,18 @@
     function toggleSelect(id) {
         const card = document.getElementById('card-' + id);
         if (!card) return;
-        
+
         const isLive = card.getAttribute('data-live') === 'true';
         if (!isLive) return;
 
         // Retrieve properties dynamically
         const titleEl = card.querySelector('.card-title');
         const title = titleEl ? titleEl.innerText.trim() : 'Product';
-        
+
         const priceEl = card.querySelector('.price-amount');
         const priceText = priceEl ? priceEl.innerText : '0';
         const price = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
-        
+
         const iconEl = card.querySelector('.card-icon-btn i');
         let icon = 'fa-box';
         if (iconEl) {
@@ -997,9 +1004,9 @@
             if (banner) banner.setAttribute('aria-checked', 'false');
             if (statusText) statusText.textContent = 'Click card to select';
             if (statusIcon) { 
-                statusIcon.className = 'fas fa-circle'; 
-                statusIcon.style.color = 'var(--medium-gray)'; 
-                statusIcon.style.fontSize = '10px'; 
+                statusIcon.className = 'fas fa-circle';
+                statusIcon.style.color = 'var(--medium-gray)';
+                statusIcon.style.fontSize = '10px';
             }
         } else {
             cart[id] = { name: title, price: price, icon: icon };
@@ -1007,9 +1014,9 @@
             if (banner) banner.setAttribute('aria-checked', 'true');
             if (statusText) statusText.textContent = 'Added to cart';
             if (statusIcon) { 
-                statusIcon.className = 'fas fa-check-circle'; 
-                statusIcon.style.color = 'var(--accent-gold)'; 
-                statusIcon.style.fontSize = '13px'; 
+                statusIcon.className = 'fas fa-check-circle';
+                statusIcon.style.color = 'var(--accent-gold)';
+                statusIcon.style.fontSize = '13px';
             }
         }
         renderCart();
@@ -1026,9 +1033,9 @@
         if (banner) banner.setAttribute('aria-checked', 'false');
         if (statusText) statusText.textContent = 'Click card to select';
         if (statusIcon) { 
-            statusIcon.className = 'fas fa-circle'; 
-            statusIcon.style.color = 'var(--medium-gray)'; 
-            statusIcon.style.fontSize = '10px'; 
+            statusIcon.className = 'fas fa-circle';
+            statusIcon.style.color = 'var(--medium-gray)';
+            statusIcon.style.fontSize = '10px';
         }
         renderCart();
     }
@@ -1084,21 +1091,21 @@
         const originalText = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        
+
         try {
             document.getElementById('paymentModal').classList.add('visible');
-            
+
             const dataObj = {
                 purpose: "Product Purchase", 
                 name: name, 
                 mobileNumber: phone,
                 email: email || "Not provided",
-                gender: "N/A",           
-                dob: "1900-01-01",       
-                tob: "00:00",            
-                pob: "N/A",              
-                maritalStatus: "N/A",    
-                profession: "N/A",       
+                gender: "N/A",                           
+                dob: "1900-01-01",                       
+                tob: "00:00",                            
+                pob: "N/A",                              
+                maritalStatus: "N/A",                    
+                profession: "N/A",                       
                 expectations: "Purchasing Software Products: " + products,
                 amount: grand, 
                 payment_status: 'pending',
@@ -1110,23 +1117,22 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dataObj)
                 });
-                
                 if (!sbRes.ok) {
                     console.warn("Supabase response not OK:", await sbRes.text());
                 }
             } catch(e) { console.warn("Saving pending cart failed, continuing.", e); }
-            
+
             const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone })
             });
             const order = await res.json();
             if (!order.success) throw new Error(order.message || "Payment initiation failed");
-            
+
             sessionStorage.setItem('rzp_txn_id', order.transactionId);
             sessionStorage.setItem('rzp_order_id', order.razorpayOrderId);
             sessionStorage.setItem('rzp_amt', grand);
-            
+
             const rzp = new Razorpay({
                 key: RAZORPAY_KEY_ID, amount: order.amount, currency: 'INR',
                 name: 'Ganesh Solutions',
@@ -1170,6 +1176,7 @@
         const mobileBtn = document.getElementById('mobileMenuToggle');
         const mainNav   = document.getElementById('mainNav');
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
+        
         if (mobileBtn && mainNav) {
             mobileBtn.onclick = function () {
                 const isActive = mainNav.classList.toggle('active');
@@ -1196,6 +1203,7 @@
                 }
             });
         });
+
         function repositionDropdowns() {
             if (window.innerWidth <= 992) return;
             document.querySelectorAll('nav ul li').forEach(li => {
@@ -1217,7 +1225,17 @@
     // ── INIT ──
     window.onload = function () {
         loadMasterCopy(); // Fetches header and footer from Components.html, then calls initMenuLogic()
-        loadProductsFromCSV(); // Fetches data and builds products dynamically
+        loadProductsFromCSV().catch(e => {
+            console.error(e);
+            // BUGFIX: Print the exact error on the screen so you aren't guessing what went wrong
+            document.getElementById('productsGrid').innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 8px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                <h3 style="font-size: 16px; margin-bottom: 5px;">Error Loading Products</h3>
+                <p style="font-size: 13px;">${e.message}</p>
+                <p style="font-size: 11px; margin-top: 10px; color: #718096;">Check if your Supabase bucket is named correctly and if the Edge Function is deployed.</p>
+            </div>`;
+        });
     };
 
     // Expose globals used inline
@@ -1244,4 +1262,5 @@
         }
     });
 </script>
-</body></html>
+</body>
+</html>
