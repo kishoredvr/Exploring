@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -759,7 +758,7 @@
 
             // Save globally for detail view reference
             allProductsData = products;
-            
+
             renderDynamicProducts(products);
 
             // Once data is loaded, check if we need to load a detail view directly from URL
@@ -767,7 +766,8 @@
 
         } catch(e) {
             console.error(e);
-            document.getElementById('productsGrid').innerHTML = `
+            // BUGFIX: Changed 'productsGrid' to 'productsListView' to match the updated HTML ID
+            document.getElementById('productsListView').innerHTML = `
             <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 8px;">
                 <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
                 <h3 style="font-size: 16px; margin-bottom: 5px;">Error Loading Products</h3>
@@ -778,7 +778,8 @@
 
     // ── DYNAMIC HTML RENDERING (LIST VIEW) ──
     function renderDynamicProducts(products) {
-        const grid = document.getElementById('productsGrid');
+        // BUGFIX: Changed 'productsGrid' to 'productsListView' to match the updated HTML ID
+        const grid = document.getElementById('productsListView');
         grid.innerHTML = ''; 
 
         products.forEach(prod => {
