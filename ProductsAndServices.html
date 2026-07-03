@@ -258,13 +258,22 @@
         }
         .carousel-container { position: relative; width: 100%; overflow: hidden; }
         .carousel-slides { display: flex; transition: transform 0.4s ease-in-out; will-change: transform; }
+        
         .carousel-slide {
             flex: 0 0 100%;
             aspect-ratio: 16 / 10;
-            background: #eef2f6;
+            background: #eef2f6; /* Matching seamless background */
             display: flex; align-items: center; justify-content: center;
         }
-        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        /* BUGFIX: object-fit: contain absolutely guarantees zero cropping */
+        .carousel-slide img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            display: block; 
+        }
+        
         .carousel-placeholder {
             width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -336,12 +345,14 @@
         .detail-body { padding: 30px; }
         .detail-title { font-size: 28px; color: var(--dark-navy); line-height: 1.2; margin-bottom: 10px; }
 
-        /* Ensures the detail image area is tall enough and prevents cropping */
+        /* Dynamic scaling for Detail View images to ensure they are large but never cropped */
         .detail-carousel-slide {
             aspect-ratio: auto !important; 
-            height: 500px; 
-            background: #f8fafc !important;
-            padding: 20px;
+            height: 60vh; /* Adjusts beautifully to laptop screens */
+            max-height: 600px;
+            min-height: 350px;
+            background: #eef2f6 !important; /* Neutral background for uncropped sides */
+            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -551,7 +562,7 @@
             .cart-sidebar { position: static; }
             .form-row { grid-template-columns: 1fr; }
             
-            .detail-carousel-slide { height: 300px; padding: 10px; }
+            .detail-carousel-slide { height: 40vh; min-height: 250px; }
             .detail-body { padding: 20px; }
             .detail-title { font-size: 24px; }
         }
@@ -803,7 +814,7 @@
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
             const price = parseFloat(prod.price) || 0;
             
-            // Splits features string by Commas (,), Pipes (|), or New Lines (\n) 
+            // Splits features string cleanly so it appears on multiple lines!
             const features = prod.features ? prod.features.split(/[|\n,]/).map(s => s.trim()).filter(Boolean) : [];
             const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
@@ -923,28 +934,15 @@
         
         // Multi-line splitting for Detail view
         const features = prod.features ? prod.features.split(/[|\n,]/).map(s => s.trim()).filter(Boolean) : [];
+        
         const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
-        // UN-PROXY SCRIPT: 
-        // This strips the "wsrv.nl" optimization layer from the URL and guarantees 
-        // that the Detail View displays the raw, uncropped, original 100% resolution image!
-        const rawImages = images.map(src => {
-            if (src.includes('wsrv.nl')) {
-                try {
-                    const urlObj = new URL(src);
-                    const rawUrl = urlObj.searchParams.get('url');
-                    if (rawUrl) return rawUrl;
-                } catch(e) {}
-            }
-            return src;
-        });
-
-        // Build unique carousel HTML for Detail view using RAW images
+        // Build unique carousel HTML for Detail view 
         let carouselHTML = '';
-        if (isLive && rawImages.length > 0) {
-            // Object-fit: contain guarantees the entire original image is displayed without cropped edges.
-            let slidesHTML = rawImages.map((src, idx) => `<div class="carousel-slide detail-carousel-slide"><img src="${src}" alt="Detail Screenshot ${idx+1}" style="object-fit: contain; width: 100%; height: 100%;"></div>`).join('');
-            let dotsHTML = rawImages.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
+        if (isLive && images.length > 0) {
+            
+            let slidesHTML = images.map((src, idx) => `<div class="carousel-slide detail-carousel-slide"><img src="${src}" alt="Detail Screenshot ${idx+1}"></div>`).join('');
+            let dotsHTML = images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide('detail-${prod.id}', ${idx})"></div>`).join('');
 
             carouselHTML = `
                 <div class="carousel-container">
@@ -1023,9 +1021,9 @@
         detailContainer.innerHTML = detailHTML;
         detailContainer.style.display = 'block';
 
-        if (isLive && rawImages.length > 0) {
+        if (isLive && images.length > 0) {
             slideIndex[`detail-${prod.id}`] = 0;
-            slideCount[`detail-${prod.id}`] = rawImages.length;
+            slideCount[`detail-${prod.id}`] = images.length;
             updateSlideTransform(`detail-${prod.id}`);
             updateDots(`detail-${prod.id}`, 0);
         }
