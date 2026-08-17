@@ -273,6 +273,10 @@
     <script>
         const SUPABASE_FUNCTION_URL = 'https://lkvcbpxkpwpoqjlcddgl.supabase.co/functions/v1/articles';
         
+        // IMPORTANT: Ensure your GitHub Actions build process replaces this placeholder 
+        // with the actual secret (e.g., using sed or a substitution action).
+        const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__'; 
+        
         const articlesMetadata = [
             {
                 id: 'art1',
@@ -516,13 +520,20 @@
             detailContentDiv.innerHTML = `<div class="prose-loading flex flex-col items-center justify-center py-12"><i class="fas fa-spinner fa-spin text-3xl text-brand-500 mb-4"></i><p class="text-gray-500">Retrieving article content...</p></div>`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
             currentArticleTitle = art.title;
+            
             try {
+                // Incorporating the SUPABASE_ANON_KEY secret into the Authorization header to verify JWT
                 const response = await fetch(`${SUPABASE_FUNCTION_URL}?title=${encodeURIComponent(art.title)}`, {
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
                 });
+                
                 if (!response.ok) throw new Error('Failed to fetch');
                 const data = await response.json();
+                
                 if (currentArticleTitle === art.title) {
                     detailContentDiv.innerHTML = data.content || '<div class="prose-error">Article content not found.</div>';
                 }
@@ -582,9 +593,13 @@
                 shareBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     navigator.clipboard.writeText(window.location.href).then(() => {
-                        alert('Sharable link copied to clipboard!');
+                        const originalHtml = shareBtn.innerHTML;
+                        shareBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                        setTimeout(() => shareBtn.innerHTML = originalHtml, 2000);
                     }).catch(() => {
-                        alert('Could not copy link. Please copy the URL manually.');
+                        const originalHtml = shareBtn.innerHTML;
+                        shareBtn.innerHTML = '<i class="fas fa-times mr-2"></i> Failed';
+                        setTimeout(() => shareBtn.innerHTML = originalHtml, 2000);
                     });
                 });
             }
