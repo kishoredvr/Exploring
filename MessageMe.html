@@ -509,12 +509,63 @@
         </div>
     </div>
 
+    <!-- Custom Alert Modal (Replaces browser alert()) -->
+    <div class="fixed inset-0 z-[3000] flex items-center justify-center hidden bg-slate-900/90 backdrop-blur-sm" id="customAlertModal">
+        <div class="bg-white p-8 rounded-xl max-w-sm w-full text-center shadow-2xl">
+            <i class="fas fa-exclamation-circle text-4xl mb-4" id="customAlertIcon" style="color: var(--accent-gold);"></i>
+            <h3 class="text-lg font-bold text-slate-800 mb-2" id="customAlertTitle">Notice</h3>
+            <p class="text-slate-600 text-sm mb-6" id="customAlertMessage"></p>
+            <button onclick="closeCustomAlert()" class="bg-[#1a365d] text-white px-6 py-2 rounded font-semibold w-full">OK</button>
+        </div>
+    </div>
+    
+    <!-- Custom Confirm Modal (Replaces browser confirm()) -->
+    <div class="fixed inset-0 z-[3000] flex items-center justify-center hidden bg-slate-900/90 backdrop-blur-sm" id="customConfirmModal">
+        <div class="bg-white p-8 rounded-xl max-w-sm w-full text-center shadow-2xl">
+            <i class="fas fa-question-circle text-4xl mb-4" style="color: var(--accent-gold);"></i>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Confirm Action</h3>
+            <p class="text-slate-600 text-sm mb-6" id="customConfirmMessage"></p>
+            <div class="flex gap-4">
+                <button onclick="closeCustomConfirm(false)" class="border border-slate-300 text-slate-600 px-4 py-2 rounded font-semibold flex-1 hover:bg-slate-50">Cancel</button>
+                <button onclick="closeCustomConfirm(true)" class="bg-[#1a365d] text-white px-4 py-2 rounded font-semibold flex-1 hover:bg-blue-900">Yes, Clear</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Placeholder for master footer -->
     <div id="footer-placeholder"></div>
 
     <script>
         const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
         const RAZORPAY_KEY_ID = 'rzp_live_SG5xWhtRJUaBRL';
+        
+        // IMPORTANT: GitHub Actions will replace this placeholder during deployment
+        const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
+
+        /**
+         * Custom UI Handlers (Replacing native alert/confirm)
+         */
+        function showCustomAlert(message, title="Notice") {
+            document.getElementById('customAlertTitle').textContent = title;
+            document.getElementById('customAlertMessage').textContent = message;
+            document.getElementById('customAlertModal').classList.remove('hidden');
+        }
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        }
+
+        let confirmCallback = null;
+        function showCustomConfirm(message, callback) {
+            document.getElementById('customConfirmMessage').textContent = message;
+            document.getElementById('customConfirmModal').classList.remove('hidden');
+            confirmCallback = callback;
+        }
+        function closeCustomConfirm(result) {
+            document.getElementById('customConfirmModal').classList.add('hidden');
+            if(confirmCallback && result) {
+                confirmCallback();
+            }
+        }
 
         /**
          * Fetch master components and inject them
@@ -645,7 +696,7 @@
                 if (!document.getElementById('contactCountry').value.trim()) showError('contactCountry');
             } else {
                 if (!document.getElementById('termsAgree').checked) {
-                    alert('Please agree to terms and conditions.');
+                    showCustomAlert('Please agree to terms and conditions.', 'Terms Required');
                     isValid = false;
                 }
             }
@@ -670,10 +721,15 @@
             try {
                 await fetch(BACKEND_BASE + '/submit-form', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
                     body: JSON.stringify(data)
                 });
-            } catch(e) {}
+            } catch(e) {
+                console.warn('Pending form saving issue:', e);
+            }
         }
 
         form.onsubmit = async (e) => {
@@ -688,16 +744,22 @@
                     document.getElementById('paymentModal').classList.remove('hidden');
                     await savePendingForm(dataObj);
                     const amt = parseInt(dataObj.astro_service_tier);
+                    
                     const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        },
                         body: JSON.stringify({ amount: amt * 100, currency: 'INR', mobileNumber: dataObj.mobileNumber })
                     });
                     const order = await res.json();
                     if (!order.success) throw new Error(order.message || "Payment initiation failed");
+                    
                     sessionStorage.setItem('rzp_txn_id', order.transactionId);
                     sessionStorage.setItem('rzp_order_id', order.razorpayOrderId);
                     sessionStorage.setItem('rzp_amt', amt);
+                    
                     const rzp = new Razorpay({
                         key: RAZORPAY_KEY_ID,
                         amount: order.amount,
@@ -719,7 +781,10 @@
                 } else {
                     const subRes = await fetch(BACKEND_BASE + '/submit-form', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        },
                         body: JSON.stringify(dataObj)
                     });
                     if (!subRes.ok) throw new Error("Submission failed");
@@ -728,7 +793,7 @@
                     window.scrollTo({top:0, behavior:'smooth'});
                 }
             } catch (err) {
-                alert('Error: ' + err.message);
+                showCustomAlert(err.message, 'Form Processing Error');
                 document.getElementById('errorMessage').classList.remove('hidden');
             } finally {
                 if (!purposeAstro.checked) {
@@ -738,12 +803,12 @@
         };
 
         document.getElementById('clearButton').onclick = () => {
-            if(confirm('Clear all fields?')) {
+            showCustomConfirm('Are you sure you want to clear all the fields?', () => {
                 form.reset();
                 toggleSections();
                 wordCountSpan.textContent = '0';
                 window.scrollTo({top:0, behavior:'smooth'});
-            }
+            });
         };
 
         // Resume Flow & Initial State
