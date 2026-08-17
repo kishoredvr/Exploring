@@ -1451,6 +1451,15 @@
         <div id="lightboxContent"></div>
     </div>
 
+    <!-- ====== CUSTOM ALERT MODAL ====== -->
+    <div class="lightbox-overlay" id="customAlertModal" style="z-index: 99999;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <i class="fas fa-exclamation-circle" style="font-size: 40px; color: var(--accent-gold); margin-bottom: 15px;"></i>
+            <p id="customAlertMessage" style="font-size: 16px; color: var(--dark-navy); margin-bottom: 20px;"></p>
+            <button onclick="document.getElementById('customAlertModal').classList.remove('open')" style="background: var(--primary-blue); color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-weight: 600;">OK</button>
+        </div>
+    </div>
+
     <!-- ====== PAYMENT MODAL ====== -->
     <div id="paymentModal">
         <div class="payment-modal-content">
@@ -1464,9 +1473,19 @@
     <script>
         const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
         const RAZORPAY_KEY_ID = 'rzp_live_SG5xWhtRJUaBRL';
+        
+        // IMPORTANT: Ensure your GitHub Actions build process replaces this placeholder 
+        // with the actual secret.
+        const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
 
         let allProductsData = [];
         var cart = {};
+
+        // ── CUSTOM ALERT FUNCTION ──
+        function showCustomAlert(message) {
+            document.getElementById('customAlertMessage').textContent = message;
+            document.getElementById('customAlertModal').classList.add('open');
+        }
 
         // ── MOBILE MENU ──
         document.addEventListener('DOMContentLoaded', function() {
@@ -1518,7 +1537,12 @@
         // ── FETCH PRODUCTS ──
         async function loadProductsFromCSV() {
             try {
-                const response = await fetch(BACKEND_BASE + '/get-products-csv');
+                const response = await fetch(BACKEND_BASE + '/get-products-csv', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
                 if (!response.ok) {
                     let errMsg = `Failed to fetch product data (Status: ${response.status})`;
                     try {
@@ -1944,10 +1968,10 @@
             const name = document.getElementById('pay-name').value.trim();
             const phone = document.getElementById('pay-phone').value.trim();
             const email = document.getElementById('pay-email').value.trim();
-            if (!name || !phone) { alert('Please enter your Name and Mobile number'); return; }
+            if (!name || !phone) { showCustomAlert('Please enter your Name and Mobile number'); return; }
 
             const keys = Object.keys(cart);
-            if (keys.length === 0) { alert('Cart is empty'); return; }
+            if (keys.length === 0) { showCustomAlert('Cart is empty'); return; }
 
             const subtotal = keys.reduce((s, k) => s + cart[k].price, 0);
             const grand = subtotal + Math.round(subtotal * 0.18);
@@ -1981,7 +2005,10 @@
                 try {
                     const sbRes = await fetch(BACKEND_BASE + '/submit-form', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        },
                         body: JSON.stringify(dataObj)
                     });
                     if (!sbRes.ok) console.warn("Supabase response not OK:", await sbRes.text());
@@ -1989,7 +2016,10 @@
 
                 const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
                     body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone })
                 });
                 const order = await res.json();
@@ -2023,7 +2053,7 @@
                 rzp.open();
 
             } catch (err) {
-                alert('Payment Error: ' + err.message);
+                showCustomAlert('Payment Error: ' + err.message);
                 document.getElementById('paymentModal').classList.remove('visible');
                 btn.disabled = false;
                 btn.innerHTML = originalText;
@@ -2037,7 +2067,7 @@
             const appType = document.getElementById('eq-type').value;
             const desc = document.getElementById('eq-desc').value.trim();
             if (!name || !phone || !appType || !desc) {
-                alert('Please fill all required fields (Name, Mobile, Application Type, Description).');
+                showCustomAlert('Please fill all required fields (Name, Mobile, Application Type, Description).');
                 return;
             }
             document.getElementById('enquiryBody').style.display = 'none';
