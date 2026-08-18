@@ -917,20 +917,13 @@
                     amount: grand, payment_status: 'pending', submittedAt: new Date().toISOString()
                 };
 
-                try {
-                    const sbRes = await fetch(BACKEND_BASE + '/submit-form', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-                        body: JSON.stringify(dataObj)
-                    });
-                    if (!sbRes.ok) console.warn("Supabase response not OK:", await sbRes.text());
-                } catch (e) { console.warn("Saving pending cart failed, continuing.", e); }
-
+                // Initiate Razorpay Order (Sends full details directly to the backend)
                 const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-                    body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone })
+                    body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone, name: name, email: email, purpose: "Product Purchase", notes: dataObj })
                 });
+                
                 const order = await res.json();
                 if (!order.success) throw new Error(order.message || "Payment initiation failed");
 
