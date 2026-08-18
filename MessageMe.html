@@ -760,7 +760,6 @@
                     await savePendingForm(dataObj);
                     const amt = parseInt(dataObj.astro_service_tier);
                     
-                    // 2. Initiate Razorpay Payment (Passing full notes so backend processes it perfectly)
                     const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                         method: 'POST',
                         headers: { 
@@ -774,7 +773,7 @@
                             name: dataObj.name,
                             email: dataObj.email,
                             purpose: dataObj.purpose,
-                            notes: dataObj // <-- Critical for printing exact details!
+                            notes: dataObj // <-- THIS is what passes the exact name to the invoice!
                         })
                     });
                     const order = await res.json();
