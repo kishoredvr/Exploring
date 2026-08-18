@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verifying Payment...</title>
+</head>
+<body>
+  <h2>Please wait while we verify your payment...</h2>
+  <p>Do not refresh this page.</p>
+
+  <script>
+    async function verifyPayment() {
+      // 1. Get the parameters Razorpay put in the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const razorpay_order_id = urlParams.get('razorpay_order_id');
+      const razorpay_payment_id = urlParams.get('razorpay_payment_id');
+      const razorpay_signature = urlParams.get('razorpay_signature');
+
+      if (!razorpay_order_id) {
+        window.location.href = "https://parishodana.xyz/MessageMe.html";
+        return;
+      }
+
+      try {
+        // 2. Call your SECURE Supabase Edge function
+        const response = await fetch("https://[YOUR_SUPABASE_PROJECT_REF].supabase.co/functions/v1/razorpay-return-handler", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY" // Add your frontend anon key here!
+          },
+          body: JSON.stringify({
+            razorpay_order_id: razorpay_order_id,
+            razorpay_payment_id: razorpay_payment_id,
+            razorpay_signature: razorpay_signature
+          })
+        });
+
+        const data = await response.json();
+
+        // 3. If successful, redirect to the print page with the token
+        if (data.success && data.token) {
+          window.location.href = `https://parishodana.xyz/print?tok=${data.token}`;
+        } else {
+          console.error("Verification failed:", data.error);
+          window.location.href = "https://parishodana.xyz/MessageMe.html";
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        window.location.href = "https://parishodana.xyz/MessageMe.html";
+      }
+    }
+
+    // Run immediately when page loads
+    verifyPayment();
+  </script>
+</body>
+</html>
