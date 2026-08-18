@@ -368,8 +368,8 @@
                     <div id="astroServiceWrapper" class="flex items-center gap-4 border-l border-slate-300 pl-4">
                         <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm">
                             <option value="2000">Consultation Fee — ₹2000</option>
-                            <option value="2000">Testing — ₹10</option>
-                            <!--Commenting option value="10">Testing — ₹10</option--->
+                            <!-- FIXED VALUE: Changed from 2000 to 10 -->
+                            <option value="10">Testing — ₹10</option>
                         </select>
                     </div>
                 </div>
@@ -505,8 +505,8 @@
     <div class="fixed inset-0 z-[2000] flex items-center justify-center hidden bg-slate-900/90 backdrop-blur-sm" id="paymentModal">
         <div class="bg-white p-10 rounded-xl max-w-xs w-full text-center shadow-2xl">
             <div class="flex justify-center mb-4"><div class="spinner"></div></div>
-            <h3 class="text-lg font-bold text-slate-800 mb-1">Redirecting to Razorpay</h3>
-            <p class="text-slate-500 text-xs">Please wait while we secure your payment.</p>
+            <h3 class="text-lg font-bold text-slate-800 mb-1" id="paymentModalTitle">Redirecting to Razorpay</h3>
+            <p class="text-slate-500 text-xs" id="paymentModalDesc">Please wait while we secure your payment.</p>
         </div>
     </div>
 
@@ -704,6 +704,7 @@
             return isValid;
         }
 
+        // Updated Data Collection to properly capture exact Service Name for the Receipt
         function collectFormObject() {
             const formData = new FormData(form);
             const data = {};
@@ -713,7 +714,20 @@
             data.mobileNumber = code + phone;
             data.submittedAt = new Date().toISOString();
             if (genderOther.checked) data.gender = "Other: " + genderOtherInput.value;
-            if (purposeAstro.checked) data.astro_service_tier = document.getElementById('astroServiceSelect').value;
+            
+            if (purposeAstro.checked) {
+                const selectEl = document.getElementById('astroServiceSelect');
+                data.astro_service_tier = selectEl.value; // Price
+                
+                // Extract clean name (e.g. "Testing" or "Consultation Fee")
+                const rawText = selectEl.options[selectEl.selectedIndex].text;
+                const serviceName = rawText.split('—')[0].trim();
+                data.astro_service_name = serviceName;
+                
+                // Prepend this string to expectations so the receipt parses it dynamically
+                const originalExpectations = data.expectations;
+                data.expectations = `Purchasing Services: ${serviceName}\n\nQuestions/Expectations: ${originalExpectations}`;
+            }
             return data;
         }
 
@@ -743,16 +757,27 @@
                 const dataObj = collectFormObject();
                 if (purposeAstro.checked) {
                     document.getElementById('paymentModal').classList.remove('hidden');
+                    
+                    // 1. Save Pending details
                     await savePendingForm(dataObj);
                     const amt = parseInt(dataObj.astro_service_tier);
                     
+                    // 2. Initiate Razorpay Payment (Passing full details so invoice logic works)
                     const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
                         },
-                        body: JSON.stringify({ amount: amt * 100, currency: 'INR', mobileNumber: dataObj.mobileNumber })
+                        body: JSON.stringify({ 
+                            amount: amt * 100, 
+                            currency: 'INR', 
+                            mobileNumber: dataObj.mobileNumber,
+                            name: dataObj.name,
+                            email: dataObj.email,
+                            purpose: dataObj.purpose,
+                            notes: dataObj // <-- Critical for printing exact details!
+                        })
                     });
                     const order = await res.json();
                     if (!order.success) throw new Error(order.message || "Payment initiation failed");
@@ -761,15 +786,50 @@
                     sessionStorage.setItem('rzp_order_id', order.razorpayOrderId);
                     sessionStorage.setItem('rzp_amt', amt);
                     
+                    // 3. Open Secure Razorpay Checkout Popup
                     const rzp = new Razorpay({
                         key: RAZORPAY_KEY_ID,
                         amount: order.amount,
                         currency: 'INR',
                         name: 'Ganesh Solutions',
-                        description: 'Astrology Consultation',
+                        description: dataObj.astro_service_name || 'Astrology Consultation', // Dynamically sets to 'Testing' or 'Consultation'
                         order_id: order.razorpayOrderId,
-                        handler: (resp) => {
-                            window.location.href = `${BACKEND_BASE}/razorpay-return-handler?razorpay_order_id=${resp.razorpay_order_id}&razorpay_payment_id=${resp.razorpay_payment_id}&razorpay_signature=${resp.razorpay_signature}`;
+                        
+                        // ✅ SECURE VERIFICATION FIX (Prevents JWT 401 Error)
+                        handler: async (resp) => {
+                            document.getElementById('paymentModalTitle').innerText = "Verifying Payment...";
+                            document.getElementById('paymentModalDesc').innerText = "Please do not refresh the page.";
+                            document.getElementById('paymentModal').classList.remove('hidden');
+
+                            try {
+                                const verifyRes = await fetch(`${BACKEND_BASE}/razorpay-return-handler`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                                    },
+                                    body: JSON.stringify({
+                                        razorpay_order_id: resp.razorpay_order_id,
+                                        razorpay_payment_id: resp.razorpay_payment_id,
+                                        razorpay_signature: resp.razorpay_signature
+                                    })
+                                });
+
+                                const data = await verifyRes.json();
+                                
+                                if (data.success && data.token) {
+                                    window.location.href = `https://parishodana.xyz/print.html?tok=${data.token}`;
+                                } else {
+                                    showCustomAlert("Verification failed: " + (data.error || "Unknown error"));
+                                    document.getElementById('paymentModal').classList.add('hidden');
+                                    btn.disabled = false; btn.textContent = original;
+                                }
+                            } catch (verifyErr) {
+                                console.error(verifyErr);
+                                showCustomAlert("Network error during payment verification.");
+                                document.getElementById('paymentModal').classList.add('hidden');
+                                btn.disabled = false; btn.textContent = original;
+                            }
                         },
                         modal: { ondismiss: () => {
                             document.getElementById('paymentModal').classList.add('hidden');
@@ -780,6 +840,7 @@
                     });
                     rzp.open();
                 } else {
+                    // Non-payment form (Other Purposes)
                     const subRes = await fetch(BACKEND_BASE + '/submit-form', {
                         method: 'POST',
                         headers: { 
