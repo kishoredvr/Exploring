@@ -37,6 +37,7 @@
         nav ul li { margin-left:26px; position:relative; }
         nav ul li a { color:white; text-decoration:none; font-weight:500; padding:8px 14px; border-radius:4px; transition:all .3s; display:flex; align-items:center; white-space:nowrap; }
         nav ul li a:hover, nav ul li a.active { background:rgba(255,255,255,.1); color:var(--accent-gold); }
+        
         .dropdown-menu { position:absolute; top:100%; left:0; background:white; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:4px; opacity:0; visibility:hidden; transform:translateY(-10px); transition:all .3s ease; z-index:1000; }
         nav ul li:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
         .dropdown-menu.flip-left { left: auto; right: 0; }
@@ -85,6 +86,7 @@
         .card-media .placeholder-fill i { font-size:38px; color:var(--primary-blue); opacity:.6; }
         .stock-badge { position:absolute; top:10px; left:10px; font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:4px 9px; border-radius:20px; background:var(--accent-gold); color:var(--dark-navy); }
         .stock-badge.soon { background:rgba(15,26,60,.75); color:white; }
+        
         .card-action-btn { width:100%; padding:10px; border-radius:6px; border:none; background:var(--accent-gold); color:var(--dark-navy); font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; margin-top:14px; transition:.2s; }
         .card-action-btn:hover { opacity:0.9; }
         .card-action-btn.in-cart { background:var(--dark-navy); color:white; }
@@ -160,14 +162,16 @@
         .cart-empty { padding: 32px 20px; text-align: center; color: var(--text-light); }
         .cart-empty i { font-size: 2.2rem; color: #cbd5e0; display: block; margin-bottom: 10px; }
         .cart-items { padding: 0; overflow-y: auto; flex: 1; }
-        .cart-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--medium-gray); }
+        
+        /* Updated Cart Item Layout */
+        .cart-item { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--medium-gray); }
         .cart-item-icon { width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, var(--dark-navy), var(--primary-blue)); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--accent-gold); flex-shrink: 0; }
         .cart-item-info { flex: 1; display:flex; flex-direction:column; }
         .cart-item-name { font-size: 13px; font-weight: 600; color: var(--text-dark); line-height: 1.3; }
         .cart-item-price { font-size: 14px; font-weight: 700; color: var(--dark-navy); margin-top: 4px; }
         
-        /* Updated Cart Remove Button */
-        .cart-item-remove { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 4px; cursor: pointer; color: #e53e3e; padding: 5px 10px; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; margin-top: 8px; align-self: flex-start; }
+        /* Explicit Red Remove Button */
+        .cart-item-remove { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 4px; cursor: pointer; color: #e53e3e; padding: 6px 10px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
         .cart-item-remove:hover { background: #fee2e2; color: #b91c1c; border-color:#fca5a5; }
         
         .cart-totals { padding: 14px 18px; border-bottom: 1px solid var(--medium-gray); display: none; }
@@ -207,16 +211,15 @@
         .payment-modal-content h3 { font-size:18px; color:var(--dark-navy); margin-bottom:5px; font-weight:bold; }
         .payment-modal-content p { font-size:13px; color:var(--text-light); }
 
-        /* ── FOOTER (Included directly to ensure dynamic application works) ── */
-        .business-info { padding: 20px 0; background: var(--light-gray); }
-        footer { background: var(--dark-navy); color: white; padding: 50px 0 20px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px; }
-        .footer-column h3 { font-size: 20px; margin-bottom: 20px; color: var(--accent-gold); }
-        .footer-column ul { list-style: none; }
-        .footer-column ul li { margin-bottom: 10px; }
-        .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; word-wrap: break-word; }
-        .footer-column a:hover { color: var(--accent-gold); }
-        .copyright { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); font-size: 14px; }
+        /* ── FOOTER (matches site) ── */
+        footer { background:var(--dark-navy); color:white; padding:50px 0 20px; }
+        .footer-content { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:30px; margin-bottom:30px; }
+        .footer-column h3 { font-size:20px; margin-bottom:20px; color:var(--accent-gold); }
+        .footer-column ul { list-style:none; }
+        .footer-column ul li { margin-bottom:10px; }
+        .footer-column a { color:rgba(255,255,255,.7); text-decoration:none; transition:color .3s; word-wrap:break-word; }
+        .footer-column a:hover { color:var(--accent-gold); }
+        .copyright { text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.5); font-size:14px; }
 
         /* ── RESPONSIVE ── */
         @media (max-width:992px) {
@@ -246,7 +249,7 @@
 </head>
 <body>
 
-    <!-- ====== DYNAMIC HEADER ====== -->
+    <!-- ====== HEADER ====== -->
     <div id="header-placeholder"></div>
 
     <!-- ====== SEARCH + CART TOOLBAR ====== -->
@@ -265,7 +268,13 @@
         </div>
     </div>
 
-    
+    <!-- ====== HERO STRIP ====== -->
+    <section class="shop-hero" id="productsListWrap">
+        <div class="container">
+            <h1>Shop Our Products</h1>
+            <p>Browse, compare and buy powerful software built for real businesses</p>
+        </div>
+    </section>
 
     <!-- ====== SHOP BODY ====== -->
     <section class="shop-body" id="products">
@@ -342,16 +351,7 @@
         </div>
     </section>
 
-    <!-- ====== BUSINESS INFO ====== -->
-    <section class="business-info">
-        <div class="container">
-            <div style="text-align:center;">                
-                <p style="color:var(--text-light); max-width:700px; margin:0 auto;">Registered micro-enterprise under the Ministry of MSME, Government of India</p>
-            </div>            
-        </div>
-    </section>
-
-    <!-- ====== DYNAMIC FOOTER ====== -->
+    <!-- ====== FOOTER ====== -->
     <div id="footer-placeholder"></div>
 
     <!-- ====== TOAST ====== -->
@@ -833,27 +833,29 @@
 
             // Toggle visibility of panels
             document.getElementById('cartEmpty').style.display = empty ? 'block' : 'none';
+            document.getElementById('cartItems').style.display = empty ? 'none' : 'block';
             document.getElementById('cartTotals').style.display = empty ? 'none' : 'block';
             document.getElementById('cartPayForm').style.display = empty ? 'none' : 'block';
             document.getElementById('cartActions').style.display = empty ? 'none' : 'flex';
             document.getElementById('secureNote').style.display = empty ? 'none' : 'flex';
 
-            // Render Items
+            // Render Items explicitly into the Cart Container
             const container = document.getElementById('cartItems');
             container.innerHTML = '';
             keys.forEach(id => {
                 const it = cart[id];
                 const row = document.createElement('div');
                 row.className = 'cart-item';
+                // Structured carefully to show details and a prominent Remove button
                 row.innerHTML = `
                     <div class="cart-item-icon"><i class="fas ${it.icon}"></i></div>
                     <div class="cart-item-info">
                         <div class="cart-item-name">${it.name}</div>
                         <div class="cart-item-price">₹${it.price.toLocaleString('en-IN')}</div>
-                        <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove">
-                            <i class="fas fa-trash-alt"></i> Remove
-                        </button>
-                    </div>`;
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove">
+                        <i class="fas fa-trash-alt"></i> Remove
+                    </button>`;
                 container.appendChild(row);
             });
 
