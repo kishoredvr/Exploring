@@ -63,7 +63,7 @@
         /* 2-Column layout: Products | Cart */
         .shop-layout { display:grid; grid-template-columns:1fr 350px; gap:30px; align-items:start; }
 
-        .results-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:auto; flex-wrap:wrap; gap:10px; }
+        .results-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
         .results-count { font-size:14px; color:var(--text-light); }
         .results-count strong { color:var(--primary-blue); }
         .filter-option { display:flex; align-items:center; gap:6px; font-size:13.5px; color:var(--text-dark); cursor:pointer; margin:0; }
@@ -144,7 +144,7 @@
         .btn-submit:hover { background: var(--dark-navy); }
 
         .cart-sidebar { position: sticky; top: 20px; }
-        .cart-panel { background: white; border-radius: 10px; border: 1px solid var(--medium-gray); box-shadow: 0 6px 24px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; }
+        .cart-panel { background: white; border-radius: 10px; border: 1px solid var(--medium-gray); box-shadow: 0 6px 24px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 40px); }
         .cart-header { background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); padding: 16px 20px; display: flex; align-items: center; gap: 10px; }
         .cart-header-text { flex: 1; color: white; }
         .cart-header-text h3 { font-size: 16px; font-weight: 600; margin:0; }
@@ -154,7 +154,7 @@
         .cart-empty i { font-size: 2.2rem; color: #cbd5e0; display: block; margin-bottom: 10px; }
         
         /* Ensures cart items actually display when JS triggers it */
-        .cart-items { padding: 0; display: block; }
+        .cart-items { padding: 0; overflow-y: auto; flex: 1; display:none; }
         .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--medium-gray); }
         .cart-item-icon { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, var(--dark-navy), var(--primary-blue)); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--accent-gold); flex-shrink: 0; }
         .cart-item-info { flex: 1; display:flex; flex-direction:column; }
@@ -253,7 +253,13 @@
         </div>
     </div>
 
-    
+    <section class="shop-hero" id="productsListWrap">
+        <div class="container">
+            <h1>Shop Our Products</h1>
+            <p>Browse, compare and buy powerful software built for real businesses</p>
+        </div>
+    </section>
+
     <section class="shop-body" id="products">
         <div class="container">
             <div class="shop-layout">
@@ -840,9 +846,10 @@
             }
         }
 
-        function submitEnquiry() {
+        async function submitEnquiry() {
             const name = document.getElementById('eq-name').value.trim();
             const phone = document.getElementById('eq-phone').value.trim();
+            const email = document.getElementById('eq-email') ? document.getElementById('eq-email').value.trim() : '';
             const desc = document.getElementById('eq-desc').value.trim();
             
             if (!name || !phone || !desc) {
@@ -850,8 +857,43 @@
                 return;
             }
             
-            document.getElementById('enquiryBody').style.display = 'none';
-            document.getElementById('formSuccess').style.display = 'block';
+            const btn = document.querySelector('.enquiry-body .btn-submit');
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            }
+
+            try {
+                // Formatting identical to your MessageMe.html endpoint expectations
+                const dataObj = {
+                    purpose: "Custom Application Enquiry",
+                    name: name,
+                    mobileNumber: phone,
+                    email: email || "Not provided",
+                    gender: "N/A", dob: "1900-01-01", tob: "00:00", pob: "N/A", maritalStatus: "N/A", profession: "N/A",
+                    expectations: desc,
+                    amount: 0, payment_status: "Free Enquiry",
+                    submittedAt: new Date().toISOString()
+                };
+
+                const res = await fetch(BACKEND_BASE + '/submit-form', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+                    body: JSON.stringify(dataObj)
+                });
+
+                if (!res.ok) throw new Error("Failed to submit enquiry.");
+
+                document.getElementById('enquiryBody').style.display = 'none';
+                document.getElementById('formSuccess').style.display = 'block';
+            } catch (err) {
+                showCustomAlert(err.message || 'Error submitting enquiry. Please try again.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            }
         }
 
         async function proceedToPayment() {
