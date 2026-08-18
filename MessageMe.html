@@ -357,7 +357,7 @@
                     <div class="flex items-center gap-3">
                         <span class="text-base font-bold text-slate-700">Purpose:</span>
                         <label class="flex items-center space-x-1 cursor-pointer mb-0">
-                            <input type="radio" id="purpose-astrology" name="purpose" value="Astrology Consultation" class="radio-custom" checked required>
+                            <input type="radio" id="purpose-astrology" name="purpose" value="Astrology" class="radio-custom" checked required>
                             <span class="text-base">Astrology Consultation</span>
                         </label>
                         <label class="flex items-center space-x-1 cursor-pointer mb-0">
@@ -368,7 +368,6 @@
                     <div id="astroServiceWrapper" class="flex items-center gap-4 border-l border-slate-300 pl-4">
                         <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm">
                             <option value="2000">Consultation Fee — ₹2000</option>
-                            <!-- FIXED VALUE: Changed from 2000 to 10 -->
                             <option value="10">Testing — ₹10</option>
                         </select>
                     </div>
@@ -704,7 +703,6 @@
             return isValid;
         }
 
-        // Updated Data Collection to properly capture exact Service Name for the Receipt
         function collectFormObject() {
             const formData = new FormData(form);
             const data = {};
@@ -719,12 +717,12 @@
                 const selectEl = document.getElementById('astroServiceSelect');
                 data.astro_service_tier = selectEl.value; // Price
                 
-                // Extract clean name (e.g. "Testing" or "Consultation Fee")
+                // Extract exact Service Name from the dropdown (e.g. "Consultation Fee" or "Testing")
                 const rawText = selectEl.options[selectEl.selectedIndex].text;
                 const serviceName = rawText.split('—')[0].trim();
                 data.astro_service_name = serviceName;
                 
-                // Prepend this string to expectations so the receipt parses it dynamically
+                // Prepend this string to expectations so print.html knows how to parse it dynamically
                 const originalExpectations = data.expectations;
                 data.expectations = `Purchasing Services: ${serviceName}\n\nQuestions/Expectations: ${originalExpectations}`;
             }
@@ -762,7 +760,7 @@
                     await savePendingForm(dataObj);
                     const amt = parseInt(dataObj.astro_service_tier);
                     
-                    // 2. Initiate Razorpay Payment (Passing full details so invoice logic works)
+                    // 2. Initiate Razorpay Payment (Passing full notes so backend processes it perfectly)
                     const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                         method: 'POST',
                         headers: { 
