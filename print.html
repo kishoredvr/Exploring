@@ -35,7 +35,7 @@
         .invoice-table td { padding: 16px; border-bottom: 1px solid var(--medium-gray); font-size: 14px; color: var(--text-dark); vertical-align: top; }
         .invoice-table tbody tr:last-child td { border-bottom: none; }
         .item-name { font-weight: 600; color: var(--dark-navy); margin-bottom: 4px; display: block; }
-        .item-desc { font-size: 12px; color: var(--text-light); }
+        .item-desc { font-size: 12px; color: var(--text-light); white-space: pre-wrap; }
 
         .totals-container { display: flex; justify-content: flex-end; padding: 20px 16px; background: var(--light-gray); border-top: 1px solid var(--medium-gray); }
         .totals-wrapper { width: 100%; max-width: 320px; }
@@ -89,8 +89,8 @@
             <div class="receipt-header">
                 <div class="company-info">
                     <h1>Ganesh Solutions</h1>
-                    <p>consult@parishodana.xyz</p>
-                    <p>www.parishodana.xyz</p>
+                    <p>contact@ganeshsolutions.com</p>
+                    <p>www.ganeshsolutions.com</p>
                 </div>
                 <div class="receipt-title">
                     <h2>RECEIPT</h2>
@@ -151,7 +151,7 @@
                     </div>
                 </div>
 
-                <p style="text-align: right; font-size: 12px; color: var(--text-light); margin-top: -15px; margin-bottom: 20px;">All amounts are in Indian Rupees (INR)</p>
+                <p style="text-align: right; font-size: 12px; color: var(--text-light); margin-top: -15px; margin-bottom: 20px;">All amounts are in Indian Rupees (INR) and include GST.</p>
             </div>
 
             <div class="actions">
@@ -173,14 +173,14 @@
             }
 
             try {
-                // 2. Decode the JWT payload (Frontend decoding, no secret needed to simply read the data)
+                // 2. Decode the JWT payload
                 const payloadData = parseJwt(token);
                 
                 if (!payloadData || !payloadData.data) {
                     throw new Error("Invalid receipt data format.");
                 }
 
-                // 3. Extract the actual order object from inside the token payload
+                // 3. Extract the actual order object
                 const order = payloadData.data;
 
                 // 4. Populate the HTML elements with the order data
@@ -208,73 +208,59 @@
                 
                 let itemsHtml = '';
 
-                // If payload passes an explicit array of items
-                if (order.items && Array.isArray(order.items) && order.items.length > 0) {
-                    order.items.forEach(item => {
-                        const qty = parseInt(item.quantity) || 1;
-                        const price = parseFloat(item.price) || 0;
-                        const basePrice = price / 1.18; 
-                        const lineTotal = qty * basePrice;
-                        
-                        itemsHtml += `
-                            <tr>
-                                <td>
-                                    <span class="item-name">${item.name || 'Product'}</span>
-                                    ${item.description ? `<span class="item-desc">${item.description}</span>` : ''}
-                                </td>
-                                <td style="text-align: center;">${qty}</td>
-                                <td style="text-align: right;">₹${basePrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                <td style="text-align: right; font-weight: 500;">₹${lineTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    const descriptionText = order.expectations || order.products || 'Software Products / Consultation Services';
-                    const purposeText = order.purpose || 'Product Purchase';
-                    
-                    // Smart Parser: Split items by comma to list them nicely on multiple lines
-                    let cleanDesc = descriptionText.replace(/^Purchasing Software Products:\s*/i, '');
+                // Extract expectations text which holds our custom string tags
+                const rawText = order.expectations || order.products || '';
+                const purposeText = order.purpose || 'Product Purchase';
+
+                // Helper to generate rows cleanly
+                const generateRow = (name, desc, qty, unitPrice, lineTotal) => `
+                    <tr>
+                        <td>
+                            <span class="item-name">${name}</span>
+                            <span class="item-desc">${desc}</span>
+                        </td>
+                        <td style="text-align: center;">${qty}</td>
+                        <td style="text-align: right;">₹${unitPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="text-align: right; font-weight: 500;">₹${lineTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>
+                `;
+
+                // SCENARIO A: Multiple Software Products from shop.html
+                if (rawText.startsWith('Purchasing Software Products:')) {
+                    let cleanDesc = rawText.replace(/^Purchasing Software Products:\s*/i, '');
                     let itemsList = cleanDesc.split(',').map(s => s.trim()).filter(Boolean);
                     
-                    if (itemsList.length > 1) {
+                    if (itemsList.length > 0) {
+                        const itemPrice = subtotal / itemsList.length; // Split subtotal evenly among items
                         itemsList.forEach((itemName) => {
-                            // Evenly distribute price across items for clean receipt display
-                            const itemPrice = subtotal / itemsList.length;
-                            itemsHtml += `
-                                <tr>
-                                    <td>
-                                        <span class="item-name">${itemName}</span>
-                                        <span class="item-desc">Software License / Product</span>
-                                    </td>
-                                    <td style="text-align: center;">1</td>
-                                    <td style="text-align: right;">₹${itemPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                    <td style="text-align: right; font-weight: 500;">₹${itemPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                </tr>
-                            `;
+                            itemsHtml += generateRow(itemName, 'Software License / Product', 1, itemPrice, itemPrice);
                         });
-                    } else {
-                        itemsHtml = `
-                            <tr>
-                                <td>
-                                    <span class="item-name">${purposeText}</span>
-                                    <span class="item-desc">${cleanDesc}</span>
-                                </td>
-                                <td style="text-align: center;">1</td>
-                                <td style="text-align: right;">₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                <td style="text-align: right; font-weight: 500;">₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                            </tr>
-                        `;
                     }
+                } 
+                // SCENARIO B: Specific Astrology/Consultation Services from MessageMe.html
+                else if (order.astro_service_name || rawText.startsWith('Purchasing Services:')) {
+                    let serviceName = order.astro_service_name;
+                    
+                    // Fallback regex to extract service name if astro_service_name wasn't attached directly
+                    if (!serviceName) {
+                        const match = rawText.match(/^Purchasing Services:\s*(.*?)(?:\n|$)/i);
+                        serviceName = match ? match[1].trim() : purposeText;
+                    }
+                    
+                    itemsHtml += generateRow(serviceName, purposeText, 1, subtotal, subtotal);
+                } 
+                // SCENARIO C: Universal Fallback
+                else {
+                    itemsHtml += generateRow(order.astro_service_name || purposeText, 'Consultation / Service', 1, subtotal, subtotal);
                 }
 
                 tbody.innerHTML = itemsHtml;
 
-                // Update totals dynamically
+                // Update total fields dynamically
                 document.getElementById('rcpt-subtotal').textContent = '₹' + subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('rcpt-tax').textContent = '₹' + tax.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('rcpt-grand-total').textContent = '₹' + totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                // 5. Hide loading, show receipt
                 document.getElementById('loading-state').style.display = 'none';
                 document.getElementById('receipt-content').style.display = 'block';
 
@@ -284,7 +270,7 @@
             }
         });
 
-        // Helper function to safely decode a Base64Url encoded JWT payload
+        // Helper function to safely decode a Base64Url encoded JWT payload (Frontend Only)
         function parseJwt(token) {
             try {
                 const base64Url = token.split('.')[1];
