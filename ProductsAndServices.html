@@ -917,11 +917,28 @@
                     amount: grand, payment_status: 'pending', submittedAt: new Date().toISOString()
                 };
 
-                // Initiate Razorpay Order (Sends full details directly to the backend)
+                try {
+                    const sbRes = await fetch(BACKEND_BASE + '/submit-form', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+                        body: JSON.stringify(dataObj)
+                    });
+                    if (!sbRes.ok) console.warn("Supabase response not OK:", await sbRes.text());
+                } catch (e) { console.warn("Saving pending cart failed, continuing.", e); }
+
+                // FIXED: Send name, email, purpose, and detailed dataObj to the initiator so the DB has all email info
                 const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-                    body: JSON.stringify({ amount: grand * 100, currency: 'INR', mobileNumber: phone, name: name, email: email, purpose: "Product Purchase", notes: dataObj })
+                    body: JSON.stringify({ 
+                        amount: grand * 100, 
+                        currency: 'INR', 
+                        mobileNumber: phone,
+                        name: name,
+                        email: email,
+                        purpose: "Product Purchase",
+                        notes: dataObj 
+                    })
                 });
                 
                 const order = await res.json();
@@ -938,8 +955,8 @@
                     name: 'Ganesh Solutions',
                     description: products.length > 250 ? products.substring(0,250) + '...' : products,
                     order_id: order.razorpayOrderId,
+                    
                     handler: async (resp) => {
-                        // Ensure the modal remains visible while verifying the signature with Supabase
                         document.getElementById('paymentModal').classList.add('visible');
                         document.querySelector('#paymentModal h3').innerText = "Verifying Payment...";
                         document.querySelector('#paymentModal p').innerText = "Please do not refresh the page.";
@@ -960,9 +977,9 @@
 
                             const data = await verifyRes.json();
                             
-                            // Successfully authenticated & marked paid in Supabase DB!
+                            // FIXED: Redirects to print.html explicitly for GitHub Pages static hosting
                             if (data.success && data.token) {
-                                window.location.href = `https://parishodana.xyz/print?tok=${data.token}`;
+                                window.location.href = `https://parishodana.xyz/print.html?tok=${data.token}`;
                             } else {
                                 showCustomAlert("Verification failed: " + (data.error || "Please contact support."));
                                 document.getElementById('paymentModal').classList.remove('visible');
