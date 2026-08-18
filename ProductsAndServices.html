@@ -52,13 +52,6 @@
         .icon-btn:hover { background:rgba(255,255,255,.18); border-color:var(--accent-gold); }
         .icon-badge { position:absolute; top:-6px; right:-6px; background:var(--accent-gold); color:var(--dark-navy); font-size:10px; font-weight:800; width:19px; height:19px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
-        /* ── CATEGORY CHIPS ── */
-        .category-strip { background:white; border-bottom:1px solid var(--medium-gray); position:sticky; top:156px; z-index:890; }
-        .chip-row { display:flex; gap:10px; padding:12px 0; overflow-x:auto; scrollbar-width:thin; }
-        .chip { flex-shrink:0; padding:8px 18px; border-radius:30px; border:1.5px solid var(--medium-gray); background:white; color:var(--text-dark); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; transition:.2s; }
-        .chip:hover { border-color:var(--accent-gold); }
-        .chip.active { background:var(--dark-navy); border-color:var(--dark-navy); color:white; }
-
         /* ── PAGE HERO STRIP ── */
         .shop-hero { background:linear-gradient(135deg,rgba(15,26,60,.93) 0%,rgba(26,54,93,.93) 100%), url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'); background-size:cover; background-position:center; color:white; padding:34px 0; text-align:center; }
         .shop-hero h1 { font-size:clamp(22px,3.4vw,32px); font-weight:600; margin-bottom:6px; }
@@ -344,10 +337,6 @@
                 <aside class="filters-panel" id="filtersPanel">
                     <h3>Filters <button onclick="clearFilters()">Reset</button></h3>
                     <div class="filter-group">
-                        <h4>Category</h4>
-                        <div id="filterCategoryList"></div>
-                    </div>
-                    <div class="filter-group">
                         <h4>Availability</h4>
                         <label class="filter-option"><input type="checkbox" id="filterLiveOnly" onchange="applyFilters()"> In stock / Live only</label>
                     </div>
@@ -505,9 +494,16 @@
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="#products">Products</a></li>
-                        <li><a href="index.html#custom-apps">Custom Apps</a></li>
+                        <li><a href="#products" onclick="window.location.hash='';">Products</a></li>
+                        <li><a href="#product-custom-app">Custom Apps</a></li>
                         <li><a href="#footer">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#products" onclick="window.location.hash='';">View All Products</a></li>
+                        <li><a href="#product-custom-app">Custom Applications</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -735,8 +731,20 @@
                     return obj;
                 });
 
-                allProductsData = products;
-                buildCategoryChips(products);
+                const customAppObj = {
+                    id: 'custom-app',
+                    title: 'Custom Application Development',
+                    category: 'Service',
+                    isCustomApp: true,
+                    isLive: 'TRUE',
+                    priceLabel: 'Tailored to your needs',
+                    shortDesc: 'Have a unique business idea? We design and build tailor-made software solutions around your exact workflow — no compromise, no features you will never use.',
+                    features: 'Desktop Applications (Billing, ERP, Payroll)|Web Applications (Dashboards, Portals)|Mobile Apps (Android for field teams)|Inventory & ERP Systems|Custom Integrations & APIs',
+                    images: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                    icon: 'fa-laptop-code'
+                };
+
+                allProductsData = [customAppObj, ...products];
                 applyFilters();
             } catch (e) {
                 console.error(e);
@@ -749,23 +757,8 @@
             }
         }
 
-        function buildCategoryChips(products) {
-            const cats = Array.from(new Set(products.map(p => p.category || 'Product').filter(Boolean)));
-            const chipRow = document.getElementById('categoryChips');
-            const filterList = document.getElementById('filterCategoryList');
-            chipRow.innerHTML = `<div class="chip active" data-cat="all" onclick="filterByCategory('all')">All Products</div>` +
-                cats.map(c => `<div class="chip" data-cat="${c}" onclick="filterByCategory('${c.replace(/'/g,"\\'")}')">${c}</div>`).join('');
-            filterList.innerHTML = cats.map(c => `
-                <label class="filter-option">
-                    <input type="checkbox" class="cat-filter-checkbox" value="${c.replace(/"/g,'&quot;')}" onchange="applyFilters()">
-                    ${c}
-                </label>`).join('');
-        }
-
         function filterByCategory(cat) {
             activeCategory = cat;
-            document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
-            document.querySelectorAll('.cat-filter-checkbox').forEach(cb => { cb.checked = (cat !== 'all' && cb.value === cat); });
             window.location.hash = '';
             applyFilters();
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
@@ -778,8 +771,6 @@
             document.getElementById('priceMin').value = '';
             document.getElementById('priceMax').value = '';
             document.getElementById('sortSelect').value = 'default';
-            document.querySelectorAll('.cat-filter-checkbox').forEach(cb => cb.checked = false);
-            document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === 'all'));
             applyFilters();
         }
 
@@ -791,15 +782,12 @@
             const min = parseFloat(document.getElementById('priceMin').value) || 0;
             const max = parseFloat(document.getElementById('priceMax').value) || Infinity;
             const sort = document.getElementById('sortSelect').value;
-            const checkedCats = Array.from(document.querySelectorAll('.cat-filter-checkbox:checked')).map(cb => cb.value);
 
             let list = allProductsData.filter(p => {
                 const isLive = String(p.isLive).toUpperCase() === 'TRUE';
                 const price = parseFloat(p.price) || 0;
-                if (activeCategory !== 'all' && (p.category || '') !== activeCategory) return false;
-                if (checkedCats.length && !checkedCats.includes(p.category || '')) return false;
                 if (liveOnly && !isLive) return false;
-                if (isLive && (price < min || price > max)) return false;
+                if (isLive && !p.isCustomApp && (price < min || price > max)) return false;
                 if (search) {
                     const hay = `${p.title||''} ${p.category||''} ${p.shortDesc||''}`.toLowerCase();
                     if (!hay.includes(search)) return false;
@@ -807,9 +795,14 @@
                 return true;
             });
 
-            if (sort === 'price-asc') list.sort((a,b) => (parseFloat(a.price)||0) - (parseFloat(b.price)||0));
-            else if (sort === 'price-desc') list.sort((a,b) => (parseFloat(b.price)||0) - (parseFloat(a.price)||0));
-            else if (sort === 'name-asc') list.sort((a,b) => (a.title||'').localeCompare(b.title||''));
+            list.sort((a, b) => {
+                if (a.isCustomApp) return -1;
+                if (b.isCustomApp) return 1;
+                if (sort === 'price-asc') return (parseFloat(a.price)||0) - (parseFloat(b.price)||0);
+                if (sort === 'price-desc') return (parseFloat(b.price)||0) - (parseFloat(a.price)||0);
+                if (sort === 'name-asc') return (a.title||'').localeCompare(b.title||'');
+                return 0;
+            });
 
             filteredProducts = list;
             document.getElementById('resultsCount').textContent = list.length;
@@ -836,13 +829,24 @@
                     : `<div class="placeholder-fill"><i class="fas ${prod.placeholderIcon || 'fa-image'}"></i><span>${prod.placeholderText || 'Coming Soon'}</span></div>`;
 
                 const badgeHTML = isLive ? '' : `<span class="stock-badge soon">Coming Soon</span>`;
-                const priceHTML = isLive
-                    ? `<span class="card-price">₹${price.toLocaleString('en-IN')}</span>${prod.priceLabel ? `<span class="card-price-label">${prod.priceLabel}</span>` : ''}`
-                    : `<span class="card-price tba">TBA</span>`;
+                
+                let priceHTML = '';
+                if (prod.isCustomApp) {
+                    priceHTML = `<span class="card-price" style="font-size:16px;">Custom Quote</span>`;
+                } else {
+                    priceHTML = isLive
+                        ? `<span class="card-price">₹${price.toLocaleString('en-IN')}</span>${prod.priceLabel ? `<span class="card-price-label">${prod.priceLabel}</span>` : ''}`
+                        : `<span class="card-price tba">TBA</span>`;
+                }
 
-                const quickAddHTML = isLive
-                    ? `<button class="quick-add-btn ${inCart ? 'in-cart' : ''}" onclick="event.stopPropagation();toggleCartState('${prod.id}')"><i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'In Cart' : 'Add to Cart'}</button>`
-                    : `<button class="quick-add-btn" disabled style="opacity:.6;cursor:not-allowed;"><i class="fas fa-clock"></i> Notify Me</button>`;
+                let quickAddHTML = '';
+                if (prod.isCustomApp) {
+                    quickAddHTML = `<button class="quick-add-btn" onclick="event.stopPropagation();window.location.hash='#product-${prod.id}'"><i class="fas fa-arrow-right"></i> View Details</button>`;
+                } else {
+                    quickAddHTML = isLive
+                        ? `<button class="quick-add-btn ${inCart ? 'in-cart' : ''}" onclick="event.stopPropagation();toggleCartState('${prod.id}')"><i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'In Cart' : 'Add to Cart'}</button>`
+                        : `<button class="quick-add-btn" disabled style="opacity:.6;cursor:not-allowed;"><i class="fas fa-clock"></i> Notify Me</button>`;
+                }
 
                 grid.insertAdjacentHTML('beforeend', `
                     <div class="product-card" id="card-${prod.id}">
@@ -904,11 +908,67 @@
                 mediaHTML = `<div class="detail-carousel-slide"><div class="placeholder-fill" style="aspect-ratio:auto;height:100%;"><i class="fas ${prod.placeholderIcon || 'fa-image'}" style="font-size:56px;"></i><span>${prod.placeholderText || 'Coming Soon'}</span></div></div>`;
             }
 
-            const inCart = !!cart[id];
-            const inWishlist = !!wishlist[id];
-            const cartBtnHTML = isLive
-                ? `<button id="detail-cart-btn-${id}" class="btn-detail-cart ${inCart ? 'remove' : 'add'}" onclick="toggleCartState('${id}')"><i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}</button>`
-                : `<button class="btn-detail-cart" disabled>Not Yet Available</button>`;
+            let detailRightColumnHTML = '';
+
+            if (prod.isCustomApp) {
+                detailRightColumnHTML = `
+                    <span class="detail-badge">${prod.category || 'Service'}</span>
+                    <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
+                    <div class="detail-price">Custom Quote <span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel || 'Tailored to your needs'}</span></div>
+                    <div class="detail-overview">
+                        <strong style="display:block;margin-bottom:6px;color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue);margin-right:6px;"></i>Product Overview</strong>
+                        ${prod.shortDesc}
+                    </div>
+                    ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
+                    
+                    <div class="enquiry-card" style="margin-top: 24px; box-shadow: none; border: 1.5px solid var(--accent-gold); border-radius: 8px; overflow: hidden;">
+                        <div class="enquiry-header" style="padding: 14px 20px; background: #f9fafb; border-bottom: 2px solid var(--accent-gold); display: flex; align-items: center; gap: 12px;">
+                            <i class="fas fa-paper-plane" style="font-size:18px; width:36px; height:36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); color: var(--accent-gold);"></i>
+                            <div class="enquiry-header-text">
+                                <h3 style="font-size:16px; margin: 0; color: var(--primary-blue);">Request a Custom App</h3>
+                                <p style="font-size:12px; margin: 2px 0 0; color: var(--text-light);">We respond within 24 hours.</p>
+                            </div>
+                        </div>
+                        <div class="enquiry-body" id="enquiryBody" style="padding:20px; background: white;">
+                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Name *</label><input type="text" id="eq-name" placeholder="e.g. Rajesh Kumar" style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></div>
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Mobile *</label><input type="tel" id="eq-phone" placeholder="+91 XXXXX XXXXX" style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></div>
+                            </div>
+                            <div class="form-row" style="margin-bottom: 14px;">
+                                <div class="form-group form-full" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Email Address</label><input type="email" id="eq-email" placeholder="you@example.com" style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></div>
+                            </div>
+                            <div class="form-row" style="margin-bottom: 14px;">
+                                <div class="form-group form-full" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Requirement Details *</label><textarea id="eq-desc" rows="3" placeholder="Briefly describe your business, what the application should do, and any specific features you need..." style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></textarea></div>
+                            </div>
+                            <div class="form-submit-row" style="margin-top: 16px;">
+                                <button class="btn-submit" onclick="submitEnquiry()" style="width:100%; justify-content:center; background: var(--primary-blue); color: white; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;"><i class="fas fa-paper-plane"></i> Send Enquiry</button>
+                            </div>
+                        </div>
+                        <div class="form-success" id="formSuccess" style="display: none; padding:24px; font-size:14px; text-align: center; background: #f0fdf4; color: #166534;"><i class="fas fa-check-circle" style="font-size:28px; margin-bottom:12px;"></i><br><strong>Enquiry Sent Successfully!</strong><br><span style="font-size:12px; font-weight:normal;">We will review your requirement and get back within 24 hours.</span></div>
+                    </div>
+                `;
+            } else {
+                const inCart = !!cart[id];
+                const inWishlist = !!wishlist[id];
+                const cartBtnHTML = isLive
+                    ? `<button id="detail-cart-btn-${id}" class="btn-detail-cart ${inCart ? 'remove' : 'add'}" onclick="toggleCartState('${id}')"><i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}</button>`
+                    : `<button class="btn-detail-cart" disabled>Not Yet Available</button>`;
+
+                detailRightColumnHTML = `
+                    <span class="detail-badge">${prod.category || 'Product'}</span>
+                    <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
+                    <div class="detail-price">${isLive ? \`₹\${price.toLocaleString('en-IN')}\` : 'TBA'} ${isLive && prod.priceLabel ? \`<span style="font-size:14px;font-weight:500;color:var(--text-light);">\${prod.priceLabel}</span>\` : ''}</div>
+                    <div class="detail-overview">
+                        <strong style="display:block;margin-bottom:6px;color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue);margin-right:6px;"></i>Product Overview</strong>
+                        ${prod.shortDesc || 'Detailed description coming soon.'}
+                    </div>
+                    ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
+                    <div class="detail-actions">
+                        ${cartBtnHTML}
+                        <button class="btn-detail-wishlist ${inWishlist ? 'active' : ''}" onclick="toggleWishlist('${id}')" aria-label="Toggle wishlist"><i class="fas fa-heart"></i></button>
+                    </div>
+                `;
+            }
 
             const detailHTML = `
                 <div class="detail-view-container">
@@ -916,18 +976,7 @@
                     <div class="detail-grid">
                         <div class="detail-media">${mediaHTML}</div>
                         <div>
-                            <span class="detail-badge">${prod.category || 'Product'}</span>
-                            <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
-                            <div class="detail-price">${isLive ? `₹${price.toLocaleString('en-IN')}` : 'TBA'} ${isLive && prod.priceLabel ? `<span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel}</span>` : ''}</div>
-                            <div class="detail-overview">
-                                <strong style="display:block;margin-bottom:6px;color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue);margin-right:6px;"></i>Product Overview</strong>
-                                ${prod.shortDesc || 'Detailed description coming soon.'}
-                            </div>
-                            ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
-                            <div class="detail-actions">
-                                ${cartBtnHTML}
-                                <button class="btn-detail-wishlist ${inWishlist ? 'active' : ''}" onclick="toggleWishlist('${id}')" aria-label="Toggle wishlist"><i class="fas fa-heart"></i></button>
-                            </div>
+                            ${detailRightColumnHTML}
                         </div>
                     </div>
                 </div>`;
