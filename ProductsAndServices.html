@@ -59,10 +59,10 @@
 
         /* ── SHOP BODY LAYOUT ── */
         .shop-body { padding:26px 0 60px; }
-        .shop-layout { display:grid; grid-template-columns:250px 1fr 320px; gap:26px; align-items:start; }
+        .shop-layout { display:grid; grid-template-columns:250px 1fr; gap:26px; align-items:start; }
 
         /* ── FILTER SIDEBAR ── */
-        .filters-panel { background:white; border:1px solid var(--medium-gray); border-radius:10px; padding:20px; position:sticky; top:210px; }
+        .filters-panel { background:white; border:1px solid var(--medium-gray); border-radius:10px; padding:20px; position:sticky; top:180px; }
         .filters-panel h3 { font-size:15px; color:var(--primary-blue); margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; }
         .filters-panel h3 button { background:none; border:none; color:var(--text-light); font-size:12px; cursor:pointer; font-weight:600; }
         .filter-group { margin-bottom:20px; }
@@ -80,67 +80,6 @@
         .results-count strong { color:var(--primary-blue); }
         .sort-select { padding:9px 14px; border:1.5px solid var(--medium-gray); border-radius:6px; font-size:13px; background:white; color:var(--text-dark); cursor:pointer; }
         .filters-toggle-mobile { display:none; padding:9px 14px; border:1.5px solid var(--medium-gray); border-radius:6px; background:white; font-size:13px; font-weight:600; cursor:pointer; }
-
-        /* ── CART PANEL (DESKTOP) ── */
-        .cart-sidebar { position:sticky; top:210px; display:block; }
-        .cart-panel { background:white; border-radius:10px; border:1px solid var(--medium-gray); box-shadow:0 6px 24px rgba(0,0,0,.08); overflow:hidden; }
-        .cart-header { background:linear-gradient(135deg,var(--dark-navy) 0%,var(--primary-blue) 100%); padding:16px 20px; display:flex; align-items:center; gap:10px; color:white; }
-        .cart-header i { font-size:18px; color:var(--accent-gold); }
-        .cart-header-text { flex:1; }
-        .cart-header-text h3 { font-size:16px; font-weight:600; margin:0; }
-        .cart-header-text p { font-size:11px; color:rgba(255,255,255,.65); margin:0; }
-        .cart-count-badge { background:var(--accent-gold); color:var(--dark-navy); font-size:12px; font-weight:700; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-        .cart-panel .cart-empty { padding:32px 20px; text-align:center; color:var(--text-light); }
-        .cart-panel .cart-empty i { font-size:2.2rem; color:#cbd5e0; display:block; margin-bottom:10px; }
-        .cart-panel .cart-item { display:flex; align-items:flex-start; gap:10px; padding:14px 18px; border-bottom:1px solid var(--medium-gray); }
-        .cart-totals-panel { padding:14px 18px; border-bottom:1px solid var(--medium-gray); display:none; }
-        .cart-totals-panel.visible { display:block; }
-        .cart-pay-form-panel { padding:16px 18px; display:none; border-bottom:1px solid var(--medium-gray); }
-        .cart-pay-form-panel.visible { display:block; }
-        .cart-actions-panel { padding:14px 18px; display:none; gap:8px; flex-direction:column; }
-        .cart-actions-panel.visible { display:flex; }
-        .cart-panel .secure-note { padding:0 18px 14px; font-size:11px; color:var(--text-light); display:none; gap:6px; }
-        .cart-panel .secure-note.visible { display:flex; }
-
-        /* ── CUSTOM APPS SECTION ── */
-        .custom-section { padding:55px 0 60px; background:white; }
-        .custom-intro { background:#ffffff; border-radius:12px; padding:28px 32px; margin-bottom:36px; display:flex; flex-wrap:wrap; align-items:center; gap:28px; border:1px solid var(--medium-gray); box-shadow:0 2px 12px rgba(0,0,0,.04); }
-        .custom-intro-icon { width:64px; height:64px; border-radius:50%; background:#eef2ff; border:2px solid var(--accent-gold); display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--primary-blue); flex-shrink:0; }
-        .custom-intro-text { flex:1; min-width:200px; }
-        .custom-intro-text h3 { font-size:20px; font-weight:600; margin-bottom:6px; color:var(--primary-blue); }
-        .custom-intro-text p { font-size:14px; color:var(--text-dark); line-height:1.65; margin:0; }
-        .custom-intro-badge { background:var(--accent-gold); color:var(--dark-navy); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:6px 16px; border-radius:30px; white-space:nowrap; }
-        .capabilities-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px; margin-bottom:36px; }
-        .capability-tile { background:white; border-radius:10px; border:1px solid var(--medium-gray); padding:20px 18px; display:flex; align-items:flex-start; gap:12px; transition:all .2s; }
-        .capability-tile:hover { transform:translateY(-3px); border-color:var(--accent-gold); box-shadow:0 8px 20px rgba(0,0,0,.06); }
-        .tile-icon { width:40px; height:40px; border-radius:10px; background:#eef2ff; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--primary-blue); flex-shrink:0; }
-        .tile-text h4 { font-size:14px; font-weight:700; color:var(--primary-blue); margin-bottom:4px; }
-        .tile-text p { font-size:12px; color:var(--text-light); line-height:1.5; margin:0; }
-        .process-row { display:flex; gap:0; margin-bottom:36px; flex-wrap:wrap; background:#f8fafc; border-radius:16px; padding:20px 0; }
-        .process-step { flex:1; min-width:130px; text-align:center; padding:12px 8px; position:relative; }
-        .step-num { width:42px; height:42px; border-radius:50%; background:var(--primary-blue); color:white; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; }
-        .process-step h4 { font-size:14px; font-weight:700; color:var(--primary-blue); margin-bottom:4px; }
-        .process-step p { font-size:12px; color:var(--text-light); }
-        .enquiry-card { background:white; border-radius:12px; border:1px solid var(--medium-gray); overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.05); }
-        .enquiry-header { background:#f9fafb; padding:18px 26px; display:flex; align-items:center; gap:12px; border-bottom:2px solid var(--accent-gold); }
-        .enquiry-header i { font-size:24px; color:var(--accent-gold); background:white; width:44px; height:44px; border-radius:44px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,.05); }
-        .enquiry-header-text h3 { font-size:18px; font-weight:700; color:var(--primary-blue); margin:0; }
-        .enquiry-header-text p { font-size:13px; color:var(--text-light); margin:2px 0 0; }
-        .enquiry-body { padding:26px; background:white; }
-        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; align-items:center; }
-        .form-group { display:flex; flex-direction:column; gap:5px; }
-        .form-group label { font-size:13px; font-weight:600; color:var(--text-dark); }
-        .form-group input, .form-group select, .form-group textarea { padding:10px 12px; border:1.5px solid var(--medium-gray); border-radius:8px; font-size:13px; transition:.2s; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--accent-gold); outline:none; }
-        .form-full { grid-column:1/-1; }
-        .form-submit-row { display:flex; justify-content:flex-end; margin-top:16px; }
-        .btn-submit { background:var(--primary-blue); color:white; padding:10px 28px; border-radius:40px; font-size:14px; font-weight:600; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:.2s; }
-        .btn-submit:hover { background:var(--dark-navy); transform:translateY(-2px); }
-        .form-success { display:none; text-align:center; padding:40px; background:#f0fdf4; color:#166534; }
-        .section-title { text-align:center; margin-bottom:36px; }
-        .section-title h2 { font-size:30px; color:var(--primary-blue); margin-bottom:5px; position:relative; display:inline-block; padding-bottom:5px; }
-        .section-title h2::after { content:""; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:70px; height:3px; background:var(--accent-gold); }
-        .section-title p { color:var(--text-light); max-width:600px; margin:0 auto; }
 
         /* ── PRODUCT GRID (Myntra/Amazon style cards) ── */
         .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px; }
@@ -199,12 +138,20 @@
         .detail-features-list li { margin-bottom:10px; display:flex; align-items:flex-start; gap:9px; font-size:14px; color:var(--text-dark); }
         .detail-features-list i { color:var(--accent-gold); margin-top:2px; }
         .detail-actions { display:flex; gap:12px; }
-        .btn-detail-cart { flex:1; padding:15px; border-radius:6px; border:none; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:.2s; }
-        .btn-detail-cart.add { background:var(--accent-gold); color:var(--dark-navy); }
-        .btn-detail-cart.remove { background:var(--dark-navy); color:white; }
-        .btn-detail-cart:disabled { background:var(--medium-gray); color:var(--text-light); cursor:not-allowed; }
-        .btn-detail-wishlist { width:52px; border-radius:6px; border:1.5px solid var(--medium-gray); background:white; color:var(--text-light); font-size:17px; cursor:pointer; transition:.2s; }
-        .btn-detail-wishlist:hover, .btn-detail-wishlist.active { color:#e53e3e; border-color:#e53e3e; }
+        
+        /* Form elements for Enquires */
+        .enquiry-card { background: white; border-radius: 8px; border: 1px solid var(--medium-gray); overflow: hidden; }
+        .enquiry-header { background: #f9fafb; padding: 14px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--accent-gold); }
+        .enquiry-header-text h3 { font-size: 16px; font-weight: 700; color: var(--primary-blue); margin: 0; }
+        .enquiry-header-text p { font-size: 12px; color: var(--text-light); margin: 2px 0 0; }
+        .enquiry-body { padding: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+        .form-group input, .form-group textarea { padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px; font-size: 13px; transition: 0.2s; width: 100%; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); outline: none; }
+        .form-full { grid-column: 1 / -1; }
+        .form-success { display: none; text-align: center; padding: 24px; background: #f0fdf4; color: #166534; font-size: 14px; }
 
         /* ── CART DRAWER ── */
         .cart-backdrop { position:fixed; inset:0; background:rgba(15,26,60,.55); z-index:3000; display:none; }
@@ -263,14 +210,10 @@
         .copyright { text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.5); font-size:14px; }
 
         /* ── RESPONSIVE ── */
-        @media (max-width:1200px) and (min-width:993px) {
-            .shop-layout { grid-template-columns: 220px 1fr 280px; gap: 16px; }
-        }
         @media (max-width:992px) {
             header { height:0!important; min-height:0!important; padding:0!important; overflow:hidden; }
             .mobile-header { display:flex; }
             .shop-toolbar { top:70px; }
-            .category-strip { top:126px; }
             nav#mainNav { display:none; position:fixed; top:70px; left:0; width:100%; height:calc(100% - 70px); background:var(--dark-navy); z-index:2000; padding:20px; overflow-y:auto; transform:translateX(-100%); transition:transform .3s ease; }
             nav#mainNav.active { display:block; transform:translateX(0); }
             nav ul { flex-direction:column; align-items:flex-start; margin-top:30px; width:100%; }
@@ -282,9 +225,7 @@
             .filters-panel { position:fixed; top:0; left:0; height:100%; width:82%; max-width:320px; z-index:3500; border-radius:0; transform:translateX(-100%); transition:transform .3s ease; overflow-y:auto; }
             .filters-panel.open { transform:translateX(0); }
             .filters-toggle-mobile { display:inline-flex; align-items:center; gap:6px; }
-            .cart-sidebar { display:none; }
             .detail-grid { grid-template-columns:1fr; padding:20px; }
-            .form-row { grid-template-columns:1fr; }
         }
     </style>
 </head>
@@ -298,25 +239,14 @@
         <div class="container shop-toolbar-inner">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search products, categories..." oninput="applyFilters()">
+                <input type="text" id="searchInput" placeholder="Search products..." oninput="applyFilters()">
             </div>
             <div class="toolbar-actions">
-                <button class="icon-btn" onclick="toggleWishlistPanel()" aria-label="Wishlist">
-                    <i class="fas fa-heart"></i>
-                    <span class="icon-badge" id="wishlistBadge" style="display:none;">0</span>
-                </button>
                 <button class="icon-btn" onclick="openCartDrawer()" aria-label="Cart">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="icon-badge" id="cartBadge" style="display:none;">0</span>
                 </button>
             </div>
-        </div>
-    </div>
-
-    <!-- ====== CATEGORY CHIPS ====== -->
-    <div class="category-strip">
-        <div class="container">
-            <div class="chip-row" id="categoryChips"></div>
         </div>
     </div>
 
@@ -371,113 +301,6 @@
                     <div id="productDetailView" style="display:none;"></div>
                 </div>
 
-                <!-- CART SIDEBAR (DESKTOP) -->
-                <aside class="cart-sidebar">
-                    <div class="cart-panel">
-                        <div class="cart-header">
-                            <i class="fas fa-shopping-cart"></i>
-                            <div class="cart-header-text"><h3>Your Cart</h3><p>Selected products</p></div>
-                            <div class="cart-count-badge" id="cartCountBadgePanel">0</div>
-                        </div>
-                        <div class="cart-empty" id="cartEmptyPanel">
-                            <i class="fas fa-cart-plus"></i>
-                            <p>No products selected yet.<br>View a product to add it here.</p>
-                        </div>
-                        <div class="cart-items" id="cartItemsPanel"></div>
-                        <div class="cart-totals-panel" id="cartTotalsPanel">
-                            <div class="total-row"><span>Subtotal</span><span id="cartSubtotalPanel">₹0</span></div>
-                            <div class="total-row"><span>GST (18%)</span><span id="cartGstPanel">₹0</span></div>
-                            <div class="total-row grand"><span>Total Payable</span><span id="cartGrandPanel">₹0</span></div>
-                        </div>
-                        <div class="cart-pay-form-panel" id="cartPayFormPanel">
-                            <p class="pay-form-title"><i class="fas fa-user"></i> Your Details</p>
-                            <div class="pay-field"><label style="font-size:12px;font-weight:600;">Full Name *</label><input type="text" id="pay-name-panel" placeholder="e.g. Rajesh Kumar"></div>
-                            <div class="pay-field"><label style="font-size:12px;font-weight:600;">Mobile / WhatsApp *</label><input type="tel" id="pay-phone-panel" placeholder="+91 XXXXX XXXXX"></div>
-                            <div class="pay-field"><label style="font-size:12px;font-weight:600;">Email Address</label><input type="email" id="pay-email-panel" placeholder="you@example.com"></div>
-                        </div>
-                        <div class="cart-actions-panel" id="cartActionsPanel">
-                            <button class="btn-pay-now" onclick="proceedToPayment('panel')"><i class="fas fa-lock"></i> Proceed to Payment</button>
-                            <button class="btn-clear-cart" onclick="clearCart()"><i class="fas fa-trash-alt"></i> Clear Cart</button>
-                        </div>
-                        <div class="secure-note" id="secureNotePanel"><i class="fas fa-shield-alt" style="color:var(--accent-gold);"></i> Secure checkout · SSL encrypted</div>
-                    </div>
-                </aside>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ====== CUSTOM APPLICATIONS ====== -->
-    <section class="custom-section" id="custom-apps">
-        <div class="container">
-            <div class="section-title">
-                <h2>Custom Application Development</h2>
-                <p>Have a unique business idea? We design and build tailor-made software solutions around your exact workflow — no compromise, no features you will never use.</p>
-            </div>
-            <div class="custom-intro">
-                <div class="custom-intro-icon"><i class="fas fa-code"></i></div>
-                <div class="custom-intro-text">
-                    <h3>We Build What You Imagine</h3>
-                    <p>From a single-screen utility to a multi-module enterprise system, Ganesh Solutions delivers fully customised applications tailored to your business processes, branding, and budget. Every project starts with a free consultation before a single line of code is written.</p>
-                </div>
-                <span class="custom-intro-badge">Open for Projects</span>
-            </div>
-            <div class="capabilities-grid">
-                <div class="capability-tile"><div class="tile-icon"><i class="fas fa-laptop-code"></i></div><div class="tile-text"><h4>Desktop Applications</h4><p>Windows-based apps for billing, ERP, payroll, inventory, and more.</p></div></div>
-                <div class="capability-tile"><div class="tile-icon"><i class="fas fa-globe"></i></div><div class="tile-text"><h4>Web Applications</h4><p>Browser-based portals, dashboards, and management systems accessible from anywhere.</p></div></div>
-                <div class="capability-tile"><div class="tile-icon"><i class="fas fa-mobile-alt"></i></div><div class="tile-text"><h4>Mobile Apps</h4><p>Android applications for field teams, customers, or in-store operations.</p></div></div>
-                <div class="capability-tile"><div class="tile-icon"><i class="fas fa-file-invoice"></i></div><div class="tile-text"><h4>Billing &amp; Accounting</h4><p>GST-compliant billing tools customised for your specific trade or industry.</p></div></div>
-                <div class="capability-tile"><div class="tile-icon"><i class="fas fa-boxes"></i></div><div class="tile-text"><h4>Inventory &amp; ERP</h4><p>Stock management, purchase orders, and multi-branch reporting built to your scale.</p></div></div>
-                <div class="capability-tile"><div class="tile-icon"><i class="fas fa-plug"></i></div><div class="tile-text"><h4>Integrations &amp; APIs</h4><p>Connect payment gateways, SMS, email, and third-party services to your system.</p></div></div>
-            </div>
-            <div class="section-title" style="margin-bottom:22px;"><h2 style="font-size:22px;">How It Works</h2></div>
-            <div class="process-row">
-                <div class="process-step"><div class="step-num">1</div><h4>Free Consultation</h4><p>Share your requirements — we listen and understand your workflow.</p></div>
-                <div class="process-step"><div class="step-num">2</div><h4>Proposal &amp; Quote</h4><p>A clear scope, timeline, and fixed-price quote — no hidden costs.</p></div>
-                <div class="process-step"><div class="step-num">3</div><h4>Design &amp; Build</h4><p>Regular demos at every milestone so you stay in control.</p></div>
-                <div class="process-step"><div class="step-num">4</div><h4>Delivery &amp; Support</h4><p>We train your team and provide ongoing support after launch.</p></div>
-            </div>
-            <div class="enquiry-card">
-                <div class="enquiry-header">
-                    <i class="fas fa-paper-plane"></i>
-                    <div class="enquiry-header-text">
-                        <h3>Request a Custom Application</h3>
-                        <p>Tell us what you need — we respond within 24 hours.</p>
-                    </div>
-                </div>
-                <div class="enquiry-body" id="enquiryBody">
-                    <div class="form-row">
-                        <div class="form-group"><label>Your Name *</label><input type="text" id="eq-name" placeholder="e.g. Rajesh Kumar"></div>
-                        <div class="form-group"><label>Mobile / WhatsApp *</label><input type="tel" id="eq-phone" placeholder="+91 XXXXX XXXXX"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Email Address</label><input type="email" id="eq-email" placeholder="you@example.com"></div>
-                        <div class="form-group"><label>Application Type *</label>
-                            <select id="eq-type">
-                                <option value="">— Select —</option>
-                                <option>Desktop Application</option>
-                                <option>Web Application</option>
-                                <option>Mobile App (Android)</option>
-                                <option>Billing / Accounting Tool</option>
-                                <option>Inventory / ERP System</option>
-                                <option>Integration / API Work</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group form-full"><label>Describe Your Requirement *</label><textarea id="eq-desc" rows="3" placeholder="Briefly describe your business, what the application should do, who will use it, and any specific features you need..."></textarea></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Expected Timeline</label>
-                            <select id="eq-timeline"><option value="">— Flexible —</option><option>ASAP (within 2 weeks)</option><option>Within 1 month</option><option>1 – 3 months</option><option>3 – 6 months</option><option>No rush</option></select>
-                        </div>
-                    </div>
-                    <div class="form-submit-row">
-                        <button class="btn-submit" onclick="submitEnquiry()"><i class="fas fa-paper-plane"></i> Send Enquiry</button>
-                    </div>
-                </div>
-                <div class="form-success" id="formSuccess"><i class="fas fa-check-circle"></i><h4>Enquiry Sent Successfully!</h4><p>Thank you. We will review your requirement and get back within 24 hours.</p></div>
             </div>
         </div>
     </section>
@@ -494,7 +317,7 @@
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="#products" onclick="window.location.hash='';">Products</a></li>
+                        <li><a href="#products">Products</a></li>
                         <li><a href="#product-custom-app">Custom Apps</a></li>
                         <li><a href="#footer">Contact</a></li>
                     </ul>
@@ -502,17 +325,8 @@
                 <div class="footer-column">
                     <h3>Products</h3>
                     <ul>
-                        <li><a href="#products" onclick="window.location.hash='';">View All Products</a></li>
+                        <li><a href="#products">View All Products</a></li>
                         <li><a href="#product-custom-app">Custom Applications</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Products</h3>
-                    <ul>
-                        <li><a href="#" onclick="filterByCategory('Financial Tools');return false;">Financial Tools</a></li>
-                        <li><a href="#" onclick="filterByCategory('Educational Software');return false;">Educational Software</a></li>
-                        <li><a href="#" onclick="filterByCategory('AI Solutions');return false;">AI Solutions</a></li>
-                        <li><a href="#" onclick="filterByCategory('all');return false;">All Products</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -587,8 +401,6 @@
         let allProductsData = [];
         let filteredProducts = [];
         let cart = {};
-        let wishlist = {};
-        let activeCategory = 'all';
         let slideIndex = {};
         let slideCount = {};
 
@@ -609,12 +421,10 @@
             return iconClass;
         }
 
-        // Modified DOMContentLoaded to initiate loading processes
         document.addEventListener('DOMContentLoaded', function () {
             loadProductsFromCSV();
         });
 
-        // Dynamic Component Loading logic (Matches index.html)
         async function loadMasterCopy() {
             try {
                 const response = await fetch('Components.html');
@@ -630,13 +440,11 @@
                 }
 
                 initMenuLogic();
-
             } catch (err) {
                 console.error("Fetch Error:", err);
             }
         }
 
-        // Dynamic Menu Logic bindings
         function initMenuLogic() {
             const mobileBtn = document.getElementById('mobileMenuToggle');
             const mainNav   = document.getElementById('mainNav');
@@ -645,9 +453,7 @@
             if (mobileBtn && mainNav) {
                 mobileBtn.onclick = function () {
                     const isActive = mainNav.classList.toggle('active');
-                    this.innerHTML = isActive
-                        ? '<i class="fas fa-times"></i>'
-                        : '<i class="fas fa-bars"></i>';
+                    this.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     document.body.style.overflow = isActive ? 'hidden' : '';
                 };
             }
@@ -706,7 +512,6 @@
 
         window.onload = loadMasterCopy;
 
-        // Existing E-Commerce Logic
         async function loadProductsFromCSV() {
             try {
                 const response = await fetch(BACKEND_BASE + '/get-products-csv', {
@@ -735,9 +540,10 @@
                     id: 'custom-app',
                     title: 'Custom Application Development',
                     category: 'Service',
-                    isCustomApp: true,
                     isLive: 'TRUE',
                     priceLabel: 'Tailored to your needs',
+                    price: 0,
+                    isCustomApp: true,
                     shortDesc: 'Have a unique business idea? We design and build tailor-made software solutions around your exact workflow — no compromise, no features you will never use.',
                     features: 'Desktop Applications (Billing, ERP, Payroll)|Web Applications (Dashboards, Portals)|Mobile Apps (Android for field teams)|Inventory & ERP Systems|Custom Integrations & APIs',
                     images: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -746,6 +552,7 @@
 
                 allProductsData = [customAppObj, ...products];
                 applyFilters();
+                handleHashRouting();
             } catch (e) {
                 console.error(e);
                 document.getElementById('productsListView').innerHTML = `
@@ -757,15 +564,7 @@
             }
         }
 
-        function filterByCategory(cat) {
-            activeCategory = cat;
-            window.location.hash = '';
-            applyFilters();
-            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-        }
-
         function clearFilters() {
-            activeCategory = 'all';
             document.getElementById('searchInput').value = '';
             document.getElementById('filterLiveOnly').checked = false;
             document.getElementById('priceMin').value = '';
@@ -786,6 +585,7 @@
             let list = allProductsData.filter(p => {
                 const isLive = String(p.isLive).toUpperCase() === 'TRUE';
                 const price = parseFloat(p.price) || 0;
+                
                 if (liveOnly && !isLive) return false;
                 if (isLive && !p.isCustomApp && (price < min || price > max)) return false;
                 if (search) {
@@ -796,12 +596,12 @@
             });
 
             list.sort((a, b) => {
-                if (a.isCustomApp) return -1;
+                if (a.isCustomApp) return -1; // Keep Custom App pinned to the top
                 if (b.isCustomApp) return 1;
                 if (sort === 'price-asc') return (parseFloat(a.price)||0) - (parseFloat(b.price)||0);
                 if (sort === 'price-desc') return (parseFloat(b.price)||0) - (parseFloat(a.price)||0);
                 if (sort === 'name-asc') return (a.title||'').localeCompare(b.title||'');
-                return 0;
+                return 0; // default order
             });
 
             filteredProducts = list;
@@ -822,7 +622,6 @@
                 const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
                 const mainImg = images[0] || '';
                 const inCart = !!cart[prod.id];
-                const inWishlist = !!wishlist[prod.id];
 
                 const mediaHTML = mainImg
                     ? `<img src="${mainImg}" alt="${prod.title||'Product'}">`
@@ -853,7 +652,6 @@
                         <div class="card-media" onclick="window.location.hash='#product-${prod.id}'">
                             ${mediaHTML}
                             ${badgeHTML}
-                            <button class="wishlist-btn ${inWishlist ? 'active' : ''}" onclick="event.stopPropagation();toggleWishlist('${prod.id}')" aria-label="Toggle wishlist"><i class="fas fa-heart"></i></button>
                             <div class="quick-add-overlay">${quickAddHTML}</div>
                         </div>
                         <div class="card-info">
@@ -908,6 +706,7 @@
                 mediaHTML = `<div class="detail-carousel-slide"><div class="placeholder-fill" style="aspect-ratio:auto;height:100%;"><i class="fas ${prod.placeholderIcon || 'fa-image'}" style="font-size:56px;"></i><span>${prod.placeholderText || 'Coming Soon'}</span></div></div>`;
             }
 
+            const inCart = !!cart[id];
             let detailRightColumnHTML = '';
 
             if (prod.isCustomApp) {
@@ -921,35 +720,31 @@
                     </div>
                     ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
                     
-                    <div class="enquiry-card" style="margin-top: 24px; box-shadow: none; border: 1.5px solid var(--accent-gold); border-radius: 8px; overflow: hidden;">
-                        <div class="enquiry-header" style="padding: 14px 20px; background: #f9fafb; border-bottom: 2px solid var(--accent-gold); display: flex; align-items: center; gap: 12px;">
+                    <div class="enquiry-card" style="margin-top: 24px; box-shadow: none; border: 1.5px solid var(--accent-gold);">
+                        <div class="enquiry-header">
                             <i class="fas fa-paper-plane" style="font-size:18px; width:36px; height:36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); color: var(--accent-gold);"></i>
                             <div class="enquiry-header-text">
-                                <h3 style="font-size:16px; margin: 0; color: var(--primary-blue);">Request a Custom App</h3>
-                                <p style="font-size:12px; margin: 2px 0 0; color: var(--text-light);">We respond within 24 hours.</p>
+                                <h3>Request a Custom App</h3>
+                                <p>We respond within 24 hours.</p>
                             </div>
                         </div>
-                        <div class="enquiry-body" id="enquiryBody" style="padding:20px; background: white;">
-                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
-                                <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Name *</label><input type="text" id="eq-name" placeholder="e.g. Rajesh Kumar" style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></div>
-                                <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Mobile *</label><input type="tel" id="eq-phone" placeholder="+91 XXXXX XXXXX" style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></div>
+                        <div class="enquiry-body" id="enquiryBody">
+                            <div class="form-row">
+                                <div class="form-group"><label>Name *</label><input type="text" id="eq-name" placeholder="e.g. Rajesh Kumar"></div>
+                                <div class="form-group"><label>Mobile *</label><input type="tel" id="eq-phone" placeholder="+91 XXXXX XXXXX"></div>
                             </div>
-                            <div class="form-row" style="margin-bottom: 14px;">
-                                <div class="form-group form-full" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Email Address</label><input type="email" id="eq-email" placeholder="you@example.com" style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></div>
+                            <div class="form-row" style="grid-template-columns: 1fr;">
+                                <div class="form-group form-full"><label>Email Address</label><input type="email" id="eq-email" placeholder="you@example.com"></div>
                             </div>
-                            <div class="form-row" style="margin-bottom: 14px;">
-                                <div class="form-group form-full" style="display: flex; flex-direction: column; gap: 5px;"><label style="font-size: 13px; font-weight: 600;">Requirement Details *</label><textarea id="eq-desc" rows="3" placeholder="Briefly describe your business, what the application should do, and any specific features you need..." style="padding: 10px; border: 1.5px solid var(--medium-gray); border-radius: 6px;"></textarea></div>
+                            <div class="form-row" style="grid-template-columns: 1fr;">
+                                <div class="form-group form-full"><label>Requirement Details *</label><textarea id="eq-desc" rows="3" placeholder="Briefly describe your business, what the application should do, and any specific features you need..."></textarea></div>
                             </div>
-                            <div class="form-submit-row" style="margin-top: 16px;">
-                                <button class="btn-submit" onclick="submitEnquiry()" style="width:100%; justify-content:center; background: var(--primary-blue); color: white; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;"><i class="fas fa-paper-plane"></i> Send Enquiry</button>
-                            </div>
+                            <button class="btn-submit" onclick="submitEnquiry()" style="width:100%; justify-content:center; background: var(--primary-blue); color: white; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;"><i class="fas fa-paper-plane"></i> Send Enquiry</button>
                         </div>
-                        <div class="form-success" id="formSuccess" style="display: none; padding:24px; font-size:14px; text-align: center; background: #f0fdf4; color: #166534;"><i class="fas fa-check-circle" style="font-size:28px; margin-bottom:12px;"></i><br><strong>Enquiry Sent Successfully!</strong><br><span style="font-size:12px; font-weight:normal;">We will review your requirement and get back within 24 hours.</span></div>
+                        <div class="form-success" id="formSuccess"><i class="fas fa-check-circle" style="font-size:28px; margin-bottom:12px;"></i><br><strong>Enquiry Sent Successfully!</strong><br><span style="font-size:12px; font-weight:normal;">We will review your requirement and get back within 24 hours.</span></div>
                     </div>
                 `;
             } else {
-                const inCart = !!cart[id];
-                const inWishlist = !!wishlist[id];
                 const cartBtnHTML = isLive
                     ? `<button id="detail-cart-btn-${id}" class="btn-detail-cart ${inCart ? 'remove' : 'add'}" onclick="toggleCartState('${id}')"><i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}</button>`
                     : `<button class="btn-detail-cart" disabled>Not Yet Available</button>`;
@@ -957,7 +752,7 @@
                 detailRightColumnHTML = `
                     <span class="detail-badge">${prod.category || 'Product'}</span>
                     <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
-                    <div class="detail-price">${isLive ? \`₹\${price.toLocaleString('en-IN')}\` : 'TBA'} ${isLive && prod.priceLabel ? \`<span style="font-size:14px;font-weight:500;color:var(--text-light);">\${prod.priceLabel}</span>\` : ''}</div>
+                    <div class="detail-price">${isLive ? `₹${price.toLocaleString('en-IN')}` : 'TBA'} ${isLive && prod.priceLabel ? `<span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel}</span>` : ''}</div>
                     <div class="detail-overview">
                         <strong style="display:block;margin-bottom:6px;color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue);margin-right:6px;"></i>Product Overview</strong>
                         ${prod.shortDesc || 'Detailed description coming soon.'}
@@ -965,7 +760,6 @@
                     ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
                     <div class="detail-actions">
                         ${cartBtnHTML}
-                        <button class="btn-detail-wishlist ${inWishlist ? 'active' : ''}" onclick="toggleWishlist('${id}')" aria-label="Toggle wishlist"><i class="fas fa-heart"></i></button>
                     </div>
                 `;
             }
@@ -1006,18 +800,6 @@
         function slidePrev(id) { const max = slideCount[id]||1; slideIndex[id] = (slideIndex[id]-1+max)%max; updateSlideTransform(id); }
         function goToSlide(id, idx) { slideIndex[id] = idx; updateSlideTransform(id); }
 
-        function toggleWishlist(id) {
-            if (wishlist[id]) delete wishlist[id]; else wishlist[id] = true;
-            const count = Object.keys(wishlist).length;
-            const badge = document.getElementById('wishlistBadge');
-            badge.textContent = count;
-            badge.style.display = count ? 'flex' : 'none';
-            showToast(wishlist[id] ? 'Added to wishlist' : 'Removed from wishlist');
-            renderDynamicProducts(filteredProducts);
-            if (window.location.hash.startsWith('#product-')) renderDetailView(window.location.hash.replace('#product-',''));
-        }
-        function toggleWishlistPanel() { showToast(Object.keys(wishlist).length ? `${Object.keys(wishlist).length} item(s) in wishlist` : 'Your wishlist is empty'); }
-
         function toggleCartState(id) {
             const prod = allProductsData.find(p => p.id === id);
             if (!prod) return;
@@ -1042,9 +824,6 @@
             badge.textContent = keys.length;
             badge.style.display = keys.length ? 'flex' : 'none';
 
-            const badgePanel = document.getElementById('cartCountBadgePanel');
-            if (badgePanel) badgePanel.textContent = keys.length;
-
             const subtotal = keys.reduce((s,k) => s + cart[k].price, 0);
             const gst = Math.round(subtotal * 0.18);
             const grand = subtotal + gst;
@@ -1053,61 +832,48 @@
             document.getElementById('cartEmpty').style.display = empty ? 'block' : 'none';
             document.getElementById('cartFooter').style.display = empty ? 'none' : 'block';
 
-            const pEmpty = document.getElementById('cartEmptyPanel');
-            if(pEmpty) pEmpty.style.display = empty ? 'block' : 'none';
-            ['cartTotalsPanel', 'cartPayFormPanel', 'cartActionsPanel', 'secureNotePanel'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.toggle('visible', !empty);
-            });
-
             const container = document.getElementById('cartItems');
             container.innerHTML = '';
-            
-            const containerPanel = document.getElementById('cartItemsPanel');
-            if (containerPanel) containerPanel.innerHTML = '';
-
             keys.forEach(id => {
                 const it = cart[id];
-                const html = `
+                const row = document.createElement('div');
+                row.className = 'cart-item';
+                row.innerHTML = `
                     <div class="cart-item-icon"><i class="fas ${it.icon}"></i></div>
                     <div class="cart-item-info">
                         <div class="cart-item-name">${it.name}</div>
                         <div class="cart-item-price">₹${it.price.toLocaleString('en-IN')}</div>
                     </div>
                     <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove"><i class="fas fa-times"></i></button>`;
-                
-                const row = document.createElement('div');
-                row.className = 'cart-item';
-                row.innerHTML = html;
                 container.appendChild(row);
-
-                if (containerPanel) {
-                    const rowP = document.createElement('div');
-                    rowP.className = 'cart-item';
-                    rowP.innerHTML = html;
-                    containerPanel.appendChild(rowP);
-                }
             });
 
             document.getElementById('cartSubtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
             document.getElementById('cartGst').textContent = '₹' + gst.toLocaleString('en-IN');
             document.getElementById('cartGrand').textContent = '₹' + grand.toLocaleString('en-IN');
 
-            if (document.getElementById('cartSubtotalPanel')) {
-                document.getElementById('cartSubtotalPanel').textContent = '₹' + subtotal.toLocaleString('en-IN');
-                document.getElementById('cartGstPanel').textContent = '₹' + gst.toLocaleString('en-IN');
-                document.getElementById('cartGrandPanel').textContent = '₹' + grand.toLocaleString('en-IN');
-            }
-
             renderDynamicProducts(filteredProducts);
             if (window.location.hash.startsWith('#product-')) renderDetailView(window.location.hash.replace('#product-',''));
         }
 
-        async function proceedToPayment(source = 'drawer') {
-            const nameSuffix = source === 'panel' ? '-panel' : '';
-            const name = document.getElementById('pay-name' + nameSuffix).value.trim();
-            const phone = document.getElementById('pay-phone' + nameSuffix).value.trim();
-            const email = document.getElementById('pay-email' + nameSuffix).value.trim();
+        function submitEnquiry() {
+            const name = document.getElementById('eq-name').value.trim();
+            const phone = document.getElementById('eq-phone').value.trim();
+            const desc = document.getElementById('eq-desc').value.trim();
+            
+            if (!name || !phone || !desc) {
+                showCustomAlert('Please fill all required fields (Name, Mobile, Requirement Details).');
+                return;
+            }
+            
+            document.getElementById('enquiryBody').style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+        }
+
+        async function proceedToPayment() {
+            const name = document.getElementById('pay-name').value.trim();
+            const phone = document.getElementById('pay-phone').value.trim();
+            const email = document.getElementById('pay-email').value.trim();
             if (!name || !phone) { showCustomAlert('Please enter your Name and Mobile number'); return; }
 
             const keys = Object.keys(cart);
@@ -1185,25 +951,9 @@
             }
         });
 
-        function submitEnquiry() {
-            const name = document.getElementById('eq-name').value.trim();
-            const phone = document.getElementById('eq-phone').value.trim();
-            const appType = document.getElementById('eq-type').value;
-            const desc = document.getElementById('eq-desc').value.trim();
-            if (!name || !phone || !appType || !desc) {
-                showCustomAlert('Please fill all required fields (Name, Mobile, Application Type, Description).');
-                return;
-            }
-            document.getElementById('enquiryBody').style.display = 'none';
-            document.getElementById('formSuccess').style.display = 'block';
-        }
-
-        window.filterByCategory = filterByCategory;
         window.clearFilters = clearFilters;
         window.toggleFiltersMobile = toggleFiltersMobile;
         window.applyFilters = applyFilters;
-        window.toggleWishlist = toggleWishlist;
-        window.toggleWishlistPanel = toggleWishlistPanel;
         window.toggleCartState = toggleCartState;
         window.removeFromCart = removeFromCart;
         window.clearCart = clearCart;
