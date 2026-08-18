@@ -74,7 +74,7 @@
         .product-card { background:white; border-radius:8px; border:1px solid var(--medium-gray); overflow:hidden; transition:transform .25s,box-shadow .25s; display:flex; flex-direction:column; position:relative; }
         .product-card:hover { transform:translateY(-4px); box-shadow:0 12px 24px rgba(0,0,0,.10); }
         .card-media { position:relative; aspect-ratio:3/4; background:#eef2f6; overflow:hidden; cursor:pointer; }
-        .card-media img { width:100%; height:100%; object-fit:auto; display:block; transition:transform .4s; }
+        .card-media img { width:100%; height:100%; object-fit:contain; display:block; transition:transform .4s; }
         .product-card:hover .card-media img { transform:scale(1.05); }
         .card-media .placeholder-fill { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:linear-gradient(145deg,#e2e8f0,#cbd5e1); color:var(--text-light); font-size:13px; }
         .card-media .placeholder-fill i { font-size:38px; color:var(--primary-blue); opacity:.6; }
