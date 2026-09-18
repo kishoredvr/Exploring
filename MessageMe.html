@@ -165,6 +165,176 @@
             justify-content: center;
         }
 
+        /* === Unified Contact / MessageMe Service Styles === */
+        .service-selector {
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+            border: 1px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+        }
+        .service-selector-title {
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .service-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .service-pill {
+            position: relative;
+            cursor: pointer;
+        }
+        .service-pill input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .service-pill span {
+            display: block;
+            padding: 9px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: white;
+            color: var(--text-dark);
+            font-size: .95rem;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+        .service-pill input:checked + span {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            box-shadow: 0 3px 10px rgba(26,54,93,.18);
+        }
+        .service-pill span:hover { border-color: var(--accent-gold); }
+        .service-help {
+            text-align: center;
+            color: var(--text-light);
+            font-size: .9rem;
+            margin-top: 8px;
+        }
+
+
+        /* === Service-specific MessageMe UI === */
+        .service-selector {
+            background: linear-gradient(135deg, #0f1a3c 0%, #1a365d 100%);
+            border: 1px solid rgba(212,175,55,.45);
+            color: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(15,26,60,.12);
+        }
+        .service-selector-title {
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .service-selector-subtitle {
+            text-align: center;
+            color: rgba(255,255,255,.72);
+            font-size: .9rem;
+            margin-bottom: 16px;
+        }
+        .service-pills {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .service-pill { position: relative; cursor: pointer; }
+        .service-pill input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .service-pill span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 52px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,.22);
+            border-radius: 9px;
+            background: rgba(255,255,255,.07);
+            color: white;
+            font-weight: 600;
+            font-size: .94rem;
+            transition: .2s ease;
+            text-align: center;
+        }
+        .service-pill span:hover {
+            border-color: var(--accent-gold);
+            background: rgba(255,255,255,.12);
+        }
+        .service-pill input:checked + span {
+            background: white;
+            color: var(--primary-blue);
+            border-color: var(--accent-gold);
+            box-shadow: 0 4px 14px rgba(0,0,0,.18);
+        }
+        .service-help {
+            text-align: center;
+            color: rgba(255,255,255,.72);
+            font-size: .86rem;
+            margin-top: 13px;
+        }
+        .service-panel {
+            border: 1px solid var(--medium-gray);
+            border-radius: 12px;
+            background: #fff;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+        .service-panel-heading {
+            display:flex;
+            align-items:center;
+            gap:10px;
+            color:var(--primary-blue);
+            font-size:1.05rem;
+            font-weight:700;
+            margin-bottom:17px;
+        }
+        .service-panel-heading i {
+            color:var(--accent-gold);
+        }
+        .service-intro {
+            text-align:center;
+            background:#f8fafc;
+            border:1px solid #e2e8f0;
+            border-radius:10px;
+            padding:12px 16px;
+            margin-bottom:20px;
+            color:#64748b;
+            font-size:.9rem;
+        }
+        .service-badge {
+            display:inline-flex;
+            align-items:center;
+            gap:7px;
+            background:#f5f7fa;
+            border:1px solid #e2e8f0;
+            color:var(--primary-blue);
+            border-radius:999px;
+            padding:5px 11px;
+            font-size:.8rem;
+            font-weight:700;
+        }
+        @media (max-width: 700px) {
+            .service-pills { grid-template-columns: 1fr; }
+            .service-selector { padding: 17px 13px; }
+            .service-panel { padding: 16px; }
+        }
+
         /* === Contact Page Form Styles === */
         .unified-card {
             background: white;
@@ -352,62 +522,75 @@
         <div class="unified-card">
             <form id="astrology-consultation-form" novalidate>
                 
-                <!-- Purpose & Service Tier -->
-                <div class="flex flex-wrap items-center justify-center gap-6 mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <div class="flex items-center gap-3">
-                        <span class="text-base font-bold text-slate-700">Purpose:</span>
-                        <label class="flex items-center space-x-1 cursor-pointer mb-0">
-                            <input type="radio" id="purpose-astrology" name="purpose" value="Astrology" class="radio-custom" checked required>
-                            <span class="text-base">Astrology Consultation</span>
+                <!-- Service Area -->
+                <div class="service-selector">
+                    <div class="service-selector-title">How can we help?</div>
+                    <div class="service-pills">
+                        <label class="service-pill">
+                            <input type="radio" name="serviceArea" value="Astrology" checked>
+                            <span><i class="fas fa-star-and-crescent mr-1"></i> Astrology</span>
                         </label>
-                        <label class="flex items-center space-x-1 cursor-pointer mb-0">
-                            <input type="radio" id="purpose-other" name="purpose" value="Other" class="radio-custom">
-                            <span class="text-base">Other Purpose</span>
+                        <label class="service-pill">
+                            <input type="radio" name="serviceArea" value="Software Development">
+                            <span><i class="fas fa-code mr-1"></i> Software Development</span>
+                        </label>
+                        <label class="service-pill">
+                            <input type="radio" name="serviceArea" value="Financial Services">
+                            <span><i class="fas fa-chart-line mr-1"></i> Financial Services</span>
                         </label>
                     </div>
-                    <div id="astroServiceWrapper" class="flex items-center gap-4 border-l border-slate-300 pl-4">
-                        <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm">
-                            <option value="2000">Consultation Fee — ₹2000</option>
-                           
-                        </select>
+                    <div id="serviceGuidance" class="service-help">
+                        Astrology consultation: birth details will be requested below.
                     </div>
                 </div>
 
-                <!-- 1. Combined Profile & Contact & Geography -->
-                <h4 class="form-section-header">1. Profile & Contact Info</h4>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4" style="align-items: center;">
-                    <div class="input-group">
-                        <label for="name" class="font-bold mb-1">Full Name *</label>
-                        <input type="text" id="name" name="name" class="input-field w-full" required>
-                        <div class="validation-message" id="name-error">Required</div>
-                    </div>
-                    <div class="input-group">
-                        <label for="email" class="font-bold mb-1">Email Address *</label>
-                        <input type="email" id="email" name="email" class="input-field w-full" required>
-                        <div class="validation-message" id="email-error">Invalid email</div>
-                    </div>
-                    <div class="input-group md:col-span-2">
-                        <label for="mobileNumber" class="font-bold mb-1">WhatsApp Number *</label>
-                        <div class="flex gap-2 w-full justify-center">
-                            <input type="text" id="countryCode" name="countryCode" class="input-field w-16 text-center" value="+91" required>
-                            <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field flex-1 max-w-[200px]" required>
+                <!-- ASTROLOGY ONLY -->
+                <div id="astrologyWorkflow">
+                    <div class="flex flex-wrap items-center justify-center gap-6 mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-3">
+                            <span class="text-base font-bold text-slate-700">Service:</span>
+                            <span class="text-base font-semibold text-slate-800">Astrology Consultation</span>
                         </div>
-                        <div class="validation-message" id="mobileNumber-error">10-digit number required</div>
+                        <div id="astroServiceWrapper" class="flex items-center gap-4 border-l border-slate-300 pl-4">
+                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm">
+                                <option value="2000">Consultation Fee — ₹2000</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div id="birth-location-section">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"style="align-items: center;">
+                    <h4 class="form-section-header">1. Profile & Contact Info</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
                         <div class="input-group">
-                            <label for="city" class="font-bold mb-1">City/Village *</label>
+                            <label for="name" class="font-bold mb-1">Full Name *</label>
+                            <input type="text" id="name" name="name" class="input-field w-full">
+                            <div class="validation-message" id="name-error">Required</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="email" class="font-bold mb-1">Email Address *</label>
+                            <input type="email" id="email" name="email" class="input-field w-full">
+                            <div class="validation-message" id="email-error">Invalid email</div>
+                        </div>
+                        <div class="input-group md:col-span-2">
+                            <label for="mobileNumber" class="font-bold mb-1">WhatsApp Number *</label>
+                            <div class="flex gap-2 w-full justify-center">
+                                <input type="text" id="countryCode" name="countryCode" class="input-field w-16 text-center" value="+91">
+                                <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field flex-1 max-w-[200px]">
+                            </div>
+                            <div class="validation-message" id="mobileNumber-error">10-digit number required</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="input-group">
+                            <label for="city" class="font-bold mb-1">Birth City/Village *</label>
                             <input type="text" id="city" name="city" class="input-field w-full">
                         </div>
                         <div class="input-group">
-                            <label for="state" class="font-bold mb-1">State *</label>
+                            <label for="state" class="font-bold mb-1">Birth State *</label>
                             <input type="text" id="state" name="state" class="input-field w-full">
                         </div>
                         <div class="input-group">
-                            <label for="country" class="font-bold mb-1">Country *</label>
+                            <label for="country" class="font-bold mb-1">Birth Country *</label>
                             <input type="text" id="country" name="country" class="input-field w-full">
                         </div>
                         <div class="input-group">
@@ -415,64 +598,160 @@
                             <input type="text" id="pincode" name="pincode" class="input-field w-24 text-center">
                         </div>
                     </div>
-                    <div id="country-field" class="hide mb-6 text-center">
-                        <div class="input-group mx-auto">
-                            <label for="contactCountry" class="font-bold mb-1">Resident Country *</label>
-                            <input type="text" id="contactCountry" name="contactCountry" class="input-field w-full max-w-sm">
-                            <div class="validation-message" id="contactCountry-error">Required for other purposes</div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- 2. Birth Details -->
-                <div id="birth-details-section">
                     <h4 class="form-section-header">2. Birth Details</h4>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div class="input-group">
-                            <label for="dob" class="font-bold mb-1">Date of Birth</label>
-                            <input type="date" id="dob" name="dob" class="input-field w-full max-w-[160px]">
+                            <label for="dob" class="font-bold mb-1">Date of Birth *</label>
+                            <input type="date" id="dob" name="dob" class="input-field w-full">
                         </div>
                         <div class="input-group">
-                            <label class="font-bold mb-1">Time (HH:MM:SS)</label>
+                            <label class="font-bold mb-1">Time (HH:MM:SS) *</label>
                             <div class="flex gap-1">
-                                <input type="number" id="hour" name="hour" placeholder="HH" class="input-field w-12 h-8 text-center text-sm px-1" min="0" max="23">
-                                <input type="number" id="minute" name="minute" placeholder="MM" class="input-field w-12 text-center text-sm px-1" min="0" max="59">
-                                <input type="number" id="second" name="second" placeholder="SS" class="input-field w-12 text-center text-sm px-1" min="0" max="59">
+                                <input type="number" id="hour" name="hour" placeholder="HH" class="input-field w-12 text-center" min="0" max="23">
+                                <input type="number" id="minute" name="minute" placeholder="MM" class="input-field w-12 text-center" min="0" max="59">
+                                <input type="number" id="second" name="second" placeholder="SS" class="input-field w-12 text-center" min="0" max="59">
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="font-bold mb-1">Gender *</label>
                             <div class="flex gap-3 mt-1">
-                                <label class="flex items-center space-x-1 mb-0"><input type="radio" name="gender" value="Male" class="radio-custom"> <span class="text-base">M</span></label>
-                                <label class="flex items-center space-x-1 mb-0"><input type="radio" name="gender" value="Female" class="radio-custom"> <span class="text-base">F</span></label>
-                                <label class="flex items-center space-x-1 mb-0"><input type="radio" id="gender-other" name="gender" value="Other" class="radio-custom"> <span class="text-base">O</span></label>
+                                <label><input type="radio" name="gender" value="Male" class="radio-custom"> M</label>
+                                <label><input type="radio" name="gender" value="Female" class="radio-custom"> F</label>
+                                <label><input type="radio" id="gender-other" name="gender" value="Other" class="radio-custom"> O</label>
                             </div>
                         </div>
-                        <div class="input-group" id="accuracy-section">
-                            <label class="font-bold mb-1">Accurate? *</label>
+                        <div class="input-group">
+                            <label class="font-bold mb-1">Birth Time Accurate?</label>
                             <div class="flex gap-4 mt-1">
-                                <label class="flex items-center space-x-1 mb-0"><input type="radio" id="accuracy-yes" name="accuracy" value="Yes" class="radio-custom" checked> <span class="text-base">Yes</span></label>
-                                <label class="flex items-center space-x-1 mb-0"><input type="radio" id="accuracy-no" name="accuracy" value="No" class="radio-custom"> <span class="text-base">No</span></label>
+                                <label><input type="radio" id="accuracy-yes" name="accuracy" value="Yes" class="radio-custom" checked> Yes</label>
+                                <label><input type="radio" id="accuracy-no" name="accuracy" value="No" class="radio-custom"> No</label>
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-wrap items-center justify-center gap-6 mb-6">
-                        <input type="text" id="genderOtherInput" name="genderOtherInput" class="input-field w-full max-w-[200px] text-sm py-1 hide" placeholder="Please specify gender">
-                        <input type="text" id="explanation" name="explanation" class="input-field flex-1 max-w-[450px] text-sm py-1 hide" placeholder="Reason why details might not be accurate">
+                    <div class="flex flex-wrap justify-center gap-6 mb-6">
+                        <input type="text" id="genderOtherInput" name="genderOtherInput" class="input-field max-w-[220px] hide" placeholder="Please specify gender">
+                        <input type="text" id="explanation" name="explanation" class="input-field max-w-[450px] hide" placeholder="Reason why details might not be accurate">
+                    </div>
+
+                    <div class="service-panel mb-2">
+                        <div class="service-panel-heading"><i class="fas fa-comment-dots"></i> Your Astrology Expectations</div>
+                        <div class="input-group">
+                            <label for="astrologyExpectations" class="font-bold mb-1">What would you like to understand from this consultation? *</label>
+                            <textarea id="astrologyExpectations" name="astrologyExpectations" rows="6" class="input-field w-full" placeholder="Please describe your questions, concerns or areas you want guidance on — for example career, business, marriage, relationships, finances, education, health, timing of an event, or any specific question. You may write in your own words."></textarea>
+                            <div class="validation-message" id="astrologyExpectations-error">Please tell us what you expect from the consultation.</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 3. Intentions -->
-                <h4 class="form-section-header">3. Intentions</h4>
-                <div class="mb-6 input-group">
-                    <label for="expectations" class="max-w-3xl font-bold mb-1">What are your specific questions/expectations? *</label>
-                    <textarea id="expectations" name="expectations" rows="4" class="input-field w-full max-w-5xl" required placeholder="Describe your intentions in detail..."></textarea>
-                    <div class="w-full max-w-5xl flex justify-between text-[11px] font-bold text-slate-400 mt-1 px-2">
-                        <span><span id="wordCount">0</span> / 5,000 words</span>
+                <!-- SOFTWARE DEVELOPMENT WORKFLOW -->
+                <div id="softwareWorkflow" class="hidden">
+                    <div class="service-intro">
+                        <span class="service-badge"><i class="fas fa-code"></i> Software Development</span>
+                        <div class="mt-2">Just tell us what you need. A short description is enough to start the discussion.</div>
                     </div>
-                    <div class="validation-message" id="expectations-error">Required</div>
+
+                    <div class="service-panel">
+                        <div class="service-panel-heading"><i class="fas fa-user"></i> Contact Information</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="input-group">
+                                <label for="softwareName" class="font-bold mb-1">Full Name *</label>
+                                <input type="text" id="softwareName" class="input-field w-full" placeholder="Your name">
+                                <div class="validation-message" id="softwareName-error">Required</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="softwareEmail" class="font-bold mb-1">Email Address *</label>
+                                <input type="email" id="softwareEmail" class="input-field w-full" placeholder="you@example.com">
+                                <div class="validation-message" id="softwareEmail-error">Invalid email</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="softwareMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                                <div class="flex gap-2 w-full">
+                                    <input type="text" id="softwareCountryCode" class="input-field w-16 text-center" value="+91">
+                                    <input type="tel" id="softwareMobile" class="input-field flex-1" placeholder="Mobile number">
+                                </div>
+                                <div class="validation-message" id="softwareMobile-error">10-digit number required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-panel">
+                        <div class="service-panel-heading"><i class="fas fa-laptop-code"></i> What Do You Need?</div>
+                        <div class="input-group mb-5">
+                            <label for="softwareType" class="font-bold mb-1">Broad Requirement *</label>
+                            <select id="softwareType" class="input-field w-full">
+                                <option value="">Select one</option>
+                                <option>New Website / Web Application</option>
+                                <option>Custom Software / Automation</option>
+                                <option>Integration / API / Data Solution</option>
+                                <option>Fix / Improve an Existing System</option>
+                                <option>Not Sure — I Need Guidance</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="softwareMessage" class="font-bold mb-1">Tell Us About Your Requirement *</label>
+                            <textarea id="softwareMessage" rows="7" class="input-field w-full" placeholder="In your own words, tell us what you want to achieve, what problem you are trying to solve, what you have today (if anything), and any important requirement or deadline. You do not need to know the technical details."></textarea>
+                            <div class="validation-message" id="softwareMessage-error">Please tell us briefly what you need.</div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- FINANCIAL SERVICES WORKFLOW -->
+                <div id="financialWorkflow" class="hidden">
+                    <div class="service-intro">
+                        <span class="service-badge"><i class="fas fa-chart-line"></i> Financial Services</span>
+                        <div class="mt-2">Select the broad area, then describe what you need in your own words. We can clarify the details with you.</div>
+                    </div>
+
+                    <div class="service-panel">
+                        <div class="service-panel-heading"><i class="fas fa-address-card"></i> Contact Information</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="input-group">
+                                <label for="financeName" class="font-bold mb-1">Full Name *</label>
+                                <input type="text" id="financeName" class="input-field w-full" placeholder="Your name">
+                                <div class="validation-message" id="financeName-error">Required</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="financeEmail" class="font-bold mb-1">Email Address *</label>
+                                <input type="email" id="financeEmail" class="input-field w-full" placeholder="you@example.com">
+                                <div class="validation-message" id="financeEmail-error">Invalid email</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="financeMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                                <div class="flex gap-2 w-full">
+                                    <input type="text" id="financeCountryCode" class="input-field w-16 text-center" value="+91">
+                                    <input type="tel" id="financeMobile" class="input-field flex-1" placeholder="Mobile number">
+                                </div>
+                                <div class="validation-message" id="financeMobile-error">10-digit number required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-panel">
+                        <div class="service-panel-heading"><i class="fas fa-file-invoice-dollar"></i> Financial Requirement</div>
+                        <div class="input-group mb-5">
+                            <label for="financeType" class="font-bold mb-1">Broad Service Area *</label>
+                            <select id="financeType" class="input-field w-full">
+                                <option value="">Select one</option>
+                                <option>Accounting / Bookkeeping / Xero</option>
+                                <option>Financial Reporting / MIS / Analysis</option>
+                                <option>Business / Economic Research</option>
+                                <option>Finance Automation / Process Improvement</option>
+                                <option>Finance Operations / Reconciliation / Cleanup</option>
+                                <option>Not Sure — I Need Guidance</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="financeMessage" class="font-bold mb-1">Tell Us About Your Requirement *</label>
+                            <textarea id="financeMessage" rows="7" class="input-field w-full" placeholder="Tell us what you are trying to achieve, the problem you are facing, what records/data or system you currently have, and any important deadline. You do not need to know the technical/accounting terminology."></textarea>
+                            <div class="validation-message" id="financeMessage-error">Please tell us briefly what you need.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Common submission fields retained for backend compatibility -->
                 <div id="termsWrapper" class="flex justify-center mb-6">
                     <label class="flex items-center space-x-2 cursor-pointer bg-slate-50 px-4 py-2 rounded border border-slate-200">
                         <input type="checkbox" id="termsAgree" name="termsAgree" class="w-4 h-4 accent-[#1a365d]">
@@ -631,101 +910,162 @@
 
         // Form Logic
         const form = document.getElementById('astrology-consultation-form');
-        const purposeAstro = document.getElementById('purpose-astrology');
-        const purposeOther = document.getElementById('purpose-other');
-        const astroWrapper = document.getElementById('astroServiceWrapper');
-        const birthSection = document.getElementById('birth-details-section');
-        const locationSection = document.getElementById('birth-location-section');
-        const countryFieldWrap = document.getElementById('country-field');
-        const termsWrapper = document.getElementById('termsWrapper');
-        
+        const astrologyWorkflow = document.getElementById('astrologyWorkflow');
+        const softwareWorkflow = document.getElementById('softwareWorkflow');
+        const financialWorkflow = document.getElementById('financialWorkflow');
+        const serviceGuidance = document.getElementById('serviceGuidance');
+        const serviceInputs = document.querySelectorAll('input[name="serviceArea"]');
+
         const accuracyNo = document.getElementById('accuracy-no');
         const accuracyYes = document.getElementById('accuracy-yes');
         const explanationField = document.getElementById('explanation');
         const genderOther = document.getElementById('gender-other');
         const genderOtherInput = document.getElementById('genderOtherInput');
-        const expectationsTextarea = document.getElementById('expectations');
-        const wordCountSpan = document.getElementById('wordCount');
 
-        function toggleSections() {
-            const isAstro = purposeAstro.checked;
-            astroWrapper.classList.toggle('hide', !isAstro);
-            birthSection.classList.toggle('disabled-section', !isAstro);
-            termsWrapper.classList.toggle('hide', !isAstro);
-            countryFieldWrap.classList.toggle('hide', isAstro);
+        const guidance = {
+            "Astrology": "Astrology consultation: birth details and the questions you want guidance on will be requested below.",
+            "Software Development": "Software Development: only your contact details, broad requirement and a message are needed. We will clarify the technical details with you.",
+            "Financial Services": "Financial Services: only your contact details, broad service area and a message are needed. We will clarify the financial details with you."
+        };
+
+        function getService() {
+            return document.querySelector('input[name="serviceArea"]:checked')?.value || "Astrology";
         }
 
-        purposeAstro.onchange = toggleSections;
-        purposeOther.onchange = toggleSections;
+        function updateWorkflow() {
+            const service = getService();
+
+            astrologyWorkflow.classList.toggle('hidden', service !== "Astrology");
+            softwareWorkflow.classList.toggle('hidden', service !== "Software Development");
+            financialWorkflow.classList.toggle('hidden', service !== "Financial Services");
+
+            serviceGuidance.textContent = guidance[service];
+
+            document.getElementById('termsWrapper').classList.toggle('hidden', service !== "Astrology");
+        }
+
+        serviceInputs.forEach(input => input.addEventListener('change', updateWorkflow));
+
         accuracyNo.onchange = () => explanationField.classList.remove('hide');
         accuracyYes.onchange = () => explanationField.classList.add('hide');
-        
+
         document.querySelectorAll('input[name="gender"]').forEach(rad => {
             rad.onchange = () => genderOtherInput.classList.toggle('hide', !genderOther.checked);
         });
 
-        expectationsTextarea.oninput = (e) => {
-            const val = e.target.value.trim();
-            const words = val === "" ? 0 : val.split(/\s+/).length;
-            wordCountSpan.textContent = words;
-            wordCountSpan.style.color = words > 5000 ? "#ef4444" : "inherit";
-        };
+        function validateEmail(v) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        }
 
         function validateForm() {
-            let isValid = true;
-            document.querySelectorAll('.validation-message').forEach(m => m.style.display = 'none');
-            document.querySelectorAll('.input-field').forEach(f => f.classList.remove('validation-error'));
+            let valid = true;
+            document.querySelectorAll('.validation-message').forEach(x => x.style.display = 'none');
+            document.querySelectorAll('.input-field').forEach(x => x.classList.remove('validation-error'));
 
-            const showError = (id) => {
-                const msg = document.getElementById(`${id}-error`);
-                if (msg) msg.style.display = 'block';
+            const err = id => {
+                const m = document.getElementById(id + '-error');
+                if (m) m.style.display = 'block';
                 document.getElementById(id)?.classList.add('validation-error');
-                isValid = false;
+                valid = false;
             };
 
-            if (!document.getElementById('name').value.trim()) showError('name');
-            const email = document.getElementById('email').value.trim();
-            if (!email || !email.includes('@')) showError('email');
-            
-            const mobile = document.getElementById('mobileNumber').value.trim();
-            if (!mobile || mobile.length < 10) showError('mobileNumber');
+            const service = getService();
 
-            if (!expectationsTextarea.value.trim()) showError('expectations');
-
-            if (purposeOther.checked) {
-                if (!document.getElementById('contactCountry').value.trim()) showError('contactCountry');
-            } else {
+            if (service === "Astrology") {
+                if (!document.getElementById('name').value.trim()) err('name');
+                if (!validateEmail(document.getElementById('email').value.trim())) err('email');
+                if (document.getElementById('mobileNumber').value.replace(/\D/g, '').length < 10) err('mobileNumber');
+                if (!document.getElementById('dob').value) err('dob');
+                if (!document.getElementById('astrologyExpectations').value.trim()) err('astrologyExpectations');
+                if (!document.getElementById('city').value.trim()) err('city');
+                if (!document.getElementById('state').value.trim()) err('state');
+                if (!document.getElementById('country').value.trim()) err('country');
+                if (!document.querySelector('input[name="gender"]:checked')) {
+                    showCustomAlert('Please select gender.', 'Birth Details');
+                    valid = false;
+                }
                 if (!document.getElementById('termsAgree').checked) {
                     showCustomAlert('Please agree to terms and conditions.', 'Terms Required');
-                    isValid = false;
+                    valid = false;
                 }
             }
-            return isValid;
+
+            if (service === "Software Development") {
+                if (!document.getElementById('softwareName').value.trim()) err('softwareName');
+                if (!validateEmail(document.getElementById('softwareEmail').value.trim())) err('softwareEmail');
+                if (document.getElementById('softwareMobile').value.replace(/\D/g, '').length < 10) err('softwareMobile');
+                if (!document.getElementById('softwareType').value) {
+                    showCustomAlert('Please select the type of software/development requirement.', 'Requirement Required');
+                    valid = false;
+                }
+                if (!document.getElementById('softwareMessage').value.trim()) err('softwareMessage');
+            }
+
+            if (service === "Financial Services") {
+                if (!document.getElementById('financeName').value.trim()) err('financeName');
+                if (!validateEmail(document.getElementById('financeEmail').value.trim())) err('financeEmail');
+                if (document.getElementById('financeMobile').value.replace(/\D/g, '').length < 10) err('financeMobile');
+                if (!document.getElementById('financeType').value) {
+                    showCustomAlert('Please select the financial service you require.', 'Service Required');
+                    valid = false;
+                }
+                if (!document.getElementById('financeMessage').value.trim()) err('financeMessage');
+            }
+
+            return valid;
         }
 
         function collectFormObject() {
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((val, key) => { data[key] = val || "Not applicable"; });
-            const code = document.getElementById('countryCode').value;
-            const phone = document.getElementById('mobileNumber').value;
-            data.mobileNumber = code + phone;
-            data.submittedAt = new Date().toISOString();
-            if (genderOther.checked) data.gender = "Other: " + genderOtherInput.value;
-            
-            if (purposeAstro.checked) {
+            const service = getService();
+            const data = {
+                service_area: service,
+                submittedAt: new Date().toISOString()
+            };
+
+            if (service === "Astrology") {
+                const fd = new FormData(form);
+                fd.forEach((val, key) => data[key] = val || "Not applicable");
+
+                data.mobileNumber =
+                    document.getElementById('countryCode').value +
+                    document.getElementById('mobileNumber').value;
+
+                if (genderOther.checked) data.gender = "Other: " + genderOtherInput.value;
+
                 const selectEl = document.getElementById('astroServiceSelect');
-                data.astro_service_tier = selectEl.value; // Price
-                
-                // Extract exact Service Name from the dropdown (e.g. "Consultation Fee" or "Testing")
-                const rawText = selectEl.options[selectEl.selectedIndex].text;
-                const serviceName = rawText.split('—')[0].trim();
-                data.astro_service_name = serviceName;
-                
-                // Prepend this string to expectations so print.html knows how to parse it dynamically
-                const originalExpectations = data.expectations;
-                data.expectations = `Purchasing Services: ${serviceName}\n\nQuestions/Expectations: ${originalExpectations}`;
+                data.astro_service_tier = selectEl.value;
+                data.astro_service_name =
+                    selectEl.options[selectEl.selectedIndex].text.split('—')[0].trim();
+
+                data.expectations =
+                    `Purchasing Services: ${data.astro_service_name}\n\nQuestions/Expectations: ${document.getElementById('astrologyExpectations').value.trim()}`;
+                return data;
             }
+
+            if (service === "Software Development") {
+                data.name = document.getElementById('softwareName').value.trim();
+                data.email = document.getElementById('softwareEmail').value.trim();
+                data.mobileNumber =
+                    document.getElementById('softwareCountryCode').value +
+                    document.getElementById('softwareMobile').value.trim();
+                data.software_type = document.getElementById('softwareType').value;
+                data.expectations = document.getElementById('softwareMessage').value.trim();
+            }
+
+            if (service === "Financial Services") {
+                data.name = document.getElementById('financeName').value.trim();
+                data.email = document.getElementById('financeEmail').value.trim();
+                data.mobileNumber =
+                    document.getElementById('financeCountryCode').value +
+                    document.getElementById('financeMobile').value.trim();
+                data.financial_service = document.getElementById('financeType').value;
+                data.expectations = document.getElementById('financeMessage').value.trim();
+            }
+
+            data.purpose = service;
+            data.payment_status = "not_applicable";
+            data.astro_service_tier = "Not applicable";
+            data.astro_service_name = "Not applicable";
             return data;
         }
 
@@ -753,7 +1093,7 @@
             btn.disabled = true; btn.textContent = 'Processing...';
             try {
                 const dataObj = collectFormObject();
-                if (purposeAstro.checked) {
+                if (getService() === 'Astrology') {
                     document.getElementById('paymentModal').classList.remove('hidden');
                     
                     // 1. Save Pending details
@@ -848,14 +1188,16 @@
                     });
                     if (!subRes.ok) throw new Error("Submission failed");
                     document.getElementById('successMessage').classList.remove('hidden');
-                    form.reset(); toggleSections();
+                    form.reset();
+                    document.querySelector('input[name="serviceArea"][value="Astrology"]').checked = true;
+                    updateWorkflow();
                     window.scrollTo({top:0, behavior:'smooth'});
                 }
             } catch (err) {
                 showCustomAlert(err.message, 'Form Processing Error');
                 document.getElementById('errorMessage').classList.remove('hidden');
             } finally {
-                if (!purposeAstro.checked) {
+                if (getService() !== "Astrology") {
                     btn.disabled = false; btn.textContent = original;
                 }
             }
@@ -864,15 +1206,17 @@
         document.getElementById('clearButton').onclick = () => {
             showCustomConfirm('Are you sure you want to clear all the fields?', () => {
                 form.reset();
-                toggleSections();
-                wordCountSpan.textContent = '0';
+                const defaultService = document.querySelector('input[name="serviceArea"][value="Astrology"]');
+                if (defaultService) defaultService.checked = true;
+                updateWorkflow();
+                window.scrollTo({top:0, behavior:'smooth'});
                 window.scrollTo({top:0, behavior:'smooth'});
             });
         };
 
         // Resume Flow & Initial State
         document.addEventListener('DOMContentLoaded', async () => {
-            toggleSections();
+            updateWorkflow();
             loadMasterCopy();
             
             const txnId = sessionStorage.getItem('rzp_txn_id');
