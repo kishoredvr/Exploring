@@ -892,102 +892,102 @@
             #astrologyWorkflow .compact-astro-birth .flex.gap-1 { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
         }
 
-</style>
 
-<style>
-/* Contact-fit adjustment only: keeps all existing fields/utilities intact.
-   Non-Astrology workflows use a stable Contact column so labels and controls
-   never compete for the same horizontal space. */
-#softwareWorkflow .compact-workflow-grid,
-#financialWorkflow .compact-workflow-grid,
-#otherPurposeWorkflow .compact-workflow-grid {
-    grid-template-columns: minmax(360px, 0.82fr) minmax(0, 1.18fr) !important;
-    gap: 20px !important;
-    align-items: stretch !important;
-}
+        /* === Final non-Astrology Contact layout correction ===
+           Same contact structure for Software, Financial and Other:
+           Row 1 = Name + Email
+           Row 2 = WhatsApp / Mobile (full width)
+           Only this contact-area layout is overridden. */
+        #softwareWorkflow .compact-contact-grid,
+        #financialWorkflow .compact-contact-grid,
+        #otherPurposeWorkflow .compact-contact-grid {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+            grid-template-rows: auto auto !important;
+            column-gap: 16px !important;
+            row-gap: 12px !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            align-items: start !important;
+        }
 
-#softwareWorkflow .compact-contact-grid,
-#financialWorkflow .compact-contact-grid,
-#otherPurposeWorkflow .compact-contact-grid {
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-}
+        #softwareWorkflow .compact-contact-grid > .input-group,
+        #financialWorkflow .compact-contact-grid > .input-group,
+        #otherPurposeWorkflow .compact-contact-grid > .input-group {
+            min-width: 0 !important;
+            width: 100% !important;
+            grid-column: auto !important;
+        }
 
-#softwareWorkflow .compact-contact-grid .input-group,
-#financialWorkflow .compact-contact-grid .input-group,
-#otherPurposeWorkflow .compact-contact-grid .input-group {
-    min-width: 0 !important;
-    width: 100% !important;
-}
+        #softwareWorkflow .compact-contact-grid > .nonastro-mobile-field,
+        #financialWorkflow .compact-contact-grid > .nonastro-mobile-field,
+        #otherPurposeWorkflow .compact-contact-grid > .nonastro-mobile-field {
+            grid-column: 1 / -1 !important;
+            width: 100% !important;
+        }
 
-#softwareWorkflow .compact-contact-grid .input-field,
-#financialWorkflow .compact-contact-grid .input-field,
-#otherPurposeWorkflow .compact-contact-grid .input-field {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-}
+        #softwareWorkflow .compact-contact-grid .nonastro-mobile-field > .flex,
+        #financialWorkflow .compact-contact-grid .nonastro-mobile-field > .flex,
+        #otherPurposeWorkflow .compact-contact-grid .nonastro-mobile-field > .flex {
+            width: 100% !important;
+            min-width: 0 !important;
+            justify-content: flex-start !important;
+        }
 
-#softwareWorkflow .compact-contact-grid .flex,
-#financialWorkflow .compact-contact-grid .flex,
-#otherPurposeWorkflow .compact-contact-grid .flex {
-    display: flex !important;
-    width: 100% !important;
-    min-width: 0 !important;
-}
+        #softwareWorkflow .compact-contact-grid .nonastro-mobile-field input,
+        #financialWorkflow .compact-contact-grid .nonastro-mobile-field input,
+        #otherPurposeWorkflow .compact-contact-grid .nonastro-mobile-field input {
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+        }
 
-#financialWorkflow .compact-contact-grid .flex .w-14,
-#otherPurposeWorkflow .compact-contact-grid .flex .w-14 {
-    flex: 0 0 58px !important;
-    width: 58px !important;
-}
+        /* Software has no separate country-code control; give its mobile field
+           a sensible width instead of allowing it to stretch unpredictably. */
+        #softwareWorkflow .compact-contact-grid #softwareMobile {
+            width: min(100%, 420px) !important;
+            flex: 0 1 420px !important;
+        }
 
-#financialWorkflow .compact-contact-grid .flex .flex-1,
-#otherPurposeWorkflow .compact-contact-grid .flex .flex-1 {
-    flex: 1 1 auto !important;
-    width: auto !important;
-    min-width: 0 !important;
-}
+        /* Finance and Other retain their existing country-code controls. */
+        #financialWorkflow .compact-contact-grid #financeCountryCode,
+        #otherPurposeWorkflow .compact-contact-grid #otherCountryCode {
+            width: 58px !important;
+            flex: 0 0 58px !important;
+        }
 
-#softwareWorkflow .compact-requirement-grid,
-#financialWorkflow .compact-requirement-grid {
-    grid-template-columns: minmax(230px, 0.72fr) minmax(0, 1.28fr) !important;
-    gap: 16px !important;
-}
+        #financialWorkflow .compact-contact-grid #financeMobile,
+        #otherPurposeWorkflow .compact-contact-grid #otherMobile {
+            width: auto !important;
+            flex: 1 1 auto !important;
+        }
 
-#softwareWorkflow .compact-message textarea.input-field,
-#financialWorkflow .compact-message textarea.input-field,
-#otherPurposeWorkflow textarea.input-field {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    resize: vertical;
-}
+        @media (max-width: 850px) {
+            #softwareWorkflow .compact-contact-grid,
+            #financialWorkflow .compact-contact-grid,
+            #otherPurposeWorkflow .compact-contact-grid {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+            }
+        }
 
-@media (max-width: 1100px) {
-    #softwareWorkflow .compact-workflow-grid,
-    #financialWorkflow .compact-workflow-grid,
-    #otherPurposeWorkflow .compact-workflow-grid {
-        grid-template-columns: 1fr !important;
-    }
-    #softwareWorkflow .compact-contact-grid,
-    #financialWorkflow .compact-contact-grid,
-    #otherPurposeWorkflow .compact-contact-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    }
-}
+        @media (max-width: 560px) {
+            #softwareWorkflow .compact-contact-grid,
+            #financialWorkflow .compact-contact-grid,
+            #otherPurposeWorkflow .compact-contact-grid {
+                grid-template-columns: 1fr !important;
+            }
 
-@media (max-width: 760px) {
-    #softwareWorkflow .compact-contact-grid,
-    #financialWorkflow .compact-contact-grid,
-    #otherPurposeWorkflow .compact-contact-grid {
-        grid-template-columns: 1fr !important;
-    }
-    #softwareWorkflow .compact-requirement-grid,
-    #financialWorkflow .compact-requirement-grid {
-        grid-template-columns: 1fr !important;
-    }
-}
+            #softwareWorkflow .compact-contact-grid > .nonastro-mobile-field,
+            #financialWorkflow .compact-contact-grid > .nonastro-mobile-field,
+            #otherPurposeWorkflow .compact-contact-grid > .nonastro-mobile-field {
+                grid-column: 1 !important;
+            }
+
+            #softwareWorkflow .compact-contact-grid #softwareMobile {
+                width: 100% !important;
+                flex: 1 1 auto !important;
+            }
+        }
+
 </style>
 </head>
 <body>
@@ -1139,18 +1139,18 @@
                             <div class="compact-contact-grid">
                                 <div class="input-group">
                                     <label for="softwareName" class="font-bold mb-1">Full Name *</label>
-                                    <input type="text" id="softwareName" class="input-field w-full" placeholder="Your name">
+                                    <input type="text" id="softwareName" class="input-field flex" placeholder="Your name">
                                     <div class="validation-message" id="softwareName-error">Required</div>
                                 </div>
                                 <div class="input-group">
                                     <label for="softwareEmail" class="font-bold mb-1">Email *</label>
-                                    <input type="email" id="softwareEmail" class="input-field w-full" placeholder="you@example.com">
+                                    <input type="email" id="softwareEmail" class="input-field flex" placeholder="you@example.com">
                                     <div class="validation-message" id="softwareEmail-error">Invalid email</div>
-                                </div>
+                                </div><br>
                                 <div class="input-group">
                                     <label for="softwareMobile" class="font-bold mb-1 w-full">WhatsApp / Mobile(With Country Code) *</label>
                                         <div class="flex gap-2">                                        
-                                        <input type="tel" id="softwareMobile" class="input-field w-full" placeholder="Mobile">
+                                        <input type="tel" id="softwareMobile" class="input-field flex w-full" placeholder="Mobile">
                                         </div>
                                         <div class="validation-message" id="softwareMobile-error">10-digit number required</div>
                                 </div>
@@ -1197,7 +1197,7 @@
                                     <input type="email" id="financeEmail" class="input-field w-full" placeholder="you@example.com">
                                     <div class="validation-message" id="financeEmail-error">Invalid email</div>
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group nonastro-mobile-field">
                                     <label for="financeMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
                                     <div class="flex gap-1 w-full">
                                         <input type="text" id="financeCountryCode" class="input-field w-14 text-center" value="+91">
@@ -1249,7 +1249,7 @@
                                     <input type="email" id="otherEmail" class="input-field w-full" placeholder="you@example.com">
                                     <div class="validation-message" id="otherEmail-error">Invalid email</div>
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group nonastro-mobile-field">
                                     <label for="otherMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
                                     <div class="flex gap-1 w-full">
                                         <input type="text" id="otherCountryCode" class="input-field w-14 text-center" value="+91">
