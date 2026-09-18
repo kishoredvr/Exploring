@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ganesh Solutions | Astrology Services & Digital Solutions</title>
+    <title>Ganesh Solutions | Astrology, Financial & Digital Services</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -313,7 +313,7 @@
         
         .astrology .service-icon { background: var(--vedic-purple); }
         .digital .service-icon { background: var(--cyber-teal); }
-        .economy .service-icon { background: var(--financial-green); }
+        .financial .service-icon { background: var(--financial-green); }
         
         .service-card h3 { font-size: 22px; margin-bottom: 15px; color: var(--primary-blue); }
         .service-card p { color: var(--text-light); margin-bottom: 20px; }
@@ -441,7 +441,7 @@
                     </div>
                 </div>
                 <h1>Ganesh Solutions</h1>
-                <p>Professional Astrology Services with Digital & Economic Research</p>
+                <p>Professional Astrology Services with Digital & Financial Services</p>
                 <div class="quote">
                     "Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant"
                 </div>
@@ -454,7 +454,7 @@
         <div class="container">
             <div class="section-title">
                 <h2>Our Services</h2>
-                <p>Professional services tailored to meet your spiritual, digital, and analytical needs</p>
+                <p>Professional services tailored to meet your spiritual, digital, and financial needs</p>
             </div>
             <div class="services-grid">
                 <div class="service-card astrology">
@@ -481,17 +481,17 @@
                     </ul>
                     <a href="#" class="service-link">Coming soon..</a>
                 </div>
-                <div class="service-card economy">
+                <div class="service-card financial">
                     <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                    <h3>Economic Research</h3>
-                    <p>In-depth analysis of national and global economic trends</p>
+                    <h3>Financial Services</h3>
+                    <p>Practical accounting, bookkeeping, reporting and Xero support for businesses</p>
                     <ul class="service-features">
-                        <li>National economy performance analysis</li>
-                        <li>Global economic trend monitoring</li>
-                        <li>Investment and market insights</li>
-                        <li>Policy impact assessment</li>
+                        <li>Xero bookkeeping and account maintenance</li>
+                        <li>Cleanup, categorisation and reconciliation</li>
+                        <li>Monthly financial and management reporting</li>
+                        <li>Excel, Power Query and finance-process support</li>
                     </ul>
-                    <a href="#" class="service-link">View Research</a>
+                    <a href="XeroServices.html" class="service-link">Explore Xero Services</a>
                 </div>
             </div>
         </div>
@@ -526,6 +526,22 @@
                 if (footerContent) {
                     document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
                 }
+
+                // Keep social links aligned with the Financial Digest rebrand.
+                // Components.html is loaded dynamically, so update its Facebook/YouTube
+                // links here without changing the shared component/theme.
+                document.querySelectorAll('a[href*="facebook.com"]').forEach(function (link) {
+                    link.href = 'https://www.facebook.com/profile.php?id=61575506668889';
+                    if (link.textContent.trim() === 'National Economies') {
+                        link.textContent = 'Financial Digest';
+                    }
+                });
+                document.querySelectorAll('a[href*="youtube.com"]').forEach(function (link) {
+                    link.href = 'https://www.youtube.com/@FinancialDigest';
+                    if (link.textContent.trim() === 'National Economies') {
+                        link.textContent = 'Financial Digest';
+                    }
+                });
 
                 // ── Run menu logic AFTER injection is complete ──
                 initMenuLogic();
