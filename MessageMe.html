@@ -338,8 +338,9 @@
 
         /* === Compact Professional MessageMe Redesign === */
         .unified-card {
-            max-width: 1320px;
-            padding: 20px 26px;
+            max-width: none;
+            width: 100%;
+            padding: 22px 32px;
             border-radius: 16px;
         }
 
@@ -356,8 +357,9 @@
 
         .service-pills {
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 8px;
-            max-width: 1100px;
+            gap: 10px;
+            max-width: none;
+            width: 100%;
         }
 
         .service-pill span {
@@ -412,24 +414,49 @@
             font-size: .82rem;
         }
 
+        /* Wide-layout stability: prevent grid children and controls from overlapping. */
+        .compact-workflow-grid > *,
+        .compact-contact-grid > *,
+        .compact-requirement-grid > *,
+        .compact-astro-contact > *,
+        .compact-astro-location > *,
+        .compact-astro-birth > * {
+            min-width: 0;
+        }
+        .input-group { min-width: 0; }
+        .input-field {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .compact-astro-contact .md\:col-span-2 { grid-column: auto !important; }
+        .compact-astro-location .w-24 { width: 100% !important; }
+        .compact-astro-birth .flex.gap-1 { width: 100%; }
+        .compact-astro-birth .flex.gap-1 .input-field { flex: 1 1 0; width: auto; min-width: 0; }
+        .compact-astro-extras { flex-wrap: wrap; }
+        .compact-astro-extras .input-field { width: min(100%, 360px); }
+        .compact-message textarea.input-field { width: 100%; min-width: 0; }
+
         /* Put contact + requirement side-by-side on larger screens. */
         .compact-workflow-grid {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
-            gap: 12px;
+            grid-template-columns: minmax(380px, .95fr) minmax(620px, 1.55fr);
+            gap: 18px;
             align-items: start;
         }
 
         .compact-contact-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
+            gap: 12px;
+            min-width: 0;
         }
 
         .compact-requirement-grid {
             display: grid;
-            grid-template-columns: minmax(210px, .7fr) minmax(0, 1.5fr);
-            gap: 12px;
+            grid-template-columns: minmax(280px, .72fr) minmax(420px, 1.28fr);
+            gap: 16px;
+            min-width: 0;
             align-items: start;
         }
 
@@ -439,21 +466,24 @@
 
         .compact-astro-contact {
             display: grid;
-            grid-template-columns: 1.05fr 1.05fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            min-width: 0;
         }
 
         .compact-astro-location {
             display: grid;
-            grid-template-columns: 1.1fr 1fr 1fr .7fr;
-            gap: 10px;
+            grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 1fr) minmax(180px, 1fr) minmax(120px, .65fr);
+            gap: 12px;
+            min-width: 0;
             margin-top: 10px;
         }
 
         .compact-astro-birth {
             display: grid;
-            grid-template-columns: 1fr 1.35fr .85fr 1fr;
-            gap: 10px;
+            grid-template-columns: minmax(190px, 1fr) minmax(300px, 1.35fr) minmax(150px, .8fr) minmax(210px, 1fr);
+            gap: 12px;
+            min-width: 0;
         }
 
         .compact-astro-extras {
@@ -489,7 +519,7 @@
             padding: 9px 28px;
         }
 
-        @media (max-width: 1050px) {
+        @media (max-width: 1180px) {
             .compact-workflow-grid,
             .compact-requirement-grid {
                 grid-template-columns: 1fr;
@@ -696,7 +726,7 @@
     <!-- Dynamic Placeholders for Master Components -->
     <div id="header-placeholder"></div>
 
-    <main class="max-w-7xl mx-auto px-3 sm:px-4 mt-5">
+    <main class="w-full max-w-[1600px] mx-auto px-3 sm:px-5 mt-5">
         <div id="successMessage" class="hidden mb-3 p-4 bg-green-50 border border-green-200 text-green-700 rounded text-center">
             <i class="fas fa-check-circle mr-1"></i> Request submitted successfully!
         </div>
