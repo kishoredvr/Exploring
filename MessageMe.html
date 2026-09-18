@@ -335,6 +335,191 @@
             .service-panel { padding: 16px; }
         }
 
+
+        /* === Compact Professional MessageMe Redesign === */
+        .unified-card {
+            max-width: 1320px;
+            padding: 20px 26px;
+            border-radius: 16px;
+        }
+
+        .service-selector {
+            padding: 15px 18px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+        }
+
+        .service-selector-title {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+        }
+
+        .service-pills {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            max-width: 1100px;
+        }
+
+        .service-pill span {
+            min-height: 44px;
+            padding: 7px 10px;
+            font-size: .88rem;
+            white-space: nowrap;
+        }
+
+        .service-help {
+            margin-top: 8px;
+            font-size: .8rem;
+        }
+
+        .service-panel {
+            padding: 15px 18px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .service-panel-heading {
+            font-size: .94rem;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .form-section-header {
+            font-size: 1.05rem;
+            margin: 7px 0 7px;
+        }
+
+        .input-field {
+            font-size: .94rem;
+            border-width: 1px;
+            min-height: 38px;
+            padding: 7px 10px;
+        }
+
+        textarea.input-field {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        .input-group label {
+            font-size: .86rem;
+            margin-bottom: 2px !important;
+        }
+
+        .service-intro {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            font-size: .82rem;
+        }
+
+        /* Put contact + requirement side-by-side on larger screens. */
+        .compact-workflow-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+            gap: 12px;
+            align-items: start;
+        }
+
+        .compact-contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .compact-requirement-grid {
+            display: grid;
+            grid-template-columns: minmax(210px, .7fr) minmax(0, 1.5fr);
+            gap: 12px;
+            align-items: start;
+        }
+
+        .compact-message textarea.input-field {
+            min-height: 104px;
+        }
+
+        .compact-astro-contact {
+            display: grid;
+            grid-template-columns: 1.05fr 1.05fr 1fr;
+            gap: 10px;
+        }
+
+        .compact-astro-location {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr 1fr .7fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .compact-astro-birth {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr .85fr 1fr;
+            gap: 10px;
+        }
+
+        .compact-astro-extras {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .compact-astro-extras .input-field {
+            max-width: 230px;
+        }
+
+        .compact-astro-expectations {
+            margin-top: 10px;
+        }
+
+        .compact-astro-expectations textarea.input-field {
+            min-height: 90px;
+        }
+
+        #termsWrapper {
+            margin-bottom: 10px !important;
+        }
+
+        .actions-compact {
+            padding-top: 10px !important;
+        }
+
+        .btn-primary {
+            font-size: .95rem;
+            padding: 9px 28px;
+        }
+
+        @media (max-width: 1050px) {
+            .compact-workflow-grid,
+            .compact-requirement-grid {
+                grid-template-columns: 1fr;
+            }
+            .compact-contact-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .unified-card { padding: 15px; }
+            .service-pills { grid-template-columns: repeat(2, 1fr); }
+            .compact-astro-contact,
+            .compact-astro-location,
+            .compact-astro-birth,
+            .compact-contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .service-pills { grid-template-columns: 1fr; }
+            .compact-astro-contact,
+            .compact-astro-location,
+            .compact-astro-birth,
+            .compact-contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* === Contact Page Form Styles === */
         .unified-card {
             background: white;
@@ -511,7 +696,7 @@
     <!-- Dynamic Placeholders for Master Components -->
     <div id="header-placeholder"></div>
 
-    <main class="max-w-6xl mx-auto px-4 mt-8">
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 mt-5">
         <div id="successMessage" class="hidden mb-3 p-4 bg-green-50 border border-green-200 text-green-700 rounded text-center">
             <i class="fas fa-check-circle mr-1"></i> Request submitted successfully!
         </div>
@@ -562,8 +747,8 @@
                         </div>
                     </div>
 
-                    <h4 class="form-section-header">1. Profile & Contact Info</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
+                    <h4 class="form-section-header">1. Profile & Contact</h4>
+                    <div class="compact-astro-contact">
                         <div class="input-group">
                             <label for="name" class="font-bold mb-1">Full Name *</label>
                             <input type="text" id="name" name="name" class="input-field w-full">
@@ -584,7 +769,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="compact-astro-location">
                         <div class="input-group">
                             <label for="city" class="font-bold mb-1">Birth City/Village *</label>
                             <input type="text" id="city" name="city" class="input-field w-full">
@@ -604,7 +789,7 @@
                     </div>
 
                     <h4 class="form-section-header">2. Birth Details</h4>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="compact-astro-birth">
                         <div class="input-group">
                             <label for="dob" class="font-bold mb-1">Date of Birth *</label>
                             <input type="date" id="dob" name="dob" class="input-field w-full">
@@ -633,12 +818,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-wrap justify-center gap-6 mb-6">
-                        <input type="text" id="genderOtherInput" name="genderOtherInput" class="input-field max-w-[220px] hide" placeholder="Please specify gender">
-                        <input type="text" id="explanation" name="explanation" class="input-field max-w-[450px] hide" placeholder="Reason why details might not be accurate">
+                    <div class="compact-astro-extras">
+                        <input type="text" id="genderOtherInput" name="genderOtherInput" class="input-field hide" placeholder="Please specify gender">
+                        <input type="text" id="explanation" name="explanation" class="input-field hide" placeholder="Reason why details might not be accurate">
                     </div>
 
-                    <div class="service-panel mb-2">
+                    <div class="service-panel compact-astro-expectations mb-2">
                         <div class="service-panel-heading"><i class="fas fa-comment-dots"></i> Let us know your expectations</div>
                         <div class="input-group">                            
                             <textarea id="astrologyExpectations" name="astrologyExpectations" rows="6" class="input-field w-full" placeholder="Please describe your questions or concerns in your own words."></textarea>
@@ -649,130 +834,140 @@
 
                 <!-- SOFTWARE DEVELOPMENT WORKFLOW -->
                 <div id="softwareWorkflow" class="hidden">
-                    <div class="service-panel">
-                        <div class="service-panel-heading"><i class="fas fa-user"></i> Contact Information</div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="input-group">
-                                <label for="softwareName" class="font-bold mb-1">Full Name *</label>
-                                <input type="text" id="softwareName" class="input-field w-full" placeholder="Your name">
-                                <div class="validation-message" id="softwareName-error">Required</div>
-                            </div>
-                            <div class="input-group">
-                                <label for="softwareEmail" class="font-bold mb-1">Email Address *</label>
-                                <input type="email" id="softwareEmail" class="input-field w-full" placeholder="you@example.com">
-                                <div class="validation-message" id="softwareEmail-error">Invalid email</div>
-                            </div>
-                            <div class="input-group">
-                                <label for="softwareMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
-                                <div class="flex gap-2 w-full">
-                                    <input type="text" id="softwareCountryCode" class="input-field w-16 text-center" value="+91">
-                                    <input type="tel" id="softwareMobile" class="input-field flex-1" placeholder="Mobile number">
+                    <div class="compact-workflow-grid">
+                        <div class="service-panel">
+                            <div class="service-panel-heading"><i class="fas fa-user"></i> Contact</div>
+                            <div class="compact-contact-grid">
+                                <div class="input-group">
+                                    <label for="softwareName" class="font-bold mb-1">Full Name *</label>
+                                    <input type="text" id="softwareName" class="input-field w-full" placeholder="Your name">
+                                    <div class="validation-message" id="softwareName-error">Required</div>
                                 </div>
-                                <div class="validation-message" id="softwareMobile-error">10-digit number required</div>
+                                <div class="input-group">
+                                    <label for="softwareEmail" class="font-bold mb-1">Email *</label>
+                                    <input type="email" id="softwareEmail" class="input-field w-full" placeholder="you@example.com">
+                                    <div class="validation-message" id="softwareEmail-error">Invalid email</div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="softwareMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                                    <div class="flex gap-1 w-full">
+                                        <input type="text" id="softwareCountryCode" class="input-field w-14 text-center" value="+91">
+                                        <input type="tel" id="softwareMobile" class="input-field flex-1" placeholder="Mobile">
+                                    </div>
+                                    <div class="validation-message" id="softwareMobile-error">10-digit number required</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="service-panel">
-                        <div class="service-panel-heading"><i class="fas fa-laptop-code"></i> What Do You Need?</div>
-                        <div class="input-group mb-5">
-                            <label for="softwareType" class="font-bold mb-1">Broad Requirement *</label>
-                            <select id="softwareType" class="input-field w-full">
-                                <option value="">Select one</option>
-                                <option>New Website / Web Application</option>
-                                <option>Custom Software / Automation</option>
-                                <option>Integration / API / Data Solution</option>
-                                <option>Fix / Improve an Existing System</option>
-                                <option>Not Sure — I Need Guidance</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label for="softwareMessage" class="font-bold mb-1">Tell Us About Your Requirement *</label>
-                            <textarea id="softwareMessage" rows="7" class="input-field w-full" placeholder="In your own words, tell us what you want to achieve, what problem you are trying to solve, what you have today (if anything), and any important requirement or deadline. You do not need to know the technical details."></textarea>
-                            <div class="validation-message" id="softwareMessage-error">Please tell us briefly what you need.</div>
+                        <div class="service-panel">
+                            <div class="service-panel-heading"><i class="fas fa-laptop-code"></i> Requirement</div>
+                            <div class="compact-requirement-grid">
+                                <div class="input-group">
+                                    <label for="softwareType" class="font-bold mb-1">Broad Requirement *</label>
+                                    <select id="softwareType" class="input-field w-full">
+                                        <option value="">Select one</option>
+                                        <option>New Website / Web Application</option>
+                                        <option>Custom Software / Automation</option>
+                                        <option>Integration / API / Data Solution</option>
+                                        <option>Fix / Improve an Existing System</option>
+                                        <option>Not Sure — I Need Guidance</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="input-group compact-message">
+                                    <label for="softwareMessage" class="font-bold mb-1">Tell Us About Your Requirement *</label>
+                                    <textarea id="softwareMessage" rows="4" class="input-field w-full" placeholder="In your own words, tell us what you want to achieve or the problem you want to solve. Technical details are not required."></textarea>
+                                    <div class="validation-message" id="softwareMessage-error">Please tell us briefly what you need.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- FINANCIAL SERVICES WORKFLOW -->
                 <div id="financialWorkflow" class="hidden">
-                    <div class="service-panel">
-                        <div class="service-panel-heading"><i class="fas fa-address-card"></i> Contact Information</div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="input-group">
-                                <label for="financeName" class="font-bold mb-1">Full Name *</label>
-                                <input type="text" id="financeName" class="input-field w-full" placeholder="Your name">
-                                <div class="validation-message" id="financeName-error">Required</div>
-                            </div>
-                            <div class="input-group">
-                                <label for="financeEmail" class="font-bold mb-1">Email Address *</label>
-                                <input type="email" id="financeEmail" class="input-field w-full" placeholder="you@example.com">
-                                <div class="validation-message" id="financeEmail-error">Invalid email</div>
-                            </div>
-                            <div class="input-group">
-                                <label for="financeMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
-                                <div class="flex gap-2 w-full">
-                                    <input type="text" id="financeCountryCode" class="input-field w-16 text-center" value="+91">
-                                    <input type="tel" id="financeMobile" class="input-field flex-1" placeholder="Mobile number">
+                    <div class="compact-workflow-grid">
+                        <div class="service-panel">
+                            <div class="service-panel-heading"><i class="fas fa-address-card"></i> Contact</div>
+                            <div class="compact-contact-grid">
+                                <div class="input-group">
+                                    <label for="financeName" class="font-bold mb-1">Full Name *</label>
+                                    <input type="text" id="financeName" class="input-field w-full" placeholder="Your name">
+                                    <div class="validation-message" id="financeName-error">Required</div>
                                 </div>
-                                <div class="validation-message" id="financeMobile-error">10-digit number required</div>
+                                <div class="input-group">
+                                    <label for="financeEmail" class="font-bold mb-1">Email *</label>
+                                    <input type="email" id="financeEmail" class="input-field w-full" placeholder="you@example.com">
+                                    <div class="validation-message" id="financeEmail-error">Invalid email</div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="financeMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                                    <div class="flex gap-1 w-full">
+                                        <input type="text" id="financeCountryCode" class="input-field w-14 text-center" value="+91">
+                                        <input type="tel" id="financeMobile" class="input-field flex-1" placeholder="Mobile">
+                                    </div>
+                                    <div class="validation-message" id="financeMobile-error">10-digit number required</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="service-panel">
-                        <div class="service-panel-heading"><i class="fas fa-file-invoice-dollar"></i> Financial Requirement</div>
-                        <div class="input-group mb-5">
-                            <label for="financeType" class="font-bold mb-1">Broad Service Area *</label>
-                            <select id="financeType" class="input-field w-full">
-                                <option value="">Select one</option>
-                                <option>Accounting / Bookkeeping / Xero</option>
-                                <option>Financial Reporting / MIS / Analysis</option>
-                                <option>Business / Economic Research</option>
-                                <option>Finance Automation / Process Improvement</option>
-                                <option>Finance Operations / Reconciliation / Cleanup</option>
-                                <option>Not Sure — I Need Guidance</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label for="financeMessage" class="font-bold mb-1">Tell Us About Your Requirement *</label>
-                            <textarea id="financeMessage" rows="7" class="input-field w-full" placeholder="Tell us what you are trying to achieve, the problem you are facing, what records/data or system you currently have, and any important deadline. You do not need to know the technical/accounting terminology."></textarea>
-                            <div class="validation-message" id="financeMessage-error">Please tell us briefly what you need.</div>
+                        <div class="service-panel">
+                            <div class="service-panel-heading"><i class="fas fa-file-invoice-dollar"></i> Financial Requirement</div>
+                            <div class="compact-requirement-grid">
+                                <div class="input-group">
+                                    <label for="financeType" class="font-bold mb-1">Broad Service Area *</label>
+                                    <select id="financeType" class="input-field w-full">
+                                        <option value="">Select one</option>
+                                        <option>Accounting / Bookkeeping / Xero</option>
+                                        <option>Financial Reporting / MIS / Analysis</option>
+                                        <option>Business / Economic Research</option>
+                                        <option>Finance Automation / Process Improvement</option>
+                                        <option>Finance Operations / Reconciliation / Cleanup</option>
+                                        <option>Not Sure — I Need Guidance</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="input-group compact-message">
+                                    <label for="financeMessage" class="font-bold mb-1">Tell Us About Your Requirement *</label>
+                                    <textarea id="financeMessage" rows="4" class="input-field w-full" placeholder="Tell us what you are trying to achieve or the problem you are facing. You can explain it in your own words."></textarea>
+                                    <div class="validation-message" id="financeMessage-error">Please tell us briefly what you need.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- OTHER PURPOSE WORKFLOW -->
                 <div id="otherPurposeWorkflow" class="hidden">
-                    <div class="service-panel">
-                        <div class="service-panel-heading"><i class="fas fa-comment-alt"></i> Other Purpose</div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <div class="input-group">
-                                <label for="otherName" class="font-bold mb-1">Full Name *</label>
-                                <input type="text" id="otherName" class="input-field w-full" placeholder="Your name">
-                                <div class="validation-message" id="otherName-error">Required</div>
-                            </div>
-                            <div class="input-group">
-                                <label for="otherEmail" class="font-bold mb-1">Email Address *</label>
-                                <input type="email" id="otherEmail" class="input-field w-full" placeholder="you@example.com">
-                                <div class="validation-message" id="otherEmail-error">Invalid email</div>
-                            </div>
-                            <div class="input-group">
-                                <label for="otherMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
-                                <div class="flex gap-2 w-full">
-                                    <input type="text" id="otherCountryCode" class="input-field w-16 text-center" value="+91">
-                                    <input type="tel" id="otherMobile" class="input-field flex-1" placeholder="Mobile number">
+                    <div class="compact-workflow-grid">
+                        <div class="service-panel">
+                            <div class="service-panel-heading"><i class="fas fa-comment-alt"></i> Contact</div>
+                            <div class="compact-contact-grid">
+                                <div class="input-group">
+                                    <label for="otherName" class="font-bold mb-1">Full Name *</label>
+                                    <input type="text" id="otherName" class="input-field w-full" placeholder="Your name">
+                                    <div class="validation-message" id="otherName-error">Required</div>
                                 </div>
-                                <div class="validation-message" id="otherMobile-error">10-digit number required</div>
+                                <div class="input-group">
+                                    <label for="otherEmail" class="font-bold mb-1">Email *</label>
+                                    <input type="email" id="otherEmail" class="input-field w-full" placeholder="you@example.com">
+                                    <div class="validation-message" id="otherEmail-error">Invalid email</div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="otherMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                                    <div class="flex gap-1 w-full">
+                                        <input type="text" id="otherCountryCode" class="input-field w-14 text-center" value="+91">
+                                        <input type="tel" id="otherMobile" class="input-field flex-1" placeholder="Mobile">
+                                    </div>
+                                    <div class="validation-message" id="otherMobile-error">10-digit number required</div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="input-group">
-                            <label for="otherMessage" class="font-bold mb-1">How Can We Help? *</label>
-                            <textarea id="otherMessage" rows="7" class="input-field w-full" placeholder="Please tell us what you are looking for, what you need help with, or any question you would like to discuss. You can explain it in your own words; no specific format is required."></textarea>
-                            <div class="validation-message" id="otherMessage-error">Please tell us briefly what you need.</div>
+                        <div class="service-panel">
+                            <div class="service-panel-heading"><i class="fas fa-comment-alt"></i> Your Message</div>
+                            <div class="input-group">
+                                <label for="otherMessage" class="font-bold mb-1">How Can We Help? *</label>
+                                <textarea id="otherMessage" rows="4" class="input-field w-full" placeholder="Tell us what you are looking for, what you need help with, or any question you would like to discuss."></textarea>
+                                <div class="validation-message" id="otherMessage-error">Please tell us briefly what you need.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -786,7 +981,7 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="flex items-center justify-center gap-8 pt-4 border-t border-slate-100">
+                <div class="actions-compact flex items-center justify-center gap-6 border-t border-slate-100">
                     <button id="submitBtn" type="submit" class="btn-primary font-bold rounded shadow">
                         Submit Request
                     </button>
