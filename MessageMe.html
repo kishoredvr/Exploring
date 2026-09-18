@@ -538,6 +538,10 @@
                             <input type="radio" name="serviceArea" value="Financial Services">
                             <span><i class="fas fa-chart-line mr-1"></i> Financial Services</span>
                         </label>
+                        <label class="service-pill">
+                            <input type="radio" name="serviceArea" value="Other Purpose">
+                            <span><i class="fas fa-comment-alt mr-1"></i> Other Purpose</span>
+                        </label>
                     </div>
                     <div id="serviceGuidance" class="service-help">
                         Astrology consultation: birth details will be requested below.
@@ -740,6 +744,39 @@
                     </div>
                 </div>
 
+                <!-- OTHER PURPOSE WORKFLOW -->
+                <div id="otherPurposeWorkflow" class="hidden">
+                    <div class="service-panel">
+                        <div class="service-panel-heading"><i class="fas fa-comment-alt"></i> Other Purpose</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="input-group">
+                                <label for="otherName" class="font-bold mb-1">Full Name *</label>
+                                <input type="text" id="otherName" class="input-field w-full" placeholder="Your name">
+                                <div class="validation-message" id="otherName-error">Required</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="otherEmail" class="font-bold mb-1">Email Address *</label>
+                                <input type="email" id="otherEmail" class="input-field w-full" placeholder="you@example.com">
+                                <div class="validation-message" id="otherEmail-error">Invalid email</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="otherMobile" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                                <div class="flex gap-2 w-full">
+                                    <input type="text" id="otherCountryCode" class="input-field w-16 text-center" value="+91">
+                                    <input type="tel" id="otherMobile" class="input-field flex-1" placeholder="Mobile number">
+                                </div>
+                                <div class="validation-message" id="otherMobile-error">10-digit number required</div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="otherMessage" class="font-bold mb-1">How Can We Help? *</label>
+                            <textarea id="otherMessage" rows="7" class="input-field w-full" placeholder="Please tell us what you are looking for, what you need help with, or any question you would like to discuss. You can explain it in your own words; no specific format is required."></textarea>
+                            <div class="validation-message" id="otherMessage-error">Please tell us briefly what you need.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Common submission fields retained for backend compatibility -->
                 <div id="termsWrapper" class="flex justify-center mb-6">
                     <label class="flex items-center space-x-2 cursor-pointer bg-slate-50 px-4 py-2 rounded border border-slate-200">
@@ -902,6 +939,7 @@
         const astrologyWorkflow = document.getElementById('astrologyWorkflow');
         const softwareWorkflow = document.getElementById('softwareWorkflow');
         const financialWorkflow = document.getElementById('financialWorkflow');
+        const otherPurposeWorkflow = document.getElementById('otherPurposeWorkflow');
         const serviceGuidance = document.getElementById('serviceGuidance');
         const serviceInputs = document.querySelectorAll('input[name="serviceArea"]');
 
@@ -914,7 +952,8 @@
         const guidance = {
             "Astrology": "Astrology consultation: birth details and the questions you want guidance on will be requested below.",
             "Software Development": "Software Development: only your contact details, broad requirement and a message are needed. We will clarify the technical details with you.",
-            "Financial Services": "Financial Services: only your contact details, broad service area and a message are needed. We will clarify the financial details with you."
+            "Financial Services": "Financial Services: only your contact details, broad service area and a message are needed. We will clarify the financial details with you.",
+            "Other Purpose": "Other Purpose: only your contact details and a message are needed. Tell us what you are looking for and we will understand the requirement with you."
         };
 
         function getService() {
@@ -927,6 +966,7 @@
             astrologyWorkflow.classList.toggle('hidden', service !== "Astrology");
             softwareWorkflow.classList.toggle('hidden', service !== "Software Development");
             financialWorkflow.classList.toggle('hidden', service !== "Financial Services");
+            otherPurposeWorkflow.classList.toggle('hidden', service !== "Other Purpose");
 
             serviceGuidance.textContent = guidance[service];
 
@@ -1001,6 +1041,13 @@
                 if (!document.getElementById('financeMessage').value.trim()) err('financeMessage');
             }
 
+            if (service === "Other Purpose") {
+                if (!document.getElementById('otherName').value.trim()) err('otherName');
+                if (!validateEmail(document.getElementById('otherEmail').value.trim())) err('otherEmail');
+                if (document.getElementById('otherMobile').value.replace(/\D/g, '').length < 10) err('otherMobile');
+                if (!document.getElementById('otherMessage').value.trim()) err('otherMessage');
+            }
+
             return valid;
         }
 
@@ -1049,6 +1096,15 @@
                     document.getElementById('financeMobile').value.trim();
                 data.financial_service = document.getElementById('financeType').value;
                 data.expectations = document.getElementById('financeMessage').value.trim();
+            }
+
+            if (service === "Other Purpose") {
+                data.name = document.getElementById('otherName').value.trim();
+                data.email = document.getElementById('otherEmail').value.trim();
+                data.mobileNumber =
+                    document.getElementById('otherCountryCode').value +
+                    document.getElementById('otherMobile').value.trim();
+                data.expectations = document.getElementById('otherMessage').value.trim();
             }
 
             data.purpose = service;
