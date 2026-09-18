@@ -720,6 +720,179 @@
 
         #header-placeholder { min-height: 100px; }
     </style>
+<style>
+
+        /* =========================================================
+           MessageMe Layout V3 — wide, stable, no-overlap redesign
+           Keeps every existing field, option and JS utility intact.
+           ========================================================= */
+        html, body { overflow-x: hidden; }
+        main.w-full.max-w-\[1600px\] {
+            max-width: 1800px !important;
+            width: 100% !important;
+            box-sizing: border-box;
+        }
+        .unified-card {
+            width: 100% !important;
+            max-width: 1720px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding: 24px 34px !important;
+            box-sizing: border-box;
+        }
+        #astrology-consultation-form,
+        #astrology-consultation-form * { box-sizing: border-box; }
+
+        .service-selector { width: 100%; }
+        .service-pills {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            max-width: none !important;
+            width: 100% !important;
+        }
+        .service-pill, .service-pill span { min-width: 0; width: 100%; }
+        .service-pill span { white-space: normal !important; line-height: 1.25; }
+
+        /* Every service workflow gets the same predictable two-zone layout:
+           contact on the left, requirement/message on the right. */
+        #softwareWorkflow .compact-workflow-grid,
+        #financialWorkflow .compact-workflow-grid,
+        #otherPurposeWorkflow .compact-workflow-grid {
+            display: grid !important;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.45fr) !important;
+            gap: 18px !important;
+            align-items: stretch !important;
+            width: 100% !important;
+        }
+        #softwareWorkflow .service-panel,
+        #financialWorkflow .service-panel,
+        #otherPurposeWorkflow .service-panel {
+            width: 100% !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 18px 20px !important;
+        }
+        #softwareWorkflow .compact-contact-grid,
+        #financialWorkflow .compact-contact-grid,
+        #otherPurposeWorkflow .compact-contact-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 14px !important;
+            width: 100% !important;
+        }
+        #softwareWorkflow .compact-requirement-grid,
+        #financialWorkflow .compact-requirement-grid {
+            display: grid !important;
+            grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.5fr) !important;
+            gap: 16px !important;
+            width: 100% !important;
+            align-items: start !important;
+        }
+        #otherPurposeWorkflow .compact-requirement-grid { display: block !important; }
+        #otherPurposeWorkflow .compact-message { width: 100% !important; }
+
+        .input-group { min-width: 0 !important; width: 100% !important; align-items: stretch !important; }
+        .input-group > label { width: 100%; text-align: left; }
+        .input-field {
+            display: block;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+        }
+        .input-group .flex { min-width: 0; width: 100%; }
+        .input-group .flex .input-field { min-width: 0 !important; }
+        textarea.input-field { width: 100% !important; max-width: 100% !important; }
+
+        /* Astrology: four controlled columns; no fixed-width children. */
+        #astrologyWorkflow .compact-astro-contact {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+            width: 100% !important;
+        }
+        #astrologyWorkflow .compact-astro-location {
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr) minmax(130px, .65fr) !important;
+            gap: 16px !important;
+            width: 100% !important;
+        }
+        #astrologyWorkflow .compact-astro-birth {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, .85fr) minmax(0, 1fr) !important;
+            gap: 16px !important;
+            width: 100% !important;
+        }
+        #astrologyWorkflow .compact-astro-birth .flex.gap-1 {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 5px !important;
+            width: 100% !important;
+        }
+        #astrologyWorkflow .compact-astro-birth .flex.gap-1 .input-field {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        #astrologyWorkflow .compact-astro-extras {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: flex-start !important;
+            width: 100% !important;
+            gap: 12px !important;
+        }
+        #astrologyWorkflow .compact-astro-extras .input-field {
+            flex: 1 1 280px !important;
+            width: auto !important;
+            max-width: 480px !important;
+        }
+        #astrologyWorkflow .compact-astro-expectations { width: 100% !important; }
+
+        /* Keep terms/actions separated from the workflow cards. */
+        #termsWrapper { width: 100%; margin-top: 18px !important; }
+        .actions-compact { width: 100%; }
+
+        /* Tablet */
+        @media (max-width: 1200px) {
+            .unified-card { padding: 20px !important; }
+            #softwareWorkflow .compact-workflow-grid,
+            #financialWorkflow .compact-workflow-grid,
+            #otherPurposeWorkflow .compact-workflow-grid {
+                grid-template-columns: 1fr !important;
+            }
+            #softwareWorkflow .compact-contact-grid,
+            #financialWorkflow .compact-contact-grid,
+            #otherPurposeWorkflow .compact-contact-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+            #softwareWorkflow .compact-requirement-grid,
+            #financialWorkflow .compact-requirement-grid {
+                grid-template-columns: minmax(220px, .8fr) minmax(0, 1.5fr) !important;
+            }
+        }
+        @media (max-width: 850px) {
+            .service-pills { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+            #softwareWorkflow .compact-contact-grid,
+            #financialWorkflow .compact-contact-grid,
+            #otherPurposeWorkflow .compact-contact-grid,
+            #astrologyWorkflow .compact-astro-contact,
+            #astrologyWorkflow .compact-astro-location,
+            #astrologyWorkflow .compact-astro-birth {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            #softwareWorkflow .compact-requirement-grid,
+            #financialWorkflow .compact-requirement-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 560px) {
+            .unified-card { padding: 14px !important; }
+            .service-pills,
+            #softwareWorkflow .compact-contact-grid,
+            #financialWorkflow .compact-contact-grid,
+            #otherPurposeWorkflow .compact-contact-grid,
+            #astrologyWorkflow .compact-astro-contact,
+            #astrologyWorkflow .compact-astro-location,
+            #astrologyWorkflow .compact-astro-birth {
+                grid-template-columns: 1fr !important;
+            }
+            #astrologyWorkflow .compact-astro-birth .flex.gap-1 { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+        }
+
+</style>
 </head>
 <body>
 
