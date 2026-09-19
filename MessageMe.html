@@ -979,28 +979,29 @@
                 <div id="astrologyWorkflow">
                     
                     <h4 class="form-section-header">1. Profile & Contact</h4>
-                    <div class="compact-astro-contact">
-                        <div class="input-group">
-                            <label for="name" class="font-bold mb-1">Full Name *</label>
-                            <input type="text" id="name" name="name" class="input-field w-full">
-                            <div class="validation-message" id="name-error">Required</div>
-                        </div>
-                        <div class="input-group">
-                            <label for="email" class="font-bold mb-1">Email Address *</label>
-                            <input type="email" id="email" name="email" class="input-field w-full">
-                            <div class="validation-message" id="email-error">Invalid email</div>
-                        </div>
-                        
-                        <!-- Standardized Mobile Field identical to Financial Tab -->
-                        <div class="input-group nonastro-mobile-field">
-                            <label for="mobileNumber" class="font-bold mb-1">WhatsApp/Mobile Number(With Country Code) *</label>
-                            <div class="flex gap-1 w-full">
-                                <input type="text" id="countryCode" name="countryCode" class="input-field w-14 text-center" value="+91">
-                                <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field flex-1" placeholder="Mobile">
-                            </div>
-                            <div class="validation-message" id="mobileNumber-error">10-digit number required</div>
-                        </div>
+                    <div class="compact-astro-contact grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                        <div class="input-group min-w-0">
+                        <label for="name" class="font-bold mb-1 whitespace-nowrap overflow-hidden text-ellipsis">Full Name *</label>
+                        <input type="text" id="name" name="name" class="input-field w-full">
+                        <div class="validation-message" id="name-error">Required</div>
+                    </div>        
+    
+                    <div class="input-group min-w-0">
+                        <label for="email" class="font-bold mb-1 whitespace-nowrap overflow-hidden text-ellipsis">Email Address *</label>
+                        <input type="email" id="email" name="email" class="input-field w-full">
+                        <div class="validation-message" id="email-error">Invalid email</div>
                     </div>
+    
+                <!-- Standardized Mobile Field identical to Financial Tab -->
+                <div class="input-group nonastro-mobile-field min-w-0">
+                    <label for="mobileNumber" class="font-bold mb-1 whitespace-nowrap overflow-hidden text-ellipsis" title="WhatsApp/Mobile Number(With Country Code) *">WhatsApp / Mobile (With Code) *</label>
+                    <div class="flex gap-1 w-full">
+                    <input type="text" id="countryCode" name="countryCode" class="input-field w-14 text-center px-1" value="+91">
+                    <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field flex-1 min-w-0" placeholder="Mobile">
+                </div>
+                <div class="validation-message" id="mobileNumber-error">10-digit number required</div>
+                </div>
+            </div>
 
                     <div class="compact-astro-location">
                         <div class="input-group">
