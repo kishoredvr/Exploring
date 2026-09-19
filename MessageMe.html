@@ -1002,43 +1002,29 @@
                 <!-- Service Area -->
                 <div class="service-selector">
                     <div class="service-selector-title">How can we help?</div>
-                    <div class="service-pills">
-                        <label class="service-pill">
-                            <input type="radio" name="serviceArea" value="Astrology" checked>
-                            <span style="width:auto";><i class="fas fa-star-and-crescent mr-1"></i> Astrology</span>
-                        </label>
-                        <label class="service-pill">
-                            <input type="radio" name="serviceArea" value="Software Development">
-                            <span style="width:auto";><i class="fas fa-code mr-1"></i> Software Development</span>
-                        </label>
-                        <label class="service-pill">
-                            <input type="radio" name="serviceArea" value="Financial Services">
-                            <span style="width:auto";><i class="fas fa-chart-line mr-1"></i> Financial Services</span>
-                        </label>
-                        <label class="service-pill">
-                            <input type="radio" name="serviceArea" value="Other Purpose">
-                            <span style="width:auto";><i class="fas fa-comment-alt mr-1"></i> Other Purpose</span>
-                        </label>
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <select id="mainServiceSelect" class="input-field font-semibold text-slate-800 min-w-[250px]">
+                            <option value="Astrology">Astrology</option>
+                            <option value="Software Development">Software Development</option>
+                            <option value="Financial Services">Financial Services</option>
+                            <option value="Other Purpose">Other Purpose</option>
+                        </select>
+
+                        <!-- Astrology inline service selector -->
+                        <div id="astroServiceInlineWrapper" class="flex items-center gap-3 bg-white/50 px-3 py-1 rounded-md border border-slate-300">
+                            <span class="text-sm font-bold text-slate-700">Service:</span>
+                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm bg-white border-slate-300 shadow-sm focus:ring-0">
+                                <option value="2000">Astrology Consultation — ₹2000</option>
+                            </select>
+                        </div>
                     </div>
-                    <div id="serviceGuidance" class="service-help">
-                        Astrology consultation: birth details will be requested below.
+                    <div id="serviceGuidance" class="service-help mt-3">
+                        Astrology consultation: birth details and the questions you want guidance on will be requested below.
                     </div>
                 </div>
 
                 <!-- ASTROLOGY ONLY -->
                 <div id="astrologyWorkflow">
-                    <div class="flex flex-wrap items-center justify-center gap-6 mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                        <div class="flex items-center gap-3">
-                            <span class="text-base font-bold text-slate-700">Service:</span>
-                            <span class="text-base font-semibold text-slate-800">Astrology Consultation</span>
-                        </div>
-                        <div id="astroServiceWrapper" class="flex items-center gap-4 border-l border-slate-300 pl-4">
-                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm">
-                                <option value="2000">Consultation Fee — ₹2000</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <h4 class="form-section-header">1. Profile & Contact</h4>
                     <div class="compact-astro-contact">
                         <div class="input-group">
@@ -1428,7 +1414,9 @@
         const financialWorkflow = document.getElementById('financialWorkflow');
         const otherPurposeWorkflow = document.getElementById('otherPurposeWorkflow');
         const serviceGuidance = document.getElementById('serviceGuidance');
-        const serviceInputs = document.querySelectorAll('input[name="serviceArea"]');
+        
+        const mainServiceSelect = document.getElementById('mainServiceSelect');
+        const astroServiceInlineWrapper = document.getElementById('astroServiceInlineWrapper');
 
         const accuracyNo = document.getElementById('accuracy-no');
         const accuracyYes = document.getElementById('accuracy-yes');
@@ -1437,14 +1425,14 @@
         const genderOtherInput = document.getElementById('genderOtherInput');
 
         const guidance = {
-            "Astrology": "Astrology consultation: birth details will be requested below.",
+            "Astrology": "Astrology consultation: birth details and the questions you want guidance on will be requested below.",
             "Software Development": "Software Development: only your contact details, broad requirement and a message are needed. We will clarify the technical details with you.",
             "Financial Services": "Financial Services: only your contact details, broad service area and a message are needed. We will clarify the financial details with you.",
             "Other Purpose": "Other Purpose: only your contact details and a message are needed. Tell us what you are looking for and we will understand the requirement with you."
         };
 
         function getService() {
-            return document.querySelector('input[name="serviceArea"]:checked')?.value || "Astrology";
+            return mainServiceSelect.value || "Astrology";
         }
 
         function updateWorkflow() {
@@ -1454,13 +1442,14 @@
             softwareWorkflow.classList.toggle('hidden', service !== "Software Development");
             financialWorkflow.classList.toggle('hidden', service !== "Financial Services");
             otherPurposeWorkflow.classList.toggle('hidden', service !== "Other Purpose");
+            astroServiceInlineWrapper.classList.toggle('hidden', service !== "Astrology");
 
             serviceGuidance.textContent = guidance[service];
 
             document.getElementById('termsWrapper').classList.toggle('hidden', service !== "Astrology");
         }
 
-        serviceInputs.forEach(input => input.addEventListener('change', updateWorkflow));
+        mainServiceSelect.addEventListener('change', updateWorkflow);
 
         accuracyNo.onchange = () => explanationField.classList.remove('hide');
         accuracyYes.onchange = () => explanationField.classList.add('hide');
@@ -1721,7 +1710,7 @@
                     if (!subRes.ok) throw new Error("Submission failed");
                     document.getElementById('successMessage').classList.remove('hidden');
                     form.reset();
-                    document.querySelector('input[name="serviceArea"][value="Astrology"]').checked = true;
+                    mainServiceSelect.value = "Astrology";
                     updateWorkflow();
                     window.scrollTo({top:0, behavior:'smooth'});
                 }
@@ -1738,8 +1727,7 @@
         document.getElementById('clearButton').onclick = () => {
             showCustomConfirm('Are you sure you want to clear all the fields?', () => {
                 form.reset();
-                const defaultService = document.querySelector('input[name="serviceArea"][value="Astrology"]');
-                if (defaultService) defaultService.checked = true;
+                mainServiceSelect.value = "Astrology";
                 updateWorkflow();
                 window.scrollTo({top:0, behavior:'smooth'});
                 window.scrollTo({top:0, behavior:'smooth'});
