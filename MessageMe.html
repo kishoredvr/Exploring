@@ -243,45 +243,6 @@
             font-size: .9rem;
             margin-bottom: 16px;
         }
-        .service-pills {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 900px;
-            margin: auto;
-        }
-        .service-pill { position: relative; cursor: pointer; }
-        .service-pill input {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .service-pill span {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            min-height: 52px;
-            padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,.22);
-            border-radius: 9px;
-            background: rgba(255,255,255,.07);
-            color: white;
-            font-weight: 600;
-            font-size: .94rem;
-            transition: .2s ease;
-            text-align: center;
-        }
-        .service-pill span:hover {
-            border-color: var(--accent-gold);
-            background: rgba(255,255,255,.12);
-        }
-        .service-pill input:checked + span {
-            background: white;
-            color: var(--primary-blue);
-            border-color: var(--accent-gold);
-            box-shadow: 0 4px 14px rgba(0,0,0,.18);
-        }
         .service-help {
             text-align: center;
             color: rgba(255,255,255,.72);
@@ -330,7 +291,6 @@
             font-weight:700;
         }
         @media (max-width: 700px) {
-            .service-pills { grid-template-columns: 1fr; }
             .service-selector { padding: 17px 13px; }
             .service-panel { padding: 16px; }
         }
@@ -353,20 +313,6 @@
         .service-selector-title {
             font-size: 1.05rem;
             margin-bottom: 8px;
-        }
-
-        .service-pills {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 10px;
-            max-width: none;
-            width: 100%;
-        }
-
-        .service-pill span {
-            min-height: 44px;
-            padding: 7px 10px;
-            font-size: .88rem;
-            white-space: nowrap;
         }
 
         .service-help {
@@ -531,7 +477,6 @@
 
         @media (max-width: 800px) {
             .unified-card { padding: 15px; }
-            .service-pills { grid-template-columns: repeat(2, 1fr); }
             .compact-astro-contact,
             .compact-astro-location,
             .compact-astro-birth,
@@ -541,7 +486,6 @@
         }
 
         @media (max-width: 520px) {
-            .service-pills { grid-template-columns: 1fr; }
             .compact-astro-contact,
             .compact-astro-location,
             .compact-astro-birth,
@@ -744,13 +688,6 @@
         #astrology-consultation-form * { box-sizing: border-box; }
 
         .service-selector { width: 100%; }
-        .service-pills {
-            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-            max-width: none !important;
-            width: 100% !important;
-        }
-        .service-pill, .service-pill span { min-width: 0; width: 100%; }
-        .service-pill span { white-space: normal !important; line-height: 1.25; }
 
         /* Every service workflow gets the same predictable two-zone layout:
            contact on the left, requirement/message on the right. */
@@ -866,7 +803,6 @@
             }
         }
         @media (max-width: 850px) {
-            .service-pills { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
             #softwareWorkflow .compact-contact-grid,
             #financialWorkflow .compact-contact-grid,
             #otherPurposeWorkflow .compact-contact-grid,
@@ -880,7 +816,6 @@
         }
         @media (max-width: 560px) {
             .unified-card { padding: 14px !important; }
-            .service-pills,
             #softwareWorkflow .compact-contact-grid,
             #financialWorkflow .compact-contact-grid,
             #otherPurposeWorkflow .compact-contact-grid,
@@ -893,8 +828,8 @@
         }
 
 
-        /* === Final non-Astrology Contact layout correction ===
-           Same contact structure for Software, Financial and Other:
+        /* === Final uniform Contact layout correction ===
+           Same contact structure for ALL services:
            Row 1 = Name + Email
            Row 2 = WhatsApp / Mobile (full width)
            Only this contact-area layout is overridden. */
@@ -919,6 +854,7 @@
             grid-column: auto !important;
         }
 
+        #astrologyWorkflow .compact-astro-contact > .nonastro-mobile-field,
         #softwareWorkflow .compact-contact-grid > .nonastro-mobile-field,
         #financialWorkflow .compact-contact-grid > .nonastro-mobile-field,
         #otherPurposeWorkflow .compact-contact-grid > .nonastro-mobile-field {
@@ -926,6 +862,7 @@
             width: 100% !important;
         }
 
+        #astrologyWorkflow .compact-astro-contact .nonastro-mobile-field > .flex,
         #softwareWorkflow .compact-contact-grid .nonastro-mobile-field > .flex,
         #financialWorkflow .compact-contact-grid .nonastro-mobile-field > .flex,
         #otherPurposeWorkflow .compact-contact-grid .nonastro-mobile-field > .flex {
@@ -934,6 +871,7 @@
             justify-content: flex-start !important;
         }
 
+        #astrologyWorkflow .compact-astro-contact .nonastro-mobile-field input,
         #softwareWorkflow .compact-contact-grid .nonastro-mobile-field input,
         #financialWorkflow .compact-contact-grid .nonastro-mobile-field input,
         #otherPurposeWorkflow .compact-contact-grid .nonastro-mobile-field input {
@@ -948,6 +886,9 @@
         #otherPurposeWorkflow .compact-contact-grid #otherCountryCode {
             width: 58px !important;
             flex: 0 0 58px !important;
+            padding-left: 0;
+            padding-right: 0;
+            text-align: center;
         }
 
         /* Uniform Mobile Input Flexing across all tabs */
@@ -974,6 +915,7 @@
                 grid-template-columns: 1fr !important;
             }
 
+            #astrologyWorkflow .compact-astro-contact > .nonastro-mobile-field,
             #softwareWorkflow .compact-contact-grid > .nonastro-mobile-field,
             #financialWorkflow .compact-contact-grid > .nonastro-mobile-field,
             #otherPurposeWorkflow .compact-contact-grid > .nonastro-mobile-field {
@@ -1002,29 +944,34 @@
                 <!-- Service Area -->
                 <div class="service-selector">
                     <div class="service-selector-title">How can we help?</div>
-                    <div class="flex flex-wrap items-center justify-center gap-4">
-                        <select id="mainServiceSelect" class="input-field font-semibold text-slate-800 min-w-[250px]">
+                    
+                    <!-- Updated Dropdown Row -->
+                    <div class="flex flex-row flex-wrap items-center justify-center gap-3 mt-3">
+                        <!-- Main Dropdown replaces Radio Tabs -->
+                        <select id="mainServiceSelect" name="serviceArea" class="input-field font-semibold text-slate-800 w-auto min-w-[240px]">
                             <option value="Astrology">Astrology</option>
                             <option value="Software Development">Software Development</option>
                             <option value="Financial Services">Financial Services</option>
                             <option value="Other Purpose">Other Purpose</option>
                         </select>
 
-                        <!-- Astrology inline service selector -->
-                        <div id="astroServiceInlineWrapper" class="flex items-center gap-3 bg-white/50 px-3 py-1 rounded-md border border-slate-300">
+                        <!-- Astrology inline service selector perfectly beside main dropdown -->
+                        <div id="astroServiceInlineWrapper" class="flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-md border border-slate-300 shadow-sm whitespace-nowrap">
                             <span class="text-sm font-bold text-slate-700">Service:</span>
-                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 text-sm bg-white border-slate-300 shadow-sm focus:ring-0">
+                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 px-2 text-sm bg-white border-slate-300 shadow-sm focus:ring-0 min-h-[32px] w-auto">
                                 <option value="2000">Astrology Consultation — ₹2000</option>
                             </select>
                         </div>
                     </div>
-                    <div id="serviceGuidance" class="service-help mt-3">
+
+                    <div id="serviceGuidance" class="service-help mt-4">
                         Astrology consultation: birth details and the questions you want guidance on will be requested below.
                     </div>
                 </div>
 
                 <!-- ASTROLOGY ONLY -->
                 <div id="astrologyWorkflow">
+                    
                     <h4 class="form-section-header">1. Profile & Contact</h4>
                     <div class="compact-astro-contact">
                         <div class="input-group">
@@ -1037,8 +984,10 @@
                             <input type="email" id="email" name="email" class="input-field w-full">
                             <div class="validation-message" id="email-error">Invalid email</div>
                         </div>
-                        <div class="input-group md:col-span-2">
-                            <label for="mobileNumber" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                        
+                        <!-- Standardized Mobile Field identical to Financial Tab -->
+                        <div class="input-group nonastro-mobile-field">
+                            <label for="mobileNumber" class="font-bold mb-1">WhatsApp/Mobile Number(With Country Code) *</label>
                             <div class="flex gap-1 w-full">
                                 <input type="text" id="countryCode" name="countryCode" class="input-field w-14 text-center" value="+91">
                                 <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field flex-1" placeholder="Mobile">
@@ -1415,6 +1364,7 @@
         const otherPurposeWorkflow = document.getElementById('otherPurposeWorkflow');
         const serviceGuidance = document.getElementById('serviceGuidance');
         
+        // Updated variable bound to the new main dropdown
         const mainServiceSelect = document.getElementById('mainServiceSelect');
         const astroServiceInlineWrapper = document.getElementById('astroServiceInlineWrapper');
 
@@ -1449,6 +1399,7 @@
             document.getElementById('termsWrapper').classList.toggle('hidden', service !== "Astrology");
         }
 
+        // Attach listener to dropdown instead of radio inputs
         mainServiceSelect.addEventListener('change', updateWorkflow);
 
         accuracyNo.onchange = () => explanationField.classList.remove('hide');
