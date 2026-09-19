@@ -941,20 +941,18 @@
             box-sizing: border-box !important;
         }
 
-        /* Software has no separate country-code control; give its mobile field
-           a sensible width instead of allowing it to stretch unpredictably. */
-        #softwareWorkflow .compact-contact-grid ##softwareCountryCode {
-            width: min(100%, 420px) !important;
-            flex: 0 1 420px !important;
-        }
-
-        /* Finance and Other retain their existing country-code controls. */
+        /* Make country code controls uniform across all tabs. */
+        #astrologyWorkflow .compact-astro-contact #countryCode,
+        #softwareWorkflow .compact-contact-grid #softwareCountryCode,
         #financialWorkflow .compact-contact-grid #financeCountryCode,
         #otherPurposeWorkflow .compact-contact-grid #otherCountryCode {
             width: 58px !important;
             flex: 0 0 58px !important;
         }
 
+        /* Uniform Mobile Input Flexing across all tabs */
+        #astrologyWorkflow .compact-astro-contact #mobileNumber,
+        #softwareWorkflow .compact-contact-grid #softwareMobile,
         #financialWorkflow .compact-contact-grid #financeMobile,
         #otherPurposeWorkflow .compact-contact-grid #otherMobile {
             width: auto !important;
@@ -980,11 +978,6 @@
             #financialWorkflow .compact-contact-grid > .nonastro-mobile-field,
             #otherPurposeWorkflow .compact-contact-grid > .nonastro-mobile-field {
                 grid-column: 1 !important;
-            }
-
-            #softwareWorkflow .compact-contact-grid #softwareMobile {
-                width: 100% !important;
-                flex: 1 1 auto !important;
             }
         }
 
@@ -1059,10 +1052,10 @@
                             <div class="validation-message" id="email-error">Invalid email</div>
                         </div>
                         <div class="input-group md:col-span-2">
-                            <label for="mobileNumber" class="font-bold mb-1">WhatsApp/Mobile Number(With Country Code) *</label>
-                            <div class="flex gap-2 justify-center">
-                                
-                                <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field max-w-[200px]">
+                            <label for="mobileNumber" class="font-bold mb-1">WhatsApp / Mobile *</label>
+                            <div class="flex gap-1 w-full">
+                                <input type="text" id="countryCode" name="countryCode" class="input-field w-14 text-center" value="+91">
+                                <input type="tel" id="mobileNumber" name="mobileNumber" class="input-field flex-1" placeholder="Mobile">
                             </div>
                             <div class="validation-message" id="mobileNumber-error">10-digit number required</div>
                         </div>
@@ -1444,7 +1437,7 @@
         const genderOtherInput = document.getElementById('genderOtherInput');
 
         const guidance = {
-            "Astrology": "Astrology consultation: birth details and the questions you want guidance on will be requested below.",
+            "Astrology": "Astrology consultation: birth details will be requested below.",
             "Software Development": "Software Development: only your contact details, broad requirement and a message are needed. We will clarify the technical details with you.",
             "Financial Services": "Financial Services: only your contact details, broad service area and a message are needed. We will clarify the financial details with you.",
             "Other Purpose": "Other Purpose: only your contact details and a message are needed. Tell us what you are looking for and we will understand the requirement with you."
