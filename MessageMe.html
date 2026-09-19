@@ -879,6 +879,12 @@
             box-sizing: border-box !important;
         }
 
+        /* Fix to keep dropdowns inline and prevent them from taking 100% width */
+        select.inline-dropdown {
+            width: auto !important;
+            display: inline-block !important;
+        }
+
         /* Make country code controls uniform across all tabs. */
         #astrologyWorkflow .compact-astro-contact #countryCode,
         #softwareWorkflow .compact-contact-grid #softwareCountryCode,
@@ -946,9 +952,9 @@
                     <div class="service-selector-title">How can we help?</div>
                     
                     <!-- Updated Dropdown Row -->
-                    <div class="flex flex-row flex-wrap items-center justify-center gap-3 mt-3">
+                    <div class="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-3 mt-3">
                         <!-- Main Dropdown replaces Radio Tabs -->
-                        <select id="mainServiceSelect" name="serviceArea" class="input-field font-semibold text-slate-800 w-auto min-w-[240px]">
+                        <select id="mainServiceSelect" name="serviceArea" class="input-field inline-dropdown font-semibold text-slate-800">
                             <option value="Astrology">Astrology</option>
                             <option value="Software Development">Software Development</option>
                             <option value="Financial Services">Financial Services</option>
@@ -958,7 +964,7 @@
                         <!-- Astrology inline service selector perfectly beside main dropdown -->
                         <div id="astroServiceInlineWrapper" class="flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-md border border-slate-300 shadow-sm whitespace-nowrap">
                             <span class="text-sm font-bold text-slate-700">Service:</span>
-                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field py-1 px-2 text-sm bg-white border-slate-300 shadow-sm focus:ring-0 min-h-[32px] w-auto">
+                            <select id="astroServiceSelect" name="astroServiceSelect" class="input-field inline-dropdown py-1 px-2 text-sm bg-white border-slate-300 shadow-sm focus:ring-0 min-h-[32px]">
                                 <option value="2000">Astrology Consultation — ₹2000</option>
                             </select>
                         </div>
