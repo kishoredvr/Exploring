@@ -1548,22 +1548,6 @@
             return data;
         }
 
-        async function savePendingForm(data) {
-            data.payment_status = 'pending';
-            try {
-                await fetch(BACKEND_BASE + '/submit-form', {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                    },
-                    body: JSON.stringify(data)
-                });
-            } catch(e) {
-                console.warn('Pending form saving issue:', e);
-            }
-        }
-
         form.onsubmit = async (e) => {
             e.preventDefault();
             if (!validateForm()) return;
@@ -1574,9 +1558,7 @@
                 const dataObj = collectFormObject();
                 if (getService() === 'Astrology') {
                     document.getElementById('paymentModal').classList.remove('hidden');
-                    
-                    // 1. Save Pending details
-                    await savePendingForm(dataObj);
+                    // Create the Razorpay order and authoritative pending DB row in one backend call.
                     const amt = parseInt(dataObj.astro_service_tier);
                     
                     const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
@@ -1594,9 +1576,14 @@
                             purpose: dataObj.purpose,
                             notes: dataObj // <-- THIS is what passes the exact name to the invoice!
                         })
-                    });
-                    const order = await res.json();
-                    if (!order.success) throw new Error(order.message || "Payment initiation failed");
+                    });                    const order = await res.json().catch(() => ({}));
+                    if (!res.ok || !order.success) {
+                        throw new Error(
+                            order.error ||
+                            order.message ||
+                            `Payment initiation failed (HTTP ${res.status})`
+                        );
+                    }
                     
                     sessionStorage.setItem('rzp_txn_id', order.transactionId);
                     sessionStorage.setItem('rzp_order_id', order.razorpayOrderId);
@@ -1665,10 +1652,18 @@
                         },
                         body: JSON.stringify(dataObj)
                     });
-                    if (!subRes.ok) throw new Error("Submission failed");
+
+                    const subBody = await subRes.json().catch(() => ({}));
+                    if (!subRes.ok) {
+                        throw new Error(
+                            subBody.error ||
+                            subBody.message ||
+                            `Submission failed (HTTP ${subRes.status})`
+                        );
+                    }
                     document.getElementById('successMessage').classList.remove('hidden');
                     form.reset();
-                    mainServiceSelect.value = "Astrology";
+                    mainServiceSelect.value = "";
                     updateWorkflow();
                     window.scrollTo({top:0, behavior:'smooth'});
                 }
@@ -1685,7 +1680,7 @@
         document.getElementById('clearButton').onclick = () => {
             showCustomConfirm('Are you sure you want to clear all the fields?', () => {
                 form.reset();
-                mainServiceSelect.value = "Astrology";
+                mainServiceSelect.value = "";
                 updateWorkflow();
                 window.scrollTo({top:0, behavior:'smooth'});
                 window.scrollTo({top:0, behavior:'smooth'});
