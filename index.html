@@ -1,56 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5432639450228352"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5432639450228352" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ganesh Solutions | Astrology, Financial & Digital Services</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
         }
         
         :root {
             --primary-blue: #1a365d;
             --accent-gold: #d4af37;
+            --accent-gold-hover: #f1c947;
             --dark-navy: #0f1a3c;
-            --light-gray: #f5f7fa;
+            --light-gray: #f8fafc;
             --medium-gray: #e2e8f0;
-            --text-dark: #2d3748;
-            --text-light: #718096;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
             --vedic-purple: #7c3aed;
             --cyber-teal: #0ea5e9;
             --financial-green: #059669;
+            --glass-bg: rgba(15, 26, 60, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
         
         body {
-            background-color: var(--light-gray);
-            color: var(--text-dark);
+            background-color: var(--dark-navy); /* Base dark theme for unified look */
+            color: white;
             line-height: 1.6;
             min-height: 100vh;
-            scroll-padding-top: 100px;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
             width: 100%;
         }
 
-        #header-placeholder { min-height: 100px; }
-        #footer-placeholder { min-height: 300px; }
-
-        header {
+        #header-placeholder { min-height: 70px; }
+        
+        header, .mobile-header {
             background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
             color: white;
             padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -58,314 +62,274 @@
 
         .mobile-header {
             display: none;
-            padding: 15px 0;
-            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
-            color: white;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
+        /* We keep the generic header styles intact for the loaded Components.html */
+        .header-content { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .logo { display: flex; align-items: center; gap: 15px; flex-shrink: 0; text-decoration: none; }
+        .logo-image { height: 60px; width: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); transition: transform 0.3s ease; }
+        .logo-text { font-size: 26px; font-weight: 700; color: white; letter-spacing: 0.5px; }
+        .tagline { font-size: 13px; color: var(--accent-gold); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .logo-image {
-            height: 70px;
-            width: auto; 
-            margin-top: 5px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .logo-text-container {
-            display: flex;
-            flex-direction: column;
-            white-space: nowrap;
-        }
-
-        .logo-text { font-size: 24px; font-weight: 600; color: white; }
-        .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
-
+        /* --- Restored Navigation Styles for Components.html --- */
         nav ul { display: flex; list-style: none; align-items: center; }
         nav ul li { margin-left: 30px; position: relative; }
         nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
+            color: white; text-decoration: none; font-weight: 500;
+            padding: 8px 15px; border-radius: 4px; transition: all 0.3s;
+            display: flex; align-items: center; white-space: nowrap;
         }
-
         nav ul li a:hover, nav ul li a.active { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
 
         .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;           /* ← default: open rightward from li's left edge */
-            background: white;
-            min-width: 220px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 1000;
+            position: absolute; top: 100%; left: 0;
+            background: white; min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 4px;
+            opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: all 0.3s ease; z-index: 1000;
         }
-
         nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        /* JS adds this class when a dropdown would overflow the right edge */
-        .dropdown-menu.flip-left {
-            left: auto;
-            right: 0;
-        }
-
+        .dropdown-menu.flip-left { left: auto; right: 0; }
         .dropdown-menu a {
-            color: var(--text-dark) !important;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--medium-gray);
-            white-space: nowrap;
+            color: var(--text-dark) !important; padding: 12px 20px;
+            display: flex; align-items: center; border-bottom: 1px solid var(--medium-gray); white-space: nowrap;
         }
-
         .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
         .dropdown-menu i { margin-right: 10px; width: 20px; text-align: center; }
 
         .mobile-menu-toggle {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
+            background: none; border: none; font-size: 24px; color: white;
+            cursor: pointer; width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* ------------------------------------------------------ */
+
+        .hero-dashboard {
+            position: relative;
+            flex-grow: 1;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 40px 0 60px;
+            background: linear-gradient(135deg, rgba(15, 26, 60, 0.95) 0%, rgba(26, 54, 93, 0.9) 100%), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            background-attachment: fixed;
         }
 
-        /* === HERO === */
-        .hero {
-            padding: 50px 0;
-            background: linear-gradient(rgba(26, 54, 93, 0.9), rgba(26, 54, 93, 0.9)), 
-                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
+        .hero-dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 80% 30%, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
+            pointer-events: none;
         }
-        
-        .hero-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 12px;
-        }
-        
-        .hero-profile-row {
-            display: flex;
-            justify-content: center;
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
             align-items: center;
-            gap: 30px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .profile-container {
             position: relative;
-            flex-shrink: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            z-index: 2;
         }
-        
-        .profile-image {
-            width: clamp(110px, 18vw, 200px);
-            height: clamp(110px, 18vw, 200px);
+
+        .intro-column h1 {
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
+            color: #cbd5e1;
+            font-weight: 400;
+            margin-bottom: 25px;
+            max-width: 90%;
+        }
+
+        .quote {
+            position: relative;
+            font-style: italic;
+            padding: 18px 24px;
+            background: linear-gradient(to right, rgba(212, 175, 55, 0.1), transparent);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 0 12px 12px 0;
+            font-size: clamp(14px, 1.5vw, 16px);
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 35px;
+            backdrop-filter: blur(5px);
+        }
+
+        .profile-action-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 25px 10px 10px;
+            border-radius: 100px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            flex-wrap: nowrap; /* STRICT CONSTRAINT: Never wrap to next line */
+            white-space: nowrap;
+        }
+
+        .profile-image-container {
+            flex-shrink: 0;
+        }
+
+        .profile-image-container img {
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--accent-gold);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            display: block;
         }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            width: auto;
-            min-width: 180px;
-        }
-        
-        .hero h1 {
-            font-size: clamp(26px, 4.5vw, 42px);
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .hero p {
-            font-size: clamp(14px, 2.2vw, 20px);
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .quote {
-            font-style: italic;
-            padding: 18px;
-            border-left: 3px solid var(--accent-gold);
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 4px;
-            margin: 30px 0;
-            font-size: clamp(14px, 1.6vw, 18px);
-            text-align: center;
-        }
-        
-        .cta-button {
-            padding: 12px 30px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            white-space: nowrap;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        .cta-primary { background: var(--accent-gold); color: var(--dark-navy); }
-        .cta-primary:hover { background: #e6b325; transform: translateY(-3px); }
-        .cta-secondary { background: transparent; color: white; border: 2px solid var(--accent-gold); }
-        .cta-secondary:hover { background: rgba(212, 175, 55, 0.1); transform: translateY(-3px); }
-        
-        /* === Services Section === */
-        .services { padding: 40px 0; background: white; scroll-margin-top: 100px; }
-        
-        .section-title { text-align: center; margin-bottom: 30px; }
-        
-        .section-title h2 {
-            font-size: 36px;
-            color: var(--primary-blue);
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-        
-        .section-title h2::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
+
+        .btn-book {
+            padding: 12px 24px;
+            border-radius: 50px;
             background: var(--accent-gold);
+            color: var(--dark-navy);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
         }
-        
-        .section-title p { color: var(--text-light); max-width: 700px; margin: 0 auto; }
-        
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
-        
-        .service-card {
-            background: white;
-            border-radius: 8px;
+
+        .btn-book:hover {
+            background: var(--accent-gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .services-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .compact-service-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 20px 24px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid var(--medium-gray);
-            text-align: center;
-            padding: 10px;
         }
-        
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
-        
-        .service-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+
+        .compact-service-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--accent-gold);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .compact-service-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .compact-service-card:hover::before { transform: scaleY(1); }
+
+        .service-icon-wrapper {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            margin: 0 auto 20px;
+            font-size: 24px;
+            flex-shrink: 0;
             color: white;
         }
-        
-        .astrology .service-icon { background: var(--vedic-purple); }
-        .digital .service-icon { background: var(--cyber-teal); }
-        .financial .service-icon { background: var(--financial-green); }
-        
-        .service-card h3 { font-size: 22px; margin-bottom: 15px; color: var(--primary-blue); }
-        .service-card p { color: var(--text-light); margin-bottom: 20px; }
-        
-        .service-features { list-style: none; text-align: left; margin-bottom: 25px; padding: 0 15px; }
-        .service-features li { margin-bottom: 10px; padding-left: 25px; position: relative; }
-        .service-features li:before { content: "✓"; position: absolute; left: 0; color: var(--accent-gold); font-weight: bold; }
-        
-        .service-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--primary-blue);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
+
+        .astrology-theme { background: linear-gradient(135deg, var(--vedic-purple), #9f67ff); }
+        .digital-theme { background: linear-gradient(135deg, var(--cyber-teal), #38bdf8); }
+        .financial-theme { background: linear-gradient(135deg, var(--financial-green), #10b981); }
+
+        .service-info {
+            flex-grow: 1;
+        }
+
+        .service-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #f8fafc;
+        }
+
+        .service-info p {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        .service-arrow {
+            color: var(--accent-gold);
+            font-size: 18px;
+            opacity: 0.5;
             transition: all 0.3s;
+            transform: translateX(0);
         }
-        .service-link:hover { background: var(--dark-navy); transform: translateY(-2px); }
-        
-        .business-info { padding: 20px 0; background: var(--light-gray); }
-        
+
+        .compact-service-card:hover .service-arrow {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .business-info { 
+            padding: 15px 0; 
+            background: rgba(15, 26, 60, 0.95); 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+            text-align: center;
+            font-size: 13px;
+        }
+        .business-info p { display: inline-flex; align-items: center; gap: 8px; color: #94a3b8; }
+        .business-info i { color: var(--accent-gold); }
+
+        /* --- Restored Footer Styles for Components.html --- */
+        #footer-placeholder { min-height: 300px; }
         footer { background: var(--dark-navy); color: white; padding: 50px 0 20px; }
-        
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px; }
         .footer-column h3 { font-size: 20px; margin-bottom: 20px; color: var(--accent-gold); }
         .footer-column ul { list-style: none; }
         .footer-column ul li { margin-bottom: 10px; }
         .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; word-wrap: break-word; }
         .footer-column a:hover { color: var(--accent-gold); }
-        
         .copyright {
-            text-align: center;
-            padding-top: 20px;
+            text-align: center; padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5); font-size: 14px;
         }
-        
-        /* === Responsive === */
+        /* -------------------------------------------------- */
+
         @media (max-width: 992px) {
-            /*
-             * ROOT CAUSE FIX — do NOT use display:none on <header>.
-             *
-             * display:none removes every descendant from the render tree,
-             * including position:fixed children. nav#mainNav lives inside
-             * <header>, so the menu was never painted on mobile.
-             *
-             * height:0 + overflow:hidden hides the visible logo bar while
-             * keeping <header> in the render tree. position:fixed children
-             * are positioned relative to the viewport so they escape
-             * overflow:hidden and render correctly when .active is toggled.
-             */
             header {
                 height: 0 !important;
                 min-height: 0 !important;
@@ -373,51 +337,63 @@
                 overflow: hidden;
             }
             .mobile-header { display: flex; }
+            .dashboard-grid { gap: 30px; }
             
+            /* --- Restored Mobile Nav Styles --- */
             nav#mainNav {
-                display: none;
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                height: calc(100% - 70px);
-                background: var(--dark-navy);
-                z-index: 2000;
-                padding: 20px;
-                overflow-y: auto;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
+                display: none; position: fixed; top: 70px; left: 0;
+                width: 100%; height: calc(100% - 70px);
+                background: var(--dark-navy); z-index: 2000;
+                padding: 20px; overflow-y: auto;
+                transform: translateX(-100%); transition: transform 0.3s ease;
             }
-            
             nav#mainNav.active { display: block; transform: translateX(0); }
             nav ul { flex-direction: column; align-items: flex-start; margin-top: 30px; width: 100%; }
             nav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
             nav ul li a { padding: 15px 0; width: 100%; }
             
             .dropdown-menu {
-                position: static;
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-                background: rgba(255, 255, 255, 0.05);
-                display: none;
-                width: 100%;
-                margin-top: 10px;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                /* Reset any JS-applied flip so mobile menus are always full-width */
-                left: 0 !important;
-                right: auto !important;
+                position: static; opacity: 1; visibility: visible; transform: none;
+                background: rgba(255, 255, 255, 0.05); display: none; width: 100%;
+                margin-top: 10px; max-height: 0; overflow: hidden;
+                transition: max-height 0.3s ease; left: 0 !important; right: auto !important;
             }
-            
             nav ul li.active .dropdown-menu { display: block; max-height: 1000px; }
+            /* ---------------------------------- */
         }
 
-        @media (max-width: 768px) {
-            .hero-profile-row { flex-direction: column; gap: 16px; }
-            .hero-buttons { flex-direction: row; justify-content: center; width: 100%; }
-            body { scroll-padding-top: 140px; }
+        @media (max-width: 860px) {
+            /* Switch to single column stack, but keep padding tight so it all fits */
+            .hero-dashboard { padding: 30px 0; align-items: flex-start; }
+            .dashboard-grid { grid-template-columns: 1fr; gap: 25px; }
+            
+            .intro-column { text-align: center; }
+            .main-subtitle { margin: 0 auto 20px; text-align: center; }
+            .quote { text-align: left; margin-bottom: 25px; }
+            
+            /* Profile & button stay left/right of each other, but centered within the container */
+            .profile-action-row-container {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-dashboard { padding: 20px 0; }
+            .quote { display: none; } /* Hide quote on tiny screens to save vertical space */
+            .main-subtitle { font-size: 15px; margin-bottom: 15px; }
+            
+            /* Squeeze the profile row slightly to ensure no wrapping */
+            .profile-action-row { gap: 12px; padding: 8px 15px 8px 8px; }
+            .profile-image-container img { width: 50px; height: 50px; }
+            .btn-book { padding: 10px 16px; font-size: 13px; }
+            
+            .compact-service-card { padding: 15px; gap: 15px; }
+            .service-icon-wrapper { width: 44px; height: 44px; font-size: 18px; }
+            .service-info h3 { font-size: 16px; }
+            .service-info p { font-size: 12px; }
         }
     </style>
 </head>
@@ -425,89 +401,84 @@
 
     <div id="header-placeholder"></div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-profile-row">
-                    <div class="hero-buttons">
-                        <a href="#services" class="cta-button cta-secondary">Learn About Our Services</a>
-                    </div>
-                    <div class="profile-container">
-                        <img src="KishoreDVR.jpg" alt="Kishore DVR" class="profile-image" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';">
-                    </div>
-                    <div class="hero-buttons">
-                        <a href="https://kishoredvr.github.io/Exploring/MessageMe" class="cta-button cta-primary">Book Consultation</a>
-                    </div>
-                </div>
+    <main class="hero-dashboard">
+        <div class="container dashboard-grid">
+            
+            <!-- Left Side: Introduction & Profile -->
+            <div class="intro-column">
                 <h1>Ganesh Solutions</h1>
-                <p>Professional Astrology Services with Digital & Financial Services</p>
+                <p class="main-subtitle">Integrated expertise bridging profound Vedic Astrology with specialized Financial & Digital solutions.</p>
+                
                 <div class="quote">
+                    <i class="fas fa-quote-left" style="color: var(--accent-gold); opacity: 0.5; margin-right: 8px;"></i>
                     "Advancements happen when you consider something as material or significant which you earlier considered as immaterial or insignificant"
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Services Section -->
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Services</h2>
-                <p>Professional services tailored to meet your spiritual, digital, and financial needs</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card astrology">
-                    <div class="service-icon"><i class="fas fa-om"></i></div>
-                    <h3>Astrology Services</h3>
-                    <p>Professional Vedic astrology consultations and spiritual guidance</p>
-                    <ul class="service-features">
-                        <li>Personalized horoscope analysis</li>
-                        <li>Compatibility and relationship guidance</li>
-                        <li>Career and financial prospects</li>
-                        <li>Remedial solutions and spiritual guidance</li>
-                    </ul>
-                    <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="service-link">Book Consultation</a>
-                </div>
-                <div class="service-card digital">
-                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
-                    <h3>Digital Solutions</h3>
-                    <p>Comprehensive digital security and software development services</p>
-                    <ul class="service-features">
-                        <li>Website and application development</li>
-                        <li>Digital security and penetration testing</li>
-                        <li>Software programming and customization</li>
-                        <li>IT consultancy and solutions</li>
-                    </ul>
-                    <a href="#" class="service-link">Coming soon..</a>
-                </div>
-                <div class="service-card financial">
-                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                    <h3>Financial Services</h3>
-                    <p>Practical accounting, bookkeeping, reporting and Xero support for businesses</p>
-                    <ul class="service-features">
-                        <li>Xero bookkeeping and account maintenance</li>
-                        <li>Cleanup, categorisation and reconciliation</li>
-                        <li>Monthly financial and management reporting</li>
-                        <li>Excel, Power Query and finance-process support</li>
-                    </ul>
-                    <a href="FinancialServices" class="service-link">Explore Services</a>
+                <!-- Profile and Button strictly side-by-side -->
+                <div class="profile-action-row-container">
+                    <div class="profile-action-row">
+                        <div class="profile-image-container">
+                            <img src="KishoreDVR.jpg" alt="Kishore DVR" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80';">
+                        </div>
+                        <a href="https://kishoredvr.github.io/Exploring/MessageMe" class="btn-book">
+                            <i class="fas fa-calendar-check"></i> Book Consultation
+                        </a>
+                    </div>
                 </div>
             </div>
+
+            <!-- Right Side: Services Stack (No Scrolling Needed) -->
+            <div class="services-column">
+                <!-- Service 1: Astrology -->
+                <a href="https://kishoredvr.github.io/Exploring/MessageMe.html" class="compact-service-card">
+                    <div class="service-icon-wrapper astrology-theme">
+                        <i class="fas fa-om"></i>
+                    </div>
+                    <div class="service-info">
+                        <h3>Astrology Services</h3>
+                        <p>Vedic consultations, horoscope analysis & spiritual guidance.</p>
+                    </div>
+                    <i class="fas fa-chevron-right service-arrow"></i>
+                </a>
+
+                <!-- Service 2: Financial -->
+                <a href="FinancialServices" class="compact-service-card">
+                    <div class="service-icon-wrapper financial-theme">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="service-info">
+                        <h3>Financial Services</h3>
+                        <p>Practical accounting, reporting, Xero & bookkeeping support.</p>
+                    </div>
+                    <i class="fas fa-chevron-right service-arrow"></i>
+                </a>
+
+                <!-- Service 3: Digital -->
+                <a href="#" class="compact-service-card">
+                    <div class="service-icon-wrapper digital-theme">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="service-info">
+                        <h3>Digital Solutions</h3>
+                        <p>Custom software development, IT consultancy & digital security.</p>
+                    </div>
+                    <i class="fas fa-chevron-right service-arrow"></i>
+                </a>
+            </div>
+
         </div>
-    </section>
+    </main>
 
     <section class="business-info">
         <div class="container">
-            <div class="section-title">                
-                <p>Registered micro-enterprise under the Ministry of MSME, Government of India</p>
-            </div>            
+            <p><i class="fas fa-certificate"></i> Registered micro-enterprise under the Ministry of MSME, Government of India</p>
         </div>
     </section>
 
     <div id="footer-placeholder"></div>
 
     <script>
+        // Keeping the exact component loading logic you requested
         async function loadMasterCopy() {
             try {
                 const response = await fetch('Components.html');
@@ -527,9 +498,6 @@
                     document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
                 }
 
-                // Keep social links aligned with the Financial Digest rebrand.
-                // Components.html is loaded dynamically, so update its Facebook/YouTube
-                // links here without changing the shared component/theme.
                 document.querySelectorAll('a[href*="facebook.com"]').forEach(function (link) {
                     link.href = 'https://www.facebook.com/profile.php?id=61575506668889';
                     if (link.textContent.trim() === 'National Economies') {
@@ -543,7 +511,6 @@
                     }
                 });
 
-                // ── Run menu logic AFTER injection is complete ──
                 initMenuLogic();
 
             } catch (err) {
@@ -556,18 +523,14 @@
             const mainNav   = document.getElementById('mainNav');
             const dropdowns = document.querySelectorAll('.dropdown-toggle');
 
-            // ── Mobile menu open/close ──────────────────────────────────────
             if (mobileBtn && mainNav) {
                 mobileBtn.onclick = function () {
                     const isActive = mainNav.classList.toggle('active');
-                    this.innerHTML = isActive
-                        ? '<i class="fas fa-times"></i>'
-                        : '<i class="fas fa-bars"></i>';
+                    this.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     document.body.style.overflow = isActive ? 'hidden' : '';
                 };
             }
 
-            // ── Mobile: tap to toggle dropdown ─────────────────────────────
             dropdowns.forEach(function (toggle) {
                 toggle.addEventListener('click', function (e) {
                     if (window.innerWidth <= 992) {
@@ -581,7 +544,6 @@
                 });
             });
 
-            // ── Close mobile menu when a plain link is clicked ──────────────
             document.querySelectorAll('nav a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
@@ -592,55 +554,24 @@
                 });
             });
 
-            // ── FIX: Reposition dropdowns that overflow the viewport edge ───
-            //
-            // WHY THIS MUST LIVE HERE:
-            //   Scripts inside Components.html are injected via innerHTML and
-            //   browsers intentionally never execute them (security policy).
-            //   Only JS that is already in the host page can fix this reliably.
-            //
-            // HOW IT WORKS:
-            //   1. Briefly make each dropdown invisible-but-rendered so we can
-            //      measure its actual pixel position.
-            //   2. If its right edge exceeds the viewport width, flip it so its
-            //      RIGHT edge aligns with the li's right edge (extends leftward).
-            //   3. If its left edge is negative, pin its LEFT edge to the li.
-            //   4. Re-run on every window resize.
-            // ────────────────────────────────────────────────────────────────
             function repositionDropdowns() {
-                // Skip on mobile — dropdowns are static there, no overflow risk
                 if (window.innerWidth <= 992) return;
-
                 document.querySelectorAll('nav ul li').forEach(function (li) {
                     var menu = li.querySelector('.dropdown-menu');
                     if (!menu) return;
-
-                    // Reset any previous JS correction
                     menu.classList.remove('flip-left');
                     menu.style.left  = '';
                     menu.style.right = '';
-
-                    // Render invisibly to get real dimensions
                     var prevVis = menu.style.visibility;
                     var prevDis = menu.style.display;
                     menu.style.visibility = 'hidden';
                     menu.style.display    = 'block';
-
                     var rect = menu.getBoundingClientRect();
                     var vw   = window.innerWidth || document.documentElement.clientWidth;
-
-                    // Restore original display state
                     menu.style.visibility = prevVis;
                     menu.style.display    = prevDis;
-
-                    if (rect.right > vw) {
-                        // Overflows right → flip so right edge aligns with li's right edge
-                        menu.classList.add('flip-left');
-                    } else if (rect.left < 0) {
-                        // Overflows left → pin left edge to li's left edge
-                        menu.style.left  = '0';
-                        menu.style.right = 'auto';
-                    }
+                    if (rect.right > vw) menu.classList.add('flip-left');
+                    else if (rect.left < 0) { menu.style.left = '0'; menu.style.right = 'auto'; }
                 });
             }
 
