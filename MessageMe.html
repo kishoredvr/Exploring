@@ -954,6 +954,7 @@
                     <div class="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-3 mt-3">
                         <!-- Main Dropdown replaces Radio Tabs -->
                         <select id="mainServiceSelect" name="serviceArea" class="input-field inline-dropdown font-semibold text-slate-800">
+                            <option value="" selected>Select the Service</option>
                             <option value="Astrology">Astrology</option>
                             <option value="Software Development">Software Development</option>
                             <option value="Financial Services">Financial Services</option>
@@ -969,9 +970,7 @@
                         </div>
                     </div>
 
-                    <div id="serviceGuidance" class="service-help mt-4">
-                        Astrology consultation: birth details and the questions you want guidance on will be requested below.
-                    </div>
+                    <div id="serviceGuidance" class="service-help mt-4"></div>
                 </div>
 
                 <!-- ASTROLOGY ONLY -->
@@ -1214,7 +1213,7 @@
 
                 <!-- Actions -->
                 <div class="actions-compact flex items-center justify-center gap-6 border-t border-slate-100">
-                    <button id="submitBtn" type="submit" class="btn-primary font-bold rounded shadow">
+                    <button id="submitBtn" type="submit" class="btn-primary font-bold rounded shadow" disabled>
                         Submit Request
                     </button>
                     <button id="clearButton" type="button" class="text-slate-400 text-sm hover:text-red-500 transition-colors">
@@ -1387,7 +1386,7 @@
         };
 
         function getService() {
-            return mainServiceSelect.value || "Astrology";
+            return mainServiceSelect.value;
         }
 
         function updateWorkflow() {
@@ -1399,9 +1398,12 @@
             otherPurposeWorkflow.classList.toggle('hidden', service !== "Other Purpose");
             astroServiceInlineWrapper.classList.toggle('hidden', service !== "Astrology");
 
-            serviceGuidance.textContent = guidance[service];
+            serviceGuidance.textContent = guidance[service] || "";
 
             document.getElementById('termsWrapper').classList.toggle('hidden', service !== "Astrology");
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = !service;
         }
 
         // Attach listener to dropdown instead of radio inputs
