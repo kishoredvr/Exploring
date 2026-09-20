@@ -1543,6 +1543,9 @@
 
             data.purpose = service;
             data.payment_status = "not_applicable";
+
+            // Do not add Astrology-only fields to non-Astrology submissions.
+            // Form-specific fields are stored inside JSON columns by /submit-form.
             return data;
         }
 
