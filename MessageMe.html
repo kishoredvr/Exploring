@@ -1554,6 +1554,9 @@
             const btn = document.getElementById('submitBtn');
             const original = btn.textContent;
             btn.disabled = true; btn.textContent = 'Processing...';
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+
             try {
                 const dataObj = collectFormObject();
                 if (getService() === 'Astrology') {
@@ -1654,26 +1657,31 @@
                     });
 
                     const subBody = await subRes.json().catch(() => ({}));
-                    if (!subRes.ok) {
+
+                    if (!subRes.ok || subBody.success !== true) {
                         throw new Error(
+                            subBody.details ||
                             subBody.error ||
                             subBody.message ||
                             `Submission failed (HTTP ${subRes.status})`
                         );
                     }
+
+                    document.getElementById('errorMessage').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
+
                     form.reset();
                     mainServiceSelect.value = "";
                     updateWorkflow();
+
                     window.scrollTo({top:0, behavior:'smooth'});
                 }
             } catch (err) {
                 showCustomAlert(err.message, 'Form Processing Error');
                 document.getElementById('errorMessage').classList.remove('hidden');
             } finally {
-                if (getService() !== "Astrology") {
-                    btn.disabled = false; btn.textContent = original;
-                }
+                btn.disabled = false;
+                btn.textContent = original;
             }
         };
 
