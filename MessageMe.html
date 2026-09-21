@@ -1273,6 +1273,11 @@
         // IMPORTANT: GitHub Actions will replace this placeholder during deployment
         const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
 
+        // Safety check for debugging
+        if (SUPABASE_ANON_KEY === '__SUPABASE_ANON_KEY__') {
+            console.warn("WARNING: SUPABASE_ANON_KEY was not injected. If this is the live site, ensure your GitHub Action replacement step is configured correctly.");
+        }
+
         /**
          * Custom UI Handlers (Replacing native alert/confirm)
          */
