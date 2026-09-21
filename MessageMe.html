@@ -219,7 +219,6 @@
             margin-top: 8px;
         }
 
-
         /* === Service-specific MessageMe UI === */
         .service-selector {
             background: linear-gradient(135deg, #0f1a3c 0%, #1a365d 100%);
@@ -294,7 +293,6 @@
             .service-selector { padding: 17px 13px; }
             .service-panel { padding: 16px; }
         }
-
 
         /* === Compact Professional MessageMe Redesign === */
         .unified-card {
@@ -665,7 +663,6 @@
         #header-placeholder { min-height: 100px; }
     </style>
 <style>
-
         /* =========================================================
            MessageMe Layout V3 — wide, stable, no-overlap redesign
            Keeps every existing field, option and JS utility intact.
@@ -826,7 +823,6 @@
             }
             #astrologyWorkflow .compact-astro-birth .flex.gap-1 { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
         }
-
 
         /* === Final uniform Contact layout correction ===
            Same contact structure for ALL services:
@@ -1426,9 +1422,10 @@
             document.querySelectorAll('.input-field').forEach(x => x.classList.remove('validation-error'));
 
             const err = id => {
-                const m = document.getElementById(id + '-error');
-                if (m) m.style.display = 'block';
-                document.getElementById(id)?.classList.add('validation-error');
+                const element = document.getElementById(id);
+                const message = document.getElementById(id + '-error');
+                if (message) message.style.display = 'block';
+                if (element) element.classList.add('validation-error');
                 valid = false;
             };
 
@@ -1512,6 +1509,7 @@
                 return data;
             }
 
+            // Ensure robust collection mimicking exact form behavior
             if (service === "Software Development") {
                 data.name = document.getElementById('softwareName').value.trim();
                 data.email = document.getElementById('softwareEmail').value.trim();
@@ -1580,7 +1578,8 @@
                             purpose: dataObj.purpose,
                             notes: dataObj // <-- THIS is what passes the exact name to the invoice!
                         })
-                    });                    const order = await res.json().catch(() => ({}));
+                    });                    
+                    const order = await res.json().catch(() => ({}));
                     if (!res.ok || !order.success) {
                         throw new Error(
                             order.error ||
@@ -1647,7 +1646,7 @@
                     });
                     rzp.open();
                 } else {
-                    // Non-payment form (Other Purposes)
+                    // Non-payment form (Software, Financial, Other Purposes)
                     const subRes = await fetch(BACKEND_BASE + '/submit-form', {
                         method: 'POST',
                         headers: { 
@@ -1691,7 +1690,6 @@
                 form.reset();
                 mainServiceSelect.value = "";
                 updateWorkflow();
-                window.scrollTo({top:0, behavior:'smooth'});
                 window.scrollTo({top:0, behavior:'smooth'});
             });
         };
