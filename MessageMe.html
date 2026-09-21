@@ -1528,7 +1528,8 @@
                 data.mobileNumber =
                     document.getElementById('financeCountryCode').value +
                     document.getElementById('financeMobile').value.trim();
-                data.financial_service = document.getElementById('financeType').value;
+                // Map to software_type to match the backend database schema accepted by /submit-form
+                data.software_type = document.getElementById('financeType').value;
                 data.expectations = document.getElementById('financeMessage').value.trim();
             }
 
@@ -1580,7 +1581,8 @@
                             purpose: dataObj.purpose,
                             notes: dataObj // <-- THIS is what passes the exact name to the invoice!
                         })
-                    });                    const order = await res.json().catch(() => ({}));
+                    });                    
+                    const order = await res.json().catch(() => ({}));
                     if (!res.ok || !order.success) {
                         throw new Error(
                             order.error ||
