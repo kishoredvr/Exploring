@@ -16,6 +16,7 @@
         }
         
         :root {
+            /* Kept core variables to prevent Flash of Unstyled Content (FOUC) before components load */
             --primary-blue: #1a365d;
             --accent-gold: #d4af37;
             --accent-gold-hover: #f1c947;
@@ -49,63 +50,7 @@
         }
 
         #header-placeholder { min-height: 70px; }
-        
-        header, .mobile-header {
-            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .mobile-header {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        /* We keep the generic header styles intact for the loaded Components.html */
-        .header-content { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .logo { display: flex; align-items: center; gap: 15px; flex-shrink: 0; text-decoration: none; }
-        .logo-image { height: 60px; width: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); transition: transform 0.3s ease; }
-        .logo-text { font-size: 26px; font-weight: 700; color: white; letter-spacing: 0.5px; }
-        .tagline { font-size: 13px; color: var(--accent-gold); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* --- Restored Navigation Styles for Components.html --- */
-        nav ul { display: flex; list-style: none; align-items: center; }
-        nav ul li { margin-left: 30px; position: relative; }
-        nav ul li a {
-            color: white; text-decoration: none; font-weight: 500;
-            padding: 8px 15px; border-radius: 4px; transition: all 0.3s;
-            display: flex; align-items: center; white-space: nowrap;
-        }
-        nav ul li a:hover, nav ul li a.active { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
-
-        .dropdown-menu {
-            position: absolute; top: 100%; left: 0;
-            background: white; min-width: 220px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 4px;
-            opacity: 0; visibility: hidden; transform: translateY(-10px);
-            transition: all 0.3s ease; z-index: 1000;
-        }
-        nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-menu.flip-left { left: auto; right: 0; }
-        .dropdown-menu a {
-            color: var(--text-dark) !important; padding: 12px 20px;
-            display: flex; align-items: center; border-bottom: 1px solid var(--medium-gray); white-space: nowrap;
-        }
-        .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
-        .dropdown-menu i { margin-right: 10px; width: 20px; text-align: center; }
-
-        .mobile-menu-toggle {
-            background: none; border: none; font-size: 24px; color: white;
-            cursor: pointer; width: 44px; height: 44px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        /* ------------------------------------------------------ */
+        #footer-placeholder { min-height: 300px; }
 
         .hero-dashboard {
             position: relative;
@@ -176,13 +121,11 @@
             border: 1px solid rgba(212, 175, 55, 0.3);
             backdrop-filter: blur(12px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            flex-wrap: nowrap; /* STRICT CONSTRAINT: Never wrap to next line */
+            flex-wrap: nowrap;
             white-space: nowrap;
         }
 
-        .profile-image-container {
-            flex-shrink: 0;
-        }
+        .profile-image-container { flex-shrink: 0; }
 
         .profile-image-container img {
             width: 70px;
@@ -272,23 +215,9 @@
         .digital-theme { background: linear-gradient(135deg, var(--cyber-teal), #38bdf8); }
         .financial-theme { background: linear-gradient(135deg, var(--financial-green), #10b981); }
 
-        .service-info {
-            flex-grow: 1;
-        }
-
-        .service-info h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #f8fafc;
-        }
-
-        .service-info p {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 0;
-            line-height: 1.4;
-        }
+        .service-info { flex-grow: 1; }
+        .service-info h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: #f8fafc; }
+        .service-info p { font-size: 14px; color: #94a3b8; margin-bottom: 0; line-height: 1.4; }
 
         .service-arrow {
             color: var(--accent-gold);
@@ -313,65 +242,16 @@
         .business-info p { display: inline-flex; align-items: center; gap: 8px; color: #94a3b8; }
         .business-info i { color: var(--accent-gold); }
 
-        /* --- Restored Footer Styles for Components.html --- */
-        #footer-placeholder { min-height: 300px; }
-        footer { background: var(--dark-navy); color: white; padding: 50px 0 20px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px; }
-        .footer-column h3 { font-size: 20px; margin-bottom: 20px; color: var(--accent-gold); }
-        .footer-column ul { list-style: none; }
-        .footer-column ul li { margin-bottom: 10px; }
-        .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; word-wrap: break-word; }
-        .footer-column a:hover { color: var(--accent-gold); }
-        .copyright {
-            text-align: center; padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5); font-size: 14px;
-        }
-        /* -------------------------------------------------- */
-
         @media (max-width: 992px) {
-            header {
-                height: 0 !important;
-                min-height: 0 !important;
-                padding: 0 !important;
-                overflow: hidden;
-            }
-            .mobile-header { display: flex; }
             .dashboard-grid { gap: 30px; }
-            
-            /* --- Restored Mobile Nav Styles --- */
-            nav#mainNav {
-                display: none; position: fixed; top: 70px; left: 0;
-                width: 100%; height: calc(100% - 70px);
-                background: var(--dark-navy); z-index: 2000;
-                padding: 20px; overflow-y: auto;
-                transform: translateX(-100%); transition: transform 0.3s ease;
-            }
-            nav#mainNav.active { display: block; transform: translateX(0); }
-            nav ul { flex-direction: column; align-items: flex-start; margin-top: 30px; width: 100%; }
-            nav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-            nav ul li a { padding: 15px 0; width: 100%; }
-            
-            .dropdown-menu {
-                position: static; opacity: 1; visibility: visible; transform: none;
-                background: rgba(255, 255, 255, 0.05); display: none; width: 100%;
-                margin-top: 10px; max-height: 0; overflow: hidden;
-                transition: max-height 0.3s ease; left: 0 !important; right: auto !important;
-            }
-            nav ul li.active .dropdown-menu { display: block; max-height: 1000px; }
-            /* ---------------------------------- */
         }
 
         @media (max-width: 860px) {
-            /* Switch to single column stack, but keep padding tight so it all fits */
             .hero-dashboard { padding: 30px 0; align-items: flex-start; }
             .dashboard-grid { grid-template-columns: 1fr; gap: 25px; }
-            
             .intro-column { text-align: center; }
             .main-subtitle { margin: 0 auto 20px; text-align: center; }
             .quote { text-align: left; margin-bottom: 25px; }
-            
-            /* Profile & button stay left/right of each other, but centered within the container */
             .profile-action-row-container {
                 display: flex;
                 justify-content: center;
@@ -382,14 +262,11 @@
 
         @media (max-width: 480px) {
             .hero-dashboard { padding: 20px 0; }
-            .quote { display: none; } /* Hide quote on tiny screens to save vertical space */
+            .quote { display: none; }
             .main-subtitle { font-size: 15px; margin-bottom: 15px; }
-            
-            /* Squeeze the profile row slightly to ensure no wrapping */
             .profile-action-row { gap: 12px; padding: 8px 15px 8px 8px; }
             .profile-image-container img { width: 50px; height: 50px; }
             .btn-book { padding: 10px 16px; font-size: 13px; }
-            
             .compact-service-card { padding: 15px; gap: 15px; }
             .service-icon-wrapper { width: 44px; height: 44px; font-size: 18px; }
             .service-info h3 { font-size: 16px; }
@@ -418,7 +295,7 @@
                 <div class="profile-action-row-container">
                     <div class="profile-action-row">
                         <div class="profile-image-container">
-                            <img src="KishoreDVR.jpg" alt="Kishore DVR" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80';">
+                            <img src="KishoreDVR.jpg" alt="Kishore DVR" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\' viewBox=\'0 0 150 150\'%3E%3Crect width=\'150\' height=\'150\' fill=\'%231a365d\'/%3E%3Ccircle cx=\'75\' cy=\'75\' r=\'50\' fill=\'none\' stroke=\'%23d4af37\' stroke-width=\'8\'/%3E%3Ccircle cx=\'55\' cy=\'65\' r=\'7\' fill=\'%23d4af37\'/%3E%3Ccircle cx=\'95\' cy=\'65\' r=\'7\' fill=\'%23d4af37\'/%3E%3Cpath d=\'M 50 95 Q 75 120 100 95\' fill=\'none\' stroke=\'%23d4af37\' stroke-width=\'8\' stroke-linecap=\'round\'/%3E%3C/svg%3E';">
                         </div>
                         <a href="https://kishoredvr.github.io/Exploring/MessageMe" class="btn-book">
                             <i class="fas fa-calendar-check"></i> Book Consultation
@@ -427,7 +304,7 @@
                 </div>
             </div>
 
-            <!-- Right Side: Services Stack (No Scrolling Needed) -->
+            <!-- Right Side: Services Stack -->
             <div class="services-column">
                 <!-- Service 1: Astrology -->
                 <a href="MessageMe" class="compact-service-card">
@@ -478,7 +355,6 @@
     <div id="footer-placeholder"></div>
 
     <script>
-        // Keeping the exact component loading logic you requested
         async function loadMasterCopy() {
             try {
                 const response = await fetch('Components.html');
@@ -488,16 +364,30 @@
                 const parser = new DOMParser();
                 const masterDoc = parser.parseFromString(text, 'text/html');
 
+                // 1. INJECT MASTER STYLES 
+                // Injects CSS from Components.html before local styles so local variables override seamlessly
+                const localStyle = document.querySelector('style');
+                masterDoc.querySelectorAll('style').forEach(style => {
+                    if (localStyle) {
+                        document.head.insertBefore(style.cloneNode(true), localStyle);
+                    } else {
+                        document.head.appendChild(style.cloneNode(true));
+                    }
+                });
+
+                // 2. INJECT HEADER
                 const headerContent = masterDoc.getElementById('site-header-source');
                 if (headerContent) {
                     document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
                 }
 
+                // 3. INJECT FOOTER
                 const footerContent = masterDoc.getElementById('site-footer-source');
                 if (footerContent) {
                     document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
                 }
 
+                // Update specific links dynamically
                 document.querySelectorAll('a[href*="facebook.com"]').forEach(function (link) {
                     link.href = 'https://www.facebook.com/profile.php?id=61575506668889';
                     if (link.textContent.trim() === 'National Economies') {
@@ -554,24 +444,29 @@
                 });
             });
 
+            // Mirrors the exact alignment logic from Components.html 
             function repositionDropdowns() {
                 if (window.innerWidth <= 992) return;
                 document.querySelectorAll('nav ul li').forEach(function (li) {
                     var menu = li.querySelector('.dropdown-menu');
                     if (!menu) return;
-                    menu.classList.remove('flip-left');
-                    menu.style.left  = '';
-                    menu.style.right = '';
-                    var prevVis = menu.style.visibility;
-                    var prevDis = menu.style.display;
+
+                    var prevVisibility = menu.style.visibility;
+                    var prevDisplay    = menu.style.display;
                     menu.style.visibility = 'hidden';
                     menu.style.display    = 'block';
-                    var rect = menu.getBoundingClientRect();
-                    var vw   = window.innerWidth || document.documentElement.clientWidth;
-                    menu.style.visibility = prevVis;
-                    menu.style.display    = prevDis;
-                    if (rect.right > vw) menu.classList.add('flip-left');
-                    else if (rect.left < 0) { menu.style.left = '0'; menu.style.right = 'auto'; }
+
+                    var rect      = menu.getBoundingClientRect();
+                    var overflows = rect.right > (window.innerWidth || document.documentElement.clientWidth);
+
+                    menu.style.visibility = prevVisibility;
+                    menu.style.display    = prevDisplay;
+
+                    if (overflows) {
+                        menu.classList.add('align-right');
+                    } else {
+                        menu.classList.remove('align-right');
+                    }
                 });
             }
 
