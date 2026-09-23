@@ -1515,45 +1515,7 @@
                 else if (service === "Astrology Research") {
                     data.astro_service_tier = "0";
                     data.astro_service_name = "Astrology Research";
-
-                    // Safely format the research payload so it lands cleanly in the email without "Not applicable" junk
-                    let researchSummary = `=== Astrology Research Data ===\n\n`;
-                    researchSummary += `Notes: ${document.getElementById('astrologyExpectations').value.trim() || 'None'}\n\n`;
-                    
-                    researchSummary += `-- Predispositions --\n`;
-                    const predispositions = [
-                        'pred_several_marriages', 'pred_widowhood', 'pred_creative_success', 
-                        'pred_exact_sciences', 'pred_unemployment', 'pred_homelessness'
-                    ];
-                    predispositions.forEach(p => {
-                        const val = fd.get(p);
-                        if (val && val !== '?') {
-                            const label = p.replace('pred_', '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                            researchSummary += `${label}: ${val}\n`;
-                        }
-                    });
-
-                    researchSummary += `\n-- Life Events (MM/YYYY) --\n`;
-                    const events = [
-                        'marriage', 'divorce', 'birth_first_child', 'birth_second_child',
-                        'mother_death', 'father_death', 'grandmother_death', 'grandfather_death',
-                        'sibling_death', 'wife_death', 'child_death', 'imprisonment',
-                        'extreme_situation', 'trauma_surgery', 'serious_disease'
-                    ];
-                    
-                    let hasEvents = false;
-                    events.forEach(e => {
-                        const m = fd.get(`event_${e}_month`);
-                        const y = fd.get(`event_${e}_year`);
-                        if (m || y) {
-                            hasEvents = true;
-                            const label = e.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                            researchSummary += `${label}: ${m || '??'}/${y || '??'}\n`;
-                        }
-                    });
-                    if (!hasEvents) researchSummary += "No significant life events provided.\n";
-
-                    data.expectations = researchSummary;
+                    data.expectations = document.getElementById('astrologyExpectations').value.trim();
                 }
                 
                 data.purpose = service;
