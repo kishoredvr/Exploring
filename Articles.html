@@ -34,6 +34,7 @@
             }
         }
     </script>
+    
     <style>
         /* Smooth transitions for view swapping */
         .fade-enter { opacity: 0; transform: translateY(10px); }
@@ -126,60 +127,12 @@
             }
         }
 
-        /* Injected Header Styles (From Components.html) */
-        header { background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); color: white; padding: 15px 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
-        .mobile-header { display: none; padding: 15px 0; background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); color: white; align-items: center; justify-content: space-between; width: 100%; position: sticky; top: 0; z-index: 1000; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-        .logo-image { height: 70px; width: auto; margin-top: 10px; border-radius: 50%; object-fit: cover; }
-        .logo-text-container { display: flex; flex-direction: column; white-space: nowrap; }
-        .logo-text { font-size: 24px; font-weight: 600; color: white; }
-        .tagline { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
-
-        nav ul { display: flex; list-style: none; align-items: center; }
-        nav ul li { margin-left: 15px; position: relative; }
-        nav ul li a { color: white; text-decoration: none; font-weight: 500; padding: 8px 12px; border-radius: 4px; transition: all 0.3s; display: flex; align-items: center; white-space: nowrap; font-size: 15px; }
-        nav ul li a:hover { background: rgba(255, 255, 255, 0.1); color: var(--accent-gold); }
-        .dropdown-menu { position: absolute; top: 100%; right: 0; background: white; min-width: 220px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 4px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 1000; }
-        nav ul li:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-menu a { color: var(--text-dark) !important; padding: 12px 20px; display: flex; align-items: center; border-bottom: 1px solid var(--medium-gray); white-space: nowrap; }
-        .dropdown-menu a:hover { background: var(--light-gray); color: var(--primary-blue) !important; }
-        .dropdown-menu a i { margin-right: 10px; width: 20px; }
-
-        /* Injected Footer Styles */
-        footer { background: var(--dark-navy); color: white; padding: 50px 0 20px; margin-top: 40px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 30px; margin-bottom: 30px; }
-        .footer-column h3 { font-size: 18px; margin-bottom: 18px; color: var(--accent-gold); font-weight: 600; }
-        .footer-column ul { list-style: none; }
-        .footer-column ul li { margin-bottom: 8px; }
-        .footer-column a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
-        .footer-column a:hover { color: var(--accent-gold); }
-        .copyright { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); font-size: 14px; }
-
         /* Google Translate Container styling to match header */
         #google_translate_element { margin-left: 10px; display: flex; align-items: center; min-width: 140px; }
         .goog-te-gadget-simple { background-color: rgba(255, 255, 255, 0.15) !important; border: 1px solid var(--accent-gold) !important; padding: 4px 8px !important; border-radius: 6px !important; font-family: 'Inter', sans-serif !important; display: flex !important; align-items: center !important; }
         .goog-te-gadget-simple a, .goog-te-menu-value span { color: white !important; text-decoration: none !important; font-size: 12px !important; }
         .goog-logo-link, .goog-te-gadget-icon, .goog-te-banner-frame { display: none !important; }
         body { top: 0 !important; }
-
-        @media (max-width: 992px) {
-            
-             header {
-                height: 0 !important;
-                min-height: 0 !important;
-                padding: 0 !important;
-                overflow: hidden;
-                }
-                
-            .mobile-header { display: flex; }
-            nav#mainNav { display: none; position: fixed; top: 70px; left: 0; width: 100%; height: calc(100% - 70px); background: var(--dark-navy); z-index: 2000; padding: 20px; overflow-y: auto; transform: translateX(-100%); transition: transform 0.3s ease; }
-            nav#mainNav.active { display: block; transform: translateX(0); }
-            nav ul { flex-direction: column; align-items: flex-start; margin-top: 20px; width: 100%; }
-            nav ul li { margin: 10px 0; width: 100%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-            .dropdown-menu { position: static; opacity: 1; visibility: visible; transform: none; background: rgba(255, 255, 255, 0.05); width: 100%; display: none; }
-            nav ul li.active .dropdown-menu { display: block; }
-        }
         
         .article-card { transition: opacity 0.2s ease, transform 0.2s ease; }
         .article-card.filtered-out { opacity: 0; transform: scale(0.96); display: none; }
@@ -208,7 +161,6 @@
                 <div id="explorer-pane" class="p-1 overflow-y-auto bg-white" style="max-height: 60vh;">
                     <!-- Tree structure injected here -->
                 </div>
-                
             </div>
         </aside>
 
@@ -317,7 +269,7 @@
         let currentArticleTitle = '';
 
         /**
-         * Fetch master components and inject them
+         * Fetch master components and inject them along with styles and scripts
          */
         async function loadMasterCopy() {
             try {
@@ -328,16 +280,37 @@
                 const parser = new DOMParser();
                 const masterDoc = parser.parseFromString(text, 'text/html');
 
-                // 1. Inject Header
+                // 1. Extract and Inject Styles from Master Head
+                const masterStyles = masterDoc.querySelectorAll('head style');
+                masterStyles.forEach(style => {
+                    document.head.appendChild(style.cloneNode(true));
+                });
+
+                // Helper function to re-inject scripts so the browser executes them
+                const executeInjectedScripts = (container) => {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                };
+
+                // 2. Inject Header HTML
                 const headerContent = masterDoc.getElementById('site-header-source');
-                if (headerContent) {
-                    document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
+                const headerPlaceholder = document.getElementById('header-placeholder');
+                if (headerContent && headerPlaceholder) {
+                    headerPlaceholder.innerHTML = headerContent.innerHTML;
+                    executeInjectedScripts(headerPlaceholder);
                 }
 
-                // 2. Inject Footer
+                // 3. Inject Footer HTML
                 const footerContent = masterDoc.getElementById('site-footer-source');
-                if (footerContent) {
-                    document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
+                const footerPlaceholder = document.getElementById('footer-placeholder');
+                if (footerContent && footerPlaceholder) {
+                    footerPlaceholder.innerHTML = footerContent.innerHTML;
+                    executeInjectedScripts(footerPlaceholder);
                 }
 
                 // Initialize events after injection
@@ -360,18 +333,25 @@
             const logos = document.querySelectorAll('.logo');
 
             if (mobileBtn && mainNav) {
-                mobileBtn.addEventListener('click', () => {
+                // Clone node to clear previously attached identical event listeners
+                const newMobileBtn = mobileBtn.cloneNode(true);
+                mobileBtn.parentNode.replaceChild(newMobileBtn, mobileBtn);
+                
+                newMobileBtn.addEventListener('click', () => {
                     const isActive = mainNav.classList.toggle('active');
-                    mobileBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    newMobileBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     document.body.style.overflow = isActive ? 'hidden' : '';
                 });
             }
 
             dropdowns.forEach(toggle => {
-                toggle.addEventListener('click', (e) => {
+                const newToggle = toggle.cloneNode(true);
+                toggle.parentNode.replaceChild(newToggle, toggle);
+
+                newToggle.addEventListener('click', (e) => {
                     if (window.innerWidth <= 992) {
                         e.preventDefault();
-                        const li = toggle.parentElement;
+                        const li = newToggle.parentElement;
                         document.querySelectorAll('nav li').forEach(item => {
                             if (item !== li) item.classList.remove('active');
                         });
@@ -380,10 +360,26 @@
                 });
             });
 
+            // Re-apply the mobile link click close logic
+            document.querySelectorAll('nav a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
+                        const mNav = document.getElementById('mainNav');
+                        const mBtn = document.getElementById('mobileMenuToggle');
+                        if (mNav) mNav.classList.remove('active');
+                        if (mBtn) mBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
             // Re-attach logo reset logic to injected logos
             logos.forEach(logo => {
-                logo.addEventListener('click', () => {
-                    if (logo.getAttribute('onclick')) return; // Avoid double trigger if it has hardcoded onclick
+                const newLogo = logo.cloneNode(true);
+                logo.parentNode.replaceChild(newLogo, logo);
+                
+                newLogo.addEventListener('click', () => {
+                    if (newLogo.getAttribute('onclick')) return; // Avoid double trigger if it has hardcoded onclick
                     showListView();
                 });
             });
