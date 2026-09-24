@@ -152,105 +152,6 @@
 <div id="site-header-source">
     
     <style>
-        /* ====================================================================
-           DYNAMIC ISLAND (BOOK CONSULTATION)
-           ==================================================================== */
-        :where(.dynamic-island-wrapper) {
-            position: fixed;
-            top: 100px;
-            left: 20px;
-            z-index: 1500;
-            pointer-events: none;
-        }
-        
-        :where(.dynamic-island) {
-            pointer-events: auto;
-            background: rgba(255, 215, 0, 0.95); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 0, 0, 0.6);
-            padding: 15px 12px;
-            border-radius: 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            color: #000;
-            opacity: 0;
-            animation: island-slide-in 0.8s forwards 1s, island-pulse-blink 2s infinite ease-in-out;
-        }
-        
-        :where(.dynamic-island:hover) {
-            background: #ffd700;
-            border-color: #ff0000;
-            transform: scale(1.1);
-            animation-play-state: paused;
-        }
-
-        :where(.dynamic-island-icon) {
-            width: 30px;
-            height: 100%;
-            background: #0000ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ff0000;
-            font-size: 20px;
-        }
-
-        :where(.dynamic-island-text) {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            white-space: nowrap;
-            text-align: center;
-            line-height: 1.3;
-            text-transform: uppercase;
-        }
-
-        @keyframes island-slide-in {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes island-pulse-blink {
-            0%, 100% { 
-                border-color: rgba(255, 0, 0, 0.6); 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
-            50% { 
-                border-color: rgba(255, 0, 0, 1); 
-                box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
-                transform: scale(1.05);
-            }
-        }
-
-        @media (max-width: 992px) {
-            :where(.dynamic-island-wrapper) {
-                top: 90px;
-                left: 15px;
-            }
-            :where(.dynamic-island) {
-                flex-direction: row;
-                padding: 10px 20px;
-                animation: island-slide-in-mobile 0.8s forwards 1s, island-pulse-blink-mobile 2s infinite ease-in-out;
-            }
-            @keyframes island-slide-in-mobile {
-                from { opacity: 0; transform: translateX(-50px); }
-                to { opacity: 1; transform: translateX(0); }
-            }
-            @keyframes island-pulse-blink-mobile {
-                0%, 100% { border-color: rgba(255, 0, 0, 0.6); transform: scale(1); }
-                50% { border-color: rgba(255, 0, 0, 1); transform: scale(1.05); }
-            }
-        }
-    </style>
-
-    <style>
         nav ul li:nth-last-child(-n+2) .dropdown-menu {
             left: auto;
             right: 0;
@@ -295,12 +196,6 @@
             window.addEventListener('resize', repositionDropdowns);
         })();
     </script>
-
-    <div class="dynamic-island-wrapper">
-        <a href="MessageMe.html" class="dynamic-island">            
-            <span class="dynamic-island-text">BOOK<br>CONSULTATION</span>
-        </a>
-    </div>
 
     <div class="mobile-header container">
         <div class="logo">
