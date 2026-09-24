@@ -23,28 +23,9 @@
         #header-placeholder { min-height: 100px; }
         #footer-placeholder { min-height: 300px; }
 
-        header { background:linear-gradient(135deg,var(--dark-navy) 0%,var(--primary-blue) 100%); color:white; padding:15px 0; box-shadow:0 2px 10px rgba(0,0,0,.1); position:sticky; top:0; z-index:1000; }
-        .mobile-header { display:none; padding:15px 0; background:linear-gradient(135deg,var(--dark-navy) 0%,var(--primary-blue) 100%); color:white; align-items:center; justify-content:space-between; width:100%; position:sticky; top:0; z-index:1000; box-shadow:0 2px 10px rgba(0,0,0,.1); }
-        .header-content { display:flex; justify-content:space-between; align-items:center; gap:10px; }
-        .logo { display:flex; align-items:center; gap:12px; flex-shrink:0; }
-        .logo-image { height:70px; width:auto; margin-top:5px; border-radius:50%; object-fit:cover; }
-        .logo-text-container { display:flex; flex-direction:column; white-space:nowrap; }
-        .logo-text { font-size:24px; font-weight:600; color:white; }
-        .tagline { font-size:14px; color:rgba(255,255,255,.7); }
+        /* Master Header & Footer styles are now dynamically imported from Components.html */
 
-        nav ul { display:flex; list-style:none; align-items:center; }
-        nav ul li { margin-left:30px; position:relative; }
-        nav ul li a { color:white; text-decoration:none; font-weight:500; padding:8px 15px; border-radius:4px; transition:all .3s; display:flex; align-items:center; white-space:nowrap; }
-        nav ul li a:hover, nav ul li a.active { background:rgba(255,255,255,.1); color:var(--accent-gold); }
-
-        .dropdown-menu { position:absolute; top:100%; left:0; background:white; min-width:220px; box-shadow:0 8px 16px rgba(0,0,0,.1); border-radius:4px; opacity:0; visibility:hidden; transform:translateY(-10px); transition:all .3s ease; z-index:1000; }
-        nav ul li:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
-        .dropdown-menu.flip-left { left: auto; right: 0; }
-        .dropdown-menu a { color:var(--text-dark)!important; padding:12px 20px; display:flex; align-items:center; border-bottom:1px solid var(--medium-gray); white-space:nowrap; }
-        .dropdown-menu a:hover { background:var(--light-gray); color:var(--primary-blue)!important; }
-        .dropdown-menu i { margin-right:10px; width:20px; text-align:center; }
-        .mobile-menu-toggle { background:none; border:none; font-size:24px; color:white; cursor:pointer; width:44px; height:44px; display:flex; align-items:center; justify-content:center; }
-
+        /* Shop Elements */
         .shop-toolbar { background:var(--primary-blue); z-index:900; box-shadow:0 3px 8px rgba(0,0,0,.08); position:relative; }
         .shop-toolbar-inner { display:flex; align-items:center; gap:16px; padding:12px 0; }
         .search-box { flex:1; display:flex; align-items:center; background:white; border-radius:6px; overflow:hidden; max-width:640px; }
@@ -200,26 +181,7 @@
         .payment-modal-content h3 { font-size:18px; color:var(--dark-navy); margin-bottom:5px; font-weight:bold; }
         .payment-modal-content p { font-size:13px; color:var(--text-light); }
 
-        footer { background:var(--dark-navy); color:white; padding:50px 0 20px; }
-        .footer-content { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:30px; margin-bottom:30px; }
-        .footer-column h3 { font-size:20px; margin-bottom:20px; color:var(--accent-gold); }
-        .footer-column ul { list-style:none; }
-        .footer-column ul li { margin-bottom:10px; }
-        .footer-column a { color:rgba(255,255,255,.7); text-decoration:none; transition:color .3s; word-wrap:break-word; }
-        .footer-column a:hover { color:var(--accent-gold); }
-        .copyright { text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.5); font-size:14px; }
-
         @media (max-width:992px) {
-            header { height:0!important; min-height:0!important; padding:0!important; overflow:hidden; }
-            .mobile-header { display:flex; }
-            nav#mainNav { display:none; position:fixed; top:70px; left:0; width:100%; height:calc(100% - 70px); background:var(--dark-navy); z-index:2000; padding:20px; overflow-y:auto; transform:translateX(-100%); transition:transform .3s ease; }
-            nav#mainNav.active { display:block; transform:translateX(0); }
-            nav ul { flex-direction:column; align-items:flex-start; margin-top:30px; width:100%; }
-            nav ul li { margin:10px 0; width:100%; border-bottom:1px solid rgba(255,255,255,.1); }
-            nav ul li a { padding:15px 0; width:100%; }
-            .dropdown-menu { position:static; opacity:1; visibility:visible; transform:none; background:rgba(255,255,255,.05); display:none; width:100%; margin-top:10px; max-height:0; overflow:hidden; transition:max-height .3s ease; left:0!important; right:auto!important; }
-            nav ul li.active .dropdown-menu { display:block; max-height:1000px; }
-
             /* Responsive Cart Slide-out */
             .shop-layout { grid-template-columns: 1fr; }
             .cart-sidebar { 
@@ -523,16 +485,40 @@
                 const parser = new DOMParser();
                 const masterDoc = parser.parseFromString(text, 'text/html');
 
+                // 1. Extract and Inject Styles from Master Head
+                const masterStyles = masterDoc.querySelectorAll('head style');
+                masterStyles.forEach(style => {
+                    document.head.appendChild(style.cloneNode(true));
+                });
+
+                // Helper function to re-inject scripts so the browser executes them
+                const executeInjectedScripts = (container) => {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                };
+
+                // 2. Inject Header HTML
                 const headerContent = masterDoc.getElementById('site-header-source');
-                if (headerContent) {
-                    document.getElementById('header-placeholder').innerHTML = headerContent.innerHTML;
+                const headerPlaceholder = document.getElementById('header-placeholder');
+                if (headerContent && headerPlaceholder) {
+                    headerPlaceholder.innerHTML = headerContent.innerHTML;
+                    executeInjectedScripts(headerPlaceholder);
                 }
 
+                // 3. Inject Footer HTML
                 const footerContent = masterDoc.getElementById('site-footer-source');
-                if (footerContent) {
-                    document.getElementById('footer-placeholder').innerHTML = footerContent.innerHTML;
+                const footerPlaceholder = document.getElementById('footer-placeholder');
+                if (footerContent && footerPlaceholder) {
+                    footerPlaceholder.innerHTML = footerContent.innerHTML;
+                    executeInjectedScripts(footerPlaceholder);
                 }
 
+                // Initialize events after injection
                 initMenuLogic();
             } catch (err) {
                 console.error("Fetch Error:", err);
@@ -545,19 +531,25 @@
             const dropdowns = document.querySelectorAll('.dropdown-toggle');
 
             if (mobileBtn && mainNav) {
-                mobileBtn.onclick = function () {
+                const newMobileBtn = mobileBtn.cloneNode(true);
+                mobileBtn.parentNode.replaceChild(newMobileBtn, mobileBtn);
+
+                newMobileBtn.addEventListener('click', () => {
                     const isActive = mainNav.classList.toggle('active');
-                    this.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                    newMobileBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                     document.body.style.overflow = isActive ? 'hidden' : '';
-                };
+                });
             }
 
-            dropdowns.forEach(function (toggle) {
-                toggle.addEventListener('click', function (e) {
+            dropdowns.forEach(toggle => {
+                const newToggle = toggle.cloneNode(true);
+                toggle.parentNode.replaceChild(newToggle, toggle);
+
+                newToggle.addEventListener('click', (e) => {
                     if (window.innerWidth <= 992) {
                         e.preventDefault();
-                        const li = toggle.parentElement;
-                        document.querySelectorAll('nav li').forEach(function (item) {
+                        const li = newToggle.parentElement;
+                        document.querySelectorAll('nav li').forEach(item => {
                             if (item !== li) item.classList.remove('active');
                         });
                         li.classList.toggle('active');
@@ -565,43 +557,18 @@
                 });
             });
 
+            // Re-apply the mobile link click close logic
             document.querySelectorAll('nav a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
-                        if (mainNav) mainNav.classList.remove('active');
-                        if (mobileBtn) mobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        const mNav = document.getElementById('mainNav');
+                        const mBtn = document.getElementById('mobileMenuToggle');
+                        if (mNav) mNav.classList.remove('active');
+                        if (mBtn) mBtn.innerHTML = '<i class="fas fa-bars"></i>';
                         document.body.style.overflow = '';
                     }
                 });
             });
-
-            function repositionDropdowns() {
-                if (window.innerWidth <= 992) return;
-                document.querySelectorAll('nav ul li').forEach(function (li) {
-                    var menu = li.querySelector('.dropdown-menu');
-                    if (!menu) return;
-                    menu.classList.remove('flip-left');
-                    menu.style.left  = '';
-                    menu.style.right = '';
-                    var prevVis = menu.style.visibility;
-                    var prevDis = menu.style.display;
-                    menu.style.visibility = 'hidden';
-                    menu.style.display    = 'block';
-                    var rect = menu.getBoundingClientRect();
-                    var vw   = window.innerWidth || document.documentElement.clientWidth;
-                    menu.style.visibility = prevVis;
-                    menu.style.display    = prevDis;
-                    if (rect.right > vw) {
-                        menu.classList.add('flip-left');
-                    } else if (rect.left < 0) {
-                        menu.style.left  = '0';
-                        menu.style.right = 'auto';
-                    }
-                });
-            }
-
-            repositionDropdowns();
-            window.addEventListener('resize', repositionDropdowns);
         }
 
         window.onload = loadMasterCopy;
