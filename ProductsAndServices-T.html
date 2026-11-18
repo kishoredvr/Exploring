@@ -318,7 +318,8 @@
                     <div class="results-toolbar">
                         <div class="results-count"><strong id="resultsCount">0</strong> products found</div>
                         <div style="display:flex; align-items:center; gap:18px;">
-                            <label class="filter-option"><input type="checkbox" id="filterLiveOnly" onchange="applyFilters()"> In stock only</label>
+                            <!-- FIX: "checked" is added here so Out-Of-Stock items are hidden by default -->
+                            <label class="filter-option"><input type="checkbox" id="filterLiveOnly" checked onchange="applyFilters()"> In stock only</label>
                             <select class="sort-select" id="sortSelect" onchange="applyFilters()">
                                 <option value="default">Sort: Featured</option>
                                 <option value="price-asc">Price: Low to High</option>
@@ -591,11 +592,23 @@
                 }).filter(row => row.length > 1);
 
                 const headers = rows.shift();
+                
+                // ==========================================================
+                // CRITICAL FIX 1: SANITIZE IDs SO SPACES DON'T BREAK URLS
+                // ==========================================================
                 const products = rows.map(row => {
                     let obj = {};
                     headers.forEach((h, i) => { obj[h] = row[i] || ''; });
+                    
+                    if (obj.id) {
+                        // This changes "Medicines Billing App" to "medicines-billing-app"
+                        // Preventing all layout & URL loading errors caused by spaces!
+                        obj.id = obj.id.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                    }
+                    
                     return obj;
                 });
+                // ==========================================================
 
                 // Top Priority custom app injected here
                 const customAppObj = {
@@ -711,10 +724,16 @@
         }
 
         window.addEventListener('hashchange', handleHashRouting);
+        
+        // ==========================================================
+        // CRITICAL FIX 2: DECODE URI COMPONENT ON URL ROUTING
+        // ==========================================================
         function handleHashRouting() {
-            const hash = window.location.hash;
+            // Decodes URL just in case, ensuring browser compatibility
+            const hash = decodeURIComponent(window.location.hash);
+            
             if (hash.startsWith('#product-') && allProductsData.length) {
-                renderDetailView(hash.replace('#product-', ''));
+                renderDetailView(hash.replace('#product-', '').trim());
             } else {
                 document.getElementById('productDetailView').style.display = 'none';
                 document.getElementById('productDetailView').innerHTML = '';
@@ -722,6 +741,7 @@
                 document.getElementById('productsListView').style.display = '';
             }
         }
+        // ==========================================================
 
         function renderDetailView(id) {
             const prod = allProductsData.find(p => p.id === id);
@@ -734,7 +754,6 @@
 
             let mediaHTML = '';
             if (isLive && images.length > 0) {
-                // Safely encode the array of images to pass to the lightbox
                 const safeImagesStr = encodeURIComponent(images.join(','));
                 
                 const slidesHTML = images.map((src, idx) => `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${src}" alt="${prod.title||'Product'} screenshot"></div></div>`).join('');
@@ -752,7 +771,6 @@
             let detailRightColumnHTML = '';
 
             if (prod.isCustomApp) {
-                // Customized Detail View for Application Services
                 detailRightColumnHTML = `
                     <span class="detail-badge">${prod.category || 'Service'}</span>
                     <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
@@ -788,7 +806,6 @@
                     </div>
                 `;
             } else {
-                // Standard Software Product View
                 const inCart = !!cart[id];
                 const cartBtnHTML = isLive
                     ? `<button id="detail-cart-btn-${id}" class="btn-submit ${inCart ? 'remove' : 'add'}" style="background:${inCart ? 'var(--dark-navy)' : 'var(--accent-gold)'}; color:${inCart ? 'white' : 'var(--dark-navy)'};" onclick="toggleCartState('${id}')"><i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}</button>`
@@ -809,7 +826,6 @@
                 `;
             }
 
-            // Integrates Back Button
             const detailHTML = `
                 <div class="detail-view-container">
                     <button class="btn-back" onclick="window.location.hash=''">
@@ -885,12 +901,10 @@
             const keys = Object.keys(cart);
             const empty = keys.length === 0;
 
-            // Totals Math
             const subtotal = keys.reduce((s,k) => s + cart[k].price, 0);
             const gst = Math.round(subtotal * 0.18);
             const grand = subtotal + gst;
 
-            // Badges
             const badge = document.getElementById('cartBadge');
             if(badge) {
                 badge.textContent = keys.length;
@@ -899,7 +913,6 @@
             const sidebarBadge = document.getElementById('cartCountBadge');
             if(sidebarBadge) sidebarBadge.textContent = keys.length;
 
-            // Toggle visibility of panels
             document.getElementById('cartEmpty').style.display = empty ? 'block' : 'none';
             document.getElementById('cartItems').style.display = empty ? 'none' : 'block';
             document.getElementById('cartTotals').style.display = empty ? 'none' : 'block';
@@ -907,7 +920,6 @@
             document.getElementById('cartActions').style.display = empty ? 'none' : 'flex';
             document.getElementById('secureNote').style.display = empty ? 'none' : 'flex';
 
-            // Render Items Explicitly
             const container = document.getElementById('cartItems');
             container.innerHTML = '';
             keys.forEach(id => {
@@ -926,15 +938,13 @@
                 container.appendChild(row);
             });
 
-            // Format Money
             document.getElementById('cartSubtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
             document.getElementById('cartGst').textContent = '₹' + gst.toLocaleString('en-IN');
             document.getElementById('cartGrand').textContent = '₹' + grand.toLocaleString('en-IN');
 
-            // Force visual re-sync of grids and detail views to show Checkmarks
             renderDynamicProducts(filteredProducts);
             if (window.location.hash.startsWith('#product-')) {
-                renderDetailView(window.location.hash.replace('#product-',''));
+                renderDetailView(window.location.hash.replace('#product-','').trim());
             }
         }
 
@@ -957,7 +967,6 @@
             }
 
             try {
-                // Formatting identical to your MessageMe.html endpoint expectations
                 const dataObj = {
                     purpose: "Custom Application Enquiry",
                     name: name,
@@ -1025,7 +1034,6 @@
                     if (!sbRes.ok) console.warn("Supabase response not OK:", await sbRes.text());
                 } catch (e) { console.warn("Saving pending cart failed, continuing.", e); }
 
-                // FIXED: Send name, email, purpose, and detailed dataObj to the initiator so the DB has all email info
                 const res = await fetch(BACKEND_BASE + '/initiate-razorpay-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
@@ -1076,7 +1084,6 @@
 
                             const data = await verifyRes.json();
                             
-                            // FIXED: Redirects to print.html explicitly for GitHub Pages static hosting
                             if (data.success && data.token) {
                                 window.location.href = `https://parishodana.xyz/print.html?tok=${data.token}`;
                             } else {
