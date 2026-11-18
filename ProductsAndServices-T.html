@@ -84,14 +84,8 @@
         .breadcrumb a { color:var(--primary-blue); text-decoration:none; font-weight:600; cursor:pointer; }
         .breadcrumb a:hover { text-decoration:underline; }
         
-        /* 
-           ===========================================================
-           PRESENTATION FIX: STICKY IMAGE & FULL-WIDTH FEATURE CARDS
-           =========================================================== 
-        */
+        /* Layout Improvements for Detailed View */
         .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; background:white; border-radius:12px; border:1px solid var(--medium-gray); padding:40px; box-shadow:0 8px 24px rgba(0,0,0,.06); max-width:1400px; margin:0 auto; align-items:start; }
-        
-        /* The image will now stay visible on screen if the user scrolls down */
         .detail-media { position:sticky; top:120px; align-self:start; }
         
         .detail-carousel-slide { aspect-ratio:4/3; max-height:500px; background:#eef2f6; display:flex; align-items:center; justify-content:center; border-radius:8px; overflow:hidden; }
@@ -110,11 +104,36 @@
         .detail-price { font-size:30px; font-weight:700; color:var(--primary-blue); margin-bottom:20px; display:flex; align-items:baseline; gap:8px; }
         .detail-overview { background:var(--light-gray); padding:18px; border-radius:8px; border:1px solid var(--medium-gray); margin-bottom:22px; font-size:14px; color:var(--text-dark); line-height:1.7; }
         
-        /* New premium styling for features so they look like elegant cards spanning full width */
-        .features-grid { list-style:none; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 10px; }
-        .features-grid li { display:flex; align-items:flex-start; gap:12px; font-size:14.5px; color:var(--text-dark); line-height:1.5; background: var(--light-gray); padding: 18px 20px; border-radius: 8px; border: 1px solid var(--medium-gray); transition: transform 0.2s, box-shadow 0.2s; }
-        .features-grid li:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); background: white; border-color: var(--accent-gold); }
-        .features-grid i { color:var(--accent-gold); margin-top:3px; font-size:18px; }
+        /* ====================================================================
+           NEW FEATURE STYLE: TWO COLUMN PARAGRAPH LAYOUT
+           ==================================================================== */
+        .features-list-2col { 
+            list-style: none; 
+            column-count: 2; 
+            column-gap: 40px; 
+            margin-bottom: 10px; 
+        }
+        .features-list-2col li { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 12px; 
+            font-size: 15px; 
+            color: var(--text-dark); 
+            line-height: 1.6; 
+            margin-bottom: 18px; 
+            break-inside: avoid; /* Prevents text from breaking across columns */
+            page-break-inside: avoid;
+        }
+        .features-list-2col i { 
+            color: var(--accent-gold); 
+            margin-top: 4px; 
+            font-size: 16px; 
+            flex-shrink: 0; 
+        }
+        /* Collapse to a single column on smaller screens */
+        @media (max-width: 768px) {
+            .features-list-2col { column-count: 1; }
+        }
         
         .detail-actions { display:flex; gap:12px; }
 
@@ -193,7 +212,6 @@
             .cart-panel { border-radius: 0; border: none; box-shadow: -8px 0 24px rgba(0,0,0,0.15); max-height: 100vh; }
             .cart-header-close { display: block; }
             
-            /* Responsive adjustments for new layout */
             .detail-grid { grid-template-columns:1fr; padding:20px; gap: 24px; }
             .detail-media { position: relative; top: 0; }
         }
@@ -754,12 +772,12 @@
             }
 
             // =================================================================
-            // CRITICAL FIX: FULL-WIDTH FEATURES GRID (Eliminates empty space)
+            // NEW: FULL-WIDTH FEATURES PARAGRAPH-STYLE COLUMN LAYOUT
             // =================================================================
             const featuresHTML = features.length ? `
                 <div style="grid-column: 1 / -1; margin-top: 20px; padding-top: 35px; border-top: 1px solid var(--medium-gray);">
                     <h3 style="font-size: 18px; color: var(--dark-navy); margin-bottom: 24px;"><i class="fas fa-star" style="color:var(--accent-gold); margin-right:10px;"></i>Highlights & Features</h3>
-                    <ul class="features-grid">
+                    <ul class="features-list-2col">
                         ${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}
                     </ul>
                 </div>
