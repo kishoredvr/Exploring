@@ -104,24 +104,8 @@
         .detail-price { font-size:30px; font-weight:700; color:var(--primary-blue); margin-bottom:0; display:flex; align-items:baseline; gap:8px; }
         .detail-overview { background:var(--light-gray); padding:18px; border-radius:8px; border:1px solid var(--medium-gray); margin-bottom:22px; font-size:14px; color:var(--text-dark); line-height:1.7; }
         
-        /* Features 2-column Paragraph Layout */
-        .features-list-2col { 
-            list-style: none; 
-            column-count: 2; 
-            column-gap: 40px; 
-            margin-bottom: 10px; 
-        }
-        .features-list-2col li { 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 12px; 
-            font-size: 15px; 
-            color: var(--text-dark); 
-            line-height: 1.6; 
-            margin-bottom: 18px; 
-            break-inside: avoid; 
-            page-break-inside: avoid;
-        }
+        .features-list-2col { list-style: none; column-count: 2; column-gap: 40px; margin-bottom: 10px; }
+        .features-list-2col li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--text-dark); line-height: 1.6; margin-bottom: 18px; break-inside: avoid; page-break-inside: avoid; }
         .features-list-2col i { color: var(--accent-gold); margin-top: 4px; font-size: 16px; flex-shrink: 0; }
         @media (max-width: 768px) { .features-list-2col { column-count: 1; } }
         
@@ -202,7 +186,6 @@
             .cart-panel { border-radius: 0; border: none; box-shadow: -8px 0 24px rgba(0,0,0,0.15); max-height: 100vh; }
             .cart-header-close { display: block; }
             
-            /* Responsive adjustments for new layout */
             .detail-grid { grid-template-columns:1fr; padding:20px; gap: 24px; }
             .detail-media { position: relative; top: 0; }
         }
@@ -707,16 +690,18 @@
             }
 
             // ==========================================================
-            // EXTRACT HEADER HTML FOR FULL-WIDTH TOP PLACEMENT
+            // FLEXBOX INLINE HEADER FIX (Badge + Title + Price on ONE LINE)
             // ==========================================================
             let detailHeaderHTML = '';
             let detailRightColumnHTML = '';
 
             if (prod.isCustomApp) {
                 detailHeaderHTML = `
-                    <span class="detail-badge">${prod.category || 'Service'}</span>
-                    <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
-                    <div class="detail-price" style="margin-bottom:0;">Custom Quote <span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel || 'Tailored to your needs'}</span></div>
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 15px; width: 100%;">
+                        <span class="detail-badge" style="margin-bottom:0;">${prod.category || 'Service'}</span>
+                        <h2 class="detail-title" style="margin-bottom:0;">${prod.title || 'Untitled'}</h2>
+                        <div class="detail-price" style="margin-bottom:0; margin-left: auto;">Custom Quote <span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel || 'Tailored to your needs'}</span></div>
+                    </div>
                 `;
                 detailRightColumnHTML = `
                     <div class="detail-overview">
@@ -755,9 +740,11 @@
                     : `<button class="btn-submit" disabled style="background:var(--medium-gray); color:var(--text-light); cursor:not-allowed;">Not Yet Available</button>`;
 
                 detailHeaderHTML = `
-                    <span class="detail-badge">${prod.category || 'Product'}</span>
-                    <h2 class="detail-title">${prod.title || 'Untitled'}</h2>
-                    <div class="detail-price" style="margin-bottom:0;">${isLive ? `₹${price.toLocaleString('en-IN')}` : 'TBA'} ${isLive && prod.priceLabel ? `<span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel}</span>` : ''}</div>
+                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 15px; width: 100%;">
+                        <span class="detail-badge" style="margin-bottom:0;">${prod.category || 'Product'}</span>
+                        <h2 class="detail-title" style="margin-bottom:0;">${prod.title || 'Untitled'}</h2>
+                        <div class="detail-price" style="margin-bottom:0; margin-left: auto;">${isLive ? `₹${price.toLocaleString('en-IN')}` : 'TBA'} ${isLive && prod.priceLabel ? `<span style="font-size:14px;font-weight:500;color:var(--text-light);">${prod.priceLabel}</span>` : ''}</div>
+                    </div>
                 `;
 
                 detailRightColumnHTML = `
@@ -780,7 +767,6 @@
                 </div>
             ` : '';
 
-            // Construct the final HTML with the full-width header placed first inside the grid
             const detailHTML = `
                 <div class="detail-view-container">
                     <button class="btn-back" onclick="window.location.hash=''">
