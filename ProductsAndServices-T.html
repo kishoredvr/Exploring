@@ -128,7 +128,6 @@
         .cart-count-badge { background: var(--accent-gold); color: var(--dark-navy); font-size: 12px; font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .cart-empty { padding: 32px 20px; text-align: center; color: var(--text-light); }
         .cart-empty i { font-size: 2.2rem; color: #cbd5e0; display: block; margin-bottom: 10px; }
-
         .cart-items { padding: 0; display: block; }
         .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--medium-gray); }
         .cart-item-icon { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, var(--dark-navy), var(--primary-blue)); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--accent-gold); flex-shrink: 0; }
@@ -315,7 +314,8 @@
         <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
         <div class="lightbox-img-container">
             <button class="lightbox-btn lightbox-prev" id="lbPrev" onclick="lbPrev()"><i class="fas fa-chevron-left"></i></button>
-            <img src="" class="lightbox-img" id="lbImage" alt="Full screen preview">
+            <!-- FIX: Added lazy loading to the lightbox just in case -->
+            <img src="" class="lightbox-img" id="lbImage" alt="Full screen preview" loading="lazy">
             <button class="lightbox-btn lightbox-next" id="lbNext" onclick="lbNext()"><i class="fas fa-chevron-right"></i></button>
         </div>
         <div class="lightbox-counter" id="lbCounter"></div>
@@ -334,13 +334,19 @@
         let lbImages = [];
         let lbIndex = 0;
 
+        // ==========================================================
+        // DYNAMIC IMAGE SIZER FUNCTION
+        // Tells the CDN to shrink the image to prevent crashes
+        // ==========================================================
         function getSizedImageUrl(url, width) {
             if (!url) return '';
             if (url.includes('wsrv.nl')) {
-                return url + `&w=${width}`;
+                // Adds exact width constraints. fit=contain stops it from getting stretched.
+                return url + `&w=${width}&fit=contain`;
             }
             return url;
         }
+        // ==========================================================
 
         function openLightbox(encodedImagesStr, index) {
             lbImages = decodeURIComponent(encodedImagesStr).split(',');
@@ -357,7 +363,9 @@
 
         function updateLightbox() {
             if (!lbImages.length) return;
-            document.getElementById('lbImage').src = lbImages[lbIndex];
+            // FIX: Even in full screen, we constrain to a max of 1600px width.
+            // This stops 4K (3000px+) images from causing massive memory lag.
+            document.getElementById('lbImage').src = getSizedImageUrl(lbImages[lbIndex], 1600);
             document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
             document.getElementById('lbPrev').style.display = lbImages.length > 1 ? 'flex' : 'none';
             document.getElementById('lbNext').style.display = lbImages.length > 1 ? 'flex' : 'none';
@@ -495,18 +503,12 @@
                     return row.split(regex).map(item => item.replace(/^"|"$/g, '').trim());
                 }).filter(row => row.length > 1);
 
-                // ==========================================================
-                // CRITICAL FIX 1: BULLETPROOF ID PARSING & SANITIZATION
-                // ==========================================================
-                // We force all headers to lowercase and trim them, so even if you
-                // accidentally type "ID ", "Id", or "Product ID" in excel, it works.
                 const rawHeaders = rows.shift();
                 
                 const products = rows.map((row, index) => {
                     let obj = {};
                     rawHeaders.forEach((h, i) => { 
                         if (h) {
-                            // Convert standard property names back to their camelCase equivalents
                             let headerKey = h.trim();
                             if (headerKey.toLowerCase() === 'id') headerKey = 'id';
                             else if (headerKey.toLowerCase() === 'islive') headerKey = 'isLive';
@@ -517,16 +519,11 @@
                         }
                     });
                     
-                    // Fallback: If 'id' is completely missing from the CSV headers, 
-                    // use the title, or the row index.
                     let rawId = obj.id || obj.ID || obj.title || `prod-${index}`;
-                    
-                    // Convert raw ID to a perfect, URL-safe slug (e.g. "medicines-billing-app")
                     obj.id = String(rawId).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
                     
                     return obj;
                 });
-                // ==========================================================
 
                 const customAppObj = {
                     id: 'custom-app',
@@ -599,10 +596,12 @@
                 const mainImg = images[0] || '';
                 const inCart = !!cart[prod.id];
 
+                // FIX: Force grid thumbnails to 400px wide maximum
                 const thumbImg = getSizedImageUrl(mainImg, 400);
 
                 const mediaHTML = mainImg
-                    ? `<img src="${thumbImg}" alt="${prod.title||'Product'}">`
+                    // FIX: loading="lazy" is added so images below the fold don't download until you scroll
+                    ? `<img src="${thumbImg}" alt="${prod.title||'Product'}" loading="lazy">`
                     : `<div class="placeholder-fill"><i class="fas ${prod.placeholderIcon || 'fa-image'}"></i><span>${prod.placeholderText || 'Coming Soon'}</span></div>`;
 
                 const badgeHTML = isLive ? '' : `<span class="stock-badge soon">Coming Soon</span>`;
@@ -642,16 +641,10 @@
             });
         }
 
-        // ==========================================================
-        // CRITICAL FIX 2: BULLETPROOF HASH ROUTING
-        // ==========================================================
         function handleHashRouting() {
             const rawHash = decodeURIComponent(window.location.hash);
             
             if (rawHash.startsWith('#product-') && allProductsData.length) {
-                // We apply the exact same slugification rule here as we did in loadProductsFromCSV.
-                // Even if the URL is messy (e.g. #product-Medicines%20Billing%20App), 
-                // it is immediately normalized to "medicines-billing-app" to guarantee a 100% match.
                 const targetId = rawHash.replace('#product-', '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
                 renderDetailView(targetId);
             } else {
@@ -662,11 +655,8 @@
             }
         }
         window.addEventListener('hashchange', handleHashRouting);
-        // ==========================================================
 
         function renderDetailView(id) {
-            // Because both the CSV-loader and Hash-router use the identical replace(/[^a-z0-9]+/g, '-') rule, 
-            // this find() method will now securely match every single time.
             const prod = allProductsData.find(p => String(p.id) === String(id));
             if (!prod) { window.location.hash = ''; return; }
 
@@ -680,8 +670,11 @@
                 const safeImagesStr = encodeURIComponent(images.join(','));
                 
                 const slidesHTML = images.map((src, idx) => {
+                    // FIX: Request an 800px wide image for the Carousel view
                     const displayImg = getSizedImageUrl(src, 800);
-                    return `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${displayImg}" alt="${prod.title||'Product'} screenshot"></div></div>`;
+                    // FIX: The first image loads immediately. Images 2, 3, 4 are lazy loaded.
+                    const lazyAttr = idx === 0 ? '' : 'loading="lazy"';
+                    return `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${displayImg}" alt="${prod.title||'Product'} screenshot" ${lazyAttr}></div></div>`;
                 }).join('');
 
                 const dotsHTML = images.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="goToSlide('detail-${prod.id}',${idx})"></div>`).join('');
@@ -793,7 +786,7 @@
         function goToSlide(id, idx) { slideIndex[id] = idx; updateSlideTransform(id); }
 
         function toggleCartState(id) {
-            const prod = allProductsData.find(p => p.id === id);
+            const prod = allProductsData.find(p => String(p.id) === String(id));
             if (!prod) return;
             if (cart[id]) {
                 delete cart[id];
@@ -870,9 +863,8 @@
             document.getElementById('cartGrand').textContent = '₹' + grand.toLocaleString('en-IN');
 
             renderDynamicProducts(filteredProducts);
-            // Refresh detailed view button text safely
             if (window.location.hash.startsWith('#product-')) {
-                const targetId = window.location.hash.replace('#product-', '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                const targetId = decodeURIComponent(window.location.hash).replace('#product-', '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
                 renderDetailView(targetId);
             }
         }
