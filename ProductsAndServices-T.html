@@ -318,7 +318,6 @@
                     <div class="results-toolbar">
                         <div class="results-count"><strong id="resultsCount">0</strong> products found</div>
                         <div style="display:flex; align-items:center; gap:18px;">
-                            <!-- FIX: "checked" is added here so Out-Of-Stock items are hidden by default -->
                             <label class="filter-option"><input type="checkbox" id="filterLiveOnly" checked onchange="applyFilters()"> In stock only</label>
                             <select class="sort-select" id="sortSelect" onchange="applyFilters()">
                                 <option value="default">Sort: Featured</option>
@@ -430,6 +429,20 @@
         let lbImages = [];
         let lbIndex = 0;
 
+        // ==========================================================
+        // DYNAMIC IMAGE SIZER FUNCTION
+        // Converts edge-function base URLs into smaller requested sizes
+        // ==========================================================
+        function getSizedImageUrl(url, width) {
+            if (!url) return '';
+            // Only add width parameters to our image proxy links
+            if (url.includes('wsrv.nl')) {
+                return url + `&w=${width}`;
+            }
+            return url;
+        }
+        // ==========================================================
+
         function openLightbox(encodedImagesStr, index) {
             lbImages = decodeURIComponent(encodedImagesStr).split(',');
             lbIndex = index;
@@ -445,6 +458,7 @@
 
         function updateLightbox() {
             if (!lbImages.length) return;
+            // The Lightbox loads the full-resolution image (no width constraint)
             document.getElementById('lbImage').src = lbImages[lbIndex];
             document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
             
@@ -486,13 +500,11 @@
                 const parser = new DOMParser();
                 const masterDoc = parser.parseFromString(text, 'text/html');
 
-                // 1. Extract and Inject Styles from Master Head
                 const masterStyles = masterDoc.querySelectorAll('head style');
                 masterStyles.forEach(style => {
                     document.head.appendChild(style.cloneNode(true));
                 });
 
-                // Helper function to re-inject scripts so the browser executes them
                 const executeInjectedScripts = (container) => {
                     const scripts = container.querySelectorAll('script');
                     scripts.forEach(oldScript => {
@@ -503,7 +515,6 @@
                     });
                 };
 
-                // 2. Inject Header HTML
                 const headerContent = masterDoc.getElementById('site-header-source');
                 const headerPlaceholder = document.getElementById('header-placeholder');
                 if (headerContent && headerPlaceholder) {
@@ -511,7 +522,6 @@
                     executeInjectedScripts(headerPlaceholder);
                 }
 
-                // 3. Inject Footer HTML
                 const footerContent = masterDoc.getElementById('site-footer-source');
                 const footerPlaceholder = document.getElementById('footer-placeholder');
                 if (footerContent && footerPlaceholder) {
@@ -519,7 +529,6 @@
                     executeInjectedScripts(footerPlaceholder);
                 }
 
-                // Initialize events after injection
                 initMenuLogic();
             } catch (err) {
                 console.error("Fetch Error:", err);
@@ -558,7 +567,6 @@
                 });
             });
 
-            // Re-apply the mobile link click close logic
             document.querySelectorAll('nav a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     if (window.innerWidth <= 992 && !this.classList.contains('dropdown-toggle')) {
@@ -593,24 +601,17 @@
 
                 const headers = rows.shift();
                 
-                // ==========================================================
-                // CRITICAL FIX 1: SANITIZE IDs SO SPACES DON'T BREAK URLS
-                // ==========================================================
                 const products = rows.map(row => {
                     let obj = {};
                     headers.forEach((h, i) => { obj[h] = row[i] || ''; });
                     
                     if (obj.id) {
-                        // This changes "Medicines Billing App" to "medicines-billing-app"
-                        // Preventing all layout & URL loading errors caused by spaces!
+                        // Sanitizes ID to prevent space-related routing bugs
                         obj.id = obj.id.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
                     }
-                    
                     return obj;
                 });
-                // ==========================================================
 
-                // Top Priority custom app injected here
                 const customAppObj = {
                     id: 'custom-app',
                     title: 'Custom Application Development',
@@ -654,13 +655,13 @@
             });
 
             list.sort((a, b) => {
-                if (a.isCustomApp) return -1; // Ensure custom app stays top priority
+                if (a.isCustomApp) return -1;
                 if (b.isCustomApp) return 1;
 
                 if (sort === 'price-asc') return (parseFloat(a.price)||0) - (parseFloat(b.price)||0);
                 if (sort === 'price-desc') return (parseFloat(b.price)||0) - (parseFloat(a.price)||0);
                 if (sort === 'name-asc') return (a.title||'').localeCompare(b.title||'');
-                return 0; // default order
+                return 0;
             });
 
             filteredProducts = list;
@@ -682,8 +683,11 @@
                 const mainImg = images[0] || '';
                 const inCart = !!cart[prod.id];
 
+                // FIX: Request a compressed 400px wide image for the Grid Thumbnail
+                const thumbImg = getSizedImageUrl(mainImg, 400);
+
                 const mediaHTML = mainImg
-                    ? `<img src="${mainImg}" alt="${prod.title||'Product'}">`
+                    ? `<img src="${thumbImg}" alt="${prod.title||'Product'}">`
                     : `<div class="placeholder-fill"><i class="fas ${prod.placeholderIcon || 'fa-image'}"></i><span>${prod.placeholderText || 'Coming Soon'}</span></div>`;
 
                 const badgeHTML = isLive ? '' : `<span class="stock-badge soon">Coming Soon</span>`;
@@ -723,15 +727,8 @@
             });
         }
 
-        window.addEventListener('hashchange', handleHashRouting);
-        
-        // ==========================================================
-        // CRITICAL FIX 2: DECODE URI COMPONENT ON URL ROUTING
-        // ==========================================================
         function handleHashRouting() {
-            // Decodes URL just in case, ensuring browser compatibility
             const hash = decodeURIComponent(window.location.hash);
-            
             if (hash.startsWith('#product-') && allProductsData.length) {
                 renderDetailView(hash.replace('#product-', '').trim());
             } else {
@@ -741,7 +738,6 @@
                 document.getElementById('productsListView').style.display = '';
             }
         }
-        // ==========================================================
 
         function renderDetailView(id) {
             const prod = allProductsData.find(p => p.id === id);
@@ -756,7 +752,12 @@
             if (isLive && images.length > 0) {
                 const safeImagesStr = encodeURIComponent(images.join(','));
                 
-                const slidesHTML = images.map((src, idx) => `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${src}" alt="${prod.title||'Product'} screenshot"></div></div>`).join('');
+                // FIX: Request an 800px wide image for the Carousel view (leaving safeImagesStr full-size for Lightbox)
+                const slidesHTML = images.map((src, idx) => {
+                    const displayImg = getSizedImageUrl(src, 800);
+                    return `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${displayImg}" alt="${prod.title||'Product'} screenshot"></div></div>`;
+                }).join('');
+
                 const dotsHTML = images.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="goToSlide('detail-${prod.id}',${idx})"></div>`).join('');
                 mediaHTML = `
                     <div style="position:relative;">
