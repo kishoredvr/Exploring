@@ -84,10 +84,16 @@
         .breadcrumb a { color:var(--primary-blue); text-decoration:none; font-weight:600; cursor:pointer; }
         .breadcrumb a:hover { text-decoration:underline; }
         
-        /* Layout Improvements for Detailed View */
+        /* 
+           ===========================================================
+           PRESENTATION FIX: STICKY IMAGE & FULL-WIDTH FEATURE CARDS
+           =========================================================== 
+        */
         .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; background:white; border-radius:12px; border:1px solid var(--medium-gray); padding:40px; box-shadow:0 8px 24px rgba(0,0,0,.06); max-width:1400px; margin:0 auto; align-items:start; }
-        .detail-media { position:relative; }
-        /* PRESENTATION FIX: Adjusted aspect ratio and max-height for software screenshots */
+        
+        /* The image will now stay visible on screen if the user scrolls down */
+        .detail-media { position:sticky; top:120px; align-self:start; }
+        
         .detail-carousel-slide { aspect-ratio:4/3; max-height:500px; background:#eef2f6; display:flex; align-items:center; justify-content:center; border-radius:8px; overflow:hidden; }
         .detail-carousel-slide img { width:100%; height:100%; object-fit:contain; }
         .carousel-slides { display:flex; transition:transform .4s ease-in-out; }
@@ -98,13 +104,18 @@
         .carousel-dots { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:12px; }
         .dot { width:8px; height:8px; background:#cbd5e0; border-radius:50%; cursor:pointer; transition:.2s; }
         .dot.active { background:var(--accent-gold); width:20px; border-radius:12px; }
+        
         .detail-badge { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:20px; background:var(--accent-gold); color:var(--dark-navy); margin-bottom:12px; }
         .detail-title { font-size:26px; color:var(--dark-navy); line-height:1.25; margin-bottom:12px; }
         .detail-price { font-size:30px; font-weight:700; color:var(--primary-blue); margin-bottom:20px; display:flex; align-items:baseline; gap:8px; }
         .detail-overview { background:var(--light-gray); padding:18px; border-radius:8px; border:1px solid var(--medium-gray); margin-bottom:22px; font-size:14px; color:var(--text-dark); line-height:1.7; }
-        .detail-features-list { list-style:none; margin-bottom:26px; }
-        .detail-features-list li { margin-bottom:12px; display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:var(--text-dark); line-height:1.5; }
-        .detail-features-list i { color:var(--accent-gold); margin-top:4px; font-size:16px; }
+        
+        /* New premium styling for features so they look like elegant cards spanning full width */
+        .features-grid { list-style:none; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 10px; }
+        .features-grid li { display:flex; align-items:flex-start; gap:12px; font-size:14.5px; color:var(--text-dark); line-height:1.5; background: var(--light-gray); padding: 18px 20px; border-radius: 8px; border: 1px solid var(--medium-gray); transition: transform 0.2s, box-shadow 0.2s; }
+        .features-grid li:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); background: white; border-color: var(--accent-gold); }
+        .features-grid i { color:var(--accent-gold); margin-top:3px; font-size:18px; }
+        
         .detail-actions { display:flex; gap:12px; }
 
         .enquiry-card { background: white; border-radius: 8px; border: 1.5px solid var(--accent-gold); overflow: hidden; margin-top: 24px; }
@@ -181,7 +192,10 @@
             .cart-sidebar.open { transform: translateX(0); }
             .cart-panel { border-radius: 0; border: none; box-shadow: -8px 0 24px rgba(0,0,0,0.15); max-height: 100vh; }
             .cart-header-close { display: block; }
-            .detail-grid { grid-template-columns:1fr; padding:20px; }
+            
+            /* Responsive adjustments for new layout */
+            .detail-grid { grid-template-columns:1fr; padding:20px; gap: 24px; }
+            .detail-media { position: relative; top: 0; }
         }
 
         #imageLightbox { position:fixed; inset:0; background:rgba(15,26,60,0.95); z-index:10000; display:none; align-items:center; justify-content:center; flex-direction:column; backdrop-filter:blur(5px); }
@@ -654,7 +668,6 @@
 
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
             const price = parseFloat(prod.price) || 0;
-            // FIX: Split safely by | or \n, never by comma, protecting your sentences!
             const features = prod.features ? prod.features.split(/[|\n]/).map(s => s.trim()).filter(Boolean) : [];
             const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
@@ -668,7 +681,6 @@
                     return `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${displayImg}" alt="${prod.title||'Product'} screenshot" ${lazyAttr}></div></div>`;
                 }).join('');
 
-                // FIX: Hide dots if there are too many screenshots
                 let dotsHTML = '';
                 if (images.length > 1 && images.length <= 15) {
                     dotsHTML = images.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="goToSlide('detail-${prod.id}',${idx})"></div>`).join('');
@@ -696,8 +708,7 @@
                         <strong style="display:block;margin-bottom:6px;color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue);margin-right:6px;"></i>Product Overview</strong>
                         ${prod.shortDesc}
                     </div>
-                    ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
-
+                    
                     <div class="enquiry-card">
                         <div class="enquiry-header">
                             <i class="fas fa-paper-plane" style="font-size:18px; width:36px; height:36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); color: var(--accent-gold);"></i>
@@ -736,12 +747,23 @@
                         <strong style="display:block;margin-bottom:6px;color:var(--dark-navy);"><i class="fas fa-info-circle" style="color:var(--primary-blue);margin-right:6px;"></i>Product Overview</strong>
                         ${prod.shortDesc || 'Detailed description coming soon.'}
                     </div>
-                    ${features.length ? `<ul class="detail-features-list">${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}</ul>` : ''}
                     <div class="detail-actions">
                         ${cartBtnHTML}
                     </div>
                 `;
             }
+
+            // =================================================================
+            // CRITICAL FIX: FULL-WIDTH FEATURES GRID (Eliminates empty space)
+            // =================================================================
+            const featuresHTML = features.length ? `
+                <div style="grid-column: 1 / -1; margin-top: 20px; padding-top: 35px; border-top: 1px solid var(--medium-gray);">
+                    <h3 style="font-size: 18px; color: var(--dark-navy); margin-bottom: 24px;"><i class="fas fa-star" style="color:var(--accent-gold); margin-right:10px;"></i>Highlights & Features</h3>
+                    <ul class="features-grid">
+                        ${features.map(f => `<li><i class="fas fa-check-circle"></i><span>${f}</span></li>`).join('')}
+                    </ul>
+                </div>
+            ` : '';
 
             const detailHTML = `
                 <div class="detail-view-container">
@@ -754,6 +776,7 @@
                         <div>
                             ${detailRightColumnHTML}
                         </div>
+                        ${featuresHTML}
                     </div>
                 </div>`;
 
