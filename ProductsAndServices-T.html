@@ -15,27 +15,16 @@
         body { background:var(--light-gray); color:var(--text-dark); line-height:1.6; min-height:100vh; scroll-padding-top:140px; }
         a { color:inherit; text-decoration: none; }
 
-        /* ====================================================================
-           CRITICAL LAYOUT FIX: OVERRIDING MASTER TEMPLATE CONSTRAINTS
-           Forces the shop grid to use optimal screen width up to 1920px.
-           ==================================================================== */
         .shop-toolbar .container, 
-        .shop-body .container { 
-            max-width: 1920px !important; 
-            padding: 0 4% !important; 
-            width: 100% !important; 
-        }
-
+        .shop-body .container { max-width: 1920px !important; padding: 0 4% !important; width: 100% !important; }
         *:focus-visible { outline:2px solid var(--accent-gold); outline-offset:2px; }
         @media (prefers-reduced-motion:reduce){ *{ animation-duration:.001ms!important; transition-duration:.001ms!important; } }
 
         #header-placeholder { min-height: 100px; }
         #footer-placeholder { min-height: 300px; }
 
-        /* Shop Elements */
         .shop-toolbar { background:var(--primary-blue); z-index:900; box-shadow:0 3px 8px rgba(0,0,0,.08); position:relative; }
         .shop-toolbar-inner { display:flex; align-items:center; gap:16px; padding:12px 0; }
-        /* Expanded search box to fit wider layout gracefully */
         .search-box { flex:1; display:flex; align-items:center; background:white; border-radius:6px; overflow:hidden; max-width:800px; }
         .search-box i { padding:0 12px; color:var(--text-light); }
         .search-box input { flex:1; border:none; outline:none; padding:11px 8px 11px 0; font-size:14px; }
@@ -49,8 +38,6 @@
         .shop-hero p { font-size:14px; color:rgba(255,255,255,.78); }
 
         .shop-body { padding:26px 0 60px; }
-        
-        /* Adjusted grid layout to make use of wider screens */
         .shop-layout { display:grid; grid-template-columns:1fr 380px; gap:40px; align-items:start; }
 
         .results-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
@@ -60,11 +47,10 @@
         .filter-option input { accent-color:var(--accent-gold); width:15px; height:15px; }
         .sort-select { padding:9px 14px; border:1.5px solid var(--medium-gray); border-radius:6px; font-size:13px; background:white; color:var(--text-dark); cursor:pointer; }
 
-        /* Widen the minimum product card size slightly for larger monitors */
         .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; }
         .product-card { background:white; border-radius:8px; border:1px solid var(--medium-gray); overflow:hidden; transition:transform .25s,box-shadow .25s; display:flex; flex-direction:column; position:relative; }
         .product-card:hover { transform:translateY(-4px); box-shadow:0 12px 24px rgba(0,0,0,.10); }
-        .card-media { position:relative; aspect-ratio:3/4; background:#eef2f6; overflow:hidden; cursor:pointer; }
+        .card-media { position:relative; aspect-ratio:4/3; background:#eef2f6; overflow:hidden; cursor:pointer; }
         .card-media img { width:100%; height:100%; object-fit:contain; display:block; transition:transform .4s; }
         .product-card:hover .card-media img { transform:scale(1.05); }
         .card-media .placeholder-fill { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:linear-gradient(145deg,#e2e8f0,#cbd5e1); color:var(--text-light); font-size:13px; }
@@ -98,26 +84,27 @@
         .breadcrumb a { color:var(--primary-blue); text-decoration:none; font-weight:600; cursor:pointer; }
         .breadcrumb a:hover { text-decoration:underline; }
         
-        /* Capped detail view max-width so it doesn't stretch awkwardly on ultra-wides */
-        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; background:white; border-radius:12px; border:1px solid var(--medium-gray); padding:40px; box-shadow:0 8px 24px rgba(0,0,0,.06); max-width:1400px; margin:0 auto; }
+        /* Layout Improvements for Detailed View */
+        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; background:white; border-radius:12px; border:1px solid var(--medium-gray); padding:40px; box-shadow:0 8px 24px rgba(0,0,0,.06); max-width:1400px; margin:0 auto; align-items:start; }
         .detail-media { position:relative; }
-        .detail-carousel-slide { aspect-ratio:1/1; background:#eef2f6; display:flex; align-items:center; justify-content:center; border-radius:8px; overflow:hidden; }
+        /* PRESENTATION FIX: Adjusted aspect ratio and max-height for software screenshots */
+        .detail-carousel-slide { aspect-ratio:4/3; max-height:500px; background:#eef2f6; display:flex; align-items:center; justify-content:center; border-radius:8px; overflow:hidden; }
         .detail-carousel-slide img { width:100%; height:100%; object-fit:contain; }
         .carousel-slides { display:flex; transition:transform .4s ease-in-out; }
         .carousel-slide-item { flex:0 0 100%; }
         .carousel-btn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.55); color:white; border:none; width:34px; height:34px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; z-index:2; }
         .carousel-btn:hover { background:var(--accent-gold); color:var(--dark-navy); }
         .carousel-prev { left:10px; } .carousel-next { right:10px; }
-        .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:12px; }
+        .carousel-dots { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:12px; }
         .dot { width:8px; height:8px; background:#cbd5e0; border-radius:50%; cursor:pointer; transition:.2s; }
         .dot.active { background:var(--accent-gold); width:20px; border-radius:12px; }
         .detail-badge { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:20px; background:var(--accent-gold); color:var(--dark-navy); margin-bottom:12px; }
         .detail-title { font-size:26px; color:var(--dark-navy); line-height:1.25; margin-bottom:12px; }
         .detail-price { font-size:30px; font-weight:700; color:var(--primary-blue); margin-bottom:20px; display:flex; align-items:baseline; gap:8px; }
-        .detail-overview { background:var(--light-gray); padding:18px; border-radius:8px; border:1px solid var(--medium-gray); margin-bottom:22px; font-size:14px; color:var(--text-dark); }
+        .detail-overview { background:var(--light-gray); padding:18px; border-radius:8px; border:1px solid var(--medium-gray); margin-bottom:22px; font-size:14px; color:var(--text-dark); line-height:1.7; }
         .detail-features-list { list-style:none; margin-bottom:26px; }
-        .detail-features-list li { margin-bottom:10px; display:flex; align-items:flex-start; gap:9px; font-size:14px; color:var(--text-dark); }
-        .detail-features-list i { color:var(--accent-gold); margin-top:2px; }
+        .detail-features-list li { margin-bottom:12px; display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:var(--text-dark); line-height:1.5; }
+        .detail-features-list i { color:var(--accent-gold); margin-top:4px; font-size:16px; }
         .detail-actions { display:flex; gap:12px; }
 
         .enquiry-card { background: white; border-radius: 8px; border: 1.5px solid var(--accent-gold); overflow: hidden; margin-top: 24px; }
@@ -132,7 +119,7 @@
         .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); outline: none; }
         .form-full { grid-column: 1 / -1; }
         .form-success { display: none; text-align: center; padding: 24px; background: #f0fdf4; color: #166534; font-size: 14px; }
-        .btn-submit { width:100%; justify-content:center; background: var(--primary-blue); color: white; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: .2s; }
+        .btn-submit { width:100%; justify-content:center; background: var(--primary-blue); color: white; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: .2s; font-size: 15px; }
         .btn-submit:hover { background: var(--dark-navy); }
 
         .cart-sidebar { position: sticky; top: 20px; }
@@ -667,7 +654,8 @@
 
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
             const price = parseFloat(prod.price) || 0;
-            const features = prod.features ? prod.features.split(/[|\n,]/).map(s => s.trim()).filter(Boolean) : [];
+            // FIX: Split safely by | or \n, never by comma, protecting your sentences!
+            const features = prod.features ? prod.features.split(/[|\n]/).map(s => s.trim()).filter(Boolean) : [];
             const images = prod.images ? prod.images.split('|').map(s => s.trim()).filter(Boolean) : [];
 
             let mediaHTML = '';
@@ -680,13 +668,19 @@
                     return `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${displayImg}" alt="${prod.title||'Product'} screenshot" ${lazyAttr}></div></div>`;
                 }).join('');
 
-                const dotsHTML = images.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="goToSlide('detail-${prod.id}',${idx})"></div>`).join('');
+                // FIX: Hide dots if there are too many screenshots
+                let dotsHTML = '';
+                if (images.length > 1 && images.length <= 15) {
+                    dotsHTML = images.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="goToSlide('detail-${prod.id}',${idx})"></div>`).join('');
+                    dotsHTML = `<div class="carousel-dots" id="dots-detail-${prod.id}">${dotsHTML}</div>`;
+                }
+                
                 mediaHTML = `
                     <div style="position:relative;">
                         <div style="overflow:hidden;"><div class="carousel-slides" id="slides-detail-${prod.id}">${slidesHTML}</div></div>
                         ${images.length > 1 ? `<button class="carousel-btn carousel-prev" onclick="slidePrev('detail-${prod.id}')"><i class="fas fa-chevron-left"></i></button><button class="carousel-btn carousel-next" onclick="slideNext('detail-${prod.id}')"><i class="fas fa-chevron-right"></i></button>` : ''}
                     </div>
-                    ${images.length > 1 ? `<div class="carousel-dots" id="dots-detail-${prod.id}">${dotsHTML}</div>` : ''}`;
+                    ${dotsHTML}`;
             } else {
                 mediaHTML = `<div class="detail-carousel-slide"><div class="placeholder-fill" style="aspect-ratio:auto;height:100%;"><i class="fas ${prod.placeholderIcon || 'fa-image'}" style="font-size:56px;"></i><span>${prod.placeholderText || 'Coming Soon'}</span></div></div>`;
             }
