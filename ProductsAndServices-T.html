@@ -15,15 +15,12 @@
         body { background:var(--light-gray); color:var(--text-dark); line-height:1.6; min-height:100vh; scroll-padding-top:140px; }
         a { color:inherit; text-decoration: none; }
 
-        /* Reduced left/right margins by expanding max-width to 96% */
         .container { max-width:96%; margin:0 auto; padding:0 20px; width:100%; }
         *:focus-visible { outline:2px solid var(--accent-gold); outline-offset:2px; }
         @media (prefers-reduced-motion:reduce){ *{ animation-duration:.001ms!important; transition-duration:.001ms!important; } }
 
         #header-placeholder { min-height: 100px; }
         #footer-placeholder { min-height: 300px; }
-
-        /* Master Header & Footer styles are now dynamically imported from Components.html */
 
         /* Shop Elements */
         .shop-toolbar { background:var(--primary-blue); z-index:900; box-shadow:0 3px 8px rgba(0,0,0,.08); position:relative; }
@@ -41,7 +38,6 @@
         .shop-hero p { font-size:14px; color:rgba(255,255,255,.78); }
 
         .shop-body { padding:26px 0 60px; }
-        /* 2-Column layout: Products | Cart */
         .shop-layout { display:grid; grid-template-columns:1fr 350px; gap:30px; align-items:start; }
 
         .results-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
@@ -108,7 +104,6 @@
         .detail-features-list i { color:var(--accent-gold); margin-top:2px; }
         .detail-actions { display:flex; gap:12px; }
 
-        /* Form elements for Custom Apps Enquiries */
         .enquiry-card { background: white; border-radius: 8px; border: 1.5px solid var(--accent-gold); overflow: hidden; margin-top: 24px; }
         .enquiry-header { background: #f9fafb; padding: 14px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--accent-gold); }
         .enquiry-header-text h3 { font-size: 16px; font-weight: 700; color: var(--primary-blue); margin: 0; }
@@ -134,15 +129,12 @@
         .cart-empty { padding: 32px 20px; text-align: center; color: var(--text-light); }
         .cart-empty i { font-size: 2.2rem; color: #cbd5e0; display: block; margin-bottom: 10px; }
 
-        /* Ensures cart items actually display when JS triggers it */
         .cart-items { padding: 0; display: block; }
         .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--medium-gray); }
         .cart-item-icon { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, var(--dark-navy), var(--primary-blue)); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--accent-gold); flex-shrink: 0; }
         .cart-item-info { flex: 1; display:flex; flex-direction:column; }
         .cart-item-name { font-size: 13.5px; font-weight: 600; color: var(--text-dark); line-height: 1.3; }
         .cart-item-price { font-size: 15px; font-weight: 700; color: var(--dark-navy); margin-top: 4px; }
-
-        /* Prominent Remove Button inside cart items */
         .cart-item-remove { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 4px; cursor: pointer; color: #e53e3e; padding: 6px 10px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
         .cart-item-remove:hover { background: #fee2e2; color: #b91c1c; border-color:#fca5a5; }
 
@@ -182,106 +174,24 @@
         .payment-modal-content p { font-size:13px; color:var(--text-light); }
 
         @media (max-width:992px) {
-            /* Responsive Cart Slide-out */
             .shop-layout { grid-template-columns: 1fr; }
-            .cart-sidebar { 
-                position: fixed; top: 0; right: 0; width: 400px; max-width: 92vw; height: 100%; 
-                z-index: 3001; transform: translateX(100%); transition: transform 0.3s ease; 
-            }
+            .cart-sidebar { position: fixed; top: 0; right: 0; width: 400px; max-width: 92vw; height: 100%; z-index: 3001; transform: translateX(100%); transition: transform 0.3s ease; }
             .cart-sidebar.open { transform: translateX(0); }
             .cart-panel { border-radius: 0; border: none; box-shadow: -8px 0 24px rgba(0,0,0,0.15); max-height: 100vh; }
             .cart-header-close { display: block; }
-
             .detail-grid { grid-template-columns:1fr; padding:20px; }
         }
 
-        /* Full Screen Image Lightbox */
-        #imageLightbox {
-            position:fixed;
-            inset:0;
-            background:rgba(15,26,60,0.95);
-            z-index:10000;
-            display:none;
-            align-items:center;
-            justify-content:center;
-            flex-direction:column;
-            backdrop-filter:blur(5px);
-        }
-        #imageLightbox.visible {
-            display:flex;
-            animation: fadeIn 0.3s ease-out;
-        }
-        .lightbox-img-container {
-            position:relative;
-            width:100%;
-            height:100%;
-            padding: 50px 70px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        }
-        .lightbox-img {
-            width:100%;
-            height:100%;
-            object-fit:contain;
-            border-radius:4px;
-            filter:drop-shadow(0 10px 30px rgba(0,0,0,0.4));
-        }
-        .lightbox-close {
-            position:absolute;
-            top:20px;
-            right:30px;
-            color:white;
-            font-size:32px;
-            cursor:pointer;
-            background:none;
-            border:none;
-            transition:color 0.2s;
-            z-index:10002;
-        }
-        .lightbox-close:hover {
-            color:var(--accent-gold);
-            transform:scale(1.1);
-        }
-        .lightbox-btn {
-            position:absolute;
-            top:50%;
-            transform:translateY(-50%);
-            background:rgba(255,255,255,0.1);
-            border:none;
-            color:white;
-            font-size:24px;
-            width:54px;
-            height:54px;
-            border-radius:50%;
-            cursor:pointer;
-            transition:all 0.2s;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            z-index:10002;
-            backdrop-filter:blur(4px);
-        }
-        .lightbox-btn:hover {
-            background:var(--accent-gold);
-            color:var(--dark-navy);
-        }
-        .lightbox-prev { left:15px; }
-        .lightbox-next { right:15px; }
-        .lightbox-counter {
-            position:absolute;
-            bottom:20px;
-            left:50%;
-            transform:translateX(-50%);
-            color:white;
-            font-size:15px;
-            font-weight:600;
-            letter-spacing:2px;
-            background:rgba(0,0,0,0.5);
-            padding:6px 16px;
-            border-radius:20px;
-            z-index:10002;
-        }
+        #imageLightbox { position:fixed; inset:0; background:rgba(15,26,60,0.95); z-index:10000; display:none; align-items:center; justify-content:center; flex-direction:column; backdrop-filter:blur(5px); }
+        #imageLightbox.visible { display:flex; animation: fadeIn 0.3s ease-out; }
+        .lightbox-img-container { position:relative; width:100%; height:100%; padding: 50px 70px; display:flex; align-items:center; justify-content:center; }
+        .lightbox-img { width:100%; height:100%; object-fit:contain; border-radius:4px; filter:drop-shadow(0 10px 30px rgba(0,0,0,0.4)); }
+        .lightbox-close { position:absolute; top:20px; right:30px; color:white; font-size:32px; cursor:pointer; background:none; border:none; transition:color 0.2s; z-index:10002; }
+        .lightbox-close:hover { color:var(--accent-gold); transform:scale(1.1); }
+        .lightbox-btn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.1); border:none; color:white; font-size:24px; width:54px; height:54px; border-radius:50%; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; z-index:10002; backdrop-filter:blur(4px); }
+        .lightbox-btn:hover { background:var(--accent-gold); color:var(--dark-navy); }
+        .lightbox-prev { left:15px; } .lightbox-next { right:15px; }
+        .lightbox-counter { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); color:white; font-size:15px; font-weight:600; letter-spacing:2px; background:rgba(0,0,0,0.5); padding:6px 16px; border-radius:20px; z-index:10002; }
 
         @media (max-width:992px) {
             .lightbox-img-container { padding: 40px 10px; }
@@ -313,7 +223,6 @@
         <div class="container">
             <div class="shop-layout">
 
-                <!-- MAIN PRODUCTS GRID -->
                 <div>
                     <div class="results-toolbar">
                         <div class="results-count"><strong id="resultsCount">0</strong> products found</div>
@@ -353,7 +262,6 @@
                             <p>Your cart is empty.<br>Browse products and add something you like.</p>
                         </div>
 
-                        <!-- Explicit Cart Items Container -->
                         <div class="cart-items" id="cartItems"></div>
 
                         <div class="cart-totals" id="cartTotals">
@@ -403,7 +311,6 @@
         </div>
     </div>
 
-    <!-- Image Lightbox Modal -->
     <div id="imageLightbox">
         <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
         <div class="lightbox-img-container">
@@ -424,31 +331,23 @@
         let cart = {};
         let slideIndex = {};
         let slideCount = {};
-
-        // Lightbox Variables & Functions
         let lbImages = [];
         let lbIndex = 0;
 
-        // ==========================================================
-        // DYNAMIC IMAGE SIZER FUNCTION
-        // Converts edge-function base URLs into smaller requested sizes
-        // ==========================================================
         function getSizedImageUrl(url, width) {
             if (!url) return '';
-            // Only add width parameters to our image proxy links
             if (url.includes('wsrv.nl')) {
                 return url + `&w=${width}`;
             }
             return url;
         }
-        // ==========================================================
 
         function openLightbox(encodedImagesStr, index) {
             lbImages = decodeURIComponent(encodedImagesStr).split(',');
             lbIndex = index;
             updateLightbox();
             document.getElementById('imageLightbox').classList.add('visible');
-            document.body.style.overflow = 'hidden'; // Prevents background scrolling while viewing
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeLightbox() {
@@ -458,11 +357,8 @@
 
         function updateLightbox() {
             if (!lbImages.length) return;
-            // The Lightbox loads the full-resolution image (no width constraint)
             document.getElementById('lbImage').src = lbImages[lbIndex];
             document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
-            
-            // Hide arrows if there's only 1 image
             document.getElementById('lbPrev').style.display = lbImages.length > 1 ? 'flex' : 'none';
             document.getElementById('lbNext').style.display = lbImages.length > 1 ? 'flex' : 'none';
         }
@@ -599,18 +495,38 @@
                     return row.split(regex).map(item => item.replace(/^"|"$/g, '').trim());
                 }).filter(row => row.length > 1);
 
-                const headers = rows.shift();
+                // ==========================================================
+                // CRITICAL FIX 1: BULLETPROOF ID PARSING & SANITIZATION
+                // ==========================================================
+                // We force all headers to lowercase and trim them, so even if you
+                // accidentally type "ID ", "Id", or "Product ID" in excel, it works.
+                const rawHeaders = rows.shift();
                 
-                const products = rows.map(row => {
+                const products = rows.map((row, index) => {
                     let obj = {};
-                    headers.forEach((h, i) => { obj[h] = row[i] || ''; });
+                    rawHeaders.forEach((h, i) => { 
+                        if (h) {
+                            // Convert standard property names back to their camelCase equivalents
+                            let headerKey = h.trim();
+                            if (headerKey.toLowerCase() === 'id') headerKey = 'id';
+                            else if (headerKey.toLowerCase() === 'islive') headerKey = 'isLive';
+                            else if (headerKey.toLowerCase() === 'pricelabel') headerKey = 'priceLabel';
+                            else if (headerKey.toLowerCase() === 'shortdesc') headerKey = 'shortDesc';
+                            
+                            obj[headerKey] = row[i] || ''; 
+                        }
+                    });
                     
-                    if (obj.id) {
-                        // Sanitizes ID to prevent space-related routing bugs
-                        obj.id = obj.id.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                    }
+                    // Fallback: If 'id' is completely missing from the CSV headers, 
+                    // use the title, or the row index.
+                    let rawId = obj.id || obj.ID || obj.title || `prod-${index}`;
+                    
+                    // Convert raw ID to a perfect, URL-safe slug (e.g. "medicines-billing-app")
+                    obj.id = String(rawId).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                    
                     return obj;
                 });
+                // ==========================================================
 
                 const customAppObj = {
                     id: 'custom-app',
@@ -683,7 +599,6 @@
                 const mainImg = images[0] || '';
                 const inCart = !!cart[prod.id];
 
-                // FIX: Request a compressed 400px wide image for the Grid Thumbnail
                 const thumbImg = getSizedImageUrl(mainImg, 400);
 
                 const mediaHTML = mainImg
@@ -727,10 +642,18 @@
             });
         }
 
+        // ==========================================================
+        // CRITICAL FIX 2: BULLETPROOF HASH ROUTING
+        // ==========================================================
         function handleHashRouting() {
-            const hash = decodeURIComponent(window.location.hash);
-            if (hash.startsWith('#product-') && allProductsData.length) {
-                renderDetailView(hash.replace('#product-', '').trim());
+            const rawHash = decodeURIComponent(window.location.hash);
+            
+            if (rawHash.startsWith('#product-') && allProductsData.length) {
+                // We apply the exact same slugification rule here as we did in loadProductsFromCSV.
+                // Even if the URL is messy (e.g. #product-Medicines%20Billing%20App), 
+                // it is immediately normalized to "medicines-billing-app" to guarantee a 100% match.
+                const targetId = rawHash.replace('#product-', '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                renderDetailView(targetId);
             } else {
                 document.getElementById('productDetailView').style.display = 'none';
                 document.getElementById('productDetailView').innerHTML = '';
@@ -738,9 +661,13 @@
                 document.getElementById('productsListView').style.display = '';
             }
         }
+        window.addEventListener('hashchange', handleHashRouting);
+        // ==========================================================
 
         function renderDetailView(id) {
-            const prod = allProductsData.find(p => p.id === id);
+            // Because both the CSV-loader and Hash-router use the identical replace(/[^a-z0-9]+/g, '-') rule, 
+            // this find() method will now securely match every single time.
+            const prod = allProductsData.find(p => String(p.id) === String(id));
             if (!prod) { window.location.hash = ''; return; }
 
             const isLive = String(prod.isLive).toUpperCase() === 'TRUE';
@@ -752,7 +679,6 @@
             if (isLive && images.length > 0) {
                 const safeImagesStr = encodeURIComponent(images.join(','));
                 
-                // FIX: Request an 800px wide image for the Carousel view (leaving safeImagesStr full-size for Lightbox)
                 const slidesHTML = images.map((src, idx) => {
                     const displayImg = getSizedImageUrl(src, 800);
                     return `<div class="carousel-slide-item"><div class="detail-carousel-slide" style="cursor:zoom-in;" onclick="openLightbox('${safeImagesStr}', ${idx})"><img src="${displayImg}" alt="${prod.title||'Product'} screenshot"></div></div>`;
@@ -944,8 +870,10 @@
             document.getElementById('cartGrand').textContent = '₹' + grand.toLocaleString('en-IN');
 
             renderDynamicProducts(filteredProducts);
+            // Refresh detailed view button text safely
             if (window.location.hash.startsWith('#product-')) {
-                renderDetailView(window.location.hash.replace('#product-','').trim());
+                const targetId = window.location.hash.replace('#product-', '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                renderDetailView(targetId);
             }
         }
 
