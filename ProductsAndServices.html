@@ -275,7 +275,7 @@
 
                         <div class="cart-totals" id="cartTotals">
                             <div class="total-row"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
-                            <div class="total-row"><span>GST (18%)</span><span id="cartGst">₹0</span></div>
+                            <div class="total-row" id="cartGstRow"><span>GST (18%)</span><span id="cartGst">₹0</span></div>
                             <div class="total-row grand"><span>Total Payable</span><span id="cartGrand">₹0</span></div>
                         </div>
 
@@ -334,6 +334,15 @@
         const BACKEND_BASE = 'https://lkvcbpxkpwpoqjlcddgl.functions.supabase.co';
         const RAZORPAY_KEY_ID = 'rzp_live_SG5xWhtRJUaBRL';
         const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
+
+        /* -------------------------------------------------------------
+           TAX CONFIG
+           GST is currently NOT applicable — set GST_ENABLED = true
+           (and adjust GST_RATE if needed) when you register for GST.
+           The cart UI, totals and Razorpay amount will update on their own.
+           ------------------------------------------------------------- */
+        const GST_ENABLED = false;   // <-- change to true when GST applies
+        const GST_RATE    = 0.18;    // 18% GST
 
         let allProductsData = [];
         let filteredProducts = [];
@@ -845,8 +854,11 @@
             const empty = keys.length === 0;
 
             const subtotal = keys.reduce((s,k) => s + cart[k].price, 0);
-            const gst = Math.round(subtotal * 0.18);
+            const gst   = GST_ENABLED ? Math.round(subtotal * GST_RATE) : 0;
             const grand = subtotal + gst;
+
+            const gstRow = document.getElementById('cartGstRow');
+            if (gstRow) gstRow.style.display = GST_ENABLED ? 'flex' : 'none';
 
             const badge = document.getElementById('cartBadge');
             if(badge) {
@@ -951,7 +963,8 @@
             if (keys.length === 0) { showCustomAlert('Cart is empty'); return; }
 
             const subtotal = keys.reduce((s,k) => s + cart[k].price, 0);
-            const grand = subtotal + Math.round(subtotal * 0.18);
+            const gst    = GST_ENABLED ? Math.round(subtotal * GST_RATE) : 0;
+            const grand  = subtotal + gst;
             const products = keys.map(k => cart[k].name).join(', ');
 
             const btn = document.querySelector('.btn-pay-now');
